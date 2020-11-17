@@ -3,10 +3,9 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToMany, PrimaryGeneratedColumn, OneToOne } from "typeorm";
-import { CommodityPackingMaterialEntity } from './commodity_packing_material';
-import { CommodityPackingSizeEntity } from './commodity_packing_size';
-import { CommodityEntity } from './commodity';
+import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { CommodityPackingMaterialEntity } from './packing/material';
+import { CommodityPackingSizeEntity } from './packing/size';
 
  @EntityModel('commodity_packing')
  export class CommodityPackingEntity {
@@ -26,8 +25,6 @@ import { CommodityEntity } from './commodity';
   @OneToMany(type => CommodityPackingSizeEntity, CommodityPackingSizeEntity => CommodityPackingSizeEntity.commodityPacking)
   sizes: CommodityPackingSizeEntity;
 
-  // 关联商品
-  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.commodityPacking)
-  commodity: CommodityEntity;
+
 
  }

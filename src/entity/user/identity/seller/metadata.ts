@@ -1,22 +1,22 @@
 /**
- * 卖家信息
+ * 商家信息
  */
 
 import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { UserSellerEntity } from './user_seller';
+import { UserIdentitySellerEntity } from '../seller';
 
-@EntityModel('user_seller_metadata')
-export class UserSellerMetadataEntity {
+@EntityModel('user_identity_seller_metadata')
+export class UserIdentitySellerMetadataEntity {
 
   // 用户信息 id
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  // 关联卖家
-  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.metadata)
+  // 关联商家
+  @OneToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.metadata)
   @JoinColumn()
-  seller: UserSellerEntity;
+  seller: UserIdentitySellerEntity;
 
   // 语言
   @Column()

@@ -1,26 +1,37 @@
 /**
- * 买家
- * 购买商品
+ * 用户信息
  */
 
 import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from './user';
 
-@EntityModel('user_buyer')
-export class UserBuyerEntity {
 
-  // 买家 id
+@EntityModel('user_metadata')
+export class UserMetadataEntity {
+
+  // 用户信息 id
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  // 是否第三方
+
+
+  // 姓名
   @Column()
-  isThirdParty: string;
+  name: string;
+
+
+
+  // 等级
+  @Column()
+  lever: number;
+
 
   // 关联用户
-  @OneToOne(type => UserEntity, UserEntity => UserEntity.buyer)
+  @OneToOne(type => UserEntity, UserEntity => UserEntity.metadata)
   @JoinColumn()
   user: UserEntity;
+
+
 
 }

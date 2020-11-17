@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { UserEntity } from './user';
 
 @EntityModel('user_address')
@@ -14,8 +14,7 @@ export class UserAddressEntity {
   id: number;
 
   // 关联用户
-  @OneToOne(type => UserEntity, UserEntity => UserEntity.address)
-  @JoinColumn()
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.address)
   user: UserEntity;
 
   // 城市
@@ -25,7 +24,5 @@ export class UserAddressEntity {
   // 详细地址
   @Column()
   address: string;
-
-
 
 }

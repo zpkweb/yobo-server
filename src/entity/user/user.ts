@@ -1,19 +1,26 @@
 /**
- *  用户
+ * 用户
+ * 级别 ：0 超级管理员 ，1 管理员，2 客服，5 商家，70 会员，80 普通用户， 90 第三方登录
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
-import { UserMetadataEntity } from './user_metadata';
-import { UserPasswordEntity } from './user_password';
-import { UserAddressEntity } from './user_address';
-import { UserBuyerEntity } from './user_buyer';
-import { UserSellerEntity } from './user_seller';
-import { UserCustomerServiceEntity } from './user_customerService';
-import { UserAdminEntity } from './user_admin';
-import { CommodityEntity } from '../commodity/commodity';
-import { ShoppingCartEntity } from '../shoppingCart/shoppingCart';
-import { OrderEntity } from '../order/order';
+import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne, OneToMany} from 'typeorm';
+import { UserMetadataEntity } from './metadata';
+import { UserPasswordEntity } from './password';
+import { UserAddressEntity } from './address';
+import { UserIdentityThirdPartyEntity } from './identity/thirdParty';
+import { UserIdentityOrdinaryEntity } from './identity/ordinary';
+import { UserIdentityMemberEntity } from './identity/member';
+import { UserIdentitySellerEntity } from './identity/seller';
+import { UserIdentityCustomerServiceEntity } from './identity/customerService';
+import { UserIdentityAdminEntity } from './identity/admin';
+import { UserIdentityEntity } from './identity/identity';
+import { MyShoppingCartEntity } from '../my/shoppingCart';
+import { MyOrderEntity } from '../my/order';
+import { MyBrowsingHistoryEntity } from '../my/browsingHistory';
+import { MyLikeSellerEntity } from '../my/likeSeller';
+import { MyLikeCommodityEntity } from '../my/likeCommodity';
+import { MyCouponEntity } from '../my/coupon';
 
 @EntityModel('user')
 export class UserEntity {
@@ -21,18 +28,6 @@ export class UserEntity {
   // 用户id
   @PrimaryGeneratedColumn('uuid')
   id: number;
-
-  // 姓氏
-  @Column()
-  surname: string;
-
-  // 名字
-  @Column()
-  name: string;
-
-  // 全称
-  @Column()
-  fullname: string;
 
   // 邮箱
   @Column()
@@ -44,9 +39,17 @@ export class UserEntity {
   })
   phone: string;
 
-  // 级别 ：0 超级管理员 ，1 管理员，2 客服，5 卖家，8 买家 9 第三方登录
-  @Column()
-  lever: number;
+  //  创建日期
+  @CreateDateColumn()
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn()
+  updatedDate: Date;
+
+  //  关联用户身份
+  @OneToOne(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user)
+  identity: UserIdentityEntity;
 
   // 关联基本信息
   @OneToOne(type => UserMetadataEntity, UserMetadataEntity => UserMetadataEntity.user)
@@ -57,48 +60,57 @@ export class UserEntity {
   password: UserPasswordEntity;
 
   // 关联地址
-  @OneToOne(type => UserAddressEntity, UserAddressEntity => UserAddressEntity.user)
+  @OneToMany(type => UserAddressEntity, UserAddressEntity => UserAddressEntity.user)
   address: UserAddressEntity;
 
-  // 关联买家
-  @OneToOne(type => UserBuyerEntity, UserBuyerEntity => UserBuyerEntity.user)
-  buyer: UserBuyerEntity;
 
-  // 关联卖家
-  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.user)
-  seller: UserSellerEntity;
+
+  // 关联第三方登录
+  @OneToOne(type => UserIdentityThirdPartyEntity, UserIdentityThirdPartyEntity => UserIdentityThirdPartyEntity.user)
+  thirdParty: UserIdentityThirdPartyEntity;
+
+  // 关联普通用户
+  @OneToOne(type => UserIdentityOrdinaryEntity, UserIdentityOrdinaryEntity => UserIdentityOrdinaryEntity.user)
+  ordinary: UserIdentityOrdinaryEntity;
+
+  // 关联会员
+  @OneToOne(type => UserIdentityMemberEntity, UserIdentityMemberEntity => UserIdentityMemberEntity.user)
+  member: UserIdentityMemberEntity;
+
+  // 关联商家
+  @OneToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.user)
+  seller: UserIdentitySellerEntity;
 
   // 关联客服
-  @OneToOne(type => UserCustomerServiceEntity, UserCustomerServiceEntity => UserCustomerServiceEntity.user)
-  customerService: UserCustomerServiceEntity;
+  @OneToOne(type => UserIdentityCustomerServiceEntity, UserIdentityCustomerServiceEntity => UserIdentityCustomerServiceEntity.user)
+  customerService: UserIdentityCustomerServiceEntity;
 
   // 关联管理员
-  @OneToOne(type => UserAdminEntity, UserAdminEntity => UserAdminEntity.user)
-  admin: UserAdminEntity;
+  @OneToOne(type => UserIdentityAdminEntity, UserIdentityAdminEntity => UserIdentityAdminEntity.user)
+  admin: UserIdentityAdminEntity;
 
-  // 关联喜欢的商品
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.likeUsers)
-  @JoinTable()
-  likeCommoditys: CommodityEntity;
+  // 关联我的喜欢商家
+  @OneToOne(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.user)
+  likeSellers: MyBrowsingHistoryEntity;
 
-  // 关联商品浏览记录
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.browsingUsers)
-  @JoinTable()
-  browsingHistory: CommodityEntity;
+  // 关联我的喜欢商品
+  @OneToMany(type => MyLikeSellerEntity, MyLikeSellerEntity => MyLikeSellerEntity.user)
+  likeCommoditys: MyLikeSellerEntity;
 
-  // 关联喜欢的卖家
-  @OneToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.likeSellerUsers)
-  likeSellers: UserSellerEntity;
+  // 关联我的浏览记录
+  @OneToMany(type => MyLikeCommodityEntity, MyLikeCommodityEntity => MyLikeCommodityEntity.user)
+  browsingHistory: MyLikeCommodityEntity;
 
-  // 关联购物车
-  @OneToOne(type => ShoppingCartEntity, ShoppingCartEntity => ShoppingCartEntity.user)
-  shoppingCart: ShoppingCartEntity;
-
+  // 关联我的购物车
+  @OneToMany(type => MyShoppingCartEntity, MyShoppingCartEntity => MyShoppingCartEntity.user)
+  shoppingCart: MyShoppingCartEntity;
 
   // 关联我的订单
-  @OneToMany(type => OrderEntity, OrderEntity => OrderEntity.users)
-  orders: OrderEntity;
+  @OneToMany(type => MyOrderEntity, MyOrderEntity => MyOrderEntity.users)
+  orders: MyOrderEntity;
 
-
+  // 关联我的优惠券列表
+  @OneToMany(type => MyCouponEntity, MyCouponEntity => MyCouponEntity.user)
+  myCoupons: MyCouponEntity;
 
 }

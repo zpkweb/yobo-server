@@ -4,7 +4,7 @@
 
 import { EntityModel } from "@midwayjs/orm";
 import { Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { CommodityPackingEntity } from './commodity_packing';
+import { CommodityPackingEntity } from '../packing';
 
 @EntityModel('commodity_packing_size')
 export class CommodityPackingSizeEntity {
