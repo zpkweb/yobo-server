@@ -5,4 +5,9 @@ export default {
     enable: true,
     package: 'egg-view-nunjucks'
   },
+  jwt: {
+    enable: true,
+    package: 'egg-jwt'
+  }
+
 } as EggPlugin;

@@ -1,14 +1,36 @@
 import { Provide } from '@midwayjs/decorator';
-import { IUserOptions } from '../interface';
 
 @Provide()
 export class UserService {
-  async getUser(options: IUserOptions) {
-    return {
-      uid: options.uid,
-      username: 'mockedName',
-      phone: '12345678901',
-      email: 'xxx.xxx@xxx.com',
-    };
+
+  // 创建用户
+  async createUser() {
+
   }
+
+  // 删除用户
+  async removeUser() {
+
+  }
+
+  // 更新用户
+  async updateUser() {
+
+  }
+
+  // 查找所有用户
+  async findAllUser() {
+
+  }
+
+  // 查找某个用户
+  async findUser() {
+
+  }
+
+  //  登录
+  async login() {
+
+  }
+
 }

@@ -1,6 +1,6 @@
 /**
  * 客服
- * 管理商家，管理商家的商品
+ * 联系商家
  */
 
 import { EntityModel } from '@midwayjs/orm';

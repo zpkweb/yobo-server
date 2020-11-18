@@ -25,6 +25,8 @@ export class UserIdentitySellerStudioEntity {
   @Column()
   video: string;
 
+  // 简介
+
   // 关联商家
   @OneToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.studio)
   seller: UserIdentitySellerEntity;

@@ -11,7 +11,7 @@ import { UserIdentityCustomerServiceEntity } from './customerService';
 import { CommodityEntity } from '../../commodity/commodity';
 import { UserIdentitySellerMetadataEntity } from './seller/metadata';
 import { UserIdentitySellerStudioEntity } from './seller/studio';
-import { MyOrderEntity } from '../../my/order';
+import { OrderEntity } from '../../order/order';
 import { MyLikeSellerEntity } from '../../my/likeSeller';
 
 @EntityModel('user_identity_seller')
@@ -77,8 +77,8 @@ export class UserIdentitySellerEntity {
   commoditys: CommodityEntity;
 
   // 关联商家售卖记录
-  @ManyToMany(type => MyOrderEntity, MyOrderEntity => MyOrderEntity.seller)
-  orders: MyOrderEntity;
+  @ManyToMany(type => OrderEntity, OrderEntity => OrderEntity.seller)
+  orders: OrderEntity;
 
 
 }

@@ -1,5 +1,5 @@
 /**
- * 订单
+ * 我的订单
  * 订单状态：待付款，已付款，待收货，待评价，已取消
  */
 import { EntityModel } from "@midwayjs/orm";
@@ -34,7 +34,7 @@ export class MyOrderEntity {
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.orders)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myOrders)
   users: UserEntity;
 
   // 关联商品

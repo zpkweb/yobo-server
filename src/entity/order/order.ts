@@ -1,17 +1,29 @@
 /**
- * 我的购物车
+ * 订单
+ * 订单状态：已完成
  */
-
 import { EntityModel } from "@midwayjs/orm";
-import { CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
 import { UserEntity } from '../user/user';
 import { CommodityEntity } from '../commodity/commodity';
 import { UserIdentitySellerEntity } from '../user/identity/seller';
 
-@EntityModel('my_shoppingCart')
-export class MyShoppingCartEntity {
+@EntityModel('order')
+export class OrderEntity {
   @PrimaryGeneratedColumn('uuid')
   id: number;
+
+  // 货币
+  @Column()
+  currency: string;
+
+  // 价格
+  @Column()
+  price: number;
+
+  // 状态
+  @Column()
+  status: string;
 
   //  创建日期
   @CreateDateColumn()
@@ -22,11 +34,11 @@ export class MyShoppingCartEntity {
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.shoppingCart)
-  user: UserEntity;
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.orders)
+  users: UserEntity;
 
   // 关联商品
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.shoppingCart)
+  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.orders)
   @JoinTable()
   commoditys: CommodityEntity;
 
@@ -34,7 +46,6 @@ export class MyShoppingCartEntity {
   @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.orders)
   @JoinTable()
   seller: UserIdentitySellerEntity;
-
 
 
 }

@@ -1,13 +1,11 @@
 /**
- * 用户身份
+ * 用户身份列表
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
-import { UserEntity } from '../user';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-
-@EntityModel('user_identity')
+@EntityModel('user_identity_list')
 export class UserIdentityEntity {
 
   // 用户地址 id
@@ -21,9 +19,5 @@ export class UserIdentityEntity {
   // 级别序号
   @Column()
   index: number;
-
-  // 关联用户
-  @OneToOne(type => UserEntity, UserEntity => UserEntity.identity)
-  user: UserEntity;
 
 }
