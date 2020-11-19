@@ -1,5 +1,5 @@
 import { Inject, Controller, Post, Provide, Get } from '@midwayjs/decorator';
-import { CommodityService } from '../service/commodity';
+import { CommodityService } from '../../service/commodity';
 
 @Provide()
 @Controller('/commodity')

@@ -1,4 +1,6 @@
 import { EggPlugin } from 'egg';
+import 'tsconfig-paths/register';
+
 export default {
   static: false, // default is true
   nunjucks: {

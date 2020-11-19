@@ -1,11 +1,9 @@
 /**
  * 用户
- * 级别 ：0 超级管理员 ，1 管理员，2 客服（技术），5 商家，70 会员，80 普通用户， 90 第三方登录
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne, OneToMany} from 'typeorm';
-import { UserPasswordEntity } from './password';
+import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
 import { UserAddressEntity } from './address';
 import { UserIdentityThirdPartyEntity } from './identity/thirdParty';
 import { UserIdentityOrdinaryEntity } from './identity/ordinary';
@@ -44,24 +42,34 @@ export class UserEntity {
   })
   phone: string;
 
+  // 密码
+  @Column({
+    select: false
+  })
+  password: string;
+
   //  创建日期
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   //  关联用户身份
-  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user)
+  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user, {
+    cascade: true
+  })
   identitys: UserIdentityEntity;
 
-  // 关联密码
-  @OneToOne(type => UserPasswordEntity, UserPasswordEntity => UserPasswordEntity.user)
-  password: UserPasswordEntity;
-
   // 关联地址
-  @OneToMany(type => UserAddressEntity, UserAddressEntity => UserAddressEntity.user)
+  @OneToMany(type => UserAddressEntity, UserAddressEntity => UserAddressEntity.user, {
+    cascade: true
+  })
   address: UserAddressEntity;
 
   // 关联第三方登录

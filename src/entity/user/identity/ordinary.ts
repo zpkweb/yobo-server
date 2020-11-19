@@ -1,6 +1,6 @@
 /**
  * 普通用户
- * 购买商品
+ * 序号: 80
  */
 
 import { EntityModel } from '@midwayjs/orm';

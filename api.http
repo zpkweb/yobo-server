@@ -1,0 +1,110 @@
+@baseUrl = http://127.0.0.1:7001
+@token = '';
+
+####################################
+
+GET {{baseUrl}}
+
+identityList
+
+
+####################################
+
+#  创建身份列表
+POST {{baseUrl}}/user/identityList
+Content-Type: application/json
+
+[{
+  "name": "超级管理员",
+  "index": 1
+},{
+  "name": "管理员",
+  "index": 2
+},{
+  "name": "客服",
+  "index": 3
+},{
+  "name": "商家",
+  "index": 5
+},{
+  "name": "会员",
+  "index": 70
+},{
+  "name": "用户",
+  "index": 80
+},{
+  "name": "第三方用户",
+  "index": 90
+}]
+
+
+####################################
+
+#  获取身份列表
+GET {{baseUrl}}/user/identityList
+
+####################################
+
+#  删除身份列表
+POST {{baseUrl}}/user/identityList/remove
+Content-Type: application/json
+
+
+
+####################################
+
+
+
+#  注册 普通用户
+POST {{baseUrl}}/user/register
+Content-Type: application/json
+
+{
+  "name": "user",
+  "phone": "18612875765",
+  "password": "123456"
+}
+
+
+####################################
+
+#  查找 用户
+GET {{baseUrl}}/user
+
+
+####################################
+
+#  删除 用户
+POST {{baseUrl}}/user/remove
+Content-Type: application/json
+
+
+
+####################################
+
+
+#  注册 艺术家
+POST {{baseUrl}}/user/register/seller
+Content-Type: application/json
+
+{
+  "name": "seller",
+  "phone": "18612875765",
+  "password": "123456"
+}
+
+
+####################################
+
+# 登录
+POST {{baseUrl}}/user/login
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "zpk",
+  "phone": "18612875765",
+}
+
+
+####################################

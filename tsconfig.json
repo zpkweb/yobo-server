@@ -13,8 +13,15 @@
     "pretty": true,
     "declaration": true,
     "typeRoots": [ "./typings", "./node_modules/@types"],
-    "outDir": "dist"
+    "outDir": "dist",
+    "removeComments": true,
+    "baseUrl": "./",
+    "paths": {
+      "src/*": ["src/*"],
+      "src/service/*": ["src/service/*"]
+    },
   },
+  "include": ["src"],
   "exclude": [
     "dist",
     "node_modules",
