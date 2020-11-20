@@ -3,11 +3,12 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
 import { CommodityEntity } from './commodity';
 
 @EntityModel('commodity_price')
 export class CommodityPriceEntity {
+
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
@@ -19,8 +20,25 @@ export class CommodityPriceEntity {
   @Column()
   value: string;
 
+  //  创建日期
+  @CreateDateColumn({
+    select: false
+  })
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn({
+    select: false
+  })
+  updatedDate: Date;
+
   // 关联商品
-  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.prices)
+  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.prices, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'commodityId'
+  })
   commodity: CommodityEntity;
 
 

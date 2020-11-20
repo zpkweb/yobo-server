@@ -3,15 +3,26 @@
  * 订单状态：已完成
  */
 import { EntityModel } from "@midwayjs/orm";
-import { Column, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
-import { UserEntity } from '../user/user';
-import { CommodityEntity } from '../commodity/commodity';
-import { UserIdentitySellerEntity } from '../user/identity/seller';
+import { Column, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryGeneratedColumn, Generated, ManyToMany, JoinTable, JoinColumn } from "typeorm";
+import { UserEntity } from 'src/entity/user/user';
+import { CommodityEntity } from 'src/entity/commodity/commodity';
+import { UserIdentitySellerEntity } from 'src/entity/user/seller/seller';
 
 @EntityModel('order')
 export class OrderEntity {
-  @PrimaryGeneratedColumn('uuid')
+
+  // 自增主键
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
+
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  orderId: string;
 
   // 货币
   @Column()
@@ -26,26 +37,53 @@ export class OrderEntity {
   status: string;
 
   //  创建日期
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.orders)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.orders, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'userId'
+  })
   users: UserEntity;
 
   // 关联商品
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.orders)
-  @JoinTable()
-  commoditys: CommodityEntity;
+  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.orders, {
+    cascade: true
+  })
+  @JoinTable({
+    joinColumn: {
+      referencedColumnName: 'orderId'
+    },
+    inverseJoinColumn: {
+      referencedColumnName: 'commodityId'
+    }
+  })
+  commoditys: CommodityEntity[];
 
   // 关联商家
-  @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.orders)
-  @JoinTable()
-  seller: UserIdentitySellerEntity;
+  @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.orders, {
+    cascade: true
+  })
+  @JoinTable({
+    joinColumn: {
+      referencedColumnName: 'orderId'
+    },
+    inverseJoinColumn: {
+      referencedColumnName: 'sellerId'
+    }
+  })
+  sellers: UserIdentitySellerEntity[];
 
 
 }

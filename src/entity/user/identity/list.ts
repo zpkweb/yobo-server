@@ -3,8 +3,8 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { UserIdentityEntity } from 'src/entity/user/identity';
+import { Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { UserIdentityEntity } from './identity';
 @EntityModel('user_identity_list')
 export class UserIdentityListEntity {
 
@@ -20,8 +20,20 @@ export class UserIdentityListEntity {
   @Column()
   index: number;
 
+  //  创建日期
+  @CreateDateColumn({
+    select: false
+  })
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn({
+    select: false
+  })
+  updatedDate: Date;
+
   // 关联用户身份
-  @OneToOne(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.identity)
-  identity: UserIdentityEntity;
+  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.identityList)
+  identitys: UserIdentityEntity[];
 
 }

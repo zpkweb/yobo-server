@@ -60,8 +60,8 @@ POST {{baseUrl}}/user/register
 Content-Type: application/json
 
 {
-  "name": "user",
-  "phone": "18612875765",
+  "name": "test",
+  "phone": "1",
   "password": "123456"
 }
 

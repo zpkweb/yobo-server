@@ -3,15 +3,24 @@
  * 订单状态：待付款，已付款，待收货，待评价，已取消
  */
 import { EntityModel } from "@midwayjs/orm";
-import { Column, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
-import { UserEntity } from '../user/user';
-import { CommodityEntity } from '../commodity/commodity';
-import { UserIdentitySellerEntity } from '../user/identity/seller';
+import { Column, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryGeneratedColumn, Generated, ManyToMany, JoinTable, JoinColumn } from "typeorm";
+import { UserEntity } from 'src/entity/user/user';
+import { CommodityEntity } from 'src/entity/commodity/commodity';
 
 @EntityModel('my_order')
 export class MyOrderEntity {
-  @PrimaryGeneratedColumn('uuid')
+  // 自增主键
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
+
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  myOrderId: string;
 
   // 货币
   @Column()
@@ -26,26 +35,41 @@ export class MyOrderEntity {
   status: string;
 
   //  创建日期
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myOrders)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myOrders, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'userId'
+  })
   users: UserEntity;
 
   // 关联商品
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.orders)
-  @JoinTable()
-  commoditys: CommodityEntity;
+  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.orders, {
+    cascade: true
+  })
+  @JoinTable({
+    joinColumn: {
+      referencedColumnName: 'myOrderId'
+    },
+    inverseJoinColumn: {
+      referencedColumnName: 'commodityId'
+    }
+  })
+  commoditys: CommodityEntity[];
 
-  // 关联商家
-  @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.orders)
-  @JoinTable()
-  seller: UserIdentitySellerEntity;
+
 
 
 }

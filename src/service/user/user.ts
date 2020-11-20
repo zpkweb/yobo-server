@@ -2,7 +2,7 @@ import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentityEntity } from 'src/entity/user/identity';
+import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 @Provide()
 export class UserService {
@@ -36,11 +36,11 @@ export class UserService {
 
   }
 
-  async find(id) {
-    if (id) {
+  async find(userId) {
+    if (userId) {
       return await this.userEntity
         .createQueryBuilder('user')
-        .where("user.id = :id", { id: id })
+        .where("user.userId = :userId", { userId: userId })
         .getOne();
     } else {
       return await this.userEntity
@@ -48,18 +48,5 @@ export class UserService {
       .getMany();
     }
   }
-
-  //  登录
-  async login(payload) {
-    return await this.userEntity
-      .createQueryBuilder('user')
-      .where("user.name = :name", { name: payload.name })
-      .andWhere("user.phone = :phone", { phone: payload.phone })
-      .getOne();
-  }
-
-
-
-
 
 }

@@ -5,22 +5,32 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToMany, OneToOne, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany } from "typeorm";
-import { UserIdentitySellerEntity } from '../user/identity/seller';
+import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinColumn } from "typeorm";
 import { CommodityPhotoEntity } from './photo';
-import { MyBrowsingHistoryEntity } from '../my/browsingHistory';
-import { MyLikeCommodityEntity } from '../my/likeCommodity';
-import { MyShoppingCartEntity } from '../my/shoppingCart';
-import { OrderEntity } from '../order/order';
-import { MyOrderEntity } from '../my/order';
 import { CommodityLangEntity } from './lang';
+import { CommodityPriceEntity } from './price';
+import { UserIdentitySellerEntity } from 'src/entity/user/seller/seller';
+import { MyBrowsingHistoryEntity } from 'src/entity/my/browsingHistory';
+import { MyLikeCommodityEntity } from 'src/entity/my/likeCommodity';
+import { MyShoppingCartEntity } from 'src/entity/my/shoppingCart';
+import { MyOrderEntity } from 'src/entity/my/order';
+import { OrderEntity } from 'src/entity/order/order';
 
 @EntityModel('commodity')
 export class CommodityEntity {
 
-  // 商品 id
-  @PrimaryGeneratedColumn('uuid')
+  // 自增主键
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
+
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  commodityId: string;
 
   // 状态
   @Column()
@@ -35,49 +45,58 @@ export class CommodityEntity {
   browsingNum: number;
 
   //  创建日期
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   // 关联商品多语言
   @OneToMany(type => CommodityLangEntity, CommodityLangEntity => CommodityLangEntity.commodity)
-  CommodityLangs: CommodityLangEntity;
+  CommodityLangs: CommodityLangEntity[];
 
-  // 关联商品多语言价格
-  @OneToMany(type => CommodityLangEntity, CommodityLangEntity => CommodityLangEntity.commodity)
-  prices: CommodityLangEntity;
+  // 关联商品价格
+  @OneToMany(type => CommodityPriceEntity, CommodityPriceEntity => CommodityPriceEntity.commodity)
+  prices: CommodityPriceEntity[];
 
   // 关联商品图片
   @OneToMany(type => CommodityPhotoEntity, CommodityPhotoEntity => CommodityPhotoEntity.commodity)
-  photos: CommodityPhotoEntity;
+  photos: CommodityPhotoEntity[];
 
 
-  // 关联喜欢商品的用户
-  @OneToOne(type => MyLikeCommodityEntity, MyLikeCommodityEntity => MyLikeCommodityEntity.commodity)
-  likeCommoditys: MyLikeCommodityEntity;
+  // 关联用户喜欢商品的列表
+  @OneToMany(type => MyLikeCommodityEntity, MyLikeCommodityEntity => MyLikeCommodityEntity.commodity)
+  likeCommoditys: MyLikeCommodityEntity[];
 
   // 关联用户浏览记录
-  @ManyToOne(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.commoditys)
-  browsingHistory: MyBrowsingHistoryEntity;
+  @OneToMany(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.commoditys)
+  browsingHistory: MyBrowsingHistoryEntity[];
 
   // 关联商家
-  @ManyToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.commoditys)
+  @ManyToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.commoditys, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'sellerId'
+  })
   seller: UserIdentitySellerEntity;
 
   // 关联订单
   @ManyToMany(type => OrderEntity, OrderEntity => OrderEntity.commoditys)
-  orders: OrderEntity;
+  orders: OrderEntity[];
 
   // 关联我的订单
   @ManyToMany(type => MyOrderEntity, MyOrderEntity => MyOrderEntity.commoditys)
-  myOrders: MyOrderEntity;
+  myOrders: MyOrderEntity[];
 
   // 关联购物车
   @ManyToMany(type => MyShoppingCartEntity, MyShoppingCartEntity => MyShoppingCartEntity.commoditys)
-  shoppingCart: MyShoppingCartEntity;
+  shoppingCart: MyShoppingCartEntity[];
 
 
 }

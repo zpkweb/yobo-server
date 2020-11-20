@@ -3,14 +3,14 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { CommodityLangEntity } from '../lang';
 
 @EntityModel('commodity_lang_metadata')
 export class CommodityLangMetadataEntity {
 
-  // 商品 id
-  @PrimaryGeneratedColumn('uuid')
+  // id
+  @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
   // 名称
@@ -45,7 +45,19 @@ export class CommodityLangMetadataEntity {
   @Column()
   deliveryTime: number;
 
-  @ManyToOne(type => CommodityLangEntity, CommodityLangEntity => CommodityLangEntity.metadata)
+  //  创建日期
+  @CreateDateColumn({
+    select: false
+  })
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn({
+    select: false
+  })
+  updatedDate: Date;
+
+  @OneToOne(type => CommodityLangEntity, CommodityLangEntity => CommodityLangEntity.metadata)
   lang: CommodityLangEntity;
 
 }

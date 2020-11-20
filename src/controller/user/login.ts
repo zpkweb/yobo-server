@@ -1,13 +1,13 @@
 import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
 import { Context } from 'egg';
-import { UserService } from 'src/service/user/user';
+import { LoginService } from 'src/service/user/login';
 
 @Provide()
 @Controller('/user')
 export class UserLoginController {
 
   @Inject()
-  userService: UserService;
+  loginService: LoginService;
 
   @Inject()
   ctx: Context;
@@ -59,7 +59,7 @@ export class UserLoginController {
     // const token = app.jwt.sign({
     //   name: user.name,
     // }, app.config.jwt.secret);
-    return await this.userService.login(loginBody);
+    return await this.loginService.login(loginBody);
   }
 
 

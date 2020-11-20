@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToOne, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, OneToOne, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { CommodityOptionsEntity } from '../options';
 import { CommodityOptionsLangEntity } from './lang';
 
@@ -18,8 +18,22 @@ export class CommodityOptionsTechniqueEntity {
   @Column()
   name: string;
 
+  //  创建日期
+  @CreateDateColumn({
+    select: false
+  })
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn({
+    select: false
+  })
+  updatedDate: Date;
+
   // 关联商品选项
-  @ManyToOne(type => CommodityOptionsEntity, CommodityOptionsEntity => CommodityOptionsEntity.techniques)
+  @ManyToOne(type => CommodityOptionsEntity, CommodityOptionsEntity => CommodityOptionsEntity.techniques, {
+    cascade: true
+  })
   options: CommodityOptionsEntity;
 
   // 关联商品选项多语言

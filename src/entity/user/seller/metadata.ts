@@ -3,8 +3,8 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { UserIdentitySellerEntity } from '../seller';
+import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { UserIdentitySellerEntity } from './seller';
 
 @EntityModel('user_identity_seller_metadata')
 export class UserIdentitySellerMetadataEntity {
@@ -13,10 +13,7 @@ export class UserIdentitySellerMetadataEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  // 关联商家
-  @OneToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.metadata)
-  @JoinColumn()
-  seller: UserIdentitySellerEntity;
+
 
   // 语言
   @Column()
@@ -70,5 +67,20 @@ export class UserIdentitySellerMetadataEntity {
   @Column()
   profile: string;
 
+  //  创建日期
+  @CreateDateColumn({
+    select: false
+  })
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn({
+    select: false
+  })
+  updatedDate: Date;
+
+  // 关联商家
+  @OneToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.metadata)
+  seller: UserIdentitySellerEntity;
 
 }

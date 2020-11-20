@@ -3,32 +3,54 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { UserEntity } from '../user/user';
-import { ActivityEntity } from '../activity/activity';
+import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { UserEntity } from 'src/entity/user/user';
+import { ActivityEntity } from 'src/entity/activity/activity';
 
 @EntityModel('my_activity')
 export class MyActivityEntity {
 
-  // 用户浏览记录 id
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  // 自增主键
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
 
-  //  创建日期
-  @CreateDateColumn()
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  myActivityId: string;
+
+  // 创建日期
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myActivitys)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myActivitys, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'userId'
+  })
   user: UserEntity;
 
-  // 关联优惠券
-  @OneToOne(type => ActivityEntity, ActivityEntity => ActivityEntity.myActivity)
-  @JoinColumn()
+  // 关联活动
+  @ManyToOne(type => ActivityEntity, ActivityEntity => ActivityEntity.myActivity, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'activityId'
+  })
   activity: ActivityEntity;
 
 }

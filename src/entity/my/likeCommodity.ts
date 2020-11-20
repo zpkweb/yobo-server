@@ -4,32 +4,54 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
-import { UserEntity } from '../user/user';
-import { CommodityEntity } from '../commodity/commodity';
+import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { UserEntity } from 'src/entity/user/user';
+import { CommodityEntity } from 'src/entity/commodity/commodity';
 
 @EntityModel('my_likeCommodity')
 export class MyLikeCommodityEntity {
 
-  // 我的喜欢商家 id
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  // 自增主键
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
 
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  myLikeCommodityId: string;
+
   //  创建日期
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.likeCommoditys)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.likeCommoditys, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'userId'
+  })
   user: UserEntity;
 
   // 关联商品
-  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.likeCommoditys)
-  @JoinColumn()
+  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.likeCommoditys, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'commodityId'
+  })
   commodity: CommodityEntity;
 
 }

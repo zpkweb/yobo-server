@@ -2,7 +2,7 @@ import { Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentityEntity } from 'src/entity/user/identity';
+import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 @Provide()
 export class UserRegisterService {
@@ -31,7 +31,7 @@ export class UserRegisterService {
       return "用户已注册"
     }else{
       // 创建用户
-      await this.userEntity
+      let user = await this.userEntity
         .createQueryBuilder()
         .insert()
         .into(UserEntity)
@@ -42,11 +42,7 @@ export class UserRegisterService {
           password: payload.password
         })
         .execute()
-        .then((res) => {
-          console.log(res)
-          user = res.identifiers[0];
-        })
-
+      console.log("user", user)
       // 通过用户身份列表获取普通用户身份
       let identityList: any = await this.userIdentityListEntity
         .createQueryBuilder('identityList')
@@ -69,27 +65,32 @@ export class UserRegisterService {
         //   identity = res.identifiers[0];
         // })
       console.log("identity", identity)
+      console.log(identity.identifiers[0].id, identityList.id, user.identifiers[0].id)
 
-      // 普通用户身份 关联 身份列表
       await this.userIdentityEntity
         .createQueryBuilder()
-        .relation(UserIdentityEntity, "identity")
+        .relation(UserIdentityEntity, "identityList")
         .of(identity.identifiers[0].id)
         .set(identityList.id);
 
-      // 用户 关联 普通用户身份
-      await this.userEntity
+      await this.userIdentityEntity
         .createQueryBuilder()
-        .relation(UserEntity, "identitys")
-        .of(user.id)
-        .add(identity.identifiers[0].id);
+        .relation(UserIdentityEntity, "user")
+        .of(identity.identifiers[0].id)
+        .set({userId: user.generatedMaps[0].userId})
 
-      console.log("user.id", user.id)
+      console.log("user.id", user.identifiers[0].id)
+
       return await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.identitys', 'identitys')
-        .where("user.id = :id", { id: user.id })
+        .where("user.id = :id", { id: user.identifiers[0].id })
         .getOne();
+
+        // this.userEntity
+        // .createQueryBuilder('user')
+        // .where("user.userId = :userId", { userId: userId })
+        // .getOne();
     }
 
   }

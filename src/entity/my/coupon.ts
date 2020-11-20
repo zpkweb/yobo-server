@@ -3,32 +3,54 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, ManyToOne, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { UserEntity } from '../user/user';
-import { CouponEntity } from '../coupon/coupon';
+import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { UserEntity } from 'src/entity/user/user';
+import { CouponEntity } from 'src/entity/coupon/coupon';
 
 @EntityModel('my_coupon')
 export class MyCouponEntity {
 
-  // 用户浏览记录 id
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  // 自增主键
+  @PrimaryGeneratedColumn({
+    type: 'bigint'
+  })
   id: number;
 
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  myCouponId: string;
+
   //  创建日期
-  @CreateDateColumn()
+  @CreateDateColumn({
+    select: false
+  })
   createdDate: Date;
 
   // 更新日期
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    select: false
+  })
   updatedDate: Date;
 
   // 关联用户
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myCoupons)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.myCoupons, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'userId'
+  })
   user: UserEntity;
 
   // 关联优惠券
-  @OneToOne(type => CouponEntity, CouponEntity => CouponEntity.myCoupon)
-  @JoinColumn()
+  @ManyToOne(type => CouponEntity, CouponEntity => CouponEntity.myCoupon, {
+    cascade: true
+  })
+  @JoinColumn({
+    referencedColumnName: 'couponId'
+  })
   coupon: CouponEntity;
 
 }
