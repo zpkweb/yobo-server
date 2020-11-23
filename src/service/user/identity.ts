@@ -54,6 +54,7 @@ export class IdentityService {
    * @param id
    */
   async findIdentityList(id) {
+    console.log("findIdentityList", id)
     if (id) {
       return await this.userIdentityListEntity
         .createQueryBuilder('identityList')

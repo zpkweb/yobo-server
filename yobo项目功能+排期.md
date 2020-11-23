@@ -1,5 +1,72 @@
 # 项目安排
 
+### 接口
+统一格式: /api/身份/模块/功能/参数？query
+
+client：
+
+注册(获取 token)
+  游客注册普通用户
+    POST: /api/user/register
+  游客，普通用户申请艺术家
+    POST: /api/user/seller/apply
+登录(获取 token)
+  普通用户,艺术家登录
+    POST: /api/user/login
+修改密码(获取 token)
+  普通用户，艺术家
+    POST: /api/user/change/password
+查找用户(验证 token)
+  获取自己的信息
+    GET: /api/user/self
+  查找艺术家
+    GET: /api/user/seller/search
+更新用户数据(验证 token)
+  普通用户
+    POST: /api/user/update
+  艺术家
+    POST: /api/user/seller/apply/update
+
+
+server：
+
+注册(获取 token)
+  管理员创建客服
+    POST: /api/admin/user/customerService/create
+  获取艺术家申请列表
+    GET: /api/admin/user/seller/apply
+  管理员同意申请成为艺术家
+    POST: /api/admin/user/seller/apply
+  超级管理员创建管理员
+    POST: /api/admin/user/superAdmin/create/:admin
+登录(获取 token)
+  客服，管理员，超级管理员登录
+    POST: /api/admin/user/login
+查找用户(验证 token)
+  查找普通用户
+    查找所有用户：
+      GET: /api/admin/user/findAll
+    查找某个用户：
+      GET: /api/admin/user/find/id/:id
+      GET: /api/admin/user/find?userId=id
+    查找某些身份的用户：
+      GET: /api/admin/user/find/type/:type
+      GET: /api/admin/user/find?type=
+    查找某个用户的身份:
+      GET: /api/admin/user/find/:type/:id
+      GET: /api/admin/user/find?type=&id=
+  查找客服,管理员
+    GET: /api/admin/user/find?type=customerService,admin
+更新用户数据(验证 token)
+  客服,管理员
+    POST: /api/admin/user/update/:type=customerService,admin
+用户身份
+  添加用户身份
+    POST: /api/admin/user/identity
+  获取身份列表
+    GET:/api/admin/user/identity
+
+
 ### 功能
 
 ```base

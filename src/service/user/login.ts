@@ -14,10 +14,28 @@ export class LoginService {
    * @param payload email/phone password
    */
   async login(payload) {
-    return await this.userEntity
+    const user = await this.userEntity
       .createQueryBuilder('user')
-      .where("user.name = :name", { name: payload.name })
-      .andWhere("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .leftJoinAndSelect('user.identitys', 'identitys')
+      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
       .getOne();
+    console.log("user", user)
+    if(!user){
+      return {
+        code: 10102
+      }
+    }
+    const userPassword = await this.userEntity
+    .createQueryBuilder('user')
+    .addSelect("user.password")
+    .where("user.id = :id", { id: user.id })
+    .andWhere("user.password = :password", { password: payload.password })
+    .getOne();
+    if(!userPassword){
+      return {
+        code: 10103
+      }
+    }
+    return user;
   }
 }

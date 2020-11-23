@@ -36,17 +36,46 @@ export class UserService {
 
   }
 
-  async find(userId) {
-    if (userId) {
-      return await this.userEntity
-        .createQueryBuilder('user')
-        .where("user.userId = :userId", { userId: userId })
-        .getOne();
-    } else {
+  /**
+   * 查找用户
+   * @param payload type userId
+   * type: identitys
+   */
+  async find(payload) {
+    if(payload.userId && payload.type){
       return await this.userEntity
       .createQueryBuilder('user')
+      .leftJoinAndSelect(`user.${payload.type}`, payload.type)
+      .where("user.userId = :userId", { userId: payload.userId })
+      .getOne();
+    }else if(payload.userId && !payload.type){
+      return await this.userEntity
+      .createQueryBuilder('user')
+      .where("user.userId = :userId", { userId: payload.userId })
+      .getOne();
+    }else if(!payload.id && payload.type){
+      return await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(`user.${payload.type}`, payload.type)
+      .getMany();
+    }else{
+      return await this.userEntity
+      .createQueryBuilder('user')
+      .addSelect("user.password")
       .getMany();
     }
   }
 
+  /**
+   * 修改密码
+   */
+
+  async changePassword(payload) {
+    await this.userEntity
+      .createQueryBuilder('user')
+      .update(UserEntity)
+      .set({ password: payload.password })
+      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .execute();
+  }
 }

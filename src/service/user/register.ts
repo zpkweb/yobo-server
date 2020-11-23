@@ -28,7 +28,9 @@ export class UserRegisterService {
     console.log(user)
 
     if(user){
-      return "用户已注册"
+      return {
+        code : 10101
+      }
     }else{
       // 创建用户
       let user = await this.userEntity

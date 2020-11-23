@@ -1,15 +1,80 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Plugin, Config } from '@midwayjs/decorator';
 import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
 import { Context } from 'egg';
 
 @Provide()
-export class ReportMiddleware implements IWebMiddleware {
+export class AuthorizeMiddleware implements IWebMiddleware {
+  @Plugin()
+  jwt;
+
+  @Config('jwt')
+  jwtConfig;
 
   resolve() {
     return async (ctx: Context, next: IMidwayWebNext) => {
-      const startTime = Date.now();
-      await next();
-      console.log(Date.now() - startTime);
+      console.log("middleware", ctx.request.body)
+      const bearerHeader = ctx.req.headers['authorization'];
+      if(typeof bearerHeader !== 'undefined') {
+        const bearer = bearerHeader.split(' ');
+        const bearerToken = bearer[1];
+        try{
+
+        }catch(err){
+
+        }
+        await this.jwt.verify(bearerToken, this.jwtConfig.secret, async (err, decoded) => {
+          if(err){
+            console.log(err)
+            const noAccess = () => {
+              ctx.body = {
+                code: '10104',
+                msg: ctx.__('10104')
+              }
+              ctx.status = 403;
+            }
+            return await noAccess();
+          }
+          console.log("decoded", decoded, decoded.identitys)
+          // 比较传来的值是否在decoded里面
+          let hasDecoded = true;
+          const reqBody = Object.keys(ctx.request.body);
+          console.log("reqBody", reqBody)
+          if(reqBody && reqBody.length){
+            hasDecoded = false;
+            for(let i in ctx.request.body){
+              // console.log(i, decoded[i],  ctx.request.body[i], decoded[i] === ctx.request.body[i])
+              if(decoded[i] === ctx.request.body[i]){
+                hasDecoded = true;
+              }
+            }
+          }
+
+          console.log("hasDecoded", hasDecoded)
+          if(hasDecoded){
+            ctx.state.user = decoded;
+          }else{
+            const invalidToken = () => {
+              ctx.body = {
+                code: '10106',
+                msg: ctx.__('10106')
+              }
+              ctx.status = 403;
+            }
+            return await invalidToken();
+          }
+          return await next();
+        });
+
+      } else {
+        const noToken = () => {
+          ctx.body = {
+            code: '10103',
+            msg: ctx.__('10103')
+          }
+          ctx.status = 403;
+        }
+        return noToken();
+      }
     };
   }
 

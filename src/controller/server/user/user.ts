@@ -3,8 +3,8 @@ import { Context } from 'egg';
 import { UserService } from 'src/service/user/user'
 
 @Provide()
-@Controller('/user') // , { middleware: [ 'reportMiddleware' ] }
-export class UserController {
+@Controller('/api/user', { middleware: [ 'authorizeMiddleware' ] }) // , { middleware: [ 'authorizeMiddleware' ] }
+export class ServerUserController {
 
   @Inject()
   userService: UserService;
@@ -21,8 +21,8 @@ export class UserController {
   // 删除用户
   @Post('/remove')
   @Post('/remove/:ID')
-  async removeUser(@Param() ID, @Body() Id, @Query() id) {
-    return await this.userService.remove(ID||Id||id);
+  async removeUser(@Param() ID, @Body() Id) {
+    return await this.userService.remove(ID||Id);
   }
 
   // 更新用户
@@ -31,12 +31,14 @@ export class UserController {
     return await this.userService.update(updateBody);
   }
 
-
   // 查找用户
   @Get()
-  @Get('/:ID')
-  async findUser(@Param() ID, @Query() id) {
-    return await this.userService.find(ID||id);
+  async findUser(@Query(ALL) findQuery) {
+    console.log("ctx", this.ctx.state,  findQuery)
+    return await this.userService.find({
+      type: findQuery.type,
+      userId: findQuery.userId
+    });
   }
 
 }

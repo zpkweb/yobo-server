@@ -1,0 +1,9 @@
+{
+  "10000": "Ok",
+  "10101": "User already exists!",
+  "10102": "User does not exist!",
+  "10103": "Token not uploaded!",
+  "10104": "Token validation failed",
+  "10105": "The user does not have permission!",
+  "10106": "Invalid token!"
+}

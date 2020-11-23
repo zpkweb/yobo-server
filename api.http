@@ -1,5 +1,12 @@
 @baseUrl = http://127.0.0.1:7001
-@token = '';
+
+//test8
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIzIiwidXNlcklkIjoiNTAwMzhkMmQtODc3Mi00NzY4LThjZTgtODNiMTVkZTY4ZDRjIiwibmFtZSI6InRlc3Q4IiwiZW1haWwiOiIiLCJwaG9uZSI6IjEyMzQ1Njc4IiwiaWRlbnRpdHlzIjpbeyJpZCI6IjgiLCJpZGVudGl0eUlkIjoiMDQxMzc4N2EtOWViMy00OTM1LWE1ZmEtMzc1MmEyNDMzODZlIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYxMjQ1MDZ9.rjSo2aqbkxVJwDREJA1GGjS-Nh8MWSp7rIyHTPA1mx8
+// test7
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyIiwidXNlcklkIjoiNmEwODA0MTUtMjhlMi00YjM5LTk4YTItYzViOTNkYWQ1ZjAwIiwibmFtZSI6InRlc3Q3IiwiZW1haWwiOiIiLCJwaG9uZSI6IjEyMzQ1NjciLCJpZGVudGl0eXMiOlt7ImlkIjoiNyIsImlkZW50aXR5SWQiOiIyYzllMTE3MC1iZmUxLTQ5ZTctYjgyNS1jNGQ2ZTFiOTQwMWMiLCJuYW1lIjoi55So5oi3IiwiaW5kZXgiOjgwfV0sImlhdCI6MTYwNjEyNDc0Nn0.A5kItbi3dOOzphEKAwS3PlTMHLeDN9koD5bTQPed7Nw
+// test6
+# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxIiwidXNlcklkIjoiY2EyOTE5MTAtYTJiOS00OTMzLWJjOTMtYzg3NWQ0MTU5ZjQzIiwibmFtZSI6InRlc3Q2IiwiZW1haWwiOiIiLCJwaG9uZSI6IjEyMzQ1NiIsImlhdCI6MTYwNjExNzk2NX0.pnJEOv3blPaxEu-jhhEL_3b0SCKKAqFHTvjDk2yET_0
+
 
 ####################################
 
@@ -11,7 +18,7 @@ identityList
 ####################################
 
 #  创建身份列表
-POST {{baseUrl}}/user/identityList
+POST {{baseUrl}}/api/admin/identity
 Content-Type: application/json
 
 [{
@@ -41,13 +48,13 @@ Content-Type: application/json
 ####################################
 
 #  获取身份列表
-GET {{baseUrl}}/user/identityList
+GET {{baseUrl}}/api/admin/identity
 
 ####################################
 
 #  删除身份列表
-POST {{baseUrl}}/user/identityList/remove
-Content-Type: application/json
+POST {{baseUrl}}/api/adminidentity/remove
+
 
 
 
@@ -56,12 +63,12 @@ Content-Type: application/json
 
 
 #  注册 普通用户
-POST {{baseUrl}}/user/register
+POST {{baseUrl}}/api/user/register?locale=en-US
 Content-Type: application/json
 
 {
-  "name": "test",
-  "phone": "1",
+  "name": "test8",
+  "phone": "12345678",
   "password": "123456"
 }
 
@@ -69,22 +76,38 @@ Content-Type: application/json
 ####################################
 
 #  查找 用户
-GET {{baseUrl}}/user
-
+# GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
+# GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
+# GET {{baseUrl}}/api/user?type=identitys
+# GET {{baseUrl}}/api/user?locale=en-US
+GET {{baseUrl}}/api/user?locale=zh-CN
+Authorization: Bearer {{token}}
 
 ####################################
 
 #  删除 用户
-POST {{baseUrl}}/user/remove
+POST {{baseUrl}}/api/admin/user/remove
 Content-Type: application/json
 
 
 
 ####################################
 
+#  修改密码
+POST {{baseUrl}}/api/user/change/password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "phone": "1234567",
+  "password": "123"
+}
+
+
+####################################
 
 #  注册 艺术家
-POST {{baseUrl}}/user/register/seller
+POST {{baseUrl}}/api/user/register/seller
 Content-Type: application/json
 
 {
@@ -97,13 +120,12 @@ Content-Type: application/json
 ####################################
 
 # 登录
-POST {{baseUrl}}/user/login
+POST {{baseUrl}}/api/user/login
 Content-Type: application/json
-Authorization: Bearer {{token}}
 
 {
-  "name": "zpk",
-  "phone": "18612875765",
+  "phone": "1234567",
+  "password": "123456"
 }
 
 
