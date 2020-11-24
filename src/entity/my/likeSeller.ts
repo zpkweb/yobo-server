@@ -5,7 +5,7 @@
 import { EntityModel } from '@midwayjs/orm';
 import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentitySellerEntity } from 'src/entity/user/seller/seller';
+import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @EntityModel('my_likeSeller')
 export class MyLikeSellerEntity {
@@ -45,12 +45,12 @@ export class MyLikeSellerEntity {
   user: UserEntity;
 
   // 关联商家
-  @ManyToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.likeSellers, {
+  @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.likeSellers, {
     cascade: true
   })
   @JoinColumn({
     referencedColumnName: 'sellerId'
   })
-  sellers: UserIdentitySellerEntity;
+  sellers: UserSellerEntity;
 
 }

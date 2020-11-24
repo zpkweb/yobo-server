@@ -1,9 +1,9 @@
-import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, Query, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { UserService } from 'src/service/user/user'
 
 @Provide()
-@Controller('/api/user', { middleware: [ 'authorizeMiddleware' ] }) // , { middleware: [ 'authorizeMiddleware' ] }
+@Controller('/api/user', { middleware: [ 'authorizeMiddleware' ] })
 export class UserController {
 
   @Inject()
@@ -18,26 +18,74 @@ export class UserController {
   @Config('jwt')
   jwtConfig;
 
-  // 更新用户
-  @Post('/update')
-  async updateUser(@Body(ALL) updateBody) {
-    return await this.userService.update(updateBody);
+  /**
+   * 查找个人信息
+   */
+  @Get('/self')
+  async self() {
+    return await this.userService.findSelf(this.ctx.state.user.userId);
   }
 
-  // 查找用户
-  @Get()
-  async findUser(@Query(ALL) findQuery) {
-    console.log("ctx", this.ctx.state,  findQuery)
-    return await this.userService.find({
-      type: findQuery.type,
-      userId: findQuery.userId
-    });
-  }
-
-  // 修改密码
-  @Post('/change/password')
+  /**
+   * 修改密码
+   * @param changePasswordBody
+   */
+  @Post('/password/update')
   async changePassword(@Body(ALL) changePasswordBody){
     return await this.userService.changePassword(changePasswordBody);
   }
+
+
+  /**
+   * 更新个人信息
+   * @param updateBody
+   */
+  @Post('/update')
+  async updateUser(@Body(ALL) updateBody) {
+    return await this.userService.update({
+      userId: this.ctx.state.user.userId,
+      ...updateBody
+    });
+  }
+
+  /**
+   * 获取用户地址
+   * @param addressBody
+   */
+  @Get('/address')
+  async getAddress(@Body(ALL) addressBody) {
+    return await this.userService.getAddress({
+      userId: this.ctx.state.user.userId
+    });
+  }
+
+  /**
+   * 添加用户地址
+   * @param addressBody
+   */
+  @Post('/address')
+  async address(@Body(ALL) addressBody) {
+    return await this.userService.address(addressBody);
+  }
+
+  /**
+   * 更新用户地址
+   * @param addressBody
+   */
+  @Post('/address/update')
+  async addressUpdate(@Body(ALL) addressBody) {
+    return await this.userService.addressUpdate(addressBody);
+  }
+
+  /**
+   * 删除用户地址
+   * @param addressBody
+   */
+  @Post('/address/remove')
+  async addressRemove(@Body(ALL) addressBody) {
+    return await this.userService.addressRemove(addressBody);
+  }
+
+
 
 }

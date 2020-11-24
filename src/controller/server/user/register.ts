@@ -3,7 +3,7 @@ import { Context } from 'egg';
 import { UserRegisterService } from 'src/service/user/register';
 
 @Provide()
-@Controller('/api/user')
+@Controller('/api/admin/user')
 export class ServerUserRegisterController {
 
   @Inject()
@@ -36,15 +36,6 @@ export class ServerUserRegisterController {
     }, this.jwtConfig.secret);
     }
     console.log("register data", data)
-    return data;
-
-  }
-
-  // 申请成为艺术家
-  @Post('/apply/seller')
-  async apply(@Body(ALL) applySellerBody) {
-
-    const data =  await this.userRegisterService.applySeller(applySellerBody);
     return data;
 
   }

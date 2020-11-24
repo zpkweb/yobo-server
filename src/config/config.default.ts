@@ -51,6 +51,9 @@ export default (appInfo: EggAppInfo) => {
   //   dir: path.join(appInfo.baseDir, 'public')
   // };
 
+  config.middleware = [
+    'globalMiddleware'
+  ];
 
   config.i18n = {
     defaultLocale: 'zh-CN',

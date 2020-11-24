@@ -1,9 +1,15 @@
 {
   "10000": "Ok",
+  "10001": "Update success!",
+  "10002": "Add success!",
+  "10004": "Remove success!",
+
   "10101": "User already exists!",
   "10102": "User does not exist!",
   "10103": "Token not uploaded!",
   "10104": "Token validation failed",
   "10105": "The user does not have permission!",
-  "10106": "Invalid token!"
+  "10106": "Invalid token!",
+  "10107": "Update failed!",
+  "10108": "Remove failed!"
 }

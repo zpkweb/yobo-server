@@ -5,12 +5,12 @@
 import { EntityModel } from '@midwayjs/orm';
 import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne, OneToMany, Generated, AfterInsert } from 'typeorm';
 import { UserAddressEntity } from './address';
-import { UserIdentityThirdPartyEntity } from './thirdParty/thirdParty';
-import { UserIdentityOrdinaryEntity } from './ordinary/ordinary';
-import { UserIdentityMemberEntity } from './member/member';
-import { UserIdentitySellerEntity } from './seller/seller';
-import { UserIdentityCustomerServiceEntity } from './customerService/customerService';
-import { UserIdentityAdminEntity } from './admin/admin';
+import { UserThirdPartyEntity } from './thirdParty/thirdParty';
+import { UserOrdinaryEntity } from './ordinary/ordinary';
+import { UserMemberEntity } from './member/member';
+import { UserSellerEntity } from './seller/seller';
+import { UserCustomerServiceEntity } from './customerService/customerService';
+import { UserAdminEntity } from './admin/admin';
 import { UserIdentityEntity } from './identity/identity';
 import { MyShoppingCartEntity } from 'src/entity/my/shoppingCart';
 import { MyOrderEntity } from 'src/entity/my/order';
@@ -83,28 +83,28 @@ export class UserEntity {
   address: UserAddressEntity[];
 
   // 关联第三方登录
-  @OneToMany(type => UserIdentityThirdPartyEntity, UserIdentityThirdPartyEntity => UserIdentityThirdPartyEntity.user)
-  thirdParty: UserIdentityThirdPartyEntity[];
+  @OneToMany(type => UserThirdPartyEntity, UserThirdPartyEntity => UserThirdPartyEntity.user)
+  thirdParty: UserThirdPartyEntity[];
 
   // 关联普通用户
-  @OneToOne(type => UserIdentityOrdinaryEntity, UserIdentityOrdinaryEntity => UserIdentityOrdinaryEntity.user)
-  ordinary: UserIdentityOrdinaryEntity;
+  @OneToOne(type => UserOrdinaryEntity, UserOrdinaryEntity => UserOrdinaryEntity.user)
+  ordinary: UserOrdinaryEntity;
 
   // 关联会员
-  @OneToOne(type => UserIdentityMemberEntity, UserIdentityMemberEntity => UserIdentityMemberEntity.user)
-  member: UserIdentityMemberEntity;
+  @OneToOne(type => UserMemberEntity, UserMemberEntity => UserMemberEntity.user)
+  member: UserMemberEntity;
 
   // 关联商家
-  @OneToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.user)
-  seller: UserIdentitySellerEntity;
+  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.user)
+  seller: UserSellerEntity;
 
   // 关联客服
-  @OneToOne(type => UserIdentityCustomerServiceEntity, UserIdentityCustomerServiceEntity => UserIdentityCustomerServiceEntity.user)
-  customerService: UserIdentityCustomerServiceEntity;
+  @OneToOne(type => UserCustomerServiceEntity, UserCustomerServiceEntity => UserCustomerServiceEntity.user)
+  customerService: UserCustomerServiceEntity;
 
   // 关联管理员
-  @OneToOne(type => UserIdentityAdminEntity, UserIdentityAdminEntity => UserIdentityAdminEntity.user)
-  admin: UserIdentityAdminEntity;
+  @OneToOne(type => UserAdminEntity, UserAdminEntity => UserAdminEntity.user)
+  admin: UserAdminEntity;
 
   // 关联我的喜欢商家列表
   @OneToMany(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.user)

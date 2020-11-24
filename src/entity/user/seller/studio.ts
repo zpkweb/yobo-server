@@ -4,10 +4,10 @@
 
 import { EntityModel } from "@midwayjs/orm";
 import { Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { UserIdentitySellerEntity } from './seller';
+import { UserSellerEntity } from './seller';
 
-@EntityModel('user_identity_seller_studio')
-export class UserIdentitySellerStudioEntity {
+@EntityModel('user_seller_studio')
+export class UserSellerStudioEntity {
 
   @PrimaryGeneratedColumn({
     type: 'bigint'
@@ -42,9 +42,9 @@ export class UserIdentitySellerStudioEntity {
   })
   updatedDate: Date;
 
-
-
   // 关联商家
-  @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.studios)
-  seller: UserIdentitySellerEntity[];
+  @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.studios,{
+    onDelete: 'CASCADE'
+  })
+  seller: UserSellerEntity[];
 }

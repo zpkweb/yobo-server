@@ -1,11 +1,8 @@
 @baseUrl = http://127.0.0.1:7001
 
-//test8
-# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIzIiwidXNlcklkIjoiNTAwMzhkMmQtODc3Mi00NzY4LThjZTgtODNiMTVkZTY4ZDRjIiwibmFtZSI6InRlc3Q4IiwiZW1haWwiOiIiLCJwaG9uZSI6IjEyMzQ1Njc4IiwiaWRlbnRpdHlzIjpbeyJpZCI6IjgiLCJpZGVudGl0eUlkIjoiMDQxMzc4N2EtOWViMy00OTM1LWE1ZmEtMzc1MmEyNDMzODZlIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYxMjQ1MDZ9.rjSo2aqbkxVJwDREJA1GGjS-Nh8MWSp7rIyHTPA1mx8
-// test7
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIyIiwidXNlcklkIjoiNmEwODA0MTUtMjhlMi00YjM5LTk4YTItYzViOTNkYWQ1ZjAwIiwibmFtZSI6InRlc3Q3IiwiZW1haWwiOiIiLCJwaG9uZSI6IjEyMzQ1NjciLCJpZGVudGl0eXMiOlt7ImlkIjoiNyIsImlkZW50aXR5SWQiOiIyYzllMTE3MC1iZmUxLTQ5ZTctYjgyNS1jNGQ2ZTFiOTQwMWMiLCJuYW1lIjoi55So5oi3IiwiaW5kZXgiOjgwfV0sImlhdCI6MTYwNjEyNDc0Nn0.A5kItbi3dOOzphEKAwS3PlTMHLeDN9koD5bTQPed7Nw
-// test6
-# @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIxIiwidXNlcklkIjoiY2EyOTE5MTAtYTJiOS00OTMzLWJjOTMtYzg3NWQ0MTU5ZjQzIiwibmFtZSI6InRlc3Q2IiwiZW1haWwiOiIiLCJwaG9uZSI6IjEyMzQ1NiIsImlhdCI6MTYwNjExNzk2NX0.pnJEOv3blPaxEu-jhhEL_3b0SCKKAqFHTvjDk2yET_0
+
+// test2
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0IiwidXNlcklkIjoiMmQ5NTY1MzgtMmFhMy00YmIyLTk4NTItYTc0MmJmZmUxN2UyIiwibmFtZSI6InRlc3QyIiwiZW1haWwiOiIiLCJwaG9uZSI6IjIiLCJpZGVudGl0eXMiOlt7ImlkIjoiMSIsImlkZW50aXR5SWQiOiIyMWQwYjY2Ni1mZmMzLTQ5NDMtYWMxZC1jMzJhYWExMTdlNWEiLCJuYW1lIjoi55So5oi3IiwiaW5kZXgiOjgwfV0sImlhdCI6MTYwNjE4OTYxMn0.RSywDDayCEQPNjPvw4cdQzdip9HBSX8e3ouygOslNwQ
 
 
 ####################################
@@ -67,9 +64,9 @@ POST {{baseUrl}}/api/user/register?locale=en-US
 Content-Type: application/json
 
 {
-  "name": "test8",
-  "phone": "12345678",
-  "password": "123456"
+  "name": "test",
+  "phone": "1",
+  "password": "1"
 }
 
 
@@ -80,7 +77,7 @@ Content-Type: application/json
 # GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?type=identitys
 # GET {{baseUrl}}/api/user?locale=en-US
-GET {{baseUrl}}/api/user?locale=zh-CN
+GET {{baseUrl}}/api/user/self?locale=zh-CN
 Authorization: Bearer {{token}}
 
 ####################################
@@ -106,18 +103,126 @@ Authorization: Bearer {{token}}
 
 ####################################
 
-#  注册 艺术家
-POST {{baseUrl}}/api/user/register/seller
+#  更新用户信息
+POST {{baseUrl}}/api/user/update
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "name": "seller",
-  "phone": "18612875765",
-  "password": "123456"
+  "phone": "1234567",
+  "name": "test77"
 }
 
 
 ####################################
+
+#  获取地址
+GET  {{baseUrl}}/api/user/address
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+
+####################################
+
+#  添加用户地址
+POST {{baseUrl}}/api/user/address
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
+  "address": {
+    "name": "test22",
+    "phone": "222",
+    "city": "北京",
+    "address": ""
+  }
+
+}
+
+
+####################################
+
+#  更新用户地址
+POST {{baseUrl}}/api/user/address/update
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
+  "address": {
+    "addressId": "dcb34b75-2c9a-458d-924e-5689967e7cfa",
+    "name": "test2",
+    "phone": "22",
+    "city": "北京",
+    "address": ""
+  }
+}
+
+
+####################################
+
+#  删除用户地址
+POST {{baseUrl}}/api/user/address/remove
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
+  "addressId": "6277c751-5748-4f4b-ac4f-de94ac39c60d"
+}
+
+
+####################################
+
+
+
+#  注册 艺术家
+POST {{baseUrl}}/api/user/seller/register
+Content-Type: application/json
+
+{
+  "firstname": "张",
+  "lastname": "三",
+  "phone": "7",
+  "language": "汉语"
+
+}
+
+
+####################################
+
+#  搜索 艺术家
+GET {{baseUrl}}/api/user/seller/search
+Authorization: Bearer {{token}}
+
+{
+  "firstname": "张",
+  "lastname": "三",
+  "phone": "4",
+  "language": "汉语"
+
+}
+
+
+
+####################################
+
+#  通过申请成为艺术家
+POST {{baseUrl}}/api/admin/seller/update
+Content-Type: application/json
+
+{
+  "sellerId": "b3b8a6a1-f6ee-4966-8128-4fe62926dca0"
+
+}
+
+
+
+####################################
+
+
 
 # 登录
 POST {{baseUrl}}/api/user/login

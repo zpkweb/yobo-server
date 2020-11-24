@@ -9,7 +9,7 @@ import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, Create
 import { CommodityPhotoEntity } from './photo';
 import { CommodityLangEntity } from './lang';
 import { CommodityPriceEntity } from './price';
-import { UserIdentitySellerEntity } from 'src/entity/user/seller/seller';
+import { UserSellerEntity } from 'src/entity/user/seller/seller';
 import { MyBrowsingHistoryEntity } from 'src/entity/my/browsingHistory';
 import { MyLikeCommodityEntity } from 'src/entity/my/likeCommodity';
 import { MyShoppingCartEntity } from 'src/entity/my/shoppingCart';
@@ -78,13 +78,13 @@ export class CommodityEntity {
   browsingHistory: MyBrowsingHistoryEntity[];
 
   // 关联商家
-  @ManyToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.commoditys, {
+  @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.commoditys, {
     cascade: true
   })
   @JoinColumn({
     referencedColumnName: 'sellerId'
   })
-  seller: UserIdentitySellerEntity;
+  seller: UserSellerEntity;
 
   // 关联订单
   @ManyToMany(type => OrderEntity, OrderEntity => OrderEntity.commoditys)

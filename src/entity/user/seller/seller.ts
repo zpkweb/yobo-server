@@ -7,15 +7,15 @@
 import { EntityModel } from '@midwayjs/orm';
 import { Column, PrimaryGeneratedColumn, Generated, OneToOne, JoinColumn, OneToMany, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentityCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
+import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
-import { UserIdentitySellerMetadataEntity } from './metadata';
-import { UserIdentitySellerStudioEntity } from './studio';
+import { UserSellerMetadataEntity } from './metadata';
+import { UserSellerStudioEntity } from './studio';
 import { OrderEntity } from 'src/entity/order/order';
 import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
 
-@EntityModel('user_identity_seller')
-export class UserIdentitySellerEntity {
+@EntityModel('user_seller')
+export class UserSellerEntity {
 
   // 自增主键
   @PrimaryGeneratedColumn({
@@ -30,13 +30,18 @@ export class UserIdentitySellerEntity {
   @Generated('uuid')
   sellerId: string;
 
+  // 状态：0: 审核, 1: 通过, 2: 更新, 3: 禁用, 4: 注销
+  @Column()
+  state: number;
+
+
   // 姓氏
   @Column()
-  surname: string;
+  firstname: string;
 
   // 名字
   @Column()
-  name: string;
+  lastname: string;
 
   // 标签
   @Column()
@@ -63,14 +68,11 @@ export class UserIdentitySellerEntity {
   updatedDate: Date;
 
   // 关联商家信息
-  @OneToOne(type => UserIdentitySellerMetadataEntity, UserIdentitySellerMetadataEntity => UserIdentitySellerMetadataEntity.seller, {
-    cascade: true
-  })
-  @JoinColumn()
-  metadata: UserIdentitySellerMetadataEntity;
+  @OneToOne(type => UserSellerMetadataEntity, UserSellerMetadataEntity => UserSellerMetadataEntity.seller)
+  metadata: UserSellerMetadataEntity;
 
   // 关联商家工作室
-  @ManyToMany(type => UserIdentitySellerStudioEntity, UserIdentitySellerStudioEntity => UserIdentitySellerStudioEntity.seller, {
+  @ManyToMany(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller, {
     cascade: true
   })
   @JoinTable({
@@ -81,17 +83,20 @@ export class UserIdentitySellerEntity {
       referencedColumnName: 'id'
     }
   })
-  studios: UserIdentitySellerStudioEntity[];
+  studios: UserSellerStudioEntity[];
 
   // 关联商家履历
-  @OneToMany(type => UserIdentitySellerStudioEntity, UserIdentitySellerStudioEntity => UserIdentitySellerStudioEntity.seller)
-  resumes: UserIdentitySellerStudioEntity[];
+  @OneToMany(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller, {
+    onDelete: 'CASCADE'
+  })
+  resumes: UserSellerStudioEntity[];
 
   // 关联用户
   @OneToOne(type => UserEntity, UserEntity => UserEntity.seller, {
     cascade: true
   })
   @JoinColumn({
+    name: 'userId',
     referencedColumnName: 'userId'
   })
   user: UserEntity;
@@ -105,7 +110,7 @@ export class UserIdentitySellerEntity {
   commoditys: CommodityEntity[];
 
   // 关联客服
-  @ManyToMany(type => UserIdentityCustomerServiceEntity, UserIdentityCustomerServiceEntity => UserIdentityCustomerServiceEntity.sellers, {
+  @ManyToMany(type => UserCustomerServiceEntity, UserCustomerServiceEntity => UserCustomerServiceEntity.sellers, {
     cascade: true
   })
   @JoinTable({
@@ -116,7 +121,7 @@ export class UserIdentitySellerEntity {
       referencedColumnName: 'costomerServiceId'
     }
   })
-  customerServices: UserIdentityCustomerServiceEntity[];
+  customerServices: UserCustomerServiceEntity[];
 
   // 关联商家订单
   @ManyToMany(type => OrderEntity, OrderEntity => OrderEntity.sellers)

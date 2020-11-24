@@ -7,8 +7,8 @@ import { EntityModel } from '@midwayjs/orm';
 import { PrimaryGeneratedColumn, Generated, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
 
-@EntityModel('user_identity_thirdParty')
-export class UserIdentityThirdPartyEntity {
+@EntityModel('user_thirdParty')
+export class UserThirdPartyEntity {
 
   // 自增主键
   @PrimaryGeneratedColumn({

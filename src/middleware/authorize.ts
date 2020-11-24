@@ -18,52 +18,100 @@ export class AuthorizeMiddleware implements IWebMiddleware {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         try{
+          const decoded = await this.jwt.verify(bearerToken, this.jwtConfig.secret)
+          console.log("decoded", decoded)
+          if(ctx.request.body && ctx.request.body.userId){
+            if(ctx.request.body.userId === decoded.userId){
+              ctx.state.user = decoded;
 
-        }catch(err){
-
-        }
-        await this.jwt.verify(bearerToken, this.jwtConfig.secret, async (err, decoded) => {
-          if(err){
-            console.log(err)
-            const noAccess = () => {
-              ctx.body = {
-                code: '10104',
-                msg: ctx.__('10104')
+            }else{
+              const invalidToken = () => {
+                ctx.body = {
+                  code: '10106',
+                  msg: ctx.__('10106')
+                }
+                ctx.status = 403;
               }
-              ctx.status = 403;
+              return await invalidToken();
             }
-            return await noAccess();
-          }
-          console.log("decoded", decoded, decoded.identitys)
-          // 比较传来的值是否在decoded里面
-          let hasDecoded = true;
-          const reqBody = Object.keys(ctx.request.body);
-          console.log("reqBody", reqBody)
-          if(reqBody && reqBody.length){
-            hasDecoded = false;
-            for(let i in ctx.request.body){
-              // console.log(i, decoded[i],  ctx.request.body[i], decoded[i] === ctx.request.body[i])
-              if(decoded[i] === ctx.request.body[i]){
-                hasDecoded = true;
-              }
-            }
-          }
-
-          console.log("hasDecoded", hasDecoded)
-          if(hasDecoded){
-            ctx.state.user = decoded;
           }else{
-            const invalidToken = () => {
-              ctx.body = {
-                code: '10106',
-                msg: ctx.__('10106')
+            if(decoded.userId){
+              ctx.state.user = decoded;
+
+            }else{
+              const invalidToken = () => {
+                ctx.body = {
+                  code: '10106',
+                  msg: ctx.__('10106')
+                }
+                ctx.status = 403;
               }
-              ctx.status = 403;
+              return await invalidToken();
             }
-            return await invalidToken();
           }
           return await next();
-        });
+        }catch(err){
+          console.log("err", err)
+          const noAccess = () => {
+            ctx.body = {
+              code: '10104',
+              msg: ctx.__('10104')
+            }
+            ctx.status = 403;
+          }
+          return await noAccess();
+        }
+        // await this.jwt.verify(bearerToken, this.jwtConfig.secret, async (err, decoded) => {
+        //   if(err){
+
+        //   }
+        //   console.log("decoded", decoded, decoded.identitys)
+        //   if(ctx.request.body && ctx.request.body.userId){
+        //     if(ctx.request.body.userId === decoded.userId){
+        //       ctx.state.user = decoded;
+
+        //     }else{
+        //       const invalidToken = () => {
+        //         ctx.body = {
+        //           code: '10106',
+        //           msg: ctx.__('10106')
+        //         }
+        //         ctx.status = 403;
+        //       }
+        //       return await invalidToken();
+        //     }
+        //   }
+        //   // 比较传来的userId是否在decoded里面
+        //   // let hasDecoded = true;
+
+        //   // const reqBody = Object.keys(ctx.request.body);
+        //   // console.log("reqBody", reqBody)
+
+        //   // if(reqBody && reqBody.length){
+        //   //   hasDecoded = false;
+        //   //   for(let i in ctx.request.body){
+        //   //     // console.log(i, decoded[i],  ctx.request.body[i], decoded[i] === ctx.request.body[i])
+        //   //     if(decoded[i] === ctx.request.body[i]){
+        //   //       hasDecoded = true;
+        //   //     }
+        //   //   }
+        //   // }
+
+        //   // console.log("hasDecoded", hasDecoded)
+        //   // if(hasDecoded){
+        //   //   ctx.state.user = decoded;
+        //   // }else{
+        //   //   const invalidToken = () => {
+        //   //     ctx.body = {
+        //   //       code: '10106',
+        //   //       msg: ctx.__('10106')
+        //   //     }
+        //   //     ctx.status = 403;
+        //   //   }
+        //   //   return await invalidToken();
+        //   // }
+
+        // });
 
       } else {
         const noToken = () => {

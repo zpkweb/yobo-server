@@ -3,17 +3,15 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { UserIdentitySellerEntity } from './seller';
+import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { UserSellerEntity } from './seller';
 
-@EntityModel('user_identity_seller_metadata')
-export class UserIdentitySellerMetadataEntity {
+@EntityModel('user_seller_metadata')
+export class UserSellerMetadataEntity {
 
   // 用户信息 id
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
-
-
 
   // 语言
   @Column()
@@ -33,7 +31,7 @@ export class UserIdentitySellerMetadataEntity {
 
   // 您在过去一年里售出多少件自己的作品？
   @Column()
-  sold: number;
+  sold: string;
 
   // 如果您在网上售出过作品，是通过什么渠道呢？
   @Column()
@@ -80,7 +78,13 @@ export class UserIdentitySellerMetadataEntity {
   updatedDate: Date;
 
   // 关联商家
-  @OneToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.metadata)
-  seller: UserIdentitySellerEntity;
+  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.metadata,{
+    cascade: true
+  })
+  @JoinColumn({
+    name: 'sellerId',
+    referencedColumnName: 'sellerId'
+  })
+  seller: UserSellerEntity;
 
 }

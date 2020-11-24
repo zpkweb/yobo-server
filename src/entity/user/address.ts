@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { Column, Generated, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { UserEntity } from './user';
 
 @EntityModel('user_address')
@@ -12,6 +12,23 @@ export class UserAddressEntity {
   // 自增主键id
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
+
+  // id
+  @Column({
+    unique: true
+  })
+  @Generated('uuid')
+  addressId: string;
+
+  // 姓名
+  @Column()
+  name: string;
+
+  //  手机
+  @Column({
+    length: 11
+  })
+  phone: string;
 
   // 城市
   @Column()

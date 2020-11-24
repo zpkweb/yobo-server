@@ -6,10 +6,10 @@
 import { EntityModel } from '@midwayjs/orm';
 import { PrimaryGeneratedColumn, Column, Generated, OneToOne, OneToMany, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentityCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
+import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
 
-@EntityModel('user_identity_admin')
-export class UserIdentityAdminEntity {
+@EntityModel('user_admin')
+export class UserAdminEntity {
 
   // 自增主键
   @PrimaryGeneratedColumn({
@@ -46,7 +46,7 @@ export class UserIdentityAdminEntity {
   user: UserEntity;
 
   // 关联客服
-  @OneToMany(type => UserIdentityCustomerServiceEntity, UserIdentityCustomerServiceEntity => UserIdentityCustomerServiceEntity.admin)
-  customerService: UserIdentityCustomerServiceEntity[];
+  @OneToMany(type => UserCustomerServiceEntity, UserCustomerServiceEntity => UserCustomerServiceEntity.admin)
+  customerService: UserCustomerServiceEntity[];
 
 }

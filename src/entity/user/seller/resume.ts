@@ -4,10 +4,10 @@
 
 import { EntityModel } from "@midwayjs/orm";
 import { Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
-import { UserIdentitySellerEntity } from './seller';
+import { UserSellerEntity } from './seller';
 
-@EntityModel('user_identity_seller_resume')
-export class UserIdentitySellerResumeEntity {
+@EntityModel('user_seller_resume')
+export class UserSellerResumeEntity {
 
   @PrimaryGeneratedColumn({
     type: 'bigint'
@@ -35,12 +35,12 @@ export class UserIdentitySellerResumeEntity {
   updatedDate: Date;
 
   // 关联商家
-  @ManyToOne(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.resumes, {
+  @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.resumes, {
     cascade: true
   })
   @JoinColumn({
     referencedColumnName: 'sellerId'
   })
-  seller: UserIdentitySellerEntity;
+  seller: UserSellerEntity;
 
 }

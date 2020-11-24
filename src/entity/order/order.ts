@@ -6,7 +6,7 @@ import { EntityModel } from "@midwayjs/orm";
 import { Column, CreateDateColumn, UpdateDateColumn, ManyToOne, PrimaryGeneratedColumn, Generated, ManyToMany, JoinTable, JoinColumn } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
-import { UserIdentitySellerEntity } from 'src/entity/user/seller/seller';
+import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @EntityModel('order')
 export class OrderEntity {
@@ -72,7 +72,7 @@ export class OrderEntity {
   commoditys: CommodityEntity[];
 
   // 关联商家
-  @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.orders, {
+  @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.orders, {
     cascade: true
   })
   @JoinTable({
@@ -83,7 +83,7 @@ export class OrderEntity {
       referencedColumnName: 'sellerId'
     }
   })
-  sellers: UserIdentitySellerEntity[];
+  sellers: UserSellerEntity[];
 
 
 }

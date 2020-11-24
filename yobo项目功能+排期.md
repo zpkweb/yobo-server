@@ -13,7 +13,7 @@ client：
 登录(获取 token)
   普通用户,艺术家登录
     POST: /api/user/login
-修改密码(获取 token)
+修改密码(验证 token)
   普通用户，艺术家
     POST: /api/user/change/password
 查找用户(验证 token)
@@ -26,6 +26,7 @@ client：
     POST: /api/user/update
   艺术家
     POST: /api/user/seller/apply/update
+
 
 
 server：

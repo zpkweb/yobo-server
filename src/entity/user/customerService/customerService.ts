@@ -6,11 +6,11 @@
 import { EntityModel } from '@midwayjs/orm';
 import { PrimaryGeneratedColumn, Column, Generated, OneToOne, ManyToMany, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentitySellerEntity } from 'src/entity/user/seller/seller';
-import { UserIdentityAdminEntity } from 'src/entity/user/admin/admin';
+import { UserSellerEntity } from 'src/entity/user/seller/seller';
+import { UserAdminEntity } from 'src/entity/user/admin/admin';
 
-@EntityModel('user_identity_customerService')
-export class UserIdentityCustomerServiceEntity {
+@EntityModel('user_customerService')
+export class UserCustomerServiceEntity {
 
   // 自增主键
   @PrimaryGeneratedColumn({
@@ -47,17 +47,18 @@ export class UserIdentityCustomerServiceEntity {
   updatedDate: Date;
 
   // 关联商家
-  @ManyToMany(type => UserIdentitySellerEntity, UserIdentitySellerEntity => UserIdentitySellerEntity.customerServices)
-  sellers: UserIdentitySellerEntity[];
+  @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.customerServices)
+
+  sellers: UserSellerEntity[];
 
   // 关联管理员
-  @ManyToOne(type => UserIdentityAdminEntity, UserIdentityAdminEntity => UserIdentityAdminEntity.customerService, {
+  @ManyToOne(type => UserAdminEntity, UserAdminEntity => UserAdminEntity.customerService, {
     cascade: true
   })
   @JoinColumn({
     referencedColumnName: 'adminId'
   })
-  admin: UserIdentityAdminEntity;
+  admin: UserAdminEntity;
 
 
 }

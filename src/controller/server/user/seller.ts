@@ -3,8 +3,8 @@ import { Context } from 'egg';
 import { UserRegisterService } from 'src/service/user/register';
 
 @Provide()
-@Controller('/api/user')
-export class UserRegisterController {
+@Controller('/api/admin/seller')
+export class ServerUserSellerController {
 
   @Inject()
   userRegisterService: UserRegisterService;
@@ -19,34 +19,16 @@ export class UserRegisterController {
   jwtConfig;
 
 
-  // 注册成为普通用户
-  @Post('/register')
+  // 更新商家信息
+  @Post('/update')
   async register(@Body(ALL) registerBody) {
-
     let data:any =  await this.userRegisterService.register(registerBody);
     if(!data.code){
-      // "identitys": [
-      //   {
-      //     "id": "8",
-      //     "identityId": "0413787a-9eb3-4935-a5fa-3752a243386e",
-      //     "name": "用户",
-      //     "index": 80
-      //   }
-      // ],
       data.token = await this.jwt.sign({
-        ...data,
-        identitys: data.identitys
+        ...data
     }, this.jwtConfig.secret);
     }
     console.log("register data", data)
-    return data;
-
-  }
-
-  // 申请成为艺术家
-  @Post('/seller/register')
-  async apply(@Body(ALL) applySellerBody) {
-    const data =  await this.userRegisterService.registerSeller(applySellerBody);
     return data;
 
   }
