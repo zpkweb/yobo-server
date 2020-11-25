@@ -21,7 +21,7 @@ export class UserOrdinaryEntity {
     unique: true
   })
   @Generated('uuid')
-  identityOrdinaryId: string;
+  ordinaryId: string;
 
   //  创建日期
   @CreateDateColumn({

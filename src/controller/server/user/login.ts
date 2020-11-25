@@ -18,10 +18,10 @@ export class ServerUserLoginController {
   @Config('jwt')
   jwtConfig;
 
-  // 登录
+  // 后台登录
   @Post('/login')
   async login(@Body(ALL) loginBody) {
-    let data:any =  await this.loginService.login(loginBody);
+    let data:any =  await this.loginService.adminLogin(loginBody);
     if(!data.code){
       data.token = await this.jwt.sign({
         ...data

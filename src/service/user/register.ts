@@ -8,6 +8,8 @@ import { UserSellerStudioEntity } from 'src/entity/user/seller/studio';
 import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
+import { UserAdminEntity } from 'src/entity/user/admin/admin';
+import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
 
 @Provide()
 export class UserRegisterService {
@@ -32,7 +34,13 @@ export class UserRegisterService {
   @InjectEntityModel(UserIdentityListEntity)
   userIdentityListEntity: Repository<UserIdentityListEntity>;
 
-  // 创建普通用户 user 用户数据 姓名 手机/邮箱 密码
+  @InjectEntityModel(UserAdminEntity)
+  userAdminEntity: Repository<UserAdminEntity>;
+
+  @InjectEntityModel(UserCustomerServiceEntity)
+  userCustomerServiceEntity: Repository<UserCustomerServiceEntity>;
+
+  // 创建普通用户 80
   async register(payload) {
     console.log("createUser")
     console.log(payload)
@@ -115,7 +123,7 @@ export class UserRegisterService {
 
   }
 
-  // 申请成为商家
+  // 申请成为商家 5
   async registerSeller(payload) {
     // 查找用户
     let user: any = await this.userEntity
@@ -246,6 +254,172 @@ export class UserRegisterService {
         .getOne();
 
     }
+  }
+
+  // 注册成为客服 3
+  async registerAdmin(payload) {
+    console.log("createUser")
+    console.log(payload)
+
+    // 查找用户
+    let user: any = await this.userEntity
+      .createQueryBuilder('user')
+      .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
+      .getOne();
+    console.log(user)
+
+    if(user){
+      return {
+        code : 10101,
+        data: user
+      }
+    }else{
+      // 创建用户
+      let user = await this.userEntity
+        .createQueryBuilder()
+        .insert()
+        .into(UserEntity)
+        .values({
+          name: payload.name,
+          phone: payload.phone || '',
+          email: payload.email || '',
+          password: payload.password
+        })
+        .execute()
+      console.log("user", user)
+      // 通过用户身份列表获取客服身份
+      let identityList: any = await this.userIdentityListEntity
+        .createQueryBuilder('identityList')
+        .where("identityList.index = :index", {index: 3})
+        .getOne();
+      console.log("identityList", identityList)
+
+      // 创建 客服身份
+      let identity: any = await this.userIdentityEntity
+        .createQueryBuilder()
+        .insert()
+        .into(UserIdentityEntity)
+        .values({
+          name: identityList.name,
+          index: identityList.index
+        })
+        .execute()
+        // .then((res) => {
+        //   console.log(res)
+        //   identity = res.identifiers[0];
+        // })
+      console.log("identity", identity)
+      console.log(identity.identifiers[0].id, identityList.id, user.identifiers[0].id)
+
+      await this.userIdentityEntity
+        .createQueryBuilder()
+        .relation(UserIdentityEntity, "identityList")
+        .of(identity.identifiers[0].id)
+        .set(identityList.id);
+
+      await this.userIdentityEntity
+        .createQueryBuilder()
+        .relation(UserIdentityEntity, "user")
+        .of(identity.identifiers[0].id)
+        .set({userId: user.generatedMaps[0].userId})
+
+      console.log("user.id", user.identifiers[0].id)
+
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.id = :id", { id: user.identifiers[0].id })
+        .getOne();
+
+        // this.userEntity
+        // .createQueryBuilder('user')
+        // .where("user.userId = :userId", { userId: userId })
+        // .getOne();
+    }
+
+  }
+
+  // 注册成为管理员2
+  async registerCustomerServer(payload) {
+    console.log("createUser")
+    console.log(payload)
+
+    // 查找用户
+    let user: any = await this.userEntity
+      .createQueryBuilder('user')
+      .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
+      .getOne();
+    console.log(user)
+
+    if(user){
+      return {
+        code : 10101,
+        data: user
+      }
+    }else{
+      // 创建用户
+      let user = await this.userEntity
+        .createQueryBuilder()
+        .insert()
+        .into(UserEntity)
+        .values({
+          name: payload.name,
+          phone: payload.phone || '',
+          email: payload.email || '',
+          password: payload.password
+        })
+        .execute()
+      console.log("user", user)
+      // 通过用户身份列表获取管理员身份
+      let identityList: any = await this.userIdentityListEntity
+        .createQueryBuilder('identityList')
+        .where("identityList.index = :index", {index: 2})
+        .getOne();
+      console.log("identityList", identityList)
+
+      // 创建管理员身份
+      let identity: any = await this.userIdentityEntity
+        .createQueryBuilder()
+        .insert()
+        .into(UserIdentityEntity)
+        .values({
+          name: identityList.name,
+          index: identityList.index
+        })
+        .execute()
+        // .then((res) => {
+        //   console.log(res)
+        //   identity = res.identifiers[0];
+        // })
+      console.log("identity", identity)
+      console.log(identity.identifiers[0].id, identityList.id, user.identifiers[0].id)
+
+      await this.userIdentityEntity
+        .createQueryBuilder()
+        .relation(UserIdentityEntity, "identityList")
+        .of(identity.identifiers[0].id)
+        .set(identityList.id);
+
+      await this.userIdentityEntity
+        .createQueryBuilder()
+        .relation(UserIdentityEntity, "user")
+        .of(identity.identifiers[0].id)
+        .set({userId: user.generatedMaps[0].userId})
+
+      console.log("user.id", user.identifiers[0].id)
+
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.id = :id", { id: user.identifiers[0].id })
+        .getOne();
+
+        // this.userEntity
+        // .createQueryBuilder('user')
+        // .where("user.userId = :userId", { userId: userId })
+        // .getOne();
+    }
+
   }
 
 

@@ -25,14 +25,6 @@ export class UserRegisterController {
 
     let data:any =  await this.userRegisterService.register(registerBody);
     if(!data.code){
-      // "identitys": [
-      //   {
-      //     "id": "8",
-      //     "identityId": "0413787a-9eb3-4935-a5fa-3752a243386e",
-      //     "name": "用户",
-      //     "index": 80
-      //   }
-      // ],
       data.token = await this.jwt.sign({
         ...data,
         identitys: data.identitys

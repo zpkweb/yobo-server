@@ -13,6 +13,11 @@ export class ServerUserIdentityController {
     return await this.identityService.createIdentityList(identityListBody)
   }
 
+  /**
+   * 获取身份列表
+   * @param ID
+   * @param id
+   */
   @Get()
   @Get('/:ID')
   async findIdentityList(@Param() ID, @Query() id ) {
@@ -20,6 +25,12 @@ export class ServerUserIdentityController {
     return await this.identityService.findIdentityList(ID || id)
   }
 
+  /**
+   * 删除身份列表
+   * @param ID
+   * @param Id
+   * @param id
+   */
   @Post('/remove')
   @Post('/remove/:ID')
   async removeIdentityList(@Param() ID, @Body() Id, @Query() id) {

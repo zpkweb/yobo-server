@@ -22,8 +22,6 @@ export class UserSellerController {
   @Get('/search')
   async search(@Query(ALL) searchQuery) {
     let data:any =  await this.sellerService.search(searchQuery);
-
-    console.log("search data", data)
     return data;
 
   }

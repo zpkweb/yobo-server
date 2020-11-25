@@ -18,18 +18,24 @@ export class ServerUserRegisterController {
   @Config('jwt')
   jwtConfig;
 
+  // 添加管理员
+  @Post('/admin/register')
+  async adminRegister(@Body(ALL) registerBody) {
+    let data:any =  await this.userRegisterService.registerAdmin(registerBody);
+    if(!data.code){
+      data.token = await this.jwt.sign({
+        ...data
+    }, this.jwtConfig.secret);
+    }
+    console.log("register data", data)
+    return data;
 
-  // 注册成为普通用户
-  @Post('/register')
-  async register(@Body(ALL) registerBody) {
-    // const token = this.jwt.sign({ foo: 'bar' }, this.jwtConfig.secret);
-    // ctx.body = { token: this.jwt.sign({name: 'tony'})}
-    // 用户存在,生成token
-    // const token = app.jwt.sign({
-    //   name: user.name,
-    // }, app.config.jwt.secret);
+  }
 
-    let data:any =  await this.userRegisterService.register(registerBody);
+  // 添加客服
+  @Post('/customerServer/register')
+  async customerServerRegister(@Body(ALL) registerBody) {
+    let data:any =  await this.userRegisterService.registerCustomerServer(registerBody);
     if(!data.code){
       data.token = await this.jwt.sign({
         ...data
