@@ -10,6 +10,12 @@ export default (appInfo: EggAppInfo) => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1605490437736_6554';
 
+  config.email = {
+    service: 'qq',
+    user: '547790132@qq.com',
+    pass: 'vgmowhcgqcpobcaf'
+  }
+
   config.jwt = {
     secret: "yobo"
   };
@@ -41,7 +47,6 @@ export default (appInfo: EggAppInfo) => {
   config.view = {
     // root: path.join(appInfo.baseDir, 'src/assets'),
     mapping: {
-      // '.js': 'assets',
       '.nj': 'nunjucks',
       '.njk': 'nunjucks',
     },
@@ -70,6 +75,14 @@ export default (appInfo: EggAppInfo) => {
     defaultLocale: 'zh-CN',
   };
 
+  config.redis = {
+    client: {
+      port: 6379,          // Redis port
+      host: '127.0.0.1',   // Redis host
+      password: null,
+      db: 0,
+    },
+  }
 
 
   return config;

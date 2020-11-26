@@ -12,12 +12,18 @@ export class UserController {
   @Inject()
   ctx: Context;
 
+  @Config('email')
+  email;
+
+
   @Plugin()
   jwt;
 
   @Config('jwt')
   jwtConfig;
 
+  @Plugin()
+  redis;
   /**
    * 查找个人信息
    */
@@ -33,6 +39,40 @@ export class UserController {
   @Post('/password/update')
   async changePassword(@Body(ALL) changePasswordBody){
     return await this.userService.changePassword(changePasswordBody);
+  }
+
+  /**
+   * 找回密码：发送验证码
+   * @param retrievePasswordBody
+   */
+  @Post('/password/retrieve/code/send')
+  async passwordRetrieveCodeSend(@Body(ALL) codeSendBody) {
+    const code = Math.random().toString().slice(-6);
+
+    return await this.userService.passwordRetrieveCodeSend({
+      sendMail: {
+        title: 'yobo-找回密码的验证码',
+        code,
+        codeTime: 1000*60*10,
+        codeTimeText: '10分钟内有效',
+      },
+      ...this.email,
+      ...codeSendBody
+    })
+
+  }
+
+  /**
+   * 找回密码：验证验证码
+   * @param retrievePasswordBody
+   */
+  @Post('/password/retrieve/code/verify')
+  async passwordRetrieveCodeVerify(@Body(ALL) codeVerifyBody) {
+
+    return await this.userService.passwordRetrieveCodeVerify({
+      ...codeVerifyBody
+    })
+
   }
 
 

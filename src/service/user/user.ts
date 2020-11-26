@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator';
+import { Provide, Plugin } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
@@ -9,8 +9,15 @@ import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAddressEntity } from 'src/entity/user/address';
+import * as crypto from 'crypto';
+import * as nodemailer from 'nodemailer';
+
 @Provide()
 export class UserService {
+
+  @Plugin()
+  redis;
+
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
 
@@ -102,36 +109,108 @@ export class UserService {
    */
 
   async changePassword(payload) {
+    // 查找用户
     const user = await this.userEntity
       .createQueryBuilder('user')
+      .addSelect('password')
+      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .getOne();
+    const passwordMd5 = crypto.createHash('md5').update(payload.passwordOld).digest('hex');
+    if(passwordMd5 === user.password){
+      const changeUser = await this.userEntity
+      .createQueryBuilder('user')
       .update(UserEntity)
-      .set({ password: payload.password })
+      .set({ password: crypto.createHash('md5').update(payload.passwordNew).digest('hex') })
       .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
       .execute();
 
-    return {
-      code : user.affected ? 10001 : 10107
+      return {
+        code : changeUser.affected ? 10001 : 10107
+      }
+    }else{
+      return {
+        code : 10109
+      }
+    }
+
+  }
+
+  /**
+   * 发送找回密码验证码的邮件
+   * @param payload
+   */
+  async passwordRetrieveCodeSend(payload) {
+    let transporter = nodemailer.createTransport({
+      // host: "smtp.qq.com",
+      service: payload.service,
+      port: 465,
+      secureConnection: true,
+      auth: {
+        user: payload.user,
+        pass: payload.pass
+      },
+    });
+
+    // send mail with defined transport object
+    const data =  await transporter.sendMail({
+      from: payload.user,
+      to: payload.email,
+      subject: payload.sendMail.title,
+      html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
+    });
+
+    if(data.messageId){
+      await this.redis.set(`emailCode-${payload.userId}`, payload.code)
+      setTimeout(() => {
+        this.redis.del(`emailCode-${payload.userId}`).then((results) => {
+          console.log("del", results)
+        });
+      }, payload.codeTime)
     }
   }
+
+  /**
+   * 验证验证码
+   * @param payload
+   */
+  async passwordRetrieveCodeVerify(payload) {
+    const redisEmailCode = await this.redis.get(`emailCode-${payload.userId}`);
+    if(redisEmailCode && redisEmailCode === payload.code){
+
+    }else{
+      return {
+        code : 10110
+      }
+    }
+  }
+
 
   /**
    * 更新用户
    * @param payload
    */
   async update(payload) {
+    // 查找用户
     const user = await this.userEntity
+      .createQueryBuilder('user')
+      .addSelect('password')
+      .where("user.userId = :userId", { userId: payload.userId })
+      .getOne();
+
+    const userUpdate = await this.userEntity
       .createQueryBuilder('user')
       .update(UserEntity)
       .set({
-        name: payload.name || '',
-        email: payload.email || '',
-        phone: payload.phone || ''
+        name: payload.name || user.name,
+        email: payload.email || user.email,
+        phone: payload.phone || user.phone,
+        password: crypto.createHash('md5').update(payload.password).digest('hex') || user.password
       })
       .where("user.userId = :userId", { userId: payload.userId })
       .execute();
 
     return {
-      code : user.affected ? 10001 : 10107
+      code : userUpdate.affected ? 10001 : 10107
     }
   }
 

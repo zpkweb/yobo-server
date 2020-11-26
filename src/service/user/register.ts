@@ -10,7 +10,7 @@ import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
-
+import * as crypto from 'crypto';
 @Provide()
 export class UserRegisterService {
   @InjectEntityModel(UserEntity)
@@ -40,6 +40,23 @@ export class UserRegisterService {
   @InjectEntityModel(UserCustomerServiceEntity)
   userCustomerServiceEntity: Repository<UserCustomerServiceEntity>;
 
+  // 创建用户
+  async createUser(payload) {
+    // 创建用户
+    let user = await this.userEntity
+    .createQueryBuilder()
+    .insert()
+    .into(UserEntity)
+    .values({
+      name: payload.name,
+      phone: payload.phone,
+      email: payload.email,
+      password:  payload.password ? crypto.createHash('md5').update(payload.password).digest('hex') : ''
+    })
+    .execute();
+    return user;
+  }
+
   // 创建普通用户 80
   async register(payload) {
     console.log("createUser")
@@ -59,17 +76,13 @@ export class UserRegisterService {
       }
     }else{
       // 创建用户
-      let user = await this.userEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserEntity)
-        .values({
-          name: payload.name,
-          phone: payload.phone || '',
-          email: payload.email || '',
-          password: payload.password
-        })
-        .execute()
+      let user = await this.createUser({
+        name: payload.name || '',
+        phone: payload.phone || '',
+        email: payload.email || '',
+        password: payload.password || ''
+      });
+
       console.log("user", user)
       // 通过用户身份列表获取普通用户身份
       let identityList: any = await this.userIdentityListEntity
@@ -139,17 +152,12 @@ export class UserRegisterService {
       }
     }else{
       // 创建用户
-      let user = await this.userEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserEntity)
-        .values({
-          name: payload.firstname + payload.lastname || '',
-          phone: payload.phone || '',
-          email: payload.email || '',
-          password: ''
-        })
-        .execute()
+      let user = await this.createUser({
+        name: payload.firstname + payload.lastname || '',
+        phone: payload.phone || '',
+        email: payload.email || '',
+        password: ''
+      });
       console.log("user", user)
 
       // 通过用户身份列表获取商家身份
@@ -275,17 +283,12 @@ export class UserRegisterService {
       }
     }else{
       // 创建用户
-      let user = await this.userEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserEntity)
-        .values({
-          name: payload.name,
-          phone: payload.phone || '',
-          email: payload.email || '',
-          password: payload.password
-        })
-        .execute()
+      let user = await this.createUser({
+        name: payload.name || '',
+        phone: payload.phone || '',
+        email: payload.email || '',
+        password: payload.password || ''
+      });
       console.log("user", user)
       // 通过用户身份列表获取客服身份
       let identityList: any = await this.userIdentityListEntity
@@ -358,17 +361,12 @@ export class UserRegisterService {
       }
     }else{
       // 创建用户
-      let user = await this.userEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserEntity)
-        .values({
-          name: payload.name,
-          phone: payload.phone || '',
-          email: payload.email || '',
-          password: payload.password
-        })
-        .execute()
+      let user = await this.createUser({
+        name: payload.name || '',
+        phone: payload.phone || '',
+        email: payload.email || '',
+        password: payload.password || ''
+      });
       console.log("user", user)
       // 通过用户身份列表获取管理员身份
       let identityList: any = await this.userIdentityListEntity

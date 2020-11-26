@@ -27,7 +27,7 @@ export class ServerUserRegisterController {
         ...data
     }, this.jwtConfig.secret);
     }
-    console.log("register data", data)
+    console.log("register admin data", data)
     return data;
 
   }
@@ -41,7 +41,7 @@ export class ServerUserRegisterController {
         ...data
     }, this.jwtConfig.secret);
     }
-    console.log("register data", data)
+    console.log("register customerServer  data", data)
     return data;
 
   }

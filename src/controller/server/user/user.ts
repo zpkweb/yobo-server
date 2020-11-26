@@ -3,7 +3,7 @@ import { Context } from 'egg';
 import { UserService } from 'src/service/user/user'
 
 @Provide()
-@Controller('/api/admin/user', { middleware: [ 'authorizeMiddleware' ] }) // , { middleware: [ 'authorizeMiddleware' ] }
+@Controller('/api/admin/user')
 export class ServerUserController {
 
   @Inject()

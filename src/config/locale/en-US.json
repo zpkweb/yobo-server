@@ -11,5 +11,7 @@
   "10105": "The user does not have permission!",
   "10106": "Invalid token!",
   "10107": "Update failed!",
-  "10108": "Remove failed!"
+  "10108": "Remove failed!",
+  "10109": "The old password is incorrect!",
+  "10110": "Email verification code failed to verify!"
 }

@@ -1,8 +1,8 @@
 @baseUrl = http://127.0.0.1:7001
 
 
-// test2
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0IiwidXNlcklkIjoiMmQ5NTY1MzgtMmFhMy00YmIyLTk4NTItYTc0MmJmZmUxN2UyIiwibmFtZSI6InRlc3QyIiwiZW1haWwiOiIiLCJwaG9uZSI6IjIiLCJpZGVudGl0eXMiOlt7ImlkIjoiMSIsImlkZW50aXR5SWQiOiIyMWQwYjY2Ni1mZmMzLTQ5NDMtYWMxZC1jMzJhYWExMTdlNWEiLCJuYW1lIjoi55So5oi3IiwiaW5kZXgiOjgwfV0sImlhdCI6MTYwNjE4OTYxMn0.RSywDDayCEQPNjPvw4cdQzdip9HBSX8e3ouygOslNwQ
+//
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1IiwidXNlcklkIjoiNmRiMjAwMDQtOTdlZi00YTljLThlM2ItYTY5NjIxZWU2N2Y1IiwibmFtZSI6InRlc3QiLCJlbWFpbCI6IiIsInBob25lIjoiMTUiLCJpZGVudGl0eXMiOlt7ImlkIjoiMTUiLCJpZGVudGl0eUlkIjoiMTYzNWI2M2YtM2U0Yy00NDA1LWE5ZjAtMGM2Mjk1ZDE3MDNiIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYzNzA2MTF9.AOpmImeh5htOBD5tBE7y0GLNgSeZ7KRnlNsyLgPWaeU
 
 
 ####################################
@@ -57,6 +57,14 @@ POST {{baseUrl}}/api/adminidentity/remove
 
 ####################################
 
+#  获取个人信息
+# GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
+# GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
+# GET {{baseUrl}}/api/user?type=identitys
+GET {{baseUrl}}/api/admin/user?locale=en-US
+# GET {{baseUrl}}/api/user/self
+
+####################################
 
 
 #  注册 普通用户
@@ -65,8 +73,8 @@ Content-Type: application/json
 
 {
   "name": "test",
-  "phone": "1",
-  "password": "1"
+  "phone": "15",
+  "password": "123456"
 }
 
 
@@ -90,24 +98,41 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "email": '',
-  "phone": "1234567",
-  "password": "123"
+  "email": "",
+  "phone": "15",
+  "passwordOld": "123456",
+  "passwordNew": "123"
 }
 
 
 ####################################
 
-
-#  获取个人信息
-# GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
-# GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
-# GET {{baseUrl}}/api/user?type=identitys
-# GET {{baseUrl}}/api/user?locale=en-US
-GET {{baseUrl}}/api/user/self
+#  找回密码-发送邮件验证码
+POST {{baseUrl}}/api/user/password/retrieve/code/send
+Content-Type: application/json
 Authorization: Bearer {{token}}
 
+{
+  "userId": "6db20004-97ef-4a9c-8e3b-a69621ee67f5",
+  "email": "zpkweb@icloud.com"
+}
+
+
 ####################################
+
+#  找回密码-验证邮件验证码
+POST {{baseUrl}}/api/user/password/retrieve/code/verify
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "6db20004-97ef-4a9c-8e3b-a69621ee67f5",
+  "code": "747215"
+}
+
+
+####################################
+
 
 #  删除 用户
 POST {{baseUrl}}/api/admin/user/remove

@@ -1,10 +1,10 @@
-import { Inject, Controller, Provide, Get, Config, Plugin, Redirect} from '@midwayjs/decorator';
+import { Inject, Controller, Provide, Get, Config, Plugin } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { LoginService } from 'src/service/user/login';
 
 @Provide()
 @Controller('/')
-export class indexController {
+export class apiController {
 
   @Inject()
   loginService: LoginService;
@@ -19,14 +19,8 @@ export class indexController {
   jwtConfig;
 
   @Get()
-  @Redirect('/index.html')
-  async index() {
-    return "index";
+  @Get('/api')
+  async api(ctx) {
+    await ctx.render('api.nj');
   }
-
-  @Get('/index.html')
-  async html() {
-  }
-
-
 }

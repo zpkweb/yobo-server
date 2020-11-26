@@ -1,7 +1,29 @@
+[接口配置](#接口配置)
+[接口](#接口)
+  - [用途：客户端](#用途：客户端)
+    - [模块：用户](#模块：用户)
+      - [`用户注册`](#用户注册)
+      - [`申请艺术家`](#申请艺术家)
+      - [`用户登录`](#用户登录)
+      - [`修改密码`](#修改密码)
+      - [`找回密码：发送邮件验证码`](#找回密码：发送邮件验证码)
+      - [`找回密码：验证邮件验证码`](#找回密码：验证邮件验证码)
+      - [`获取个人信息`](#获取个人信息)
+      - [`更新用户信息`](#更新用户信息)
+      - [`获取用户地址`](#获取用户地址)
+      - [`添加用户地址`](#添加用户地址)
+      - [`更新用户地址`](#更新用户地址)
+      - [`删除用户地址`](#删除用户地址)
+
+[接口示例](#接口示例)
+
+
+
 # 接口配置
 
 ```base
   @baseUrl = http://192.168.0.67:7001
+  @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzIiwidXNlcklkIjoiOTA3ZTNhYjItZDg2OC00OGU0LThlN2MtYzFiMjdjNTI5OTM1IiwibmFtZSI6InRlc3QiLCJlbWFpbCI6IiIsInBob25lIjoiMTMiLCJpZGVudGl0eXMiOlt7ImlkIjoiMTMiLCJpZGVudGl0eUlkIjoiYTAxMWMyMWUtYzU0MC00ZGFmLTgyMTYtN2ZjNTNiOGIwZGYzIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYzNjY3ODR9.VzGR0tr8xKMl9I3x6xt_3LlA8nAoEhYp9ybfKIOg5yI
 ```
 多语言
 ```base
@@ -84,10 +106,34 @@ Authorization: Bearer {{token}}
 }
 ```
 
+#### 找回密码：发送邮件验证码
+```base
+  POST {{baseUrl}}/api/user/password/retrieve/code/send
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+
+  {
+    "userId": "6db20004-97ef-4a9c-8e3b-a69621ee67f5",
+    "email": "zpkweb@icloud.com"
+  }
+```
+
+#### 找回密码：验证邮件验证码
+```base
+  POST {{baseUrl}}/api/user/password/retrieve/code/verify
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+
+  {
+    "userId": "6db20004-97ef-4a9c-8e3b-a69621ee67f5",
+    "code": "747215"
+  }
+```
+
+
 ####  获取用户地址
 ```base
 GET  {{baseUrl}}/api/user/address?userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
-Content-Type: application/json
 Authorization: Bearer {{token}}
 ```
 
@@ -144,3 +190,20 @@ Authorization: Bearer {{token}}
 
 
 
+# 接口示例
+
+```base
+import axios from 'axios'
+
+export function register ({commit}, form) {
+  return axios.post('api/auth/register', form)
+    .then(response => {
+      commit('login', {token: response.data.token, user: response.data.user})
+      setAxiosHeaders(response.data.token)
+    })
+}
+
+function setAxiosHeaders (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
+```

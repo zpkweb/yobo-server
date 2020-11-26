@@ -10,10 +10,6 @@ export class GlobalMiddleware implements IWebMiddleware {
       const startTime = Date.now();
       await next();
       console.log("接口响应时间:", Date.now() - startTime);
-
-
-
-
     };
   }
 

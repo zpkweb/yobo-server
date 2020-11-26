@@ -28,7 +28,6 @@ export class ServerUserSellerController {
         ...data
     }, this.jwtConfig.secret);
     }
-    console.log("register data", data)
     return data;
 
   }
