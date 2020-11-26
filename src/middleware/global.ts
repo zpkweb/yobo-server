@@ -11,14 +11,8 @@ export class GlobalMiddleware implements IWebMiddleware {
       await next();
       console.log("接口响应时间:", Date.now() - startTime);
 
-      console.log("ctx.body", ctx.body)
-      const resultData = await ctx.body;
 
-      if(resultData && resultData.code){
-        ctx.body = { code: resultData.code, message: ctx.__(resultData.code), success: false, data: resultData.data }
-      }else{
-        ctx.body = { code: 10000, message: ctx.__('10000'), success: true, data: resultData }
-      }
+
 
     };
   }

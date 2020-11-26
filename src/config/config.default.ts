@@ -37,18 +37,29 @@ export default (appInfo: EggAppInfo) => {
     "logging": false
   }
 
+
   config.view = {
+    // root: path.join(appInfo.baseDir, 'src/assets'),
     mapping: {
-      '.js': 'react',
-      '.jsx': 'react',
+      // '.js': 'assets',
       '.nj': 'nunjucks',
       '.njk': 'nunjucks',
     },
   };
-
+  config.static = {
+    prefix: '/',
+    dir: 'public'
+  };
   // exports.static = {
   //   prefix: '/public/',
   //   dir: path.join(appInfo.baseDir, 'public')
+  // };
+
+  // config.assets = {
+  //   devServer: {
+  //     command: 'roadhog dev',
+  //     port: 8080,
+  //   },
   // };
 
   config.middleware = [

@@ -9,6 +9,7 @@
     "@midwayjs/swagger": "^1.0.4",
     "@midwayjs/web": "^2.3.0",
     "egg": "^2.0.0",
+    "egg-assets": "^1.0.8",
     "egg-i18n": "^2.1.1",
     "egg-jwt": "^3.1.7",
     "egg-scripts": "^2.10.0",

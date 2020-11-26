@@ -72,12 +72,39 @@ Content-Type: application/json
 
 ####################################
 
-#  查找 用户
+# 登录
+POST {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+  "phone": "1234567",
+  "password": "123456"
+}
+
+
+####################################
+
+#  修改密码
+POST {{baseUrl}}/api/user/change/password
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "email": '',
+  "phone": "1234567",
+  "password": "123"
+}
+
+
+####################################
+
+
+#  获取个人信息
 # GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?type=identitys
 # GET {{baseUrl}}/api/user?locale=en-US
-GET {{baseUrl}}/api/user/self?locale=zh-CN
+GET {{baseUrl}}/api/user/self
 Authorization: Bearer {{token}}
 
 ####################################
@@ -90,18 +117,7 @@ Content-Type: application/json
 
 ####################################
 
-#  修改密码
-POST {{baseUrl}}/api/user/change/password
-Content-Type: application/json
-Authorization: Bearer {{token}}
 
-{
-  "phone": "1234567",
-  "password": "123"
-}
-
-
-####################################
 
 #  更新用户信息
 POST {{baseUrl}}/api/user/update
@@ -187,7 +203,6 @@ Content-Type: application/json
   "lastname": "三",
   "phone": "7",
   "language": "汉语"
-
 }
 
 
@@ -224,14 +239,3 @@ Content-Type: application/json
 
 
 
-# 登录
-POST {{baseUrl}}/api/user/login
-Content-Type: application/json
-
-{
-  "phone": "1234567",
-  "password": "123456"
-}
-
-
-####################################
