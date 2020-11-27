@@ -21,7 +21,7 @@ export class ServerUserRegisterController {
   // 添加管理员
   @Post('/admin/register')
   async adminRegister(@Body(ALL) registerBody) {
-    let data:any =  await this.userRegisterService.registerAdmin(registerBody);
+    let data:any =  await this.userRegisterService.createAdmin(registerBody);
     if(!data.code){
       data.token = await this.jwt.sign({
         ...data
@@ -35,7 +35,7 @@ export class ServerUserRegisterController {
   // 添加客服
   @Post('/customerServer/register')
   async customerServerRegister(@Body(ALL) registerBody) {
-    let data:any =  await this.userRegisterService.registerCustomerServer(registerBody);
+    let data:any =  await this.userRegisterService.createCustomerServer(registerBody);
     if(!data.code){
       data.token = await this.jwt.sign({
         ...data

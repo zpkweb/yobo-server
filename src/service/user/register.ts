@@ -40,389 +40,307 @@ export class UserRegisterService {
   @InjectEntityModel(UserCustomerServiceEntity)
   userCustomerServiceEntity: Repository<UserCustomerServiceEntity>;
 
-  // 创建用户
-  async createUser(payload) {
-    // 创建用户
-    let user = await this.userEntity
-    .createQueryBuilder()
-    .insert()
-    .into(UserEntity)
-    .values({
-      name: payload.name,
-      phone: payload.phone,
-      email: payload.email,
-      password:  payload.password ? crypto.createHash('md5').update(payload.password).digest('hex') : ''
-    })
-    .execute();
-    return user;
-  }
 
-  // 创建普通用户 80
-  async register(payload) {
-    console.log("createUser")
-    console.log(payload)
 
-    // 查找用户
-    let user: any = await this.userEntity
-      .createQueryBuilder('user')
-      .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
-      .getOne();
-    console.log(user)
-
-    if(user){
-      return {
-        code : 10101,
-        data: user
+  // 创建商家
+  async createSeller(payload) {
+    const seller = await this.userSellerEntity
+      .createQueryBuilder()
+      .insert()
+      .into(UserSellerEntity)
+      .values({
+        state: 0,
+        firstname: payload.firstname || '',
+        lastname: payload.lastname || '',
+        label: payload.label || '',
+        gender: payload.gender || '',
+        country: payload.country || ''
+      })
+      .execute()
+      if (seller.identifiers[0].id) {
+        return seller
+      }else{
+        return {
+          success: false,
+          code: 10004
+        }
       }
-    }else{
-      // 创建用户
-      let user = await this.createUser({
-        name: payload.name || '',
-        phone: payload.phone || '',
-        email: payload.email || '',
-        password: payload.password || ''
-      });
+  }
+  // 创建商家基本信息
+  async createSellerMetadata(payload) {
+    const sellerMetadata =  await this.userSellerMetadataEntity
+      .createQueryBuilder()
+      .insert()
+      .into(UserSellerMetadataEntity)
+      .values({
+        language: payload.language || '',
+        findUs: payload.findUs || '',
+        isFullTime: payload.isFullTime || '',
+        onlineSell: payload.onlineSell || '',
+        sold: payload.sold || '',
+        channel: payload.channel || '',
+        gallery: payload.gallery || '',
+        medium: payload.medium || '',
+        galleryInfo: payload.galleryInfo || '',
+        recommend: payload.recommend || '',
+        prize: payload.prize || '',
+        website: payload.website || '',
+        profile: payload.profile || '',
 
-      console.log("user", user)
-      // 通过用户身份列表获取普通用户身份
-      let identityList: any = await this.userIdentityListEntity
+      })
+      .execute()
+      if (sellerMetadata.identifiers[0].id) {
+        return sellerMetadata
+      }else{
+        return {
+          success: false,
+          code: 10004
+        }
+      }
+  }
+  /**
+   * 查找身份列表
+   * @param id
+   */
+  async findIdentityList(index) {
+    let identityList;
+    if (index) {
+      // 根据id返回身份列表
+      identityList = await this.userIdentityListEntity
         .createQueryBuilder('identityList')
-        .where("identityList.index = :index", {index: 80})
+        .where("identityList.index = :index", { index: index })
         .getOne();
-      console.log("identityList", identityList)
-
-      // 创建普通用户身份
-      let identity: any = await this.userIdentityEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserIdentityEntity)
-        .values({
-          name: identityList.name,
-          index: identityList.index
-        })
-        .execute()
-        // .then((res) => {
-        //   console.log(res)
-        //   identity = res.identifiers[0];
-        // })
-      console.log("identity", identity)
-      console.log(identity.identifiers[0].id, identityList.id, user.identifiers[0].id)
-
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "identityList")
-        .of(identity.identifiers[0].id)
-        .set(identityList.id);
-
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "user")
-        .of(identity.identifiers[0].id)
-        .set({userId: user.generatedMaps[0].userId})
-
-      console.log("user.id", user.identifiers[0].id)
-
-      return await this.userEntity
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.identitys', 'identitys')
-        .where("user.id = :id", { id: user.identifiers[0].id })
-        .getOne();
-
-        // this.userEntity
-        // .createQueryBuilder('user')
-        // .where("user.userId = :userId", { userId: userId })
-        // .getOne();
+    } else {
+      // 返回身份列表
+      identityList = await this.userIdentityListEntity
+        .createQueryBuilder('identityList')
+        .getMany();
+    }
+    if (identityList) {
+      return identityList;
+    }else{
+      // 不存在这个用户身份
+      return {
+        success: false,
+        code: 10207
+      }
     }
 
   }
 
-  // 申请成为商家 5
-  async registerSeller(payload) {
-    // 查找用户
-    let user: any = await this.userEntity
-      .createQueryBuilder('user')
-      .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
-      .getOne();
-    console.log(user)
-
-    if(user){
-      return {
-        code : 10101,
-        data: user
+  // 创建用户的身份
+  async createUserIdentity(payload) {
+    const userIdentity = await this.userIdentityEntity
+      .createQueryBuilder()
+      .insert()
+      .into(UserIdentityEntity)
+      .values({
+        name: payload.name,
+        index: payload.index
+      })
+      .execute()
+      if (userIdentity.identifiers[0].id) {
+        return userIdentity
+      }else{
+        return {
+          success: false,
+          code: 10004
+        }
       }
-    }else{
-      // 创建用户
-      let user = await this.createUser({
-        name: payload.firstname + payload.lastname || '',
-        phone: payload.phone || '',
-        email: payload.email || '',
-        password: ''
-      });
-      console.log("user", user)
+  }
 
-      // 通过用户身份列表获取商家身份
-      let identityList: any = await this.userIdentityListEntity
-        .createQueryBuilder('identityList')
-        .where("identityList.index = :index", { index: 5 })
+  // 查找用户
+  async getUser(payload) {
+    console.log("getuser", payload)
+    if (payload.email && payload.phone) {
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
         .getOne();
-      console.log("identityList", identityList)
+    } else if (payload.email && !payload.phone) {
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.email = :email", { email: payload.email })
+        .getOne();
+    } else if (!payload.email && payload.phone) {
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.phone = :phone", { phone: payload.phone })
+        .getOne();
+    }
 
+  }
+  // 创建用户
+  async createUser(payload) {
+    // 判断用户是否存在
+    const user = await this.getUser(payload);
+    console.log("createUser", user)
+    if (user) {
+      return {
+        success: false,
+        code: 10201
+      }
+    }
+    // 创建用户
+    const newUser =  await this.userEntity
+      .createQueryBuilder()
+      .insert()
+      .into(UserEntity)
+      .values({
+        name: payload.name,
+        phone: payload.phone,
+        email: payload.email,
+        password: payload.password ? crypto.createHash('md5').update(payload.password).digest('hex') : ''
+      })
+      .execute()
+      if (newUser.identifiers[0].id) {
+        return newUser
+      }else{
+        return {
+          success: false,
+          code: 10004
+        }
+      }
 
+  }
 
+  async register(payload) {
+    // 创建用户
+    let user: any = await this.createUser(payload);
+    if(user.code){
+      return user;
+    }
+    console.log("user", user)
+    // 通过用户身份列表获取用户身份
+    let identityList = await this.findIdentityList(payload.identityIndex);
+    if(identityList.code){
+      return identityList;
+    }
+    console.log("identityList", identityList)
+    // 创建用户的身份
+    let identity: any = await this.createUserIdentity(identityList);
+    if(identity.code){
+      return identity;
+    }
+    if(payload.identityIndex === 5){
       // 创建商家
-      let seller = await this.userSellerEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserSellerEntity)
-        .values({
-          state: 0,
-          firstname: payload.firstname || '',
-          lastname: payload.lastname || '',
-          label: payload.label || '',
-          gender: payload.gender || '',
-          country: payload.country || ''
-        })
-        .execute()
-        console.log("seller", seller)
+      let seller: any = await this.createSeller(payload);
+      if(seller.code){
+        return seller;
+      }
+      console.log("seller", seller)
 
       // 创建商家基本信息
-      let sellerMetadata = await this.userSellerMetadataEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserSellerMetadataEntity)
-        .values({
-          language: payload.language || '',
-          findUs: payload.findUs || '',
-          isFullTime: payload.isFullTime || '',
-          onlineSell: payload.onlineSell || '',
-          sold: payload.sold || '',
-          channel: payload.channel || '',
-          gallery: payload.gallery || '',
-          medium: payload.medium || '',
-          galleryInfo: payload.galleryInfo || '',
-          recommend: payload.recommend || '',
-          prize: payload.prize || '',
-          website: payload.website || '',
-          profile: payload.profile || '',
+      let sellerMetadata: any = await this.createSellerMetadata(payload);
+      console.log("sellerMetadata", sellerMetadata)
+      if(sellerMetadata.code){
+        return sellerMetadata;
+      }
 
-        })
-        .execute()
-        console.log("sellerMetadata", sellerMetadata)
-
-      // 创建商家身份
-      let identity: any = await this.userIdentityEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserIdentityEntity)
-        .values({
-          name: identityList.name,
-          index: identityList.index
-        })
-        .execute()
-
-      // 身份关联商家身份
-      await this.userIdentityEntity
-      .createQueryBuilder()
-      .relation(UserIdentityEntity, "identityList")
-      .of(identity.identifiers[0].id)
-      .set(identityList.id);
-
-      // 身份关联用户
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "user")
-        .of(identity.identifiers[0].id)
-        .set({userId: user.generatedMaps[0].userId})
-
-      // 商家关联商家基本信息
+      // 商家 关联 商家基本信息
 
       await this.userSellerEntity
         .createQueryBuilder()
         .relation(UserSellerEntity, "metadata")
-        .of({sellerId: seller.generatedMaps[0].sellerId})
+        .of({ sellerId: seller.generatedMaps[0].sellerId })
         .set(sellerMetadata.identifiers[0].id);
 
-      // 商家关联用户
+      // 商家 关联 用户
       await this.userSellerEntity
+        .createQueryBuilder()
+        .relation(UserSellerEntity, "user")
+        .of(seller.identifiers[0].id)
+        .set({ userId: user.generatedMaps[0].userId });
+
+    }
+    // 用户身份 关联 用户身份列表
+    await this.userIdentityEntity
       .createQueryBuilder()
-      .relation(UserSellerEntity, "user")
-      .of(seller.identifiers[0].id)
-      .set({userId: user.generatedMaps[0].userId});
-      // await this.userEntity
-      // .createQueryBuilder()
-      // .relation(UserSellerEntity, "user")
-      // .of({userId: user.generatedMaps[0].userId})
-      // .set({sellerId: seller.generatedMaps[0].sellerId})
+      .relation(UserIdentityEntity, "identityList")
+      .of(identity.identifiers[0].id)
+      .set(identityList.id);
+    // 用户身份 关联 用户
+    await this.userIdentityEntity
+      .createQueryBuilder()
+      .relation(UserIdentityEntity, "user")
+      .of(identity.identifiers[0].id)
+      .set({ userId: user.generatedMaps[0].userId })
+    console.log("user.id", user.identifiers[0].id)
 
-      return await this.userEntity
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.identitys', 'identitys')
-        .leftJoinAndSelect('user.seller', 'seller')
-        .where("user.id = :id", { id: user.identifiers[0].id })
-        .getOne();
-
-    }
-  }
-
-  // 注册成为客服 3
-  async registerAdmin(payload) {
-    console.log("createUser")
-    console.log(payload)
-
-    // 查找用户
-    let user: any = await this.userEntity
-      .createQueryBuilder('user')
-      .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
-      .getOne();
-    console.log(user)
-
-    if(user){
+    // 返回用户关联身份
+    const getUser =  await this.getUser(payload);
+    if(getUser){
       return {
-        code : 10101,
-        data: user
+        data: getUser,
+        success: true,
+        code : 10003
       }
     }else{
-      // 创建用户
-      let user = await this.createUser({
-        name: payload.name || '',
-        phone: payload.phone || '',
-        email: payload.email || '',
-        password: payload.password || ''
-      });
-      console.log("user", user)
-      // 通过用户身份列表获取客服身份
-      let identityList: any = await this.userIdentityListEntity
-        .createQueryBuilder('identityList')
-        .where("identityList.index = :index", {index: 3})
-        .getOne();
-      console.log("identityList", identityList)
-
-      // 创建 客服身份
-      let identity: any = await this.userIdentityEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserIdentityEntity)
-        .values({
-          name: identityList.name,
-          index: identityList.index
-        })
-        .execute()
-        // .then((res) => {
-        //   console.log(res)
-        //   identity = res.identifiers[0];
-        // })
-      console.log("identity", identity)
-      console.log(identity.identifiers[0].id, identityList.id, user.identifiers[0].id)
-
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "identityList")
-        .of(identity.identifiers[0].id)
-        .set(identityList.id);
-
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "user")
-        .of(identity.identifiers[0].id)
-        .set({userId: user.generatedMaps[0].userId})
-
-      console.log("user.id", user.identifiers[0].id)
-
-      return await this.userEntity
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.identitys', 'identitys')
-        .where("user.id = :id", { id: user.identifiers[0].id })
-        .getOne();
-
-        // this.userEntity
-        // .createQueryBuilder('user')
-        // .where("user.userId = :userId", { userId: userId })
-        // .getOne();
-    }
-
-  }
-
-  // 注册成为管理员2
-  async registerCustomerServer(payload) {
-    console.log("createUser")
-    console.log(payload)
-
-    // 查找用户
-    let user: any = await this.userEntity
-      .createQueryBuilder('user')
-      .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
-      .getOne();
-    console.log(user)
-
-    if(user){
       return {
-        code : 10101,
-        data: user
+        success: false,
+        code : 10004
       }
-    }else{
-      // 创建用户
-      let user = await this.createUser({
-        name: payload.name || '',
-        phone: payload.phone || '',
-        email: payload.email || '',
-        password: payload.password || ''
-      });
-      console.log("user", user)
-      // 通过用户身份列表获取管理员身份
-      let identityList: any = await this.userIdentityListEntity
-        .createQueryBuilder('identityList')
-        .where("identityList.index = :index", {index: 2})
-        .getOne();
-      console.log("identityList", identityList)
-
-      // 创建管理员身份
-      let identity: any = await this.userIdentityEntity
-        .createQueryBuilder()
-        .insert()
-        .into(UserIdentityEntity)
-        .values({
-          name: identityList.name,
-          index: identityList.index
-        })
-        .execute()
-        // .then((res) => {
-        //   console.log(res)
-        //   identity = res.identifiers[0];
-        // })
-      console.log("identity", identity)
-      console.log(identity.identifiers[0].id, identityList.id, user.identifiers[0].id)
-
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "identityList")
-        .of(identity.identifiers[0].id)
-        .set(identityList.id);
-
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "user")
-        .of(identity.identifiers[0].id)
-        .set({userId: user.generatedMaps[0].userId})
-
-      console.log("user.id", user.identifiers[0].id)
-
-      return await this.userEntity
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.identitys', 'identitys')
-        .where("user.id = :id", { id: user.identifiers[0].id })
-        .getOne();
-
-        // this.userEntity
-        // .createQueryBuilder('user')
-        // .where("user.userId = :userId", { userId: userId })
-        // .getOne();
     }
+  }
+
+  // 注册普通用户 80
+  async registerUser(payload) {
+    return await this.register(Object.assign({}, {
+      identityIndex: 80,
+      name: payload.name || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: payload.password || ''
+    }, payload));
+
 
   }
 
+  // 申请成为商家 5
+  async applySeller(payload) {
+    return await this.register(Object.assign({}, {
+      identityIndex: 5,
+      name: payload.firstname + payload.lastname || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: ''
+    }, payload));
+
+  }
+
+  // 创建客服 3
+  async createAdmin(payload) {
+    return await this.register(Object.assign({}, {
+      identityIndex: 3,
+      name: payload.name || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: payload.password || ''
+    }, payload));
 
 
 
 
+
+  }
+
+  // 注册成为管理员 2
+  async createCustomerServer(payload) {
+    return await this.register(Object.assign({}, {
+      identityIndex: 2,
+      name: payload.name || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: payload.password || ''
+    }, payload));
+
+
+
+
+  }
 
 }
+

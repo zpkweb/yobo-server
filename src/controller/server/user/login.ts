@@ -3,7 +3,7 @@ import { Context } from 'egg';
 import { LoginService } from 'src/service/user/login';
 
 @Provide()
-@Controller('/api/admin/user')
+@Controller('/api/admin/user', { tagName: 'admin' })
 export class ServerUserLoginController {
 
   @Inject()

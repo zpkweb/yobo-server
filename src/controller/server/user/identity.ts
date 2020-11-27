@@ -19,7 +19,6 @@ export class ServerUserIdentityController {
    * @param id
    */
   @Get()
-  @Get('/:ID')
   async findIdentityList(@Param() ID, @Query() id ) {
     console.log("findIdentityList", ID || id)
     return await this.identityService.findIdentityList(ID || id)
@@ -35,6 +34,19 @@ export class ServerUserIdentityController {
   @Post('/remove/:ID')
   async removeIdentityList(@Param() ID, @Body() Id, @Query() id) {
     return await this.identityService.removeIdentityList(ID || Id || id)
+  }
+
+
+  /**
+   * 通过身份查找用户
+   * @param ID
+   * @param id
+   */
+  @Get('/user')
+  @Get('/user/:ID')
+  async findIdentityUser(@Param() ID, @Query() id ) {
+    console.log("findIdentityUser", ID || id)
+    return await this.identityService.findIdentityUser(ID || id)
   }
 
 }

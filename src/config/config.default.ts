@@ -55,6 +55,10 @@ export default (appInfo: EggAppInfo) => {
     prefix: '/',
     dir: 'public'
   };
+  // 上传
+  config.multipart = {
+    mode: 'file',
+  }
   // exports.static = {
   //   prefix: '/public/',
   //   dir: path.join(appInfo.baseDir, 'public')

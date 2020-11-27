@@ -1,13 +1,17 @@
-import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL, Query } from '@midwayjs/decorator';
 import { Context } from 'egg';
-import { UserService } from 'src/service/user/user'
+import { UserService } from 'src/service/user/user';
+import { SellerService } from 'src/service/user/seller';
 
 @Provide()
-@Controller('/api/user', { middleware: [ 'authorizeMiddleware' ] })
+@Controller('/api/user',  { tagName: 'user', middleware: [ 'authorizeMiddleware' ] })
 export class UserController {
 
   @Inject()
   userService: UserService;
+
+  @Inject()
+  sellerService: SellerService;
 
   @Inject()
   ctx: Context;
@@ -126,6 +130,11 @@ export class UserController {
     return await this.userService.addressRemove(addressBody);
   }
 
-
+  // 搜索商家
+  @Get('/seller/search')
+  async search(@Query(ALL) searchQuery) {
+    let data:any =  await this.sellerService.search(searchQuery);
+    return data;
+  }
 
 }

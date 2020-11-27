@@ -52,10 +52,14 @@ GET {{baseUrl}}/api/admin/identity
 #  删除身份列表
 POST {{baseUrl}}/api/adminidentity/remove
 
+####################################
 
-
+#  通过身份查找用户
+GET {{baseUrl}}/api/admin/identity/user
 
 ####################################
+
+
 
 #  获取个人信息
 # GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
@@ -68,12 +72,12 @@ GET {{baseUrl}}/api/admin/user?locale=en-US
 
 
 #  注册 普通用户
-POST {{baseUrl}}/api/user/register?locale=en-US
+POST {{baseUrl}}/api/user/register
 Content-Type: application/json
 
 {
   "name": "test",
-  "phone": "15",
+  "phone": "21",
   "password": "123456"
 }
 
@@ -219,14 +223,14 @@ Authorization: Bearer {{token}}
 
 
 
-#  注册 艺术家
-POST {{baseUrl}}/api/user/seller/register
+#  申请 艺术家
+POST {{baseUrl}}/api/user/seller/apply
 Content-Type: application/json
 
 {
   "firstname": "张",
-  "lastname": "三",
-  "phone": "7",
+  "lastname": "1",
+  "phone": "19",
   "language": "汉语"
 }
 

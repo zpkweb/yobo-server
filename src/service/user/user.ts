@@ -2,10 +2,6 @@ import { Provide, Plugin } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserSellerEntity } from 'src/entity/user/seller/seller';
-import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
-import { UserSellerStudioEntity } from 'src/entity/user/seller/studio';
-import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAddressEntity } from 'src/entity/user/address';
@@ -21,22 +17,9 @@ export class UserService {
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
 
-  @InjectEntityModel(UserSellerEntity)
-  UserSellerEntity: Repository<UserSellerEntity>;
-
-  @InjectEntityModel(UserSellerMetadataEntity)
-  UserSellerMetadataEntity: Repository<UserSellerMetadataEntity>;
-
-  @InjectEntityModel(UserSellerStudioEntity)
-  UserSellerStudioEntity: Repository<UserSellerStudioEntity>;
-
-  @InjectEntityModel(UserSellerResumeEntity)
-  UserSellerResumeEntity: Repository<UserSellerResumeEntity>;
 
   @InjectEntityModel(UserIdentityEntity)
   userIdentityEntity: Repository<UserIdentityEntity>;
-
-
 
   @InjectEntityModel(UserIdentityListEntity)
   userIdentityListEntity: Repository<UserIdentityListEntity>;
@@ -51,41 +34,62 @@ export class UserService {
    * type: identitys
    */
   async find(payload) {
+    let user: UserEntity | UserEntity[];
     if (payload.userId && payload.type) {
-      return await this.userEntity
+      user = await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect(`user.${payload.type}`, payload.type)
         .where("user.userId = :userId", { userId: payload.userId })
         .getOne();
     } else if (payload.userId && !payload.type) {
-      return await this.userEntity
+      user = await this.userEntity
         .createQueryBuilder('user')
         .where("user.userId = :userId", { userId: payload.userId })
         .getOne();
     } else if (!payload.id && payload.type) {
-      return await this.userEntity
+      user = await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect(`user.${payload.type}`, payload.type)
         .getMany();
     } else {
-      return await this.userEntity
+      user = await this.userEntity
         .createQueryBuilder('user')
-        .addSelect("user.password")
         .getMany();
+    }
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
     }
   }
 
   // 删除用户
   async remove(id) {
-    await this.userEntity
+    const user = await this.userEntity
       .createQueryBuilder('user')
       .delete()
       .where("user.id = :id", { id: id })
       .execute();
+      if(user.affected){
+        return {
+          data: user,
+          success: true,
+          code : 10005
+        }
+      }else{
+        return {
+          success: false,
+          code : 10006
+        }
+      }
   }
-
-
-
 
 
   /**
@@ -93,7 +97,7 @@ export class UserService {
    * @param userId
    */
   async findSelf(userId) {
-    return await this.userEntity
+    const user =  await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
       .leftJoinAndSelect('user.address', 'address')
@@ -102,6 +106,18 @@ export class UserService {
       .leftJoinAndSelect('user.browsingHistory', 'browsingHistory')
       .where("user.userId = :userId", { userId: userId })
       .getOne();
+      if(user){
+        return {
+          data: user,
+          success: true,
+          code : 10009
+        }
+      }else{
+        return {
+          success: false,
+          code : 10010
+        }
+      }
   }
 
   /**
@@ -115,21 +131,39 @@ export class UserService {
       .addSelect('password')
       .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
       .getOne();
+    if(!user){
+      // 找不到用户
+      return{
+        success: false,
+        code: 10202
+      }
+    }
     const passwordMd5 = crypto.createHash('md5').update(payload.passwordOld).digest('hex');
-    if(passwordMd5 === user.password){
-      const changeUser = await this.userEntity
+    if(passwordMd5 !== user.password){
+      // 用户密码不正确
+      return {
+        success: false,
+        code : 10204
+      }
+    }
+    const changeUser = await this.userEntity
       .createQueryBuilder('user')
       .update(UserEntity)
       .set({ password: crypto.createHash('md5').update(payload.passwordNew).digest('hex') })
       .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
       .execute();
 
+
+    if(changeUser.affected){
       return {
-        code : changeUser.affected ? 10001 : 10107
+        data: user,
+        success: true,
+        code : 10007
       }
     }else{
       return {
-        code : 10109
+        success: false,
+        code : 10008
       }
     }
 
@@ -166,6 +200,15 @@ export class UserService {
           console.log("del", results)
         });
       }, payload.codeTime)
+      return {
+        success: true,
+        code : 10405
+      }
+    }else{
+      return {
+        success: false,
+        code : 10406
+      }
     }
   }
 
@@ -176,10 +219,16 @@ export class UserService {
   async passwordRetrieveCodeVerify(payload) {
     const redisEmailCode = await this.redis.get(`emailCode-${payload.userId}`);
     if(redisEmailCode && redisEmailCode === payload.code){
-
-    }else{
+      // 验证成功
       return {
-        code : 10110
+        success: true,
+        code : 10407
+      }
+    }else{
+      // 验证失败
+      return {
+        success: false,
+        code : 10408
       }
     }
   }
@@ -196,7 +245,12 @@ export class UserService {
       .addSelect('password')
       .where("user.userId = :userId", { userId: payload.userId })
       .getOne();
-
+    if(!user){
+      return {
+        success: false,
+        code: 10202
+      }
+    }
     const userUpdate = await this.userEntity
       .createQueryBuilder('user')
       .update(UserEntity)
@@ -209,9 +263,21 @@ export class UserService {
       .where("user.userId = :userId", { userId: payload.userId })
       .execute();
 
-    return {
-      code : userUpdate.affected ? 10001 : 10107
+    if(userUpdate.affected){
+      // 修改成功
+      return {
+        data: user,
+        success: true,
+        code : 10007
+      }
+    }else{
+      // 修改失败
+      return {
+        success: false,
+        code : 10008
+      }
     }
+
   }
 
 
@@ -222,10 +288,22 @@ export class UserService {
    * @param payload
    */
   async getAddress(payload) {
-    return await this.userAddressEntity
+    const address =  await this.userAddressEntity
       .createQueryBuilder('address')
       .leftJoinAndSelect('address.user', 'user')
       .getMany();
+    if(address){
+      return{
+        data: address,
+        success: true,
+        code: 10009
+      }
+    }else{
+      return{
+        success: false,
+        code: 10010
+      }
+    }
   }
 
   /**
@@ -244,21 +322,31 @@ export class UserService {
       address: payload.address.address || ''
     })
     .execute()
-    console.log("address", address)
-
-    await this.userAddressEntity
+    if(address.identifiers[0].id){
+      await this.userAddressEntity
       .createQueryBuilder()
       .relation(UserAddressEntity, "user")
       .of(address.identifiers[0].id)
       .set({userId: payload.userId})
 
-    let userAddress = await this.userAddressEntity
-      .createQueryBuilder('address')
-      .where("id = :id", { id: address.identifiers[0].id })
+    let user = await this.userEntity
+      .createQueryBuilder('user')
+      .where("user.userId = :userId", { userId: payload.userId })
       .getOne();
-    console.log("useraddress", userAddress)
 
-    return userAddress
+      return {
+        data: user,
+        success: true,
+        code : 10003
+      }
+    }else{
+      return {
+        success: false,
+        code : 10004
+      }
+    }
+
+
   }
 
   /**
@@ -267,7 +355,7 @@ export class UserService {
    */
   async addressUpdate(payload) {
 
-    const userAddress = await this.userAddressEntity
+    const address = await this.userAddressEntity
       .createQueryBuilder('address')
       .update(UserAddressEntity)
       .set({
@@ -278,8 +366,25 @@ export class UserService {
       })
       .where("addressId = :addressId", { addressId: payload.address.addressId })
       .execute();
-      return {
-        code : userAddress.affected ? 10001 : 10107
+
+
+
+
+      if(address.affected){
+        let user = await this.userEntity
+          .createQueryBuilder('user')
+          .where("user.userId = :userId", { userId: payload.userId })
+          .getOne();
+        return {
+          data: user,
+          success: true,
+          code : 10007
+        }
+      }else{
+        return {
+          success: false,
+          code : 10008
+        }
       }
   }
 
@@ -288,116 +393,28 @@ export class UserService {
    * @param payload
    */
   async addressRemove(payload) {
-    const userAddress = await this.userAddressEntity
+    const address = await this.userAddressEntity
       .createQueryBuilder('address')
       .delete()
       .where("addressId = :addressId", { addressId: payload.addressId })
       .execute();
 
-      return {
-        code : userAddress.affected ? 10004 : 10108
-      }
-  }
 
-  /**
-   * 查找艺术家
-   * @param payload
-   */
-  async findSeller(payload) {
-    return await this.UserSellerEntity
-      .createQueryBuilder('seller')
-      .leftJoinAndSelect('seller.user', 'user')
-      .leftJoinAndSelect('seller.metadata', 'metadata')
-      .leftJoinAndSelect('seller.studios', 'studios')
-      .leftJoinAndSelect('seller.resumes', 'resumes')
-      .leftJoinAndSelect('seller.commoditys', 'commoditys')
-      .leftJoinAndSelect('seller.likeSellers', 'likeSellers')
-      .leftJoinAndSelect('seller.orders', 'orders')
-      .where("seller.sellerId = :sellerId", { sellerId: payload.sellerId })
-      .getOne();
-  }
+      if(address.affected){
 
-  /**
-   * 更新艺术家
-   * @param payload
-   */
-  async updateSeller(payload) {
-    // 更新用户
-    const user = await this.userEntity
-      .createQueryBuilder('user')
-      .update(UserEntity)
-      .set({
-        name: payload.name || '',
-        email: payload.email || '',
-        phone: payload.phone || ''
-      })
-      .where("userId = :userId", { userId: payload.userId })
-      .execute();
-    if(!user.affected){
-      return {
-        code : 10107
-      }
-    }
-
-    // 更新艺术家
-    let seller = await this.UserSellerEntity
-      .createQueryBuilder()
-      .update(UserSellerEntity)
-      .set({
-        firstname: payload.firstname || '',
-        lastname: payload.lastname || '',
-        label: payload.label || '',
-        gender: payload.gender || '',
-        country: payload.country || ''
-      })
-      .where("sellerId = :sellerId", { sellerId: payload.sellerId })
-      .execute()
-      console.log("seller", seller)
-
-    if(!seller.affected){
-      return {
-        code : 10107
-      }
-    }
-    // 更新艺术家基本信息
-    let sellerMetadata = await this.UserSellerMetadataEntity
-        .createQueryBuilder()
-        .update(UserSellerMetadataEntity)
-        .set({
-          language: payload.language || '',
-          findUs: payload.findUs || '',
-          isFullTime: payload.isFullTime || '',
-          onlineSell: payload.onlineSell || '',
-          sold: payload.sold || '',
-          channel: payload.channel || '',
-          gallery: payload.gallery || '',
-          medium: payload.medium || '',
-          galleryInfo: payload.galleryInfo || '',
-          recommend: payload.recommend || '',
-          prize: payload.prize || '',
-          website: payload.website || '',
-          profile: payload.profile || ''
-        })
-        .where("sellerId = :sellerId", { sellerId: payload.sellerId })
-        .execute()
-        console.log("sellerMetadata", sellerMetadata)
-      if(!sellerMetadata.affected){
         return {
-          code : 10107
+          success: true,
+          code : 10005
+        }
+      }else{
+        return {
+          success: false,
+          code : 10006
         }
       }
-      return {
-        code : 10001
-      }
   }
 
-  /**
-   * 删除艺术家
-   * @param payload
-   */
-  async removeSeller(payload) {
 
-  }
 
 
 }
