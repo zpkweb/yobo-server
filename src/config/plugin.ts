@@ -3,6 +3,10 @@ import 'tsconfig-paths/register';
 
 export default {
   static: true, // default is true
+  cors: {
+    enable: true,
+    package: 'egg-cors'
+  },
   nunjucks: {
     enable: true,
     package: 'egg-view-nunjucks'

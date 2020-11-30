@@ -3,10 +3,12 @@ import { Context } from 'egg';
 import { UserController } from 'src/controller/client/user/user';
 import { UserLoginController } from 'src/controller/client/user/login';
 
+import { ServerUserLoginController } from 'src/controller/server/user/login';
 @Provide()
 @Aspect([
   UserController,
-  UserLoginController
+  UserLoginController,
+  ServerUserLoginController
 ])
 export class ReportInfo implements IMethodAspect {
 
@@ -20,6 +22,7 @@ export class ReportInfo implements IMethodAspect {
     return {
       code: resultData.code,
       success: resultData.success,
+      status: resultData.success,
       message: point.target.ctx.__(resultData.code),
       data: resultData.data
     }

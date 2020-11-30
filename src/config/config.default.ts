@@ -10,6 +10,10 @@ export default (appInfo: EggAppInfo) => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1605490437736_6554';
 
+  config.root = {
+    name: 'root',
+    password: '123456'
+  }
   config.email = {
     service: 'qq',
     user: '547790132@qq.com',
@@ -29,7 +33,7 @@ export default (appInfo: EggAppInfo) => {
       enable: false,
     },
     // 跨域白名单
-    domainWhiteList: [ 'http://localhost:7001' ],
+    domainWhiteList: [ 'http://localhost:7001', 'http://localhost:3000' ],
   };
 
   config.orm = {

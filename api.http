@@ -65,7 +65,7 @@ GET {{baseUrl}}/api/admin/identity/user
 # GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?type=identitys
-GET {{baseUrl}}/api/admin/user?locale=en-US
+GET {{baseUrl}}/api/admin/user
 # GET {{baseUrl}}/api/user/self
 
 ####################################
@@ -77,7 +77,7 @@ Content-Type: application/json
 
 {
   "name": "test",
-  "phone": "21",
+  "phone": "22",
   "password": "123456"
 }
 

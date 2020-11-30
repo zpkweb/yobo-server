@@ -1,4 +1,4 @@
-import { Provide } from "@midwayjs/decorator";
+import { Config, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
@@ -9,6 +9,9 @@ export class LoginService {
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
+
+  @Config('root')
+  root;
 
   /**
    * 登录
@@ -52,14 +55,24 @@ export class LoginService {
 
   /**
    * 后台登录
-   * @param payload email/phone password
+   * @param payload
    */
   async adminLogin(payload) {
+    console.log('adminLogin', payload, this.root)
+    if(payload.name === this.root.name && payload.password === this.root.password){
+      return {
+        data:{
+          name: payload.name
+        },
+        success: true,
+        code: 10011
+      };
+    }
     // 查找用户
     const user = await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
-      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .where("user.name", { phone: payload.name })
       .getOne();
     console.log("user", user)
 
@@ -87,6 +100,7 @@ export class LoginService {
         }
       }
     })
+
     // 判断密码是否正确
     const userPassword = await this.userEntity
       .createQueryBuilder('user')

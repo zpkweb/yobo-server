@@ -1,6 +1,7 @@
-import { Inject, Controller, Post, Provide, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Config, Plugin, Body, ALL, Validate } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { LoginService } from 'src/service/user/login';
+import { AdminUserLoginDTO } from 'src/dto/user/login';
 
 @Provide()
 @Controller('/api/admin/user', { tagName: 'admin' })
@@ -20,7 +21,9 @@ export class ServerUserLoginController {
 
   // 后台登录
   @Post('/login')
-  async login(@Body(ALL) loginBody) {
+  @Validate()
+  async login(@Body(ALL) loginBody: AdminUserLoginDTO) {
+    console.log("admin login", loginBody)
     let data:any =  await this.loginService.adminLogin(loginBody);
     if(!data.code){
       data.token = await this.jwt.sign({
