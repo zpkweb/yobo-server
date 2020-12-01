@@ -39,21 +39,25 @@ export class UserService {
       user = await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect(`user.${payload.type}`, payload.type)
+        .addSelect('createdDate')
         .where("user.userId = :userId", { userId: payload.userId })
         .getOne();
     } else if (payload.userId && !payload.type) {
       user = await this.userEntity
         .createQueryBuilder('user')
+        .addSelect('createdDate')
         .where("user.userId = :userId", { userId: payload.userId })
         .getOne();
     } else if (!payload.id && payload.type) {
       user = await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect(`user.${payload.type}`, payload.type)
+        .addSelect('createdDate')
         .getMany();
     } else {
       user = await this.userEntity
         .createQueryBuilder('user')
+        .addSelect('createdDate')
         .getMany();
     }
     if(user){
