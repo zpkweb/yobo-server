@@ -13,6 +13,7 @@ import 'egg-static';
 import 'egg-jsonp';
 import 'egg-view';
 import 'midway-schedule';
+import 'egg-cors';
 import 'egg-view-nunjucks';
 import 'egg-jwt';
 import 'egg-redis';
@@ -32,6 +33,7 @@ declare module 'egg' {
     jsonp?: EggPluginItem;
     view?: EggPluginItem;
     schedulePlus?: EggPluginItem;
+    cors?: EggPluginItem;
     nunjucks?: EggPluginItem;
     jwt?: EggPluginItem;
     redis?: EggPluginItem;

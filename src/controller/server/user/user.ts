@@ -20,9 +20,9 @@ export class ServerUserController {
 
   // 删除用户
   @Post('/remove')
-  @Post('/remove/:ID')
-  async removeUser(@Param() ID, @Body() Id) {
-    return await this.userService.remove(ID||Id);
+  @Post('/remove/:UserId')
+  async removeUser(@Param() UserId, @Body() userId) {
+    return await this.userService.remove(UserId||userId);
   }
 
   // 更新用户
@@ -34,11 +34,18 @@ export class ServerUserController {
   // 查找用户
   @Get()
   async findUser(@Query(ALL) findQuery) {
-    console.log("ctx", this.ctx.state,  findQuery)
     return await this.userService.find({
       type: findQuery.type,
       userId: findQuery.userId
     });
+  }
+
+  // 搜索用户
+  @Get('/search')
+  async searchUser(@Query(ALL) searchQuery) {
+    console.log("ctx", searchQuery)
+
+    return await this.userService.search(searchQuery);
   }
 
 }

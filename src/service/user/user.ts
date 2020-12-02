@@ -27,6 +27,43 @@ export class UserService {
   @InjectEntityModel(UserAddressEntity)
   userAddressEntity: Repository<UserAddressEntity>;
 
+  /**
+   * 搜索用户通过：name, email, phone
+   * @param payload
+   */
+  async search(payload) {
+    console.log("search", payload)
+    let user: UserEntity | UserEntity[];
+    if(payload.name || payload.email || payload.phone){
+      user = await this.userEntity
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename = :ename', { ename: payload.identity })
+      .addSelect('user.createdDate')
+      .where("user.name like :name", { name: `%${payload.name}%` })
+      .andWhere("user.email like :email", { email: `%${payload.email}%` })
+      .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
+      .getMany();
+    }else{
+      user = await this.userEntity
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename = :ename', { ename: payload.identity })
+      .addSelect('user.createdDate')
+      .getMany();
+    }
+
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
 
   /**
    * 查找用户
@@ -75,11 +112,11 @@ export class UserService {
   }
 
   // 删除用户
-  async remove(id) {
+  async remove(userId) {
     const user = await this.userEntity
       .createQueryBuilder('user')
       .delete()
-      .where("user.id = :id", { id: id })
+      .where("user.userId = :userId", { userId: userId })
       .execute();
       if(user.affected){
         return {
@@ -160,7 +197,6 @@ export class UserService {
 
     if(changeUser.affected){
       return {
-        data: user,
         success: true,
         code : 10007
       }
@@ -270,7 +306,6 @@ export class UserService {
     if(userUpdate.affected){
       // 修改成功
       return {
-        data: user,
         success: true,
         code : 10007
       }

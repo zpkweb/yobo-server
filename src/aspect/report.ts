@@ -3,12 +3,17 @@ import { Context } from 'egg';
 import { UserController } from 'src/controller/client/user/user';
 import { UserLoginController } from 'src/controller/client/user/login';
 
+import { ServerUserController } from 'src/controller/server/user/user';
 import { ServerUserLoginController } from 'src/controller/server/user/login';
+import { ServerUserRegisterController } from 'src/controller/server/user/register';
+
 @Provide()
 @Aspect([
   UserController,
   UserLoginController,
-  ServerUserLoginController
+  ServerUserController,
+  ServerUserLoginController,
+  ServerUserRegisterController
 ])
 export class ReportInfo implements IMethodAspect {
 

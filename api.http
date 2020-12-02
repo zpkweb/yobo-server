@@ -20,29 +20,48 @@ Content-Type: application/json
 
 [{
   "name": "超级管理员",
+  "ename": "superAdmin",
   "index": 1
 },{
   "name": "管理员",
+  "ename": "admin",
   "index": 2
 },{
   "name": "客服",
+  "ename": "customerService",
   "index": 3
 },{
   "name": "商家",
+  "ename": "seller",
   "index": 5
 },{
   "name": "会员",
+  "ename": "member",
   "index": 70
 },{
   "name": "用户",
+  "ename": "ordinary",
   "index": 80
 },{
   "name": "第三方用户",
+  "ename": "thirdParty",
   "index": 90
 }]
 
 
 ####################################
+
+#  修改身份列表
+POST {{baseUrl}}/api/admin/identity/update
+Content-Type: application/json
+
+{
+  "id": "3",
+  "ename": "customerService"
+}
+
+####################################
+
 
 #  获取身份列表
 GET {{baseUrl}}/api/admin/identity
@@ -58,6 +77,8 @@ POST {{baseUrl}}/api/adminidentity/remove
 GET {{baseUrl}}/api/admin/identity/user
 
 ####################################
+
+
 
 
 

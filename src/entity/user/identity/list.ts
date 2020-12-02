@@ -16,6 +16,10 @@ export class UserIdentityListEntity {
   @Column()
   name: string;
 
+  // 英文身份名称
+  @Column()
+  ename: string;
+
   // 身份序号
   @Column()
   index: number;

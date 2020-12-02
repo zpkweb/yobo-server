@@ -46,6 +46,7 @@ export class IdentityService {
           .into(UserIdentityListEntity)
           .values({
             name: item.name,
+            ename: item.ename,
             index: item.index
           })
           .execute();
@@ -72,6 +73,51 @@ export class IdentityService {
       return{
         success: false,
         code: 10010
+      }
+    }
+
+  }
+
+  /**
+   * 更新身份列表
+   * @param payload
+   */
+  async updateIdentityList(payload) {
+    const identityList = await this.userIdentityListEntity
+    .createQueryBuilder('identityList')
+    .where("identityList.id = :id", { id: payload.id })
+    .getOne();
+    console.log("identityList", identityList)
+    if(!identityList){
+      return {
+        success: false,
+        code: 10202
+      }
+    }
+
+
+    const identityListUpdate = await this.userIdentityListEntity
+      .createQueryBuilder()
+      .update(UserIdentityListEntity)
+      .set({
+        name: payload.name || identityList.name,
+        ename: payload.ename || identityList.ename,
+        index: payload.index || identityList.index,
+      })
+      .where("id = :id", { id: payload.id })
+      .execute();
+
+    if(identityListUpdate.affected){
+      // 修改成功
+      return {
+        success: true,
+        code : 10007
+      }
+    }else{
+      // 修改失败
+      return {
+        success: false,
+        code : 10008
       }
     }
 

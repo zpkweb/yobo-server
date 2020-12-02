@@ -18,6 +18,18 @@ export class ServerUserRegisterController {
   @Config('jwt')
   jwtConfig;
 
+  // 注册用户
+  @Post('/register')
+  async register(@Body(ALL) registerBody) {
+    let data:any =  await this.userRegisterService.adminRegister(registerBody);
+    if(!data.code){
+      data.token = await this.jwt.sign({
+        ...data
+      }, this.jwtConfig.secret);
+    }
+    return data;
+  }
+
   // 添加管理员
   @Post('/admin/register')
   async adminRegister(@Body(ALL) registerBody) {
@@ -27,21 +39,19 @@ export class ServerUserRegisterController {
         ...data
     }, this.jwtConfig.secret);
     }
-    console.log("register admin data", data)
     return data;
 
   }
 
   // 添加客服
-  @Post('/customerServer/register')
-  async customerServerRegister(@Body(ALL) registerBody) {
-    let data:any =  await this.userRegisterService.createCustomerServer(registerBody);
+  @Post('/customerService/register')
+  async customerServiceRegister(@Body(ALL) registerBody) {
+    let data:any =  await this.userRegisterService.createCustomerService(registerBody);
     if(!data.code){
       data.token = await this.jwt.sign({
         ...data
     }, this.jwtConfig.secret);
     }
-    console.log("register customerServer  data", data)
     return data;
 
   }

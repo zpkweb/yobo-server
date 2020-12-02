@@ -8,10 +8,25 @@ export class ServerUserIdentityController {
   @Inject()
   identityService: IdentityService;
 
+  /**
+   * 创建身份列表
+   * @identityListBody
+   */
+
   @Post()
   async createIdentityList(@Body(ALL) identityListBody:any) {
     return await this.identityService.createIdentityList(identityListBody)
   }
+
+  /**
+   * 更新身份列表
+   * @identityListBody
+   */
+  @Post('/update')
+  async updateIdentityList(@Body(ALL) identityListBody:any) {
+    return await this.identityService.updateIdentityList(identityListBody)
+  }
+
 
   /**
    * 获取身份列表

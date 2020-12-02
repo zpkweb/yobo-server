@@ -49,12 +49,12 @@ export class UserRegisterService {
       .insert()
       .into(UserSellerEntity)
       .values({
-        state: 0,
+        state: payload.state,
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',
         label: payload.label || '',
         gender: payload.gender || '',
-        country: payload.country || ''
+        country: payload.country || '',
       })
       .execute()
       if (seller.identifiers[0].id) {
@@ -136,6 +136,7 @@ export class UserRegisterService {
       .into(UserIdentityEntity)
       .values({
         name: payload.name,
+        ename: payload.ename,
         index: payload.index
       })
       .execute()
@@ -306,13 +307,14 @@ export class UserRegisterService {
       name: payload.firstname + payload.lastname || '',
       phone: payload.phone || '',
       email: payload.email || '',
-      password: ''
+      password: payload.password || '',
+      state: payload.state || 0
     }, payload));
 
   }
 
   // 创建客服 3
-  async createAdmin(payload) {
+  async createCustomerService(payload) {
     return await this.register(Object.assign({}, {
       identityIndex: 3,
       name: payload.name || '',
@@ -328,7 +330,7 @@ export class UserRegisterService {
   }
 
   // 注册成为管理员 2
-  async createCustomerServer(payload) {
+  async createAdmin(payload) {
     return await this.register(Object.assign({}, {
       identityIndex: 2,
       name: payload.name || '',
@@ -337,8 +339,28 @@ export class UserRegisterService {
       password: payload.password || ''
     }, payload));
 
+  }
 
-
+  // 后台管理 注册 用户
+  async adminRegister(payload) {
+    let adminRegisterUser;
+    switch(payload.identity){
+      case 'ordinary':
+        adminRegisterUser = await this.registerUser(payload);
+        break;
+      case 'seller':
+        adminRegisterUser = await this.applySeller(Object.assign({
+          state: 1
+        }, payload));
+        break;
+      case 'customerService':
+        adminRegisterUser = await this.createCustomerService(payload);
+        break;
+      case 'admin':
+        adminRegisterUser = await this.createAdmin(payload);
+        break;
+    }
+    return adminRegisterUser;
 
   }
 

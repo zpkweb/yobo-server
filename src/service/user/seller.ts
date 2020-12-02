@@ -187,7 +187,6 @@ export class SellerService {
       }
     if(user){
       return {
-        data: user,
         success: true,
         code : 10007
       }
@@ -198,7 +197,7 @@ export class SellerService {
    * @param payload
    */
   async update(payload) {
-    // 更新用户
+    // 查找艺术家
     const user = await this.userEntity
       .createQueryBuilder('user')
       .update(UserEntity)
@@ -267,7 +266,6 @@ export class SellerService {
       }
       if(user){
         return {
-          data: user,
           success: true,
           code : 10007
         }

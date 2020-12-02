@@ -28,6 +28,10 @@ export class UserIdentityEntity {
   @Column()
   name: string;
 
+  // 英文身份名称
+  @Column()
+  ename: string;
+
   // 身份序号
   @Column()
   index: number;
@@ -46,7 +50,8 @@ export class UserIdentityEntity {
 
   // 关联 用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.identitys, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     name: 'userId',
