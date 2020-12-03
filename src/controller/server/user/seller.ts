@@ -30,23 +30,17 @@ export class ServerUserSellerController {
     return await this.sellerService.find(findQuery)
   }
 
-  // 更新商家信息
+  // 更新艺术家信息
   @Post('/update')
-  async register(@Body(ALL) registerBody) {
-    let data:any =  await this.userRegisterService.register(registerBody);
-    if(!data.code){
-      data.token = await this.jwt.sign({
-        ...data
-    }, this.jwtConfig.secret);
-    }
-    return data;
+  async update(@Body(ALL) registerBody) {
+    return await this.sellerService.update(registerBody);
   }
 
   // 艺术家申请 registerList
-  @Get('/applyList')
-  async applyList(@Query(ALL) findQuery) {
-    return await this.sellerService.applyList(findQuery)
-  }
+  // @Get('/applyList')
+  // async applyList(@Query(ALL) findQuery) {
+  //   return await this.sellerService.applyList(findQuery)
+  // }
 
   /**
    * 设置艺术家状态

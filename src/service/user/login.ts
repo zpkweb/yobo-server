@@ -22,7 +22,8 @@ export class LoginService {
     const user = await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
-      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      // .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .where("user.name = :name", { name: payload.name })
       .getOne();
 
     if(!user){
@@ -72,7 +73,8 @@ export class LoginService {
     const user = await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
-      .where("user.name", { phone: payload.name })
+      .where("user.name = :name", { name: payload.name })
+      // .andWhere('identity.index < :index', { index : 5 })
       .getOne();
     console.log("user", user)
 
@@ -91,7 +93,8 @@ export class LoginService {
         code: 10203
       }
     }
-    user.identitys.forEach((item) => {
+    for(let item of user.identitys){
+      console.log("user identity", item)
       if(item.index > 3){
         // 用户没有权限
         return {
@@ -99,7 +102,8 @@ export class LoginService {
           code: 10203
         }
       }
-    })
+    }
+
 
     // 判断密码是否正确
     const userPassword = await this.userEntity

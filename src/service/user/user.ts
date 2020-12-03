@@ -1,4 +1,4 @@
-import { Provide, Plugin } from '@midwayjs/decorator';
+import { Provide, Plugin, Config } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
@@ -13,6 +13,9 @@ export class UserService {
 
   @Plugin()
   redis;
+
+  @Config('email')
+  email;
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
@@ -32,22 +35,33 @@ export class UserService {
    * @param payload
    */
   async search(payload) {
+    console.log("search", payload)
     let user: UserEntity | UserEntity[];
-    if(payload.name || payload.email || payload.phone){
+    if(payload.name || payload.email || payload.phone || payload.identity){
+
       user = await this.userEntity
       .createQueryBuilder('user')
-      .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename = :ename', { ename: payload.identity })
+      .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename like :ename ', { ename: `%${payload.identity}%` })
       .addSelect('user.createdDate')
       .where("user.name like :name", { name: `%${payload.name}%` })
       .andWhere("user.email like :email", { email: `%${payload.email}%` })
       .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
       .getMany();
     }else{
-      user = await this.userEntity
-      .createQueryBuilder('user')
-      .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename = :ename', { ename: payload.identity })
-      .addSelect('user.createdDate')
-      .getMany();
+      // if(payload.identity){
+      //   user = await this.userEntity
+      //     .createQueryBuilder('user')
+      //     .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename like :ename', { ename: `%${payload.identity}%` })
+      //     .addSelect('user.createdDate')
+      //     .getMany();
+      // }else{
+        user = await this.userEntity
+          .createQueryBuilder('user')
+          .leftJoinAndSelect('user.identitys', 'identitys')
+          .addSelect('user.createdDate')
+          .getMany();
+      // }
+
     }
 
     if(user){
@@ -169,7 +183,8 @@ export class UserService {
     const user = await this.userEntity
       .createQueryBuilder('user')
       .addSelect('password')
-      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      // .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .where("user.name = :name", { name: payload.name })
       .getOne();
     if(!user){
       // 找不到用户
@@ -190,7 +205,8 @@ export class UserService {
       .createQueryBuilder('user')
       .update(UserEntity)
       .set({ password: crypto.createHash('md5').update(payload.passwordNew).digest('hex') })
-      .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      // .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
+      .where("user.name = :name", { name: payload.name })
       .execute();
 
 
@@ -215,18 +231,18 @@ export class UserService {
   async passwordRetrieveCodeSend(payload) {
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",
-      service: payload.service,
+      service: this.email.service,
       port: 465,
       secureConnection: true,
       auth: {
-        user: payload.user,
-        pass: payload.pass
+        user: this.email.user,
+        pass: this.email.pass
       },
     });
 
     // send mail with defined transport object
     const data =  await transporter.sendMail({
-      from: payload.user,
+      from: this.email.user,
       to: payload.email,
       subject: payload.sendMail.title,
       html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`

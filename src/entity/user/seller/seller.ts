@@ -92,7 +92,8 @@ export class UserSellerEntity {
 
   // 关联用户
   @OneToOne(type => UserEntity, UserEntity => UserEntity.seller, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     name: 'userId',

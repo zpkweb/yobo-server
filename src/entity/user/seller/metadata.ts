@@ -79,7 +79,8 @@ export class UserSellerMetadataEntity {
 
   // 关联商家
   @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.metadata,{
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     name: 'sellerId',

@@ -157,13 +157,14 @@ export class UserRegisterService {
       return await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.identitys', 'identitys')
-        .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
+        // .where("user.email = :email OR user.phone = :phone", { email: payload.email, phone: payload.phone })
+        .where("user.name = :name", { name: payload.name })
         .getOne();
-    } else if (payload.email && !payload.phone) {
+    } else if (payload.name && !payload.phone) {
       return await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.identitys', 'identitys')
-        .where("user.email = :email", { email: payload.email })
+        .where("user.name = :name", { name: payload.name })
         .getOne();
     } else if (!payload.email && payload.phone) {
       return await this.userEntity
@@ -328,7 +329,7 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      state: payload.state || 0
+      state: payload.state || 1
     }, payload));
 
   }
@@ -370,9 +371,7 @@ export class UserRegisterService {
         adminRegisterUser = await this.registerUser(payload);
         break;
       case 'seller':
-        adminRegisterUser = await this.registerSeller(Object.assign({
-          state: 1
-        }, payload));
+        adminRegisterUser = await this.registerSeller(payload);
         break;
       case 'customerService':
         adminRegisterUser = await this.createCustomerService(payload);

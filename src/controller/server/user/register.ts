@@ -21,25 +21,25 @@ export class ServerUserRegisterController {
   // 注册用户
   @Post('/register')
   async register(@Body(ALL) registerBody) {
-    let data:any =  await this.userRegisterService.adminRegister(registerBody);
-    if(!data.code){
-      data.token = await this.jwt.sign({
-        ...data
-      }, this.jwtConfig.secret);
-    }
-    return data;
+    return await this.userRegisterService.adminRegister(registerBody);
+    // if(!data.code){
+    //   data.token = await this.jwt.sign({
+    //     ...data
+    //   }, this.jwtConfig.secret);
+    // }
+    // return data;
   }
 
   // 添加管理员
   @Post('/admin/register')
   async adminRegister(@Body(ALL) registerBody) {
-    let data:any =  await this.userRegisterService.createAdmin(registerBody);
-    if(!data.code){
-      data.token = await this.jwt.sign({
-        ...data
-    }, this.jwtConfig.secret);
-    }
-    return data;
+    return await this.userRegisterService.createAdmin(registerBody);
+    // if(!data.code){
+    //   data.token = await this.jwt.sign({
+    //     ...data
+    // }, this.jwtConfig.secret);
+    // }
+    // return data;
 
   }
 

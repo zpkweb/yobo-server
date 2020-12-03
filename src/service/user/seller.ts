@@ -29,6 +29,14 @@ export class SellerService {
   @Config('email')
   email;
 
+  async getSeller(sellerId) {
+    return await this.userSellerEntity
+    .createQueryBuilder('seller')
+    .leftJoinAndSelect('seller.user', 'user')
+    .leftJoinAndSelect('seller.metadata', 'metadata')
+    .where('seller.sellerId = :sellerId', { sellerId: sellerId })
+    .getOne();
+  }
 
   // 通过艺术家申请 ，发送邮件：账号密码
   /**
@@ -39,13 +47,7 @@ export class SellerService {
    */
   async updateSellerState(payload) {
     // 查找用户，通过sellerId关联查找user
-    const seller = await this.userSellerEntity
-    .createQueryBuilder('seller')
-    .leftJoinAndSelect('seller.user', 'user')
-    .where('seller.sellerId = :sellerId', { sellerId: payload.sellerId })
-    .getOne();
-    console.log("seller state user", seller);
-    // 用户不存在
+    const seller = await this.getSeller(payload.sellerId)
     if(!seller){
       return {
         success: false,
@@ -82,12 +84,23 @@ export class SellerService {
       }
 
       // 发送邮件
-      return await this.sendMailSellerApply({
+      const sendmail =  await this.sendMailSellerApply({
         ...payload,
         email: seller.user.email,
         subject: '恭喜您通过申请',
         html: `<p>恭喜您通过申请！初始密码 <span style="font-size: 18px; color: red">123456</span></p>`
       });
+      if(sendmail.messageId){
+        return {
+          success: true,
+          code : 10403
+        }
+      }else{
+        return {
+          success: false,
+          code : 10404
+        }
+      }
 
     }else if(payload.state == '2'){ // 拒绝申请
       // 更新状态
@@ -102,13 +115,23 @@ export class SellerService {
         }
       }
       // 发送邮件
-      return await this.sendMailSellerApply({
+      const sendmail = await this.sendMailSellerApply({
         ...payload,
         email: seller.user.email,
         subject: '非常抱歉，您未能通过申请',
         html: `<p>非常抱歉，您未能通过申请！</p>`
       });
-
+      if(sendmail.messageId){
+        return {
+          success: true,
+          code : 10409
+        }
+      }else{
+        return {
+          success: false,
+          code : 10410
+        }
+      }
     }
   }
   // 设置状态
@@ -139,7 +162,7 @@ export class SellerService {
     });
 
     // send mail with defined transport object
-    const data =  await transporter.sendMail({
+    return  await transporter.sendMail({
       from: this.email.user,
       to: payload.email,
       subject: payload.subject,
@@ -147,17 +170,7 @@ export class SellerService {
 
     });
 
-    if(data.messageId){
-      return {
-        success: true,
-        code : 10403
-      }
-    }else{
-      return {
-        success: false,
-        code : 10404
-      }
-    }
+
   }
 
 
@@ -241,23 +254,45 @@ export class SellerService {
       }
     }
   }
+
   /**
    * 艺术家 更新个人资料
    * @param payload
    */
   async update(payload) {
+
     // 查找艺术家
-    const user = await this.userEntity
+    const seller = await this.getSeller(payload.sellerId)
+    if(!seller){
+      return {
+        success: false,
+        code: 10202
+      }
+    }
+
+
+    // 更新用户
+    const updateUser = await this.userEntity
       .createQueryBuilder('user')
       .update(UserEntity)
-      .set({
-        name: payload.name || '',
-        email: payload.email || '',
-        phone: payload.phone || ''
-      })
-      .where("userId = :userId", { userId: payload.userId })
+      // .set({
+      //   name: payload.name || seller.name,
+      //   email: payload.email || '',
+      //   phone: payload.phone || ''
+      // })
+      .set(Object.assign({
+        name: seller.user.name,
+        email: seller.user.email,
+        phone: seller.user.phone,
+      },{
+        name: payload.firstname + payload.lastname,
+        email: payload.email,
+        phone: payload.phone,
+        password: crypto.createHash('md5').update(payload.password).digest('hex')
+      }))
+      .where("userId = :userId", { userId: seller.user.userId })
       .execute();
-    if(!user.affected){
+    if(!updateUser.affected){
       return {
         success: false,
         code : 10008
@@ -265,45 +300,66 @@ export class SellerService {
     }
 
     // 更新艺术家
-    let seller = await this.userSellerEntity
+    let updateSeller = await this.userSellerEntity
       .createQueryBuilder()
       .update(UserSellerEntity)
-      .set({
-        firstname: payload.firstname || '',
-        lastname: payload.lastname || '',
-        label: payload.label || '',
-        gender: payload.gender || '',
-        country: payload.country || ''
-      })
+      .set(Object.assign({
+        state: seller.state,
+        firstname: seller.firstname,
+        lastname: seller.lastname,
+        label: seller.label,
+        gender: seller.gender,
+        country: seller.country
+      },{
+        state: payload.state,
+        firstname: payload.firstname,
+        lastname: payload.lastname,
+        label: payload.label,
+        gender: payload.gender,
+        country: payload.country
+      }))
       .where("sellerId = :sellerId", { sellerId: payload.sellerId })
       .execute()
-      console.log("seller", seller)
+      console.log("seller", updateSeller)
 
-    if(!seller.affected){
+    if(!updateSeller.affected){
       return {
         success: false,
         code : 10008
       }
     }
+
     // 更新艺术家基本信息
     let sellerMetadata = await this.userSellerMetadataEntity
         .createQueryBuilder()
         .update(UserSellerMetadataEntity)
-        .set({
-          language: payload.language || '',
-          findUs: payload.findUs || '',
-          isFullTime: payload.isFullTime || '',
-          onlineSell: payload.onlineSell || '',
-          sold: payload.sold || '',
-          channel: payload.channel || '',
-          gallery: payload.gallery || '',
-          medium: payload.medium || '',
-          galleryInfo: payload.galleryInfo || '',
-          recommend: payload.recommend || '',
-          prize: payload.prize || '',
-          website: payload.website || '',
-          profile: payload.profile || ''
-        })
+        .set(Object.assign({
+          findUs: seller.metadata.findUs,
+          isFullTime: seller.metadata.isFullTime,
+          onlineSell: seller.metadata.onlineSell,
+          sold: seller.metadata.sold,
+          channel: seller.metadata.channel,
+          gallery: seller.metadata.gallery,
+          medium: seller.metadata.medium,
+          galleryInfo: seller.metadata.galleryInfo,
+          recommend: seller.metadata.recommend,
+          prize: seller.metadata.prize,
+          website: seller.metadata.website,
+          profile: seller.metadata.profile
+        },{
+          findUs: payload.findUs,
+          isFullTime: payload.isFullTime,
+          onlineSell: payload.onlineSell,
+          sold: payload.sold,
+          channel: payload.channel,
+          gallery: payload.gallery,
+          medium: payload.medium,
+          galleryInfo: payload.galleryInfo,
+          recommend: payload.recommend,
+          prize: payload.prize,
+          website: payload.website,
+          profile: payload.profile
+        }))
         .where("sellerId = :sellerId", { sellerId: payload.sellerId })
         .execute()
         console.log("sellerMetadata", sellerMetadata)
@@ -313,8 +369,10 @@ export class SellerService {
           code : 10008
         }
       }
-      if(user){
+      const newSeller = await this.getSeller(payload.sellerId)
+      if(newSeller){
         return {
+          data: newSeller,
           success: true,
           code : 10007
         }
@@ -349,7 +407,7 @@ export class SellerService {
    */
   async search(payload) {
     let seller: UserSellerEntity | UserSellerEntity[];
-    if(payload.firstname || payload.lastname || payload.email || payload.phone){
+    if(payload.firstname || payload.lastname || payload.email || payload.phone || payload.label || payload.gender || payload.country || payload.state ){
       seller = await this.userSellerEntity
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
@@ -357,15 +415,16 @@ export class SellerService {
       .where("seller.firstname like :firstname", { firstname: `%${payload.firstname}%` })
       .andWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })
       .andWhere("seller.label like :label", { label: `%${payload.label}%` })
-      .andWhere("seller.gender = :gender", { gender: payload.gender })
+      .andWhere("seller.gender like :gender", { gender: `%${payload.gender}%` })
       .andWhere("seller.country like :country", { country: `%${payload.country}%` })
-      .andWhere("seller.state = :state", { state: payload.state })
+      .andWhere("seller.state like :state", { state: `%${payload.state}%` })
       .andWhere("user.email like :email", { email: `%${payload.email}%` })
       .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
       .getMany();
     }else{
       seller = await this.userSellerEntity
       .createQueryBuilder('seller')
+      .leftJoinAndSelect('seller.user', 'user')
       .addSelect('seller.createdDate')
       .getMany();
     }
@@ -391,24 +450,20 @@ export class SellerService {
    * @param payload
    */
   async find(payload) {
-    const user = await this.userEntity
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.seller', 'seller')
-      .leftJoinAndMapOne("user.sellerMetadata", UserSellerMetadataEntity, "userSellerMetadata", "seller.sellerId = userSellerMetadata.sellerId")
-      .where('user.userId = :userId', { userId : payload.userId })
-      .getOne();
 
-    // const seller =  await this.userSellerEntity
+    // const seller = await this.userSellerEntity
     //   .createQueryBuilder('seller')
     //   .leftJoinAndSelect('seller.user', 'user')
     //   .leftJoinAndSelect('seller.metadata', 'metadata')
-    //   .leftJoinAndSelect('seller.studios', 'studios')
-    //   .leftJoinAndSelect('seller.resumes', 'resumes')
-    //   .leftJoinAndSelect('seller.commoditys', 'commoditys')
-    //   .leftJoinAndSelect('seller.likeSellers', 'likeSellers')
-    //   .leftJoinAndSelect('seller.orders', 'orders')
-    //   .where("seller.sellerId = :sellerId", { sellerId: payload.sellerId })
+    //   .where('seller.sellerId = :sellerId', { sellerId: payload.sellerId })
     //   .getOne();
+
+    const user = await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.seller', 'seller')
+      .leftJoinAndMapOne('user.sellerMetadata', UserSellerMetadataEntity, 'sellerMetadata', 'sellerMetadata.sellerId = :sellerId', { sellerId: payload.sellerId})
+      .where('user.userId = :userId', { userId : payload.userId })
+      .getOne();
 
       if(user){
         return {

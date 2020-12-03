@@ -31,7 +31,7 @@ Content-Type: application/json
   "ename": "customerService",
   "index": 3
 },{
-  "name": "商家",
+  "name": "艺术家",
   "ename": "seller",
   "index": 5
 },{
@@ -56,8 +56,8 @@ POST {{baseUrl}}/api/admin/identity/update
 Content-Type: application/json
 
 {
-  "id": "3",
-  "ename": "customerService"
+  "id": "4",
+  "name": "艺术家"
 }
 
 ####################################
