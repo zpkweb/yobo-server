@@ -23,7 +23,7 @@ export class UserSellerMetadataEntity {
 
   // 您是一个全职的专业艺术家么？
   @Column()
-  isFullTime: boolean;
+  isFullTime: string;
 
   // 售出的作品中，网上售出的比例占多少？
   @Column()

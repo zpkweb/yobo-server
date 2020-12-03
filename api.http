@@ -274,6 +274,22 @@ Authorization: Bearer {{token}}
 
 ####################################
 
+#  搜索 艺术家
+GET {{baseUrl}}/api/admin/user/seller/search
+Authorization: Bearer {{token}}
+
+{
+  "firstname": "张",
+  "lastname": "三",
+  "phone": "4",
+  "language": "汉语"
+
+}
+
+
+
+####################################
+
 #  通过申请成为艺术家
 POST {{baseUrl}}/api/admin/seller/update
 Content-Type: application/json

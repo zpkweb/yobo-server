@@ -56,6 +56,15 @@ export class ServerUserRegisterController {
 
   }
 
+  // 申请成为艺术家
+  @Post('/seller/apply')
+  async apply(@Body(ALL) applySellerBody) {
+    const data =  await this.userRegisterService.applySeller(applySellerBody);
+    console.log("申请成为艺术家", data)
+    return data;
+
+  }
+
 
 
 }

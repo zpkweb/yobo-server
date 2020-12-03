@@ -32,7 +32,6 @@ export class UserService {
    * @param payload
    */
   async search(payload) {
-    console.log("search", payload)
     let user: UserEntity | UserEntity[];
     if(payload.name || payload.email || payload.phone){
       user = await this.userEntity

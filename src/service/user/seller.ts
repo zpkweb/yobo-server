@@ -1,4 +1,4 @@
-import { Provide } from "@midwayjs/decorator";
+import { Provide, Config } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
@@ -26,83 +26,129 @@ export class SellerService {
   @InjectEntityModel(UserSellerResumeEntity)
   userSellerResumeEntity: Repository<UserSellerResumeEntity>;
 
-  // 查找艺术家申请列表
-  async registerList (payload) {
-    const registerlist =  await this.userSellerEntity
-      .createQueryBuilder('seller')
-      .where('seller.state = :state', { state: 0 })
-      .getMany();
-    if(registerlist){
-      return {
-        data: registerlist,
-        success: true,
-        code : 10009
-      }
-    }else{
-      return {
-        success: false,
-        code : 10010
-      }
-    }
-  }
+  @Config('email')
+  email;
+
 
   // 通过艺术家申请 ，发送邮件：账号密码
-  async register(payload){
-    // 更新用户
-    const user = await this.userEntity
+  /**
+   * 修改艺术家状态
+   * @param payload
+   * 通过申请：发送通过申请邮件 -> 账号密码
+   * 拒绝申请：发送拒绝申请邮件
+   */
+  async updateSellerState(payload) {
+    // 查找用户，通过sellerId关联查找user
+    const seller = await this.userSellerEntity
+    .createQueryBuilder('seller')
+    .leftJoinAndSelect('seller.user', 'user')
+    .where('seller.sellerId = :sellerId', { sellerId: payload.sellerId })
+    .getOne();
+    console.log("seller state user", seller);
+    // 用户不存在
+    if(!seller){
+      return {
+        success: false,
+        code: 10202
+      }
+    }
+    if(payload.state == '1'){ // 同意申请
+
+      // 设置密码
+      const password = await this.userEntity
       .createQueryBuilder('user')
       .update(UserEntity)
       .set({
         password: crypto.createHash('md5').update('123456').digest('hex')
       })
-      .where("userId = :userId", { userId: payload.userId })
+      .where("userId = :userId", { userId: seller.user.userId })
       .execute();
-    if(!user.affected){
-      return {
-        success: false,
-        code : 10008
+      if(!password.affected){
+        return {
+          success: false,
+          code : 10008
+        }
       }
-    }
+      // 更新状态
+      let sellerState = await this.setSellerState(payload.sellerId, 1)
 
-    // 更新艺术家
-    let seller = await this.userSellerEntity
+      console.log("seller", sellerState)
+
+      if(!sellerState.affected){
+        return {
+          success: false,
+          code : 10008
+        }
+      }
+
+      // 发送邮件
+      return await this.sendMailSellerApply({
+        ...payload,
+        email: seller.user.email,
+        subject: '恭喜您通过申请',
+        html: `<p>恭喜您通过申请！初始密码 <span style="font-size: 18px; color: red">123456</span></p>`
+      });
+
+    }else if(payload.state == '2'){ // 拒绝申请
+      // 更新状态
+      let sellerState = await this.setSellerState(payload.sellerId, 2)
+
+      console.log("seller", sellerState)
+
+      if(!sellerState.affected){
+        return {
+          success: false,
+          code : 10008
+        }
+      }
+      // 发送邮件
+      return await this.sendMailSellerApply({
+        ...payload,
+        email: seller.user.email,
+        subject: '非常抱歉，您未能通过申请',
+        html: `<p>非常抱歉，您未能通过申请！</p>`
+      });
+
+    }
+  }
+  // 设置状态
+  async setSellerState(sellerId, state) {
+    return await this.userSellerEntity
       .createQueryBuilder()
       .update(UserSellerEntity)
       .set({
-        state: 1
+        state
       })
-      .where("sellerId = :sellerId", { sellerId: payload.sellerId })
+      .where("sellerId = :sellerId", { sellerId: sellerId })
       .execute()
-      console.log("seller", seller)
 
-    if(!seller.affected){
-      return {
-        success: false,
-        code : 10008
-      }
-    }
+  }
+  // 发送邮件
+  async sendMailSellerApply(payload){
+    console.log("sendMail", payload, this.email)
+    // 发送邮件
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",
-      service: payload.service,
+      service: this.email.service,
       port: 465,
       secureConnection: true,
       auth: {
-        user: payload.user,
-        pass: payload.pass
+        user: this.email.user,
+        pass: this.email.pass
       },
     });
 
     // send mail with defined transport object
     const data =  await transporter.sendMail({
-      from: payload.user,
+      from: this.email.user,
       to: payload.email,
-      subject: payload.sendMail.title,
-      html: `<p>`+payload.sendMail.title+`：初始密码 <span style="font-size: 18px; color: red">123456</span></p>`
+      subject: payload.subject,
+      html: payload.html
+
     });
 
     if(data.messageId){
       return {
-        data: user,
         success: true,
         code : 10403
       }
@@ -113,6 +159,9 @@ export class SellerService {
       }
     }
   }
+
+
+
   /**
    *  管理员 更新艺术家资料
    * @param payload
@@ -273,21 +322,53 @@ export class SellerService {
   }
 
 
+  // 查找艺术家申请列表
+  async applyList (payload) {
+    const applyList =  await this.userSellerEntity
+      .createQueryBuilder('seller')
+      .where('seller.state = :state', { state: 0 })
+      .getMany();
+    if(applyList){
+      return {
+        data: applyList,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
+
+
   /**
    * 搜索艺术家
    * @param payload
    */
   async search(payload) {
-    const seller =  await this.userSellerEntity
+    let seller: UserSellerEntity | UserSellerEntity[];
+    if(payload.firstname || payload.lastname || payload.email || payload.phone){
+      seller = await this.userSellerEntity
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
-      .leftJoinAndSelect('seller.metadata', 'metadata')
-      .leftJoinAndSelect('seller.studios', 'studios')
-      .leftJoinAndSelect('seller.resumes', 'resumes')
-      .leftJoinAndSelect('seller.commoditys', 'commoditys')
-      .leftJoinAndSelect('seller.likeSellers', 'likeSellers')
-      .leftJoinAndSelect('seller.orders', 'orders')
+      .addSelect('seller.createdDate')
+      .where("seller.firstname like :firstname", { firstname: `%${payload.firstname}%` })
+      .andWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })
+      .andWhere("seller.label like :label", { label: `%${payload.label}%` })
+      .andWhere("seller.gender = :gender", { gender: payload.gender })
+      .andWhere("seller.country like :country", { country: `%${payload.country}%` })
+      .andWhere("seller.state = :state", { state: payload.state })
+      .andWhere("user.email like :email", { email: `%${payload.email}%` })
+      .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
       .getMany();
+    }else{
+      seller = await this.userSellerEntity
+      .createQueryBuilder('seller')
+      .addSelect('seller.createdDate')
+      .getMany();
+    }
     if(seller){
       return {
         data: seller,
@@ -300,6 +381,9 @@ export class SellerService {
         code : 10010
       }
     }
+
+
+
   }
 
   /**
@@ -307,20 +391,28 @@ export class SellerService {
    * @param payload
    */
   async find(payload) {
-    const seller =  await this.userSellerEntity
-      .createQueryBuilder('seller')
-      .leftJoinAndSelect('seller.user', 'user')
-      .leftJoinAndSelect('seller.metadata', 'metadata')
-      .leftJoinAndSelect('seller.studios', 'studios')
-      .leftJoinAndSelect('seller.resumes', 'resumes')
-      .leftJoinAndSelect('seller.commoditys', 'commoditys')
-      .leftJoinAndSelect('seller.likeSellers', 'likeSellers')
-      .leftJoinAndSelect('seller.orders', 'orders')
-      .where("seller.sellerId = :sellerId", { sellerId: payload.sellerId })
+    const user = await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.seller', 'seller')
+      .leftJoinAndMapOne("user.sellerMetadata", UserSellerMetadataEntity, "userSellerMetadata", "seller.sellerId = userSellerMetadata.sellerId")
+      .where('user.userId = :userId', { userId : payload.userId })
       .getOne();
-      if(seller){
+
+    // const seller =  await this.userSellerEntity
+    //   .createQueryBuilder('seller')
+    //   .leftJoinAndSelect('seller.user', 'user')
+    //   .leftJoinAndSelect('seller.metadata', 'metadata')
+    //   .leftJoinAndSelect('seller.studios', 'studios')
+    //   .leftJoinAndSelect('seller.resumes', 'resumes')
+    //   .leftJoinAndSelect('seller.commoditys', 'commoditys')
+    //   .leftJoinAndSelect('seller.likeSellers', 'likeSellers')
+    //   .leftJoinAndSelect('seller.orders', 'orders')
+    //   .where("seller.sellerId = :sellerId", { sellerId: payload.sellerId })
+    //   .getOne();
+
+      if(user){
         return {
-          data: seller,
+          data: user,
           success: true,
           code : 10009
         }

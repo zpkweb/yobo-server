@@ -209,6 +209,7 @@ export class UserRegisterService {
   }
 
   async register(payload) {
+    console.log("register", payload)
     // 创建用户
     let user: any = await this.createUser(payload);
     if(user.code){
@@ -300,11 +301,30 @@ export class UserRegisterService {
 
   }
 
+
+
   // 申请成为商家 5
   async applySeller(payload) {
     return await this.register(Object.assign({}, {
       identityIndex: 5,
       name: payload.firstname + payload.lastname || '',
+      firstname: payload.firstname || '',
+      lastname: payload.lastname || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: payload.password || '',
+      state: 0
+    }, payload));
+
+  }
+
+  // 管理员 注册 商家 5
+  async registerSeller(payload) {
+    return await this.register(Object.assign({}, {
+      identityIndex: 5,
+      name: payload.firstname + payload.lastname || '',
+      firstname: payload.firstname || '',
+      lastname: payload.lastname || '',
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
@@ -312,6 +332,7 @@ export class UserRegisterService {
     }, payload));
 
   }
+
 
   // 创建客服 3
   async createCustomerService(payload) {
@@ -349,7 +370,7 @@ export class UserRegisterService {
         adminRegisterUser = await this.registerUser(payload);
         break;
       case 'seller':
-        adminRegisterUser = await this.applySeller(Object.assign({
+        adminRegisterUser = await this.registerSeller(Object.assign({
           state: 1
         }, payload));
         break;

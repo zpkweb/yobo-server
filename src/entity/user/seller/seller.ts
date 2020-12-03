@@ -34,7 +34,6 @@ export class UserSellerEntity {
   @Column()
   state: number;
 
-
   // 姓氏
   @Column()
   firstname: string;

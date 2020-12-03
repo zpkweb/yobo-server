@@ -7,13 +7,15 @@ import { ServerUserController } from 'src/controller/server/user/user';
 import { ServerUserLoginController } from 'src/controller/server/user/login';
 import { ServerUserRegisterController } from 'src/controller/server/user/register';
 
+import { ServerUserSellerController } from 'src/controller/server/user/seller';
 @Provide()
 @Aspect([
   UserController,
   UserLoginController,
   ServerUserController,
   ServerUserLoginController,
-  ServerUserRegisterController
+  ServerUserRegisterController,
+  ServerUserSellerController
 ])
 export class ReportInfo implements IMethodAspect {
 
