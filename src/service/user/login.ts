@@ -2,10 +2,9 @@ import { Config, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
-import * as crypto from 'crypto';
-
+import { BaseUserServer } from "../base/user";
 @Provide()
-export class LoginService {
+export class LoginService extends BaseUserServer {
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
@@ -14,17 +13,36 @@ export class LoginService {
   root;
 
   /**
+   * 验证密码是否正确
+   * @param payload
+   * userId
+   * password
+   */
+  async validatePassword(payload) {
+    console.log("validatePassword", payload)
+    const validataPassword = await this.baseValidatePassword(payload);
+
+    if(validataPassword){
+      return {
+        success: true,
+        code: 10206
+      }
+    }else{
+      return {
+        success: false,
+        code: 10204
+      }
+    }
+  }
+
+
+  /**
    * 登录
    * @param payload email/phone password
    */
   async login(payload) {
     // 查找用户
-    const user = await this.userEntity
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      // .where("user.phone = :phone OR user.email = :email", { phone: payload.phone, email: payload.email })
-      .where("user.name = :name", { name: payload.name })
-      .getOne();
+    const user:any = await this.baseRetrieveUser(payload)
 
     if(!user){
       // 用户不存在
@@ -33,25 +51,23 @@ export class LoginService {
         code: 10202
       }
     }
+    console.log("login", user)
+    // 判断用户密码是否正确
+    const userPassword = await this.validatePassword({
+      userId: user.data.userId,
+      password: payload.password
+    })
 
-    const userPassword = await this.userEntity
-      .createQueryBuilder('user')
-      .addSelect("user.password")
-      .where("user.id = :id", { id: user.id })
-      .andWhere("user.password = :password", { password: crypto.createHash('md5').update(payload.password).digest('hex') })
-      .getOne();
-    if(!userPassword){
-      // 用户密码不正确
+    if(userPassword.success){
       return {
-        success: false,
-        code: 10204
-      }
+        data: user.data,
+        success: true,
+        code: 10011
+      };
+    }else{
+      return userPassword
     }
-    return {
-      data: user,
-      success: true,
-      code: 10011
-    };
+
   }
 
   /**
@@ -59,7 +75,6 @@ export class LoginService {
    * @param payload
    */
   async adminLogin(payload) {
-    console.log('adminLogin', payload, this.root)
     if(payload.name === this.root.name && payload.password === this.root.password){
       return {
         data:{
@@ -70,12 +85,7 @@ export class LoginService {
       };
     }
     // 查找用户
-    const user = await this.userEntity
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      .where("user.name = :name", { name: payload.name })
-      // .andWhere('identity.index < :index', { index : 5 })
-      .getOne();
+    const user:any = await this.baseRetrieveUser(payload)
     console.log("user", user)
 
     if(!user){
@@ -85,18 +95,27 @@ export class LoginService {
         code: 10202
       }
     }
+
+    // 判断用户密码是否正确
+    const userPassword = await this.validatePassword({
+      userId: user.data.userId,
+      password: payload.password
+    })
+    if(!userPassword.success){
+      return userPassword
+    }
+
     // 判断用户权限
     if(user.identitys && !user.identitys.length){
-      // 用户没有权限
+      // 用户还没有设置权限
       return {
         success: false,
-        code: 10203
+        code: 10207
       }
     }
     for(let item of user.identitys){
-      console.log("user identity", item)
       if(item.index > 3){
-        // 用户没有权限
+        // 用户没有权限登录
         return {
           success: false,
           code: 10203
@@ -105,24 +124,11 @@ export class LoginService {
     }
 
 
-    // 判断密码是否正确
-    const userPassword = await this.userEntity
-      .createQueryBuilder('user')
-      .addSelect("password")
-      .where("id = :id", { id: user.id })
-      .andWhere("password = :password", { password: crypto.createHash('md5').update(payload.password).digest('hex') })
-      .getOne();
-    if(!userPassword){
-      // 用户密码不正确
-      return {
-        success: false,
-        code: 10204
-      }
-    }
     return {
       data: user,
       success: true,
       code: 10011
     };
+
   }
 }

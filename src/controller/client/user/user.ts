@@ -133,7 +133,7 @@ export class UserController {
   // 搜索商家
   @Get('/seller/search')
   async search(@Query(ALL) searchQuery) {
-    let data:any =  await this.sellerService.search(searchQuery);
+    let data:any =  await this.sellerService.searchSeller(searchQuery);
     return data;
   }
 

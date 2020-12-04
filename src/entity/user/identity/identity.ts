@@ -61,7 +61,8 @@ export class UserIdentityEntity {
 
   // 关联 用户身份列表
   @ManyToOne(type => UserIdentityListEntity, UserIdentityListEntity => UserIdentityListEntity.identitys, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     name: 'identityListId',

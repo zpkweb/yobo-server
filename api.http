@@ -15,7 +15,7 @@ identityList
 ####################################
 
 #  创建身份列表
-POST {{baseUrl}}/api/admin/identity
+POST {{baseUrl}}/api/admin/identityList
 Content-Type: application/json
 
 [{
@@ -52,24 +52,24 @@ Content-Type: application/json
 ####################################
 
 #  修改身份列表
-POST {{baseUrl}}/api/admin/identity/update
+POST {{baseUrl}}/api/admin/identityList/update
 Content-Type: application/json
 
 {
-  "id": "4",
-  "name": "艺术家"
+  "id": 1,
+  "ename": "superAdmin"
 }
 
 ####################################
 
 
 #  获取身份列表
-GET {{baseUrl}}/api/admin/identity
+GET {{baseUrl}}/api/admin/identityList
 
 ####################################
 
 #  删除身份列表
-POST {{baseUrl}}/api/adminidentity/remove
+GET {{baseUrl}}/api/admin/identityList/delete?id=3
 
 ####################################
 
@@ -110,8 +110,20 @@ POST {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-  "phone": "1234567",
-  "password": "123456"
+  "name": "用户",
+  "password": "123"
+}
+
+
+####################################
+
+# 登录后台
+POST {{baseUrl}}/api/admin/user/login
+Content-Type: application/json
+
+{
+  "name": "管理员",
+  "password": "123"
 }
 
 
@@ -303,5 +315,17 @@ Content-Type: application/json
 
 ####################################
 
+# 后台添加用户
+POST {{baseUrl}}/api/admin/user/register
+Content-Type: application/json
+
+{
+  "email": "user",
+  "identity": "ordinary",
+  "name": "user",
+  "password": "user",
+  "phone": ""
+
+}
 
 

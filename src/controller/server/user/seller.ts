@@ -55,7 +55,7 @@ export class ServerUserSellerController {
   @Get('/search')
   async applySearch(@Query(ALL) searchQuery) {
     console.log('search', searchQuery)
-    return await this.sellerService.search(searchQuery);
+    return await this.sellerService.searchSeller(searchQuery);
   }
 
 
