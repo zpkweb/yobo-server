@@ -3,13 +3,12 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from "src/entity/user/user";
 import * as crypto from 'crypto';
-import { IdentityListService } from "../user/identityList";
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserAddressEntity } from 'src/entity/user/address';
 
 
 @Provide()
-export class BaseUserServer extends IdentityListService {
+export class BaseUserServer {
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
@@ -57,7 +56,18 @@ export class BaseUserServer extends IdentityListService {
       })
       .execute()
   }
-
+  /**
+   * 删除用户身份
+   * @param payload
+   */
+    async baseDeleteUserIdentity(payload) {
+      return await this.userIdentityEntity
+      .createQueryBuilder()
+      .delete()
+      .where("userId = :userId", { userId: payload.userId })
+      .andWhere("ename = :ename", { ename: payload.identity })
+      .execute();
+    }
 
   /**
    * 检索用户
@@ -77,12 +87,21 @@ export class BaseUserServer extends IdentityListService {
       // .orWhere("user.email = :email", { email: payload.email })
       // .orWhere("user.phone = :phone", { phone: payload.phone })
       .getOne();
+  }
 
+  async baseRetrieveUserPass(payload) {
+    return await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.identitys', 'identitys')
+      // .addSelect('user.createdDate')
+      .addSelect("user.password")
+      .where("user.userId = :userId", { userId: payload.userId })
+      .getOne();
   }
 
   async baseRetrieveUserAll() {
     return await this.userEntity
-      .createQueryBuilder()
+      .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
       .getMany();
   }
@@ -114,6 +133,17 @@ export class BaseUserServer extends IdentityListService {
   async baseSearchUser(payload) {
     return await this.userEntity
       .createQueryBuilder('user')
+      .addSelect('user.createdDate')
+      .where("user.name like :name", { name: `%${payload.name}%` })
+      .andWhere("user.email like :email", { email: `%${payload.email}%` })
+      .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
+      .getMany();
+
+  }
+
+  async baseSearchUserIdentity(payload) {
+    return await this.userEntity
+      .createQueryBuilder('user')
       .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename like :ename ', { ename: `%${payload.identity}%` })
       .addSelect('user.createdDate')
       .where("user.name like :name", { name: `%${payload.name}%` })
@@ -129,13 +159,13 @@ export class BaseUserServer extends IdentityListService {
    */
   async baseUpdateUser(payload) {
     return await this.userEntity
-      .createQueryBuilder('user')
+      .createQueryBuilder()
       .update(UserEntity)
       .set({
         name: payload.name,
         email: payload.email,
         phone: payload.phone,
-        password: crypto.createHash('md5').update(payload.password).digest('hex')
+        password: payload.password
       })
       .where("user.userId = :userId", { userId: payload.userId })
       .execute();
@@ -146,14 +176,11 @@ export class BaseUserServer extends IdentityListService {
    * 删除
    * @param payload
    */
-    async baseDeleteUser(payload) {
+    async baseDeleteUser(userId) {
       return await this.userEntity
         .createQueryBuilder()
         .delete()
-        .where("name = :name", { name: payload.name })
-        .orWhere("email = :email", { email: payload.email })
-        .orWhere("phone = :phone", { phone: payload.phone })
-        .orWhere("userId = :userId", { userId: payload.userId })
+        .where("userId = :userId", { userId: userId })
         .execute();
     }
     async baseDeleteUserAll() {

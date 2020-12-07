@@ -33,7 +33,7 @@ export class ServerUserSellerController {
   // 更新艺术家信息
   @Post('/update')
   async update(@Body(ALL) registerBody) {
-    return await this.sellerService.update(registerBody);
+    return await this.sellerService.updateSeller(registerBody);
   }
 
   // 艺术家申请 registerList
@@ -47,15 +47,21 @@ export class ServerUserSellerController {
    * @param stateBody sellerId state
    */
   @Post('/setState')
-  async updateSellerState(@Body(ALL) stateBody) {
+  async setState(@Body(ALL) stateBody) {
     return await this.sellerService.updateSellerState(stateBody);
   }
 
   // 艺术家搜索
   @Get('/search')
-  async applySearch(@Query(ALL) searchQuery) {
+  async search(@Query(ALL) searchQuery) {
     console.log('search', searchQuery)
     return await this.sellerService.searchSeller(searchQuery);
+  }
+
+  // 删除艺术家
+  @Get('/delete')
+  async delete(@Query() sellerId) {
+    return await this.sellerService.deleteSeller(sellerId);
   }
 
 

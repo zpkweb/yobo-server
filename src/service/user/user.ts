@@ -1,4 +1,4 @@
-import { Provide, Plugin, Config } from '@midwayjs/decorator';
+import { Provide, Plugin, Config, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
@@ -7,10 +7,10 @@ import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAddressEntity } from 'src/entity/user/address';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
-import { BaseSellerServer } from '../base/seller';
+import { BaseUserServer } from '../base/user';
 
 @Provide()
-export class UserService extends BaseSellerServer {
+export class UserService{
 
   @Plugin()
   redis;
@@ -31,16 +31,40 @@ export class UserService extends BaseSellerServer {
   @InjectEntityModel(UserAddressEntity)
   userAddressEntity: Repository<UserAddressEntity>;
 
+  @Inject()
+  baseUserServer: BaseUserServer;
+
   /**
    * 搜索用户通过：name, email, phone
    * @param payload
    */
   async search(payload) {
     let user: UserEntity | UserEntity[];
+
     if(payload && Object.keys(payload).length){
-      user = await this.baseSearchUser(payload)
+      let isParams = false;
+      Object.keys(payload).forEach((item) => {
+        console.log("item", item, payload[item])
+        if(payload[item]){
+          console.log("params", payload[item])
+          isParams = true;
+        }
+
+      })
+      console.log(isParams)
+      if(isParams){
+        if(payload['identity']){
+          user = await this.baseUserServer.baseSearchUserIdentity(payload)
+        }else{
+          user = await this.baseUserServer.baseSearchUser(payload)
+        }
+
+      }else{
+        user = await this.baseUserServer.baseRetrieveUserAll()
+      }
+
     }else{
-      user = await this.baseRetrieveUserAll()
+      user = await this.baseUserServer.baseRetrieveUserAll()
     }
     if(user){
       return {
@@ -64,9 +88,9 @@ export class UserService extends BaseSellerServer {
   async find(payload) {
     let user: UserEntity | UserEntity[];
     if(payload && Object.keys(payload).length){
-      user = await this.baseRetrieveUser(payload)
+      user = await this.baseUserServer.baseRetrieveUser(payload)
     }else{
-      user = await this.baseRetrieveUserAll()
+      user = await this.baseUserServer.baseRetrieveUserAll()
     }
     if(user){
       return {
@@ -83,17 +107,18 @@ export class UserService extends BaseSellerServer {
   }
 
   // 删除用户
-  async remove(payload) {
-    let user;
-    if(payload && Object.keys(payload).length){
-      user = await this.baseDeleteUser(payload)
-    }else{
-      user = await this.baseDeleteUserAll()
-    }
+  async remove(userId) {
+    console.log("remove", userId)
+    const user = await this.baseUserServer.baseDeleteUser(userId)
+    // let user;
+    // if(payload && Object.keys(payload).length){
+    //   user = await this.baseUserServer.baseDeleteUser(payload)
+    // }else{
+    //   user = await this.baseUserServer.baseDeleteUserAll()
+    // }
 
     if(user.affected){
       return {
-        data: user,
         success: true,
         code : 10005
       }
@@ -111,7 +136,7 @@ export class UserService extends BaseSellerServer {
    * @param userId
    */
   async findSelf(userId) {
-    const user =  await this.baseRetrieveSelf({
+    const user =  await this.baseUserServer.baseRetrieveSelf({
       userId
     })
       if(user){
@@ -134,7 +159,7 @@ export class UserService extends BaseSellerServer {
 
   async changePassword(payload) {
     // 查找用户
-    const user = await this.baseRetrieveUser(payload)
+    const user = await this.baseUserServer.baseRetrieveUser(payload)
     if(!user){
       // 找不到用户
       return{
@@ -150,9 +175,12 @@ export class UserService extends BaseSellerServer {
         code : 10204
       }
     }
-    const changeUser = await this.baseUpdateUser({
+    const changeUser = await this.baseUserServer.baseUpdateUser({
       userId: user.userId,
-      password: payload.passwordNew
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      password: crypto.createHash('md5').update(payload.passwordNew).digest('hex')
     })
 
 
@@ -240,15 +268,29 @@ export class UserService extends BaseSellerServer {
    * @param payload
    */
   async update(payload) {
+    console.log("update", payload)
     // 查找用户
-    const user = await this.baseRetrieveUser(payload);
+    const user = await this.baseUserServer.baseRetrieveUserPass(payload);
     if(!user){
       return {
         success: false,
         code: 10202
       }
     }
-    const userUpdate = await this.baseUpdateUser(payload);
+    console.log("update user", user)
+    let password = '';
+    if(payload.password){
+      password = crypto.createHash('md5').update(payload.password).digest('hex')
+    }else{
+      password = user.password
+    }
+    const userUpdate = await this.baseUserServer.baseUpdateUser({
+      userId: user.userId,
+      name: payload.name || user.name,
+      email: payload.email || user.email,
+      phone: payload.phone || user.phone,
+      password: password
+    });
 
     if(userUpdate.affected){
       // 修改成功
@@ -274,7 +316,7 @@ export class UserService extends BaseSellerServer {
    * @param payload
    */
   async getAddress(payload) {
-    const address =  await this.baseRetrieveUserAddress(payload);
+    const address =  await this.baseUserServer.baseRetrieveUserAddress(payload);
 
     if(address){
       return{
@@ -295,7 +337,7 @@ export class UserService extends BaseSellerServer {
    * @param payload
    */
   async address(payload) {
-    let address = await this.baseCreateUserAddress(payload);
+    let address = await this.baseUserServer.baseCreateUserAddress(payload);
 
     if(address.identifiers[0].id){
 
@@ -305,7 +347,7 @@ export class UserService extends BaseSellerServer {
       .of(address.identifiers[0].id)
       .set({userId: payload.userId})
 
-    let userAddress = await this.baseRetrieveUserAddress(payload);
+    let userAddress = await this.baseUserServer.baseRetrieveUserAddress(payload);
     if(userAddress){
       return {
         data: userAddress,
@@ -335,14 +377,14 @@ export class UserService extends BaseSellerServer {
    */
   async addressUpdate(payload) {
 
-    const address = await this.baseUpdateUserAddress({
+    const address = await this.baseUserServer.baseUpdateUserAddress({
       name: payload.address.name || '',
         phone: payload.address.email || '',
         city: payload.address.phone || '',
         address: payload.address.address || ''
     })
       if(address.affected){
-        let user = await this.baseRetrieveUserAddress(payload)
+        let user = await this.baseUserServer.baseRetrieveUserAddress(payload)
         if(user){
           return {
             data: user,
@@ -369,7 +411,7 @@ export class UserService extends BaseSellerServer {
    * @param payload
    */
   async addressRemove(payload) {
-    const address = await this.baseDeleteUserAddress(payload);
+    const address = await this.baseUserServer.baseDeleteUserAddress(payload);
       if(address.affected){
         return {
           success: true,
@@ -381,6 +423,29 @@ export class UserService extends BaseSellerServer {
           code : 10006
         }
       }
+  }
+
+  /**
+   * 删除用户身份
+   * @param payload
+   * identity
+   * userId
+   */
+  async deleteUserIdentity(payload) {
+    console.log("deleteUserIdentity", payload)
+    const userIdentity = await this.baseUserServer.baseDeleteUserIdentity(payload);
+    console.log("userIdentity", userIdentity)
+    if(userIdentity.affected){
+      return {
+        success: true,
+        code : 10005
+      }
+    }else{
+      return {
+        success: false,
+        code : 10006
+      }
+    }
   }
 
 }

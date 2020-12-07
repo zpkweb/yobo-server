@@ -1,14 +1,17 @@
-import { Provide } from "@midwayjs/decorator";
+import { Inject, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { BaseIdentityListServer } from "../base/identityList";
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 
 @Provide()
-export class IdentityListService extends BaseIdentityListServer {
+export class IdentityListService {
 
   @InjectEntityModel(UserIdentityListEntity)
   userIdentityListEntity: Repository<UserIdentityListEntity>;
+
+  @Inject()
+  baseIdentityListServer: BaseIdentityListServer;
 
   /**
    * 创建身份列表
@@ -16,9 +19,9 @@ export class IdentityListService extends BaseIdentityListServer {
    */
   async createIdentityList(payload) {
     for (let item of payload) {
-      let identity:any = await this.baseRetrieveIdentityList(item);
+      let identity:any = await this.baseIdentityListServer.baseRetrieveIdentityList(item);
       if (!identity) {
-        let newIdentity = await this.baseCreateIdentityList(item)
+        let newIdentity = await this.baseIdentityListServer.baseCreateIdentityList(item)
         console.log("newIdentity", newIdentity)
         if (!newIdentity.identifiers[0].id) {
           return {
@@ -29,7 +32,7 @@ export class IdentityListService extends BaseIdentityListServer {
       }
     }
 
-    const userIdentity = await this.baseRetrieveIdentityListAll();
+    const userIdentity = await this.baseIdentityListServer.baseRetrieveIdentityListAll();
     if (userIdentity) {
       return {
         data: userIdentity,
@@ -55,7 +58,7 @@ export class IdentityListService extends BaseIdentityListServer {
    */
   async retrieveIdentityList(payload?:any) {
     if(payload && Object.keys(payload).length){
-      const retrieveIdentityList =  await this.baseRetrieveIdentityList(payload);
+      const retrieveIdentityList =  await this.baseIdentityListServer.baseRetrieveIdentityList(payload);
       if(retrieveIdentityList) {
         return {
           data: retrieveIdentityList,
@@ -69,7 +72,7 @@ export class IdentityListService extends BaseIdentityListServer {
         }
       }
     }else{
-      const retrieveIdentityListAll =   await this.baseRetrieveIdentityListAll();
+      const retrieveIdentityListAll =   await this.baseIdentityListServer.baseRetrieveIdentityListAll();
       if(retrieveIdentityListAll) {
         return {
           data: retrieveIdentityListAll,
@@ -92,7 +95,7 @@ export class IdentityListService extends BaseIdentityListServer {
    * @param payload
    */
   async updateIdentityList(payload) {
-    const identityList = await this.baseRetrieveIdentityList(payload);
+    const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList(payload);
     if (!identityList) {
       return {
         success: false,
@@ -100,7 +103,7 @@ export class IdentityListService extends BaseIdentityListServer {
       }
     }
 
-    const newIdentityList = await this.baseUpdateIdentityList(Object.assign({
+    const newIdentityList = await this.baseIdentityListServer.baseUpdateIdentityList(Object.assign({
       name: identityList.name,
       ename: identityList.ename,
       index: identityList.index,
@@ -132,7 +135,7 @@ export class IdentityListService extends BaseIdentityListServer {
    */
   async deleteIdentityList(payload) {
     if(payload && Object.keys(payload).length){
-      const identityList = await this.baseDeleteIdentityList(payload);
+      const identityList = await this.baseIdentityListServer.baseDeleteIdentityList(payload);
       if(identityList.affected){
         return {
           data: identityList,
@@ -146,7 +149,7 @@ export class IdentityListService extends BaseIdentityListServer {
         }
       }
     }else{
-      const identityListAll = await this.baseDeleteIdentityListAll();
+      const identityListAll = await this.baseIdentityListServer.baseDeleteIdentityListAll();
       if(identityListAll.affected){
         return {
           data: identityListAll,

@@ -75,7 +75,9 @@ export class UserEntity {
 
 
   //  关联用户身份
-  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user)
+  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user, {
+    onDelete: "CASCADE"
+  })
   identitys: UserIdentityEntity[];
 
   // 关联地址

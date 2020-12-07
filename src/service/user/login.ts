@@ -1,13 +1,16 @@
-import { Config, Provide } from "@midwayjs/decorator";
+import { Config, Inject, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
 import { BaseUserServer } from "../base/user";
 @Provide()
-export class LoginService extends BaseUserServer {
+export class LoginService {
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
+
+  @Inject()
+  baseUserServer: BaseUserServer;
 
   @Config('root')
   root;
@@ -20,7 +23,7 @@ export class LoginService extends BaseUserServer {
    */
   async validatePassword(payload) {
     console.log("validatePassword", payload)
-    const validataPassword = await this.baseValidatePassword(payload);
+    const validataPassword = await this.baseUserServer.baseValidatePassword(payload);
 
     if(validataPassword){
       return {
@@ -42,7 +45,7 @@ export class LoginService extends BaseUserServer {
    */
   async login(payload) {
     // 查找用户
-    const user:any = await this.baseRetrieveUser(payload)
+    const user:any = await this.baseUserServer.baseRetrieveUser(payload)
 
     if(!user){
       // 用户不存在
@@ -85,7 +88,7 @@ export class LoginService extends BaseUserServer {
       };
     }
     // 查找用户
-    const user:any = await this.baseRetrieveUser(payload)
+    const user:any = await this.baseUserServer.baseRetrieveUser(payload)
     console.log("user", user)
 
     if(!user){
@@ -98,7 +101,7 @@ export class LoginService extends BaseUserServer {
 
     // 判断用户密码是否正确
     const userPassword = await this.validatePassword({
-      userId: user.data.userId,
+      userId: user.userId,
       password: payload.password
     })
     if(!userPassword.success){
@@ -113,22 +116,28 @@ export class LoginService extends BaseUserServer {
         code: 10207
       }
     }
+
+    let loginIdentity = false;
     for(let item of user.identitys){
-      if(item.index > 3){
-        // 用户没有权限登录
-        return {
-          success: false,
-          code: 10203
-        }
+      if(item.index < 5){
+        loginIdentity = true;
+      }
+    }
+    if(loginIdentity){
+      return {
+        data: user,
+        success: true,
+        code: 10011
+      };
+    }else{
+      // 用户没有权限登录
+      return {
+        success: false,
+        code: 10203
       }
     }
 
 
-    return {
-      data: user,
-      success: true,
-      code: 10011
-    };
 
   }
 }

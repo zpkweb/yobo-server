@@ -3,10 +3,9 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserSellerEntity } from "src/entity/user/seller/seller";
 import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
-import { BaseUserServer } from "./user";
 
 @Provide()
-export class BaseSellerServer extends BaseUserServer {
+export class BaseSellerServer {
 
   @InjectEntityModel(UserSellerEntity)
   userSellerEntity: Repository<UserSellerEntity>
@@ -99,9 +98,10 @@ export class BaseSellerServer extends BaseUserServer {
    * Seller
    */
   async baseSearchSeller(payload) {
+    console.log("baseSearchSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder('seller')
-      .leftJoinAndSelect('seller.user', 'user')
+      // .leftJoinAndSelect('seller.user', 'user')
       .addSelect('seller.createdDate')
       .where("seller.firstname like :firstname", { firstname: `%${payload.firstname}%` })
       .andWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })
@@ -109,8 +109,8 @@ export class BaseSellerServer extends BaseUserServer {
       .andWhere("seller.gender like :gender", { gender: `%${payload.gender}%` })
       .andWhere("seller.country like :country", { country: `%${payload.country}%` })
       .andWhere("seller.state like :state", { state: `%${payload.state}%` })
-      .andWhere("user.email like :email", { email: `%${payload.email}%` })
-      .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
+      // .andWhere("user.email like :email", { email: `%${payload.email}%` })
+      // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
       .getMany();
   }
 
@@ -122,10 +122,18 @@ export class BaseSellerServer extends BaseUserServer {
    * metadata
    */
   async baseUpdateSeller(payload) {
+    console.log("baseUpdateSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder()
       .update(UserSellerEntity)
-      .set(payload)
+      .set({
+        state: payload.state,
+        firstname: payload.firstname,
+        lastname: payload.lastname,
+        label: payload.label,
+        gender: payload.gender,
+        country: payload.country,
+      })
       .where("sellerId = :sellerId", { sellerId: payload.sellerId })
       .execute();
   }
@@ -137,10 +145,25 @@ export class BaseSellerServer extends BaseUserServer {
    * metadata
    */
   async baseUpdateSellerMetadata(payload) {
+    console.log("baseUpdateSellerMetadata", payload)
     return await this.userSellerMetadataEntity
       .createQueryBuilder()
       .update(UserSellerMetadataEntity)
-      .set(payload)
+      .set({
+        language: payload.language,
+        findUs: payload.findUs,
+        isFullTime: payload.isFullTime,
+        onlineSell: payload.onlineSell,
+        sold: payload.sold,
+        channel: payload.channel,
+        gallery: payload.gallery,
+        medium: payload.medium,
+        galleryInfo: payload.galleryInfo,
+        recommend: payload.recommend,
+        prize: payload.prize,
+        website: payload.website,
+        profile: payload.profile,
+      })
       .where("sellerId = :sellerId", { sellerId: payload.sellerId })
       .execute()
   }
@@ -150,11 +173,12 @@ export class BaseSellerServer extends BaseUserServer {
    * @param payload
    * sellerId
    */
-  async baseDeleteSeller(payload) {
+  async baseDeleteSeller(sellerId) {
+    console.log("baseDeleteSeller", sellerId)
     return await this.userSellerEntity
       .createQueryBuilder()
       .delete()
-      .where("sellerId = :sellerId", { sellerId: payload.sellerId })
+      .where("sellerId = :sellerId", { sellerId: sellerId })
       .execute();
   }
   /**

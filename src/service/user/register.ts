@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator';
+import { Inject, Provide } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
@@ -10,9 +10,12 @@ import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
+import { BaseUserServer } from "../base/user";
 import { BaseSellerServer } from '../base/seller';
+import { BaseIdentityListServer } from '../base/identityList';
 @Provide()
-export class UserRegisterService extends BaseSellerServer {
+export class UserRegisterService {
+
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
 
@@ -39,6 +42,15 @@ export class UserRegisterService extends BaseSellerServer {
 
   @InjectEntityModel(UserCustomerServiceEntity)
   userCustomerServiceEntity: Repository<UserCustomerServiceEntity>;
+
+  @Inject()
+  baseUserServer: BaseUserServer;
+
+  @Inject()
+  baseSellerServer: BaseSellerServer;
+
+  @Inject()
+  baseIdentityListServer: BaseIdentityListServer;
 
   /**
    * 注册普通用户 80
@@ -180,19 +192,39 @@ export class UserRegisterService extends BaseSellerServer {
     if(!newUser.success){
       return newUser;
     }
+
+    let identityIndexs = [];
+    switch(payload.identityIndex){
+      case 1:
+      case 2:
+      case 3:
+      case 5:
+        identityIndexs = ["80", payload.identityIndex];
+        break;
+      case 70:
+      case 80:
+      case 90:
+      default:
+        identityIndexs = [payload.identityIndex]
+        break;
+
+    }
+    console.log("identityIndexs", identityIndexs)
     // 添加身份
-    const userIdentity:any = await this.addUserIdentity({
-      ...payload,
+    const userIdentity:any = await this.addUserIdentitys({
+      identityIndexs: identityIndexs,
       userId: newUser.userId
     });
+    console.log("userIdentity", userIdentity)
     if(!userIdentity.success) {
       return userIdentity;
     }
+
     // 添加商家信息
     if(payload.identityIndex === 5){
       let seller: any = await this.addSeller({
         ...payload,
-        userId: user.userId
+        userId: newUser.userId
       });
       if(!seller.success){
         return seller;
@@ -220,7 +252,7 @@ export class UserRegisterService extends BaseSellerServer {
    * @param payload
    */
     async hasUser(payload) {
-      const user:any = await this.baseRetrieveUser(payload);
+      const user:any = await this.baseUserServer.baseRetrieveUser(payload);
       console.log("user", user)
       if(user){
         return {
@@ -257,7 +289,7 @@ export class UserRegisterService extends BaseSellerServer {
 
       }else{
         // 创建用户
-        let newUser: any = await this.baseCreateUser(Object.assign({
+        let newUser: any = await this.baseUserServer.baseCreateUser(Object.assign({
           name: '',
           email: '',
           phone: '',
@@ -278,12 +310,35 @@ export class UserRegisterService extends BaseSellerServer {
       }
     }
   /**
+   * addUserIdentitys
+   * @param payload
+   */
+
+   async addUserIdentitys(payload) {
+    for(let item of payload.identityIndexs) {
+      console.log(item)
+      let userIdentity = await this.addUserIdentity({
+        identityIndex: item,
+        userId: payload.userId
+      });
+      if(!userIdentity.success){
+        return userIdentity;
+      }
+    }
+
+    return {
+      success: true,
+      code: 10009
+    };;
+   }
+  /**
    * 创建身份
    * @param payload
    */
     async addUserIdentity(payload) {
+
       // 通过用户身份列表获取 用户身份
-      let identityList = await this.baseRetrieveIdentityList({
+      let identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
         index: payload.identityIndex
       });
       console.log("identityList", identityList)
@@ -295,7 +350,7 @@ export class UserRegisterService extends BaseSellerServer {
       }
 
       // 创建用户的身份
-      let identity: any = await this.baseCreateUserIdentity(identityList);
+      let identity: any = await this.baseUserServer.baseCreateUserIdentity(identityList);
       console.log("identity", identity)
       if(!identity){
         return {
@@ -311,12 +366,14 @@ export class UserRegisterService extends BaseSellerServer {
         .of(identity.identifiers[0].id)
         .set(identityList.id);
 
+
       // 用户身份 关联 用户
       await this.userIdentityEntity
         .createQueryBuilder()
         .relation(UserIdentityEntity, "user")
         .of(identity.identifiers[0].id)
         .set({ userId: payload.userId })
+
       return {
         success: true,
         code: 10009
@@ -329,7 +386,7 @@ export class UserRegisterService extends BaseSellerServer {
    */
     async addSeller(payload){
       // 添加商家信息
-      const seller = await this.baseCreateSeller({
+      const seller = await this.baseSellerServer.baseCreateSeller({
         state: payload.state,
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',
@@ -344,7 +401,7 @@ export class UserRegisterService extends BaseSellerServer {
         };
       }
       // 添加商家基本信息
-      const sellerMetadata = await this.baseCreateSellerMetadata({
+      const sellerMetadata = await this.baseSellerServer.baseCreateSellerMetadata({
         language: payload.language || '',
         findUs: payload.findUs || '',
         isFullTime: payload.isFullTime || '',
@@ -366,7 +423,6 @@ export class UserRegisterService extends BaseSellerServer {
         };
       }
       // 商家 关联 商家基本信息
-
       await this.userSellerEntity
         .createQueryBuilder()
         .relation(UserSellerEntity, "metadata")
