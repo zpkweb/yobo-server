@@ -29,11 +29,17 @@ export class ReportInfo implements IMethodAspect {
     return {
       code: resultData.code,
       success: resultData.success,
-      status: resultData.success,
+      status: resultData.success ? 200 : 500,
       message: point.target.ctx.__(resultData.code),
       data: resultData.data
     }
 
 
   }
+  // async afterThrow(point: JoinPoint, error) {
+  //   if(error){
+  //     console.error(error)
+  //     return error;
+  //   }
+  // }
 }

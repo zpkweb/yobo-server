@@ -274,13 +274,13 @@ Content-Type: application/json
 GET {{baseUrl}}/api/user/seller/search
 Authorization: Bearer {{token}}
 
-{
-  "firstname": "张",
-  "lastname": "三",
-  "phone": "4",
-  "language": "汉语"
+# {
+#   "firstname": "张",
+#   "lastname": "三",
+#   "phone": "4",
+#   "language": "汉语"
 
-}
+# }
 
 
 

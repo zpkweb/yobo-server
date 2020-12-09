@@ -1,24 +1,25 @@
 /**
- * 商品价格
+ * 商品类别
  */
 
 import { EntityModel } from "@midwayjs/orm";
 import { Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
-import { CommodityEntity } from './commodity';
+import { CommodityEntity } from '../commodity';
 
-@EntityModel('commodity_price')
-export class CommodityPriceEntity {
+@EntityModel('commodity_category')
+export class CommodityCategoryEntity {
 
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  // 商品形状 id
+  @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
   // 语言
   @Column()
   lang: string;
 
-  // 价格
+  // 名称
   @Column()
-  value: string;
+  name: string;
 
   //  创建日期
   @CreateDateColumn({
@@ -32,14 +33,13 @@ export class CommodityPriceEntity {
   })
   updatedDate: Date;
 
-  // 关联商品
-  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.prices, {
+  // // 关联商品选项
+  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.category, {
     cascade: true
   })
   @JoinColumn({
     referencedColumnName: 'commodityId'
   })
   commodity: CommodityEntity;
-
 
 }

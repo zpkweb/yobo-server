@@ -3,8 +3,8 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
-import { CommodityEntity } from './commodity';
+import { Column,  OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+// import { CommodityEntity } from './commodity';
 import { CommodityLangMetadataEntity } from './lang/metadata';
 
 @EntityModel('commodity_lang')
@@ -38,12 +38,12 @@ export class CommodityLangEntity {
   metadata: CommodityLangMetadataEntity;
 
   // 关联商品
-  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.CommodityLangs, {
-    cascade: true
-  })
-  @JoinColumn({
-    referencedColumnName: 'commodityId'
-  })
-  commodity: CommodityEntity;
+  // @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.CommodityLangs, {
+  //   cascade: true
+  // })
+  // @JoinColumn({
+  //   referencedColumnName: 'commodityId'
+  // })
+  // commodity: CommodityEntity;
 
 }

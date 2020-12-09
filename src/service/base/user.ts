@@ -70,6 +70,34 @@ export class BaseUserServer {
     }
 
   /**
+   * 用户登录
+   * @param payload
+   */
+    async baseLoginUser(payload) {
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.name = :name", { name: payload.name })
+        .orWhere("user.email = :email", { email: payload.name })
+        .orWhere("user.phone = :phone", { phone: payload.name })
+        .getOne();
+    }
+  /**
+   * 验证密码是否正确
+   * @param payload
+   * userId
+   * password
+   */
+  async baseValidatePassword(payload) {
+    return await this.userEntity
+    .createQueryBuilder('user')
+    .addSelect("user.password")
+    .where("user.userId = :userId", { userId: payload.userId })
+    .andWhere("user.password = :password", { password: crypto.createHash('md5').update(payload.password).digest('hex') })
+    .getOne();
+  }
+
+  /**
    * 检索用户
    * @param payload
    * name
@@ -77,16 +105,31 @@ export class BaseUserServer {
    * phone
    * userId
    */
+
   async baseRetrieveUser(payload) {
-    return await this.userEntity
+    if(payload.name){
+      return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
       .addSelect('user.createdDate')
       .where("user.name = :name", { name: payload.name })
-      .orWhere("user.userId = :userId", { userId: payload.userId })
-      // .orWhere("user.email = :email", { email: payload.email })
-      // .orWhere("user.phone = :phone", { phone: payload.phone })
       .getOne();
+    }else if(payload.email){
+      return await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.identitys', 'identitys')
+      .addSelect('user.createdDate')
+      .where("user.email = :email", { email: payload.email })
+      .getOne();
+    }else if(payload.phone){
+      return await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.identitys', 'identitys')
+      .addSelect('user.createdDate')
+      .where("user.phone = :phone", { phone: payload.phone })
+      .getOne();
+    }
+
   }
 
   async baseRetrieveUserPass(payload) {
@@ -191,20 +234,7 @@ export class BaseUserServer {
     }
 
 
-  /**
-   * 验证密码是否正确
-   * @param payload
-   * userId
-   * password
-   */
-    async baseValidatePassword(payload) {
-      return await this.userEntity
-      .createQueryBuilder('user')
-      .addSelect("user.password")
-      .where("user.userId = :userId", { userId: payload.userId })
-      .andWhere("user.password = :password", { password: crypto.createHash('md5').update(payload.password).digest('hex') })
-      .getOne();
-    }
+
 
   /**
    * 获取用户地址

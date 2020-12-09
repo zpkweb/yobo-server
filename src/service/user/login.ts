@@ -88,7 +88,7 @@ export class LoginService {
       };
     }
     // 查找用户
-    const user:any = await this.baseUserServer.baseRetrieveUser(payload)
+    const user:any = await this.baseUserServer.baseLoginUser(payload)
     console.log("user", user)
 
     if(!user){
@@ -117,13 +117,13 @@ export class LoginService {
       }
     }
 
-    let loginIdentity = false;
+    let loginAuth = false;
     for(let item of user.identitys){
       if(item.index < 5){
-        loginIdentity = true;
+        loginAuth = true;
       }
     }
-    if(loginIdentity){
+    if(loginAuth){
       return {
         data: user,
         success: true,

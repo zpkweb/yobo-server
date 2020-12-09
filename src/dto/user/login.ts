@@ -2,8 +2,8 @@
 import { Rule, RuleType } from "@midwayjs/decorator";
 
 export class AdminUserLoginDTO {
-  @Rule(RuleType.string().required())
-  name: string;
+  @Rule(RuleType.string().email().required())
+  email: string;
 
   @Rule(RuleType.string().required())
   password: string;

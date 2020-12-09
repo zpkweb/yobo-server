@@ -1,7 +1,7 @@
-import { Inject, Controller, Post, Provide, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Config, Plugin, Body, ALL, Validate } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { UserRegisterService } from 'src/service/user/register';
-
+import { AdminUserRegisterDTO } from 'src/dto/user/register';
 @Provide()
 @Controller('/api/admin/user')
 export class ServerUserRegisterController {
@@ -20,7 +20,8 @@ export class ServerUserRegisterController {
 
   // 注册用户
   @Post('/register')
-  async register(@Body(ALL) registerBody) {
+  @Validate()
+  async register(@Body(ALL) registerBody:AdminUserRegisterDTO) {
     return await this.userRegisterService.adminRegister(registerBody);
     // if(!data.code){
     //   data.token = await this.jwt.sign({

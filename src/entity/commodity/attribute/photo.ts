@@ -4,13 +4,17 @@
 
 import { EntityModel } from "@midwayjs/orm";
 import { Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
-import { CommodityEntity } from './commodity';
+import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_photo')
 export class CommodityPhotoEntity {
 
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
+
+  // 图片路径
+  @Column()
+  src: string;
 
   //  创建日期
   @CreateDateColumn({
@@ -23,10 +27,6 @@ export class CommodityPhotoEntity {
     select: false
   })
   updatedDate: Date;
-
-  // 图片路径
-  @Column()
-  src: string;
 
   // 关联商品
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.photos,{

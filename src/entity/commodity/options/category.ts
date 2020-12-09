@@ -3,9 +3,8 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { CommodityOptionsEntity } from '../options';
-import { CommodityOptionsLangEntity } from './lang';
+import { Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_options_category')
 export class CommodityOptionsCategoryEntity {
@@ -13,6 +12,10 @@ export class CommodityOptionsCategoryEntity {
   // 商品形状 id
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
+
+  // 语言
+  @Column()
+  lang: string;
 
   // 名称
   @Column()
@@ -30,14 +33,13 @@ export class CommodityOptionsCategoryEntity {
   })
   updatedDate: Date;
 
-  // 关联商品选项
-  @ManyToOne(type => CommodityOptionsEntity, CommodityOptionsEntity => CommodityOptionsEntity.categorys, {
+  // // 关联商品选项
+  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.category, {
     cascade: true
   })
-  options: CommodityOptionsEntity;
-
-  // 关联商品选项多语言
-  @OneToOne(type => CommodityOptionsLangEntity, CommodityOptionsLangEntity => CommodityOptionsLangEntity.categorys)
-  lang: CommodityOptionsLangEntity;
+  @JoinColumn({
+    referencedColumnName: 'commodityId'
+  })
+  commodity: CommodityEntity;
 
 }
