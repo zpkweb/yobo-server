@@ -13,13 +13,19 @@ export class CommodityOptionsShapeEntity {
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
-  // 语言
+  // lang: ['zh-cn', 'en-us', 'ja-jp', 'fr-fr'],
+  // 汉语
   @Column()
-  lang: string;
+  'zh-cn': string;
 
-  // 名称
   @Column()
-  name: string;
+  'en-us': string;
+
+  @Column()
+  'ja-jp': string;
+
+  @Column()
+  'fr-fr': string;
 
   //  创建日期
   @CreateDateColumn({

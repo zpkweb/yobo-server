@@ -15,11 +15,16 @@ export class CommodityOptionsTechniqueEntity {
 
   // 语言
   @Column()
-  lang: string;
+  'zh-cn': string;
 
-  // 名称
   @Column()
-  name: string;
+  'en-us': string;
+
+  @Column()
+  'ja-jp': string;
+
+  @Column()
+  'fr-fr': string;
 
   //  创建日期
   @CreateDateColumn({
