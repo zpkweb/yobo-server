@@ -12,7 +12,7 @@ export class CommodityOptionsThemeService {
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseCreate(payload);
-    if (data) {
+    if (data.identifiers[0].id) {
       return {
         data: data,
         success: true,
@@ -89,7 +89,7 @@ export class CommodityOptionsThemeService {
    */
   async update(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseUpdate(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,
@@ -109,7 +109,7 @@ export class CommodityOptionsThemeService {
    */
   async delete(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseDelete(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,

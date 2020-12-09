@@ -12,7 +12,7 @@ export class CommodityOptionsCategoryService {
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsCategoryServer.BaseCreate(payload);
-    if (data) {
+    if (data.identifiers[0].id) {
       return {
         data: data,
         success: true,
@@ -89,7 +89,7 @@ export class CommodityOptionsCategoryService {
    */
   async update(payload) {
     const data = await this.baseCommodityOptionsCategoryServer.BaseUpdate(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,
@@ -109,7 +109,7 @@ export class CommodityOptionsCategoryService {
    */
   async delete(payload) {
     const data = await this.baseCommodityOptionsCategoryServer.BaseDelete(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,

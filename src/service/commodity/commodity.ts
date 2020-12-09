@@ -53,11 +53,13 @@ export class CommodityService {
     let data: any = [];
     if (payload.options && payload.options.length) {
       for (let item of payload.options) {
+        console.log("item", item)
         // 查询商品选项
         const commodityOptions = await this.commodityOptionsTypeRetrieve({
           type: payload.type,
           ...item
         });
+        console.log("commodityOptions", commodityOptions)
         if (commodityOptions.success) {
           return {
             success: false,
@@ -118,18 +120,7 @@ export class CommodityService {
         data = await this.commodityOptionsThemeService.create(payload);
         break;
     }
-    if(data.identifiers[0].id){
-      return {
-        data,
-        success: true,
-        code: 10003
-      }
-    }else{
-      return {
-        success: false,
-        code: 10004
-      }
-    }
+    return data;
   }
 
   /**
@@ -151,18 +142,7 @@ export class CommodityService {
         data = await this.commodityOptionsThemeService.retrieve(payload);
         break;
     }
-    if(data){
-      return {
-        data,
-        success: true,
-        code: 10009
-      }
-    }else{
-      return {
-        success: false,
-        code: 10010
-      }
-    }
+    return data;
   }
 
   /**
@@ -192,18 +172,7 @@ export class CommodityService {
         });
         break;
     }
-    if(data){
-      return {
-        data,
-        success: true,
-        code: 10009
-      }
-    }else{
-      return {
-        success: false,
-        code: 10010
-      }
-    }
+    return data;
   }
 
   /**
@@ -224,19 +193,8 @@ export class CommodityService {
       case 'theme':
         data = await this.commodityOptionsThemeService.retrieveAll();
         break;
-    }
-    if(data){
-      return {
-        data,
-        success: true,
-        code: 10009
       }
-    }else{
-      return {
-        success: false,
-        code: 10010
-      }
-    }
+      return data;
     }
 
   /**
@@ -247,6 +205,7 @@ export class CommodityService {
 
     // 查询商品选项
     const commodityOptionsShape = await this.commodityOptionsTypeRetrieveId(payload);
+    console.log("commodityOptionsShape", commodityOptionsShape )
     if (!commodityOptionsShape.success) {
       return {
         success: false,
@@ -255,11 +214,12 @@ export class CommodityService {
     }
 
     return await this.commodityOptionsTypeUpdate({
+      'type': payload.type,
       'id': commodityOptionsShape.data.id,
-      'zh-cn': payload.options['zh-cn'] || commodityOptionsShape.data['zh-cn'],
-      'en-us': payload.options['en-us'] || commodityOptionsShape.data['en-us'],
-      'ja-jp': payload.options['ja-jp'] || commodityOptionsShape.data['ja-jp'],
-      'fr-fr': payload.options['fr-fr'] || commodityOptionsShape.data['fr-fr']
+      'zh-cn': payload['zh-cn'] || commodityOptionsShape.data['zh-cn'],
+      'en-us': payload['en-us'] || commodityOptionsShape.data['en-us'],
+      'ja-jp': payload['ja-jp'] || commodityOptionsShape.data['ja-jp'],
+      'fr-fr': payload['fr-fr'] || commodityOptionsShape.data['fr-fr']
     })
 
   }
@@ -308,18 +268,7 @@ export class CommodityService {
         });
         break;
     }
-    if(data.affected){
-      return {
-        data,
-        success: true,
-        code: 10005
-      }
-    }else{
-      return {
-        success: false,
-        code: 10006
-      }
-    }
+    return data;
   }
 
   /**
@@ -371,18 +320,7 @@ export class CommodityService {
         });
         break;
     }
-    if(data.affected){
-      return {
-        data,
-        success: true,
-        code: 10005
-      }
-    }else{
-      return {
-        success: false,
-        code: 10006
-      }
-    }
+    return data;
   }
 
 }

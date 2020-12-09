@@ -12,7 +12,7 @@ export class CommodityOptionsTechniqueService {
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseCreate(payload);
-    if (data) {
+    if (data.identifiers[0].id) {
       return {
         data: data,
         success: true,
@@ -89,7 +89,7 @@ export class CommodityOptionsTechniqueService {
    */
   async update(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseUpdate(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,
@@ -109,7 +109,7 @@ export class CommodityOptionsTechniqueService {
    */
   async delete(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseDelete(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,

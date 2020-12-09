@@ -12,7 +12,7 @@ export class CommodityOptionsShapeService {
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsShapeServer.BaseCreate(payload);
-    if (data) {
+    if (data.identifiers[0].id) {
       return {
         data: data,
         success: true,
@@ -31,6 +31,7 @@ export class CommodityOptionsShapeService {
    */
   async retrieve(payload) {
     const data = await this.baseCommodityOptionsShapeServer.BaseRetrieve(payload);
+
     if (data) {
       return {
         data: data,
@@ -89,7 +90,7 @@ export class CommodityOptionsShapeService {
    */
   async update(payload) {
     const data = await this.baseCommodityOptionsShapeServer.BaseUpdate(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,
@@ -109,7 +110,7 @@ export class CommodityOptionsShapeService {
    */
   async delete(payload) {
     const data = await this.baseCommodityOptionsShapeServer.BaseDelete(payload);
-    if (data) {
+    if (data.affected) {
       return {
         data: data,
         success: true,
