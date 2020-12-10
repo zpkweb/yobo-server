@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Column, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_price')
@@ -14,11 +14,16 @@ export class CommodityPriceEntity {
 
   // 语言
   @Column()
-  lang: string;
+  'zh-cn': number;
 
-  // 价格
   @Column()
-  value: string;
+  'en-us': number;
+
+  @Column()
+  'ja-jp': number;
+
+  @Column()
+  'fr-fr': number;
 
   //  创建日期
   @CreateDateColumn({
@@ -33,12 +38,7 @@ export class CommodityPriceEntity {
   updatedDate: Date;
 
   // 关联商品
-  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.price, {
-    cascade: true
-  })
-  @JoinColumn({
-    referencedColumnName: 'commodityId'
-  })
+  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.price)
   commodity: CommodityEntity;
 
 

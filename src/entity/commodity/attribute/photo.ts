@@ -16,6 +16,10 @@ export class CommodityPhotoEntity {
   @Column()
   src: string;
 
+  // 图片名称
+  @Column()
+  name: string;
+
   //  创建日期
   @CreateDateColumn({
     select: false
@@ -30,9 +34,11 @@ export class CommodityPhotoEntity {
 
   // 关联商品
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.photos,{
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
+    name: 'commodityId',
     referencedColumnName: 'commodityId'
   })
   commodity: CommodityEntity;

@@ -1,5 +1,5 @@
 import { Inject, Controller, Post, Provide, Get, Param, Body, ALL } from '@midwayjs/decorator';
-import { CommodityService } from 'src/service/commodity/commodity';
+import { CommodityService } from 'src/service/commodity';
 import { Context } from 'egg';
 
 @Provide()
@@ -14,14 +14,26 @@ export class CommodityAdminController {
 
   // 添加商品
   @Post('/create')
-  async createCommodity() {
-    return  await this.commodityService.createCommodity();
+  async createCommodity(@Body(ALL) createBody) {
+    return  await this.commodityService.create(createBody);
+  }
+
+  // 查找商品
+  @Get()
+  async find(@Param(ALL) findParams) {
+    return await this.commodityService.find(findParams);
+  }
+
+  //  查询所有商品
+  @Get('/all')
+  async findAll() {
+    return await this.commodityService.findAll();
   }
 
   // 删除商品
-  @Get('/remove')
-  async removeCommodity() {
-    return await this.commodityService.removeCommodity();
+  @Get('/delete')
+  async delete() {
+    return await this.commodityService.delete();
   }
 
   // 更新商品

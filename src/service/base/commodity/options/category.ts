@@ -31,11 +31,11 @@ export class BaseCommodityOptionsCategoryServer {
    */
   async BaseRetrieve(payload) {
     return await this.commodityOptionsCategoryEntity
-      .createQueryBuilder('Category')
-      .where('Category.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('Category.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('Category.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('Category.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .createQueryBuilder('category')
+      .where('category.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
+      .orWhere('category.en-us = :enus', { enus: payload['en-us'] })
+      .orWhere('category.ja-jp = :jajp', { jajp: payload['ja-jp'] })
+      .orWhere('category.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .getOne();
   }
 
@@ -44,8 +44,8 @@ export class BaseCommodityOptionsCategoryServer {
    */
   async BaseRetrieveId(payload) {
     return await this.commodityOptionsCategoryEntity
-      .createQueryBuilder('Category')
-      .where('Category.id = :id', { id: payload.id })
+      .createQueryBuilder('category')
+      .where('category.id = :id', { id: payload.id })
       .getOne();
   }
 

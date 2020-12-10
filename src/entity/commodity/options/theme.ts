@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_options_theme')
@@ -39,11 +39,9 @@ export class CommodityOptionsThemeEntity {
   updatedDate: Date;
 
   // 关联商品选项
-  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.theme, {
-    cascade: true
-  })
-  @JoinColumn({
-    referencedColumnName: 'commodityId'
+  @OneToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.theme, {
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   commodity: CommodityEntity;
 

@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm";
 import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_name')
@@ -15,11 +15,16 @@ export class CommodityNameEntity {
 
   // 语言
   @Column()
-  lang: string;
+  'zh-cn': string;
 
-  // 名称
   @Column()
-  name: string;
+  'en-us': string;
+
+  @Column()
+  'ja-jp': string;
+
+  @Column()
+  'fr-fr': string;
 
   //  创建日期
   @CreateDateColumn({
@@ -34,12 +39,8 @@ export class CommodityNameEntity {
   updatedDate: Date;
 
   // // 关联商品选项
-  @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.name, {
-    cascade: true
-  })
-  @JoinColumn({
-    referencedColumnName: 'commodityId'
-  })
+  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.name)
+
   commodity: CommodityEntity;
 
 }

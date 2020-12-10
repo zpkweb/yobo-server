@@ -31,11 +31,11 @@ export class BaseCommodityOptionsThemeServer {
    */
   async BaseRetrieve(payload) {
     return await this.commodityOptionsThemeEntity
-      .createQueryBuilder('Theme')
-      .where('Theme.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('Theme.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('Theme.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('Theme.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .createQueryBuilder('theme')
+      .where('theme.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
+      .orWhere('theme.en-us = :enus', { enus: payload['en-us'] })
+      .orWhere('theme.ja-jp = :jajp', { jajp: payload['ja-jp'] })
+      .orWhere('theme.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .getOne();
   }
 
@@ -44,8 +44,8 @@ export class BaseCommodityOptionsThemeServer {
    */
   async BaseRetrieveId(payload) {
     return await this.commodityOptionsThemeEntity
-      .createQueryBuilder('Theme')
-      .where('Theme.id = :id', { id: payload.id })
+      .createQueryBuilder('theme')
+      .where('theme.id = :id', { id: payload.id })
       .getOne();
   }
 

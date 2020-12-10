@@ -1,5 +1,5 @@
 import { Inject, Controller, Provide, Get, Param, ALL } from '@midwayjs/decorator';
-import { CommodityService } from 'src/service/commodity/commodity';
+import { CommodityService } from 'src/service/commodity';
 import { Context } from 'egg';
 
 @Provide()
@@ -15,8 +15,10 @@ export class CommodityController {
   // 查找商品
   @Get()
   async find(@Param(ALL) findParams) {
-    return await this.commodityService.commodityFind(findParams);
+    return await this.commodityService.find(findParams);
   }
+
+
 
   // 查找商品选项-形状
   @Get('/options/:type')

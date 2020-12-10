@@ -66,7 +66,7 @@ export class CommodityOptionsShapeService {
   }
 
   /**
-   * 查询商品所有f选项
+   * 查询商品所有选项
    */
   async retrieveAll() {
     const data = await this.baseCommodityOptionsShapeServer.BaseRetrieveAll();

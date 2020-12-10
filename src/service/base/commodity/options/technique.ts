@@ -31,11 +31,11 @@ export class BaseCommodityOptionsTechniqueServer {
    */
   async BaseRetrieve(payload) {
     return await this.commodityOptionsTechniqueEntity
-      .createQueryBuilder('Technique')
-      .where('Technique.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('Technique.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('Technique.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('Technique.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .createQueryBuilder('technique')
+      .where('technique.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
+      .orWhere('technique.en-us = :enus', { enus: payload['en-us'] })
+      .orWhere('technique.ja-jp = :jajp', { jajp: payload['ja-jp'] })
+      .orWhere('technique.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .getOne();
   }
 
@@ -44,8 +44,8 @@ export class BaseCommodityOptionsTechniqueServer {
    */
   async BaseRetrieveId(payload) {
     return await this.commodityOptionsTechniqueEntity
-      .createQueryBuilder('Technique')
-      .where('Technique.id = :id', { id: payload.id })
+      .createQueryBuilder('technique')
+      .where('technique.id = :id', { id: payload.id })
       .getOne();
   }
 
