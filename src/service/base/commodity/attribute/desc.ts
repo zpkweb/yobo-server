@@ -27,6 +27,17 @@ export class BaseCommodityDescServer {
   }
 
   /**
+   * 查询商品是否存在
+   * @param commodityId
+   */
+  async BaseHas(commodityId) {
+    return await this.commodityDescEntity
+    .createQueryBuilder('commodity')
+    .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+    .getOne();
+  }
+
+  /**
    * 查询商品名称
    */
   async BaseRetrieve(payload) {

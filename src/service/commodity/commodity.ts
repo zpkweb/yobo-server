@@ -1,9 +1,9 @@
 import { Inject, Provide } from '@midwayjs/decorator';
 import { BaseCommodityServer } from '../base/commodity/commodity';
-import { BaseCommodityNameServer } from '../base/commodity/attribute/name';
-import { BaseCommodityDescServer } from '../base/commodity/attribute/desc';
-import { BaseCommodityPriceServer } from '../base/commodity/attribute/price';
-import { BaseCommodityPhotoServer } from '../base/commodity/attribute/photo';
+import { CommodityAttributeName } from './attribute/name';
+import { CommodityAttributeDesc } from './attribute/desc';
+import { CommodityAttributePrice } from './attribute/price';
+import { CommodityAttributePhoto } from './attribute/photo';
 @Provide()
 export class CommodityCommodityService {
 
@@ -11,19 +11,21 @@ export class CommodityCommodityService {
   baseCommodityServer: BaseCommodityServer;
 
   @Inject()
-  baseCommodityNameServer: BaseCommodityNameServer;
+  commodityAttributeName: CommodityAttributeName;
 
   @Inject()
-  baseCommodityDescServer: BaseCommodityDescServer;
+  commodityAttributeDesc: CommodityAttributeDesc;
 
   @Inject()
-  baseCommodityPriceServer: BaseCommodityPriceServer;
+  commodityAttributePrice: CommodityAttributePrice;
 
   @Inject()
-  baseCommodityPhotoServer: BaseCommodityPhotoServer;
+  commodityAttributePhoto: CommodityAttributePhoto;
 
   // 创建商品
   async create(payload) {
+    console.log("create", payload)
+
     // 状态 state
     // 颜色 colors
     // 大小 size
@@ -32,12 +34,13 @@ export class CommodityCommodityService {
       colors: payload.state || ['000', 'fff'],
       size: payload.size || []
     })
+
     if (!commodity.success) {
       return commodity
     }
 
     // 创建商品名称
-    const commodityName = await this.createName({
+    const commodityName = await this.commodityAttributeName.create({
       'zh-cn': payload.name['zh-cn'],
       'en-us': payload.name['en-us'],
       'ja-jp': payload.name['ja-jp'],
@@ -50,12 +53,12 @@ export class CommodityCommodityService {
     // 商品 关联 商品名称
     await this.relation({
       name: 'name',
-      of: commodity.data.identifiers[0].id,
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
       set: commodityName.data.identifiers[0].id
     })
 
     // 创建商品详情
-    const commodityDesc = await this.createDesc({
+    const commodityDesc = await this.commodityAttributeDesc.create({
       'zh-cn': payload.desc['zh-cn'],
       'en-us': payload.desc['en-us'],
       'ja-jp': payload.desc['ja-jp'],
@@ -68,12 +71,12 @@ export class CommodityCommodityService {
     // 商品 关联 商品详情
     await this.relation({
       name: 'desc',
-      of: commodity.data.identifiers[0].id,
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
       set: commodityDesc.data.identifiers[0].id
     })
 
     // 创建商品价格
-    const commodityPrice = await this.createPrice({
+    const commodityPrice = await this.commodityAttributePrice.create({
       'zh-cn': payload.price['zh-cn'],
       'en-us': payload.price['en-us'],
       'ja-jp': payload.price['ja-jp'],
@@ -86,15 +89,14 @@ export class CommodityCommodityService {
     // 商品 关联 商品价格
     await this.relation({
       name: 'price',
-      of: commodity.data.identifiers[0].id,
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
       set: commodityPrice.data.identifiers[0].id
     })
 
 
     // 创建商品图片
-    // for(let i=0; i< payload.photos.length; i++){
-      for(let item of payload.photos){
-      const commodityPhoto = await this.createPhoto(item)
+    for(let item of payload.photos){
+      const commodityPhoto = await this.commodityAttributePhoto.create(item)
       if (!commodityPhoto.success) {
         return commodityPhoto
       }
@@ -108,39 +110,38 @@ export class CommodityCommodityService {
 
 
 
-
+    console.log("commodity", commodity.data)
     // 商品 关联 商品形状
     await this.relation({
-      name: 'shape',
-      of: commodity.data.identifiers[0].id,
-      set: payload.shape
+      name: 'shapes',
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      add: payload.shape
     })
 
     // 商品 关联 商品主题
     await this.relation({
-      name: 'theme',
-      of: commodity.data.identifiers[0].id,
-      set: payload.theme
+      name: 'themes',
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      add: payload.theme
     })
 
     // 商品 关联 商品类别
     await this.relation({
-      name: 'category',
-      of: commodity.data.identifiers[0].id,
-      set: payload.category
+      name: 'categorys',
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      add: payload.category
     })
 
     // 商品 关联 商品手法
     await this.relation({
-      name: 'technique',
-      of: commodity.data.identifiers[0].id,
-      set: payload.technique
+      name: 'techniques',
+      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      add: payload.technique
     })
 
-    // 商品Id查找商品
-    return await this.retrieveId({
-      commodityId: commodity.data.generatedMaps[0].commodityId
-    })
+    return commodity
+
+
     // const data = await this.baseCommodityServer.BaseRetrieveCommodityId({
     //   commodityId: commodity.data.generatedMaps[0].commodityId
     // })
@@ -175,73 +176,13 @@ export class CommodityCommodityService {
     }
   }
 
-  // 创建名称
-  async createName(payload) {
-    const data = await this.baseCommodityNameServer.BaseCreate(payload);
-    if (data.identifiers[0].id) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
-  }
 
-  // 创建详情
-  async createDesc(payload) {
-    const data = await this.baseCommodityDescServer.BaseCreate(payload);
-    if (data.identifiers[0].id) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
-  }
 
-  // 创建价格
-  async createPrice(payload) {
-    const data = await this.baseCommodityPriceServer.BaseCreate(payload);
-    if (data.identifiers[0].id) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
-  }
 
-  // 创建图片
-  async createPhoto(payload) {
-    const data = await this.baseCommodityPhotoServer.BaseCreate(payload);
-    if (data.identifiers[0].id) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
-  }
+
+
+
+
 
 
   // 关联
@@ -263,12 +204,155 @@ export class CommodityCommodityService {
   }
 
   //
+
+
+
+
+
+
+
   /**
-   * 查找商品-通过商品名称
+   * 通过commodityId判断商品是否存在
    * @param payload
+   *
+   */
+  async hasCommodityPhoto(payload) {
+    const data = await this.baseCommodityServer.BaseHasRelation({
+      type: 'photos',
+      commodityId: payload.commodityId,
+      id: payload.id
+    });
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+
+  /**
+   * 通过commodityId判断商品是否存在
+   * @param payload
+   *
+   */
+  async hasCommodityCategory(payload) {
+    const data = await this.baseCommodityServer.BaseHasRelation({
+      type: 'categorys',
+      commodityId: payload.commodityId,
+      id: payload.id
+    });
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+  /**
+   * 通过commodityId判断商品是否存在
+   * @param payload
+   *
+   */
+  async hasCommodityShape(payload) {
+    const data = await this.baseCommodityServer.BaseHasRelation({
+      type: 'shapes',
+      commodityId: payload.commodityId,
+      id: payload.id
+    });
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+  /**
+   * 通过commodityId判断商品是否存在
+   * @param payload
+   *
+   */
+  async hasCommodityTechnique(payload) {
+    const data = await this.baseCommodityServer.BaseHasRelation({
+      type: 'techniques',
+      commodityId: payload.commodityId,
+      id: payload.id
+    });
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+  /**
+   * 通过commodityId判断商品是否存在
+   * @param payload
+   *
+   */
+  async hasCommodityTheme(payload) {
+    const data = await this.baseCommodityServer.BaseHasRelation({
+      type: 'themes',
+      commodityId: payload.commodityId,
+      id: payload.id
+    });
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+
+  /**
+   * 查找商品-
+   * @param payload
+   * 通过商品名称
+   * 通过商品id
    */
   async retrieve(payload) {
-    const data = await this.baseCommodityNameServer.BaseRetrieve(payload);
+    console.log("retrieve", payload)
+    let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
+
+    if(!payload.edit) {
+      const filterData = this.filter(payload.lang || 'zh-cn', [data]);
+      data = filterData[0];
+    }
+    console.log("data", data)
     if (data) {
       return {
         data: data,
@@ -283,48 +367,65 @@ export class CommodityCommodityService {
     }
   }
 
-  /**
-   * 查找商品-通过商品id
-   * @param payload
-   */
-  async retrieveId(payload) {
-    // 商品Id查找商品
-    const data = await this.baseCommodityServer.BaseRetrieveId({
-      commodityId: payload.commodityId
-    })
-    if (data) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
-  }
+
   /**
    * 查找商品-所有商品
    * @param payload
    */
-    async retrieveAll() {
+    async retrieveAll(payload) {
       // 商品Id查找商品
-    const data = await this.baseCommodityServer.BaseRetrieveAll()
-    if (data) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
+      const data = await this.baseCommodityServer.BaseRetrieveAll()
+      console.log("retrieveAll", data)
+      const filterData = this.filter(payload.lang || 'zh-cn', data)
+      if (data) {
+        return {
+          data: filterData,
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
       }
     }
+  /**
+   * 筛选商品
+   * @param  payload
+   * @param type
+   */
+    filter(type, payload) {
+      return payload.map(item => {
+        let name = item.name ? item.name[type] : '';
+
+        let desc = item.desc ? item.desc[type] : '';
+        let price = item.price ? item.price[type] : '';
+
+        let shapes = item.shapes ? item.shapes.map(item => {return {id: item.id, name: item[type]}}) : '';
+        let themes = item.themes ? item.themes.map(item => {return {id: item.id, name: item[type]}})  : '';
+        let categorys = item.categorys ? item.categorys.map(item => {return {id: item.id, name: item[type]}})  : '';
+        let techniques = item.techniques ? item.techniques.map(item => {return {id: item.id, name: item[type]}})  : '';
+
+        return {
+          commodityId: item.commodityId,
+          state: item.state,
+          colors: item.colors,
+          size: item.size,
+          name,
+          desc,
+          price,
+          photos: item.photos,
+          shapes,
+          themes,
+          categorys,
+          techniques,
+          seller: item.seller|| '',
+          createdDate: item.createdDate
+        }
+      })
     }
+
 
   // 搜索商品
   async search(payload) {
@@ -332,13 +433,59 @@ export class CommodityCommodityService {
   }
 
   // 删除商品
-  async delete() {
+  async delete(payload) {
+    const data = await this.baseCommodityServer.BaseDelete(payload.commodityId);
+    if (data.affected) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async hasId(commodityId) {
+    const data = await this.baseCommodityServer.BaseHas(commodityId);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+  async update(payload) {
+    const data = await this.baseCommodityServer.BaseUpdate(payload);
+    if (data.affected) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+
 
   }
 
-  // 更新商品
-  async update() {
 
-  }
+
+
+
 
 }

@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
 import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_price')
@@ -38,7 +38,13 @@ export class CommodityPriceEntity {
   updatedDate: Date;
 
   // 关联商品
-  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.price)
+  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.price, {
+    onDelete: 'CASCADE'
+  })
+  @JoinColumn({
+    name: 'commodityId',
+    referencedColumnName: 'commodityId'
+  })
   commodity: CommodityEntity;
 
 

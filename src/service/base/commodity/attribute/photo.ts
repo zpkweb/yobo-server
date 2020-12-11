@@ -25,26 +25,37 @@ export class BaseCommodityPhotoServer {
   }
 
   /**
+   * 查询商品是否存在
+   * @param commodityId
+   */
+  async BaseHas(commodityId) {
+    return await this.commodityPhotoEntity
+    .createQueryBuilder('commodity')
+    .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+    .getOne();
+  }
+
+
+  /**
+   * 查询商品
+   */
+  async BaseRetrieveCommodityId(payload) {
+    return await this.commodityPhotoEntity
+      .createQueryBuilder('photo')
+      .where('photo.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .getMany();
+  }
+
+  /**
    * 查询商品名称
    */
   async BaseRetrieve(payload) {
     return await this.commodityPhotoEntity
       .createQueryBuilder('photo')
-      .where('photo.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('photo.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('photo.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('photo.fr-fr = :frfr', { frfr: payload['fr-fr'] })
-      .getOne();
-  }
-
-  /**
-   * 查询商品名称Id
-   */
-  async BaseRetrieveId(payload) {
-    return await this.commodityPhotoEntity
-      .createQueryBuilder('photo')
       .where('photo.id = :id', { id: payload.id })
-      .getOne();
+      .orWhere('photo.name = :name', { name: payload.name })
+      .orWhere('photo.src = :src', { src: payload.src })
+      .getMany();
   }
 
   /**

@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { CommodityEntity } from '../commodity';
 
 @EntityModel('commodity_options_technique')
@@ -39,7 +39,7 @@ export class CommodityOptionsTechniqueEntity {
   updatedDate: Date;
 
   // 关联商品选项
-  @OneToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.technique, {
+  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.techniques, {
     cascade: true,
     onDelete: 'SET NULL'
   })

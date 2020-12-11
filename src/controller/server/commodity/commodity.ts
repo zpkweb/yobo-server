@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Provide, Get, Param, Body, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Param, Body, ALL, Query } from '@midwayjs/decorator';
 import { CommodityService } from 'src/service/commodity';
 import { Context } from 'egg';
 
@@ -20,26 +20,34 @@ export class CommodityAdminController {
 
   // 查找商品
   @Get()
-  async find(@Param(ALL) findParams) {
+  async find(@Query(ALL) findParams) {
     return await this.commodityService.find(findParams);
+  }
+
+  // 查找商品
+  @Get('/edit')
+  async finEdit(@Query(ALL) findParams) {
+    return await this.commodityService.finEdit(findParams);
   }
 
   //  查询所有商品
   @Get('/all')
-  async findAll() {
-    return await this.commodityService.findAll();
+  async findAll(@Query(ALL) findParams) {
+    return await this.commodityService.findAll(findParams);
   }
 
   // 删除商品
-  @Get('/delete')
-  async delete() {
-    return await this.commodityService.delete();
+  @Post('/delete')
+  async delete(@Body(ALL) deleteBody) {
+    return await this.commodityService.delete({
+      commodityId: deleteBody.commodityId
+    });
   }
 
   // 更新商品
   @Post('/update')
-  async updateCommodity() {
-    // return await this.commodityService.({});
+  async updateCommodity(@Body(ALL) updateBody) {
+    return await this.commodityService.update(updateBody)
   }
 
   // 添加商品选项

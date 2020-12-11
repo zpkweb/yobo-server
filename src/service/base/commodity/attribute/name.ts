@@ -27,6 +27,17 @@ export class BaseCommodityNameServer {
   }
 
   /**
+   * 查询商品是否存在
+   * @param commodityId
+   */
+  async BaseHas(commodityId) {
+    return await this.commodityNameEntity
+    .createQueryBuilder('commodity')
+    .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+    .getOne();
+  }
+
+  /**
    * 查询商品名称
    */
   async BaseRetrieve(payload) {
@@ -71,18 +82,18 @@ export class BaseCommodityNameServer {
         'ja-jp': payload['ja-jp'],
         'fr-fr': payload['fr-fr']
       })
-      .where("id = :id", { id: payload.id })
+      .where("commmodityId = :commmodityId", { commmodityId: payload.commmodityId })
       .execute();
   }
 
   /**
    * 删除商品名称
    */
-  async BaseDelete(payload) {
+  async BaseDelete(commmodityId) {
     return await this.commodityNameEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where("commmodityId = :commmodityId", { commmodityId: commmodityId })
       .execute();
   }
 }

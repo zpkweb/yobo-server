@@ -7,7 +7,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToMany, OneToOne } from "typeorm";
+import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToMany, OneToOne, JoinTable } from "typeorm";
 import { CommodityNameEntity } from './attribute/name';
 import { CommodityDescEntity } from './attribute/desc';
 import { CommodityPhotoEntity } from './attribute/photo';
@@ -61,48 +61,78 @@ export class CommodityEntity {
   // 关联 商品名称
   @OneToOne(type => CommodityNameEntity, CommodityNameEntity => CommodityNameEntity.commodity, {
     cascade: true,
-    onDelete: 'CASCADE'
   })
-  @JoinColumn()
   name: CommodityNameEntity;
 
   // 关联 商品描述
   @OneToOne(type => CommodityDescEntity, CommodityDescEntity => CommodityDescEntity.commodity, {
     cascade: true,
-    onDelete: 'CASCADE'
   })
-  @JoinColumn()
   desc: CommodityDescEntity;
 
   // 关联 商品价格
   @OneToOne(type => CommodityPriceEntity, CommodityPriceEntity => CommodityPriceEntity.commodity, {
     cascade: true,
-    onDelete: 'CASCADE'
   })
-  @JoinColumn()
   price: CommodityPriceEntity;
 
   // 关联 商品图片
   @OneToMany(type => CommodityPhotoEntity, CommodityPhotoEntity => CommodityPhotoEntity.commodity)
-  photos: CommodityPhotoEntity;
+  photos: CommodityPhotoEntity[];
 
 
   // options
   // 关联 商品形状
-  @ManyToOne(type => CommodityOptionsShapeEntity, CommodityOptionsShapeEntity => CommodityOptionsShapeEntity.commodity)
-  shape: CommodityOptionsShapeEntity[];
+  @ManyToMany(type => CommodityOptionsShapeEntity, CommodityOptionsShapeEntity => CommodityOptionsShapeEntity.commodity)
+  @JoinTable({
+    name: 'commodity_shape',
+    joinColumn:{
+      referencedColumnName: 'commodityId'
+    },
+    inverseJoinColumn:{
+      referencedColumnName: 'id'
+    }
+  })
+  shapes: CommodityOptionsShapeEntity[];
 
   // 关联 商品主题
-  @ManyToOne(type => CommodityOptionsThemeEntity, CommodityOptionsThemeEntity => CommodityOptionsThemeEntity.commodity)
-  theme: CommodityOptionsThemeEntity[];
+  @ManyToMany(type => CommodityOptionsThemeEntity, CommodityOptionsThemeEntity => CommodityOptionsThemeEntity.commodity)
+  @JoinTable({
+    name: 'commodity_theme',
+    joinColumn:{
+      referencedColumnName: 'commodityId'
+    },
+    inverseJoinColumn:{
+      referencedColumnName: 'id'
+    }
+  })
+  themes: CommodityOptionsThemeEntity[];
 
   // 关联 商品类别
-  @ManyToOne(type => CommodityOptionsCategoryEntity, CommodityOptionsCategoryEntity => CommodityOptionsCategoryEntity.commodity)
-  category: CommodityOptionsCategoryEntity[];
+  @ManyToMany(type => CommodityOptionsCategoryEntity, CommodityOptionsCategoryEntity => CommodityOptionsCategoryEntity.commodity)
+  @JoinTable({
+    name: 'commodity_category',
+    joinColumn:{
+      referencedColumnName: 'commodityId'
+    },
+    inverseJoinColumn:{
+      referencedColumnName: 'id'
+    }
+  })
+  categorys: CommodityOptionsCategoryEntity[];
 
   // 关联 商品手法
-  @ManyToOne(type => CommodityOptionsTechniqueEntity, CommodityOptionsTechniqueEntity => CommodityOptionsTechniqueEntity.commodity)
-  technique: CommodityOptionsTechniqueEntity[];
+  @ManyToMany(type => CommodityOptionsTechniqueEntity, CommodityOptionsTechniqueEntity => CommodityOptionsTechniqueEntity.commodity)
+  @JoinTable({
+    name: 'commodity_technique',
+    joinColumn:{
+      referencedColumnName: 'commodityId'
+    },
+    inverseJoinColumn:{
+      referencedColumnName: 'id'
+    }
+  })
+  techniques: CommodityOptionsTechniqueEntity[];
 
   // 关联商家
   @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.commoditys, {

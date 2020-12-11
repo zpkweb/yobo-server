@@ -46,24 +46,48 @@ export class BaseCommodityServer {
         .createQueryBuilder()
         .relation(CommodityEntity, payload.name)
         .of(payload.of)
-        .add(payload.set);
+        .add(payload.add);
     }
-
+  /**
+   * 查询商品是否存在
+   * @param commodityId
+   */
+    async BaseHas(commodityId) {
+      return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+      .getOne();
+    }
+  /**
+   * 查询商品关联属性是否存在
+   * @param payload
+   * commodityId
+   * id
+   * type : category, shape, technique, theme
+   */
+  async BaseHasRelation(payload) {
+    return await this.commodityEntity
+    .createQueryBuilder('commodity')
+    .leftJoinAndSelect(`commodity.${payload.type}`, 'relation', 'relation.id = :id', { id: payload.id })
+    .where('commodity.commodityId = :commodityId', { commodityId: payload.commodityId })
+    .getOne();
+  }
   /**
    * 查询商品
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieve(commodityId) {
     return await this.commodityEntity
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.name', 'name')
       .leftJoinAndSelect('commodity.desc', 'desc')
       .leftJoinAndSelect('commodity.price', 'price')
       .leftJoinAndSelect('commodity.photos', 'photos')
-      .leftJoinAndSelect('commodity.shape', 'shape')
-      .leftJoinAndSelect('commodity.theme', 'theme')
-      .leftJoinAndSelect('commodity.category', 'category')
-      .leftJoinAndSelect('commodity.technique', 'technique')
-      .where('commodity.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .leftJoinAndSelect('commodity.shapes', 'shape')
+      .leftJoinAndSelect('commodity.themes', 'theme')
+      .leftJoinAndSelect('commodity.categorys', 'category')
+      .leftJoinAndSelect('commodity.techniques', 'technique')
+      .addSelect('commodity.createdDate')
+      .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
   }
   /**
@@ -76,10 +100,39 @@ export class BaseCommodityServer {
       .leftJoinAndSelect('commodity.desc', 'desc')
       .leftJoinAndSelect('commodity.price', 'price')
       .leftJoinAndSelect('commodity.photos', 'photos')
-      .leftJoinAndSelect('commodity.shape', 'shape')
-      .leftJoinAndSelect('commodity.theme', 'theme')
-      .leftJoinAndSelect('commodity.category', 'category')
-      .leftJoinAndSelect('commodity.technique', 'technique')
+      .leftJoinAndSelect('commodity.shapes', 'shape')
+      .leftJoinAndSelect('commodity.themes', 'theme')
+      .leftJoinAndSelect('commodity.categorys', 'category')
+      .leftJoinAndSelect('commodity.techniques', 'technique')
+      .addSelect('commodity.createdDate')
+      // .printSql()
+      // .getSql();
       .getMany();
+  }
+  /**
+   * 删除商品
+   */
+  async BaseDelete(commodityId) {
+    return await this.commodityEntity
+      .createQueryBuilder()
+      .delete()
+      .where("commodityId = :commodityId", { commodityId: commodityId })
+      .execute();
+  }
+  /**
+   * 更新商品
+   * @param payload
+   */
+  async BaseUpdate(payload) {
+    return await this.commodityEntity
+      .createQueryBuilder()
+      .update(CommodityEntity)
+      .set({
+        state: payload.state,
+        colors: payload.colors,
+        size: payload.size
+      })
+      .where("commodityId = :commodityId", { commodityId: payload.commodityId })
+      .execute();
   }
 }

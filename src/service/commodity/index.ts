@@ -1,5 +1,9 @@
 import { Inject, Provide } from '@midwayjs/decorator';
 import { CommodityCommodityService } from './commodity';
+import { CommodityAttributeName } from './attribute/name';
+import { CommodityAttributeDesc } from './attribute/desc';
+import { CommodityAttributePrice } from './attribute/price';
+import { CommodityAttributePhoto } from './attribute/photo';
 import { CommodityOptionsCategoryService } from './options/category';
 import { CommodityOptionsShapeService } from './options/shape';
 import { CommodityOptionsTechniqueService } from './options/technique';
@@ -10,6 +14,18 @@ export class CommodityService {
 
   @Inject()
   commodityCommodityService: CommodityCommodityService;
+
+  @Inject()
+  commodityAttributeName: CommodityAttributeName;
+
+  @Inject()
+  commodityAttributeDesc: CommodityAttributeDesc;
+
+  @Inject()
+  commodityAttributePrice: CommodityAttributePrice;
+
+  @Inject()
+  commodityAttributePhoto: CommodityAttributePhoto;
 
   @Inject()
   commodityOptionsCategoryService: CommodityOptionsCategoryService;
@@ -26,18 +42,31 @@ export class CommodityService {
   // 创建
   async create(payload) {
     console.log("commodity index create", payload)
-    // 查询商品
-    // const commodity = await this.commodityCommodityService.retrieve(payload.name);
-    // if(commodity.success){
-    //   return {
-    //     success: false,
-    //     code: 10013
-    //   }
-    // }
+    // 查询商品是否存在
+    const commodity = await this.commodityAttributeName.hasName({
+      'zh-cn': payload['zh-cn'],
+      'en-us': payload['en-us'],
+      'ja-jp': payload['ja-jp'],
+      'fr-fr': payload['fr-fr']
+    });
+    if(commodity.success){
+      return {
+        success: false,
+        code: 10013
+      }
+    }
 
-    return await this.commodityCommodityService.create(payload);
+    const commodityNew =  await this.commodityCommodityService.create(payload);
 
+    if(!commodityNew.success){
+      return commodityNew
+    }
 
+    // 通过商品Id查找商品
+
+    return await this.commodityCommodityService.retrieve({
+      commodityId: commodityNew.data.generatedMaps[0].commodityId
+    })
 
 
   }
@@ -46,19 +75,21 @@ export class CommodityService {
 
   // 查找商品
   async find(payload) {
-    if(payload.commodityId){
-      return await this.commodityCommodityService.retrieveId({
-        commodityId: payload.commodityId
-      });
-    }else{
-      return await this.commodityCommodityService.retrieve(payload);
-    }
-
+    return await this.commodityCommodityService.retrieve({
+      ...payload,
+      edit: false
+    });
   }
 
+  async finEdit(payload) {
+    return await this.commodityCommodityService.retrieve({
+      commodityId: payload.commodityId,
+      edit: true
+    });
+  }
   // 查找所有商品
-  async findAll() {
-    return await this.commodityCommodityService.retrieveAll();
+  async findAll(payload) {
+    return await this.commodityCommodityService.retrieveAll(payload);
   }
 
 
@@ -68,13 +99,120 @@ export class CommodityService {
   }
 
   // 删除商品
-  async delete() {
-
+  async delete(payload) {
+    return await this.commodityCommodityService.delete(payload);
   }
 
   // 更新商品
-  async update() {
+  async update(payload) {
+    // 查询商品是否存在
+    const commodity = await this.commodityCommodityService.hasId({
+      commodityId: payload.commodityId
+    });
+    console.log("commodity", commodity)
+    //  商品不存在
+    if(!commodity.success){
+      return {
+        success: false,
+        code: 10014
+      }
+    }
+    // 更新商品属性
+    const commodityUpdate = await this.commodityCommodityService.update({
+      commodityId: payload.commodityId,
+      state: payload.state,
+      colors: payload.state,
+      size: payload.size
+    })
+    console.log("commodityUpdate", commodityUpdate)
+    // 更新失败
+    if (!commodityUpdate.success) {
+      return commodityUpdate
+    }
 
+
+    // 更新商品名称
+    const commodityName = await this.commodityAttributeName.updateName({
+      commodityId: payload.commodityId,
+      'zh-cn': payload.name['zh-cn'],
+      'en-us': payload.name['en-us'],
+      'ja-jp': payload.name['ja-jp'],
+      'fr-fr': payload.name['fr-fr']
+    })
+    if(!commodityName.success) {
+      return commodityName;
+    }
+
+    // 更新商品详情
+    const commodityDesc = await this.commodityAttributeDesc.updateDesc({
+      commodityId: payload.commodityId,
+      'zh-cn': payload.desc['zh-cn'],
+      'en-us': payload.desc['en-us'],
+      'ja-jp': payload.desc['ja-jp'],
+      'fr-fr': payload.desc['fr-fr']
+    });
+    if(!commodityDesc.success) {
+      return commodityDesc;
+    }
+
+    // 更新商品价格
+    const commodityPrice = await this.commodityAttributePrice.updatePrice({
+      commodityId: payload.commodityId,
+      'zh-cn': payload.desc['zh-cn'],
+      'en-us': payload.desc['en-us'],
+      'ja-jp': payload.desc['ja-jp'],
+      'fr-fr': payload.desc['fr-fr']
+    });
+    if(!commodityPrice.success) {
+      return commodityPrice;
+    }
+
+
+
+    // 更新商品图片
+    for(let item of payload.photos){
+      const commodityPhoto = await this.commodityAttributePhoto.update(item)
+      if (!commodityPhoto.success) {
+        return commodityPhoto
+      }
+      // 商品 关联 商品图片
+      // await this.relation({
+      //   name: 'photos',
+      //   of: { commodityId: payload.commodityId },
+      //   add: commodityPhoto.data.identifiers[0].id
+      // })
+    }
+
+    // 更新 商品形状
+    await this.commodityCommodityService.relation({
+      name: 'shapes',
+      of: { commodityId: payload.commodityId },
+      add: payload.shape
+    })
+
+    // 更新 商品主题
+    await this.commodityCommodityService.relation({
+      name: 'themes',
+      of: { commodityId: payload.commodityId },
+      add: payload.theme
+    })
+
+    // 更新 商品类别
+    await this.commodityCommodityService.relation({
+      name: 'categorys',
+      of: { commodityId: payload.commodityId },
+      add: payload.category
+    })
+
+    // 更新 商品手法
+    await this.commodityCommodityService.relation({
+      name: 'techniques',
+      of: { commodityId: payload.commodityId },
+      add: payload.technique
+    })
+
+
+    // return await this.commodityCommodityService.update(payload);
   }
 
 
