@@ -95,7 +95,20 @@ export class CommodityService {
 
   // 搜索商品
   async search(payload) {
+    return await this.commodityCommodityService.search({
+      name: payload.name || '',
+      desc: payload.desc || '',
+      price: payload.price || ' ',
+      state: payload.state || ' ',
+      shapes: payload.shapes || ' ',
+      themes: payload.themes || ' ',
+      categorys: payload.categorys || ' ',
+      techniques: payload.techniques || ' ',
+      seller: payload.seller || ' ',
+      hots: payload.hots || ' ',
+      news: payload.news || ' ',
 
+    });
   }
 
   // 删除商品

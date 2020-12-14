@@ -82,6 +82,21 @@ export class BaseUserServer {
         .orWhere("user.phone = :phone", { phone: payload.name })
         .getOne();
     }
+
+    /**
+   * 用户登录
+   * @param payload
+   */
+    async baseLoginAdmin(payload) {
+      return await this.userEntity
+        .createQueryBuilder('user')
+        .leftJoinAndSelect('user.identitys', 'identitys')
+        .where("user.name = :name", { name: payload.name })
+        .orWhere("user.email = :email", { email: payload.name })
+        .orWhere("user.phone = :phone", { phone: payload.name })
+        .getOne();
+    }
+
   /**
    * 验证密码是否正确
    * @param payload

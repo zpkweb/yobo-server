@@ -57,13 +57,13 @@ export class LoginService {
     console.log("login", user)
     // 判断用户密码是否正确
     const userPassword = await this.validatePassword({
-      userId: user.data.userId,
+      userId: user.userId,
       password: payload.password
     })
 
     if(userPassword.success){
       return {
-        data: user.data,
+        data: user,
         success: true,
         code: 10011
       };
@@ -87,8 +87,9 @@ export class LoginService {
         code: 10011
       };
     }
-    // 查找用户
-    const user:any = await this.baseUserServer.baseLoginUser(payload)
+    // 后台管理登录
+
+    const user:any = await this.baseUserServer.baseLoginAdmin(payload)
     console.log("user", user)
 
     if(!user){

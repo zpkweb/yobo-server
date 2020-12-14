@@ -2,12 +2,16 @@ import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { CommodityEntity } from 'src/entity/commodity/commodity';
+import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 
 @Provide()
 export class BaseCommodityServer {
 
   @InjectEntityModel(CommodityEntity)
   commodityEntity: Repository<CommodityEntity>;
+
+  @InjectEntityModel(CommodityNameEntity)
+  commodityNameEntity: Repository<CommodityNameEntity>;
 
 
   /**
@@ -107,6 +111,44 @@ export class BaseCommodityServer {
       .addSelect('commodity.createdDate')
       // .printSql()
       // .getSql();
+      .getMany();
+  }
+  /**
+   * 搜索
+   * @param commodityId
+   */
+  async BaseSearch(payload) {
+    console.log("BaseSearch", payload)
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .leftJoinAndSelect('commodity.name', 'name', 'name.zh-cn like :lang OR name.en-us like :lang OR name.ja-jp like :lang OR name.fr-fr like :lang', { lang: `%${payload.name}%` })
+      // .leftJoinAndSelect('commodity.name', 'name')
+      // .leftJoinAndSelect('commodity.desc', 'desc', 'desc.zh-cn like :lang OR desc.en-us like :lang OR desc.ja-jp like :lang OR desc.fr-fr like :lang', { lang: `%${payload.desc}%`})
+      // .innerJoinAndSelect('commodity.price', 'price', 'price.zh-cn like :zhcn OR price.en-us like :enus OR price.ja-jp like :jajp OR price.fr-fr like :frfr', { zhcn: `%${payload.price}%`, enus: `${payload.price}`, jajp: `${payload.price}`, frfr: `${payload.price}` })
+      // .innerJoinAndSelect('commodity.shapes', 'shapes', 'shapes.id like :id ', { id: `%${payload.shapes}%` })
+      // .innerJoinAndSelect('commodity.themes', 'themes', 'themes.id like :id ', { id: `%${payload.themes}%` })
+      // .innerJoinAndSelect('commodity.categorys', 'categorys', 'categorys.id like :id ', { id: `%${payload.categorys}%` })
+      // .innerJoinAndSelect('commodity.techniques', 'techniques', 'techniques.id like :id ', { id: `%${payload.techniques}%` })
+      // .innerJoinAndSelect('commodity.seller', 'seller', 'seller.email like :email ', { email: `%${payload.seller}%` })
+      .addSelect('commodity.createdDate')
+      // .where("commodity.state like :state", { state: `%${payload.state}%` })
+      // .andWhere(qb => {
+      //   const subQuery = qb
+      //     .subQuery()
+      //     .from(CommodityNameEntity, "name")
+      //     .where("name.zh-cn = :name")
+      //     .andWhere("name.en-us = :name")
+      //     .andWhere("name.ja-jp = :name")
+      //     .andWhere("name.fr-fr = :name")
+      //     .getQuery();
+      //   return "commodity.name IN " + subQuery;
+      // })
+      // .setParameter("name", payload.name)
+      // .andWhere("name.zh-cn like :name")
+      // .andWhere("name.en-us like :name")
+      // .andWhere("name.ja-jp like :name")
+      // .andWhere("name.fr-fr like :name")
+      // .setParameter("name", payload.name)
       .getMany();
   }
   /**

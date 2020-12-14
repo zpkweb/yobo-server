@@ -27,8 +27,8 @@ export class UserLoginController {
   async register(@Body(ALL) registerBody) {
 
     let data:any =  await this.userRegisterService.registerUser(registerBody);
-    if(!data.code){
-      data.token = await this.jwt.sign({
+    if(data.success){
+      data.data.token = await this.jwt.sign({
         ...data,
         identitys: data.identitys
     }, this.jwtConfig.secret);
@@ -51,8 +51,8 @@ export class UserLoginController {
   @Post('/login')
   async login(@Body(ALL) loginBody) {
     let data:any =  await this.loginService.login(loginBody);
-    if(!data.code){
-      data.token = await this.jwt.sign({
+    if(data.success){
+      data.data.token = await this.jwt.sign({
         ...data,
         identitys: data.identitys
       }, this.jwtConfig.secret);

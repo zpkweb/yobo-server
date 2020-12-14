@@ -110,7 +110,7 @@ POST {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-  "name": "用户",
+  "name": "kefu",
   "password": "123"
 }
 

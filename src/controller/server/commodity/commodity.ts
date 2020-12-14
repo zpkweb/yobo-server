@@ -36,6 +36,12 @@ export class CommodityAdminController {
     return await this.commodityService.findAll(findParams);
   }
 
+  // 搜索
+  @Get('/search')
+  async search(@Query(ALL) searchParams) {
+    return await this.commodityService.search(searchParams);
+  }
+
   // 删除商品
   @Post('/delete')
   async delete(@Body(ALL) deleteBody) {

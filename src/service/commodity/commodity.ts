@@ -31,7 +31,7 @@ export class CommodityCommodityService {
     // 大小 size
     const commodity = await this.createMetadata({
       state: payload.state || '0',
-      colors: payload.state || ['000', 'fff'],
+      colors: payload.colors || ['000', 'fff'],
       size: payload.size || []
     })
 
@@ -375,7 +375,6 @@ export class CommodityCommodityService {
     async retrieveAll(payload) {
       // 商品Id查找商品
       const data = await this.baseCommodityServer.BaseRetrieveAll()
-      console.log("retrieveAll", data)
       const filterData = this.filter(payload.lang || 'zh-cn', data)
       if (data) {
         return {
@@ -429,7 +428,22 @@ export class CommodityCommodityService {
 
   // 搜索商品
   async search(payload) {
+    const data = await this.baseCommodityServer.BaseSearch(payload);
+    console.log("commodity search", data)
 
+    const filterData = this.filter(payload.lang || 'zh-cn', data)
+    if (data) {
+      return {
+        data: filterData,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
   }
 
   // 删除商品
