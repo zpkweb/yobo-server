@@ -10,7 +10,7 @@ export class BaseCommodityDescServer {
   commodityDescEntity: Repository<CommodityDescEntity>;
 
   /**
-   * 创建商品名称
+   * 创建详情
    */
   async BaseCreate(payload) {
     return await this.commodityDescEntity
@@ -32,13 +32,13 @@ export class BaseCommodityDescServer {
    */
   async BaseHas(commodityId) {
     return await this.commodityDescEntity
-    .createQueryBuilder('commodity')
-    .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+    .createQueryBuilder('desc')
+    .where('desc.commodityId = :commodityId', { commodityId: commodityId })
     .getOne();
   }
 
   /**
-   * 查询商品名称
+   * 查询详情
    */
   async BaseRetrieve(payload) {
     return await this.commodityDescEntity
@@ -51,12 +51,12 @@ export class BaseCommodityDescServer {
   }
 
   /**
-   * 查询商品名称Id
+   * 查询详情Id
    */
   async BaseRetrieveId(payload) {
     return await this.commodityDescEntity
       .createQueryBuilder('desc')
-      .where('desc.id = :id', { id: payload.id })
+      .where('desc.commodityId = :commodityId', { commodityId: payload.commodityId })
       .getOne();
   }
 
@@ -70,7 +70,7 @@ export class BaseCommodityDescServer {
   }
 
   /**
-   * 修改商品名称
+   * 修改详情
    */
   async BaseUpdate(payload) {
     return await this.commodityDescEntity
@@ -82,18 +82,18 @@ export class BaseCommodityDescServer {
         'ja-jp': payload['ja-jp'],
         'fr-fr': payload['fr-fr']
       })
-      .where("id = :id", { id: payload.id })
+      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
       .execute();
   }
 
   /**
-   * 删除商品名称
+   * 删除详情
    */
-  async BaseDelete(payload) {
+  async BaseDelete(commodityId) {
     return await this.commodityDescEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
 }

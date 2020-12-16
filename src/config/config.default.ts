@@ -24,6 +24,11 @@ export default (appInfo: EggAppInfo) => {
     secret: "yobo"
   };
 
+  config.pagination = {
+    pageSize: 10,
+    currentPage: 1,
+  }
+
   // add your config here
   config.middleware = [];
 

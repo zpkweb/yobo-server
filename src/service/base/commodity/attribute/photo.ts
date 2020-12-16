@@ -10,7 +10,7 @@ export class BaseCommodityPhotoServer {
   commodityPhotoEntity: Repository<CommodityPhotoEntity>;
 
   /**
-   * 创建商品名称
+   * 创建图片
    */
   async BaseCreate(payload) {
     return await this.commodityPhotoEntity
@@ -25,7 +25,7 @@ export class BaseCommodityPhotoServer {
   }
 
   /**
-   * 查询商品是否存在
+   * 查询图片是否存在
    * @param commodityId
    */
   async BaseHas(commodityId) {
@@ -37,7 +37,7 @@ export class BaseCommodityPhotoServer {
 
 
   /**
-   * 查询商品
+   * 查询图片
    */
   async BaseRetrieveCommodityId(payload) {
     return await this.commodityPhotoEntity
@@ -47,19 +47,19 @@ export class BaseCommodityPhotoServer {
   }
 
   /**
-   * 查询商品名称
+   * 查询图片
    */
   async BaseRetrieve(payload) {
     return await this.commodityPhotoEntity
       .createQueryBuilder('photo')
-      .where('photo.id = :id', { id: payload.id })
+      .where('photo.commodityId = :commodityId', { commodityId: payload.commodityId })
       .orWhere('photo.name = :name', { name: payload.name })
       .orWhere('photo.src = :src', { src: payload.src })
       .getMany();
   }
 
   /**
-   * 查询商品所有名称
+   * 查询所有图片
    */
   async BaseRetrieveAll() {
     return await this.commodityPhotoEntity
@@ -68,27 +68,28 @@ export class BaseCommodityPhotoServer {
   }
 
   /**
-   * 修改商品名称
+   * 修改图片
    */
   async BaseUpdate(payload) {
+    console.log("BaseUpdate", payload)
     return await this.commodityPhotoEntity
       .createQueryBuilder()
       .update(CommodityPhotoEntity)
       .set({
         'src': payload['src']
       })
-      .where("id = :id", { id: payload.id })
+      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
       .execute();
   }
 
   /**
-   * 删除商品名称
+   * 删除图片
    */
   async BaseDelete(payload) {
     return await this.commodityPhotoEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
       .execute();
   }
 }

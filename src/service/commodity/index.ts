@@ -4,6 +4,7 @@ import { CommodityAttributeName } from './attribute/name';
 import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
+import { CommodityAttributeColor } from './attribute/color';
 import { CommodityOptionsCategoryService } from './options/category';
 import { CommodityOptionsShapeService } from './options/shape';
 import { CommodityOptionsTechniqueService } from './options/technique';
@@ -26,6 +27,9 @@ export class CommodityService {
 
   @Inject()
   commodityAttributePhoto: CommodityAttributePhoto;
+
+  @Inject()
+  commodityAttributeColor: CommodityAttributeColor;
 
   @Inject()
   commodityOptionsCategoryService: CommodityOptionsCategoryService;
@@ -76,38 +80,115 @@ export class CommodityService {
   // 查找商品
   async find(payload) {
     return await this.commodityCommodityService.retrieve({
-      ...payload,
-      edit: false
+      commodityId: payload.commodityId
     });
   }
 
-  async finEdit(payload) {
-    return await this.commodityCommodityService.retrieve({
-      commodityId: payload.commodityId,
-      edit: true
-    });
-  }
+
   // 查找所有商品
   async findAll(payload) {
-    return await this.commodityCommodityService.retrieveAll(payload);
+    return await this.commodityCommodityService.retrieveAll({
+      isLocale: payload.isLocale || false,
+      locale: payload.locale || 'zh-cn',
+      currentPage: +payload.currentPage || 1,
+      pageSize: +payload.pageSize || 10
+    });
   }
 
 
   // 搜索商品
   async search(payload) {
+    console.log("search", payload)
+    let price;
+    if(payload.price){
+      if(typeof payload.price == 'string') {
+        price = JSON.parse(payload.price)
+      }else{
+        price = payload.price
+      }
+    }else{
+      price = {
+        min: '',
+        max: ''
+      }
+    }
+    let width;
+    if(payload.width){
+      if(typeof payload.width == 'string') {
+        width = JSON.parse(payload.width)
+      }else{
+        width = payload.width
+      }
+    }else{
+      width = {
+        min: '',
+        max: ''
+      }
+    }
+    let height;
+    if(payload.height){
+      if(typeof payload.height == 'string') {
+        height = JSON.parse(payload.height)
+      }else{
+        height = payload.height
+      }
+    }else{
+      height = {
+        min: '',
+        max: ''
+      }
+    }
+    let colors;
+    if(payload.colors){
+      if(typeof payload.colors == 'string') {
+        colors = JSON.parse(payload.colors)
+      }else{
+        colors = payload.colors
+      }
+    }else{
+      colors = {
+        start: '',
+        end: ''
+      }
+    }
+    let colorStart = colors.start.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+    let colorEnd = colors.end.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+    let colorsMin,colorsMax;
+    if(colorStart<=colorEnd){
+      colorsMin = colorStart;
+      colorsMax = colorEnd;
+    }else{
+      colorsMin = colorEnd;
+      colorsMax = colorStart;
+    }
+
     return await this.commodityCommodityService.search({
       name: payload.name || '',
       desc: payload.desc || '',
-      price: payload.price || ' ',
-      state: payload.state || ' ',
-      shapes: payload.shapes || ' ',
-      themes: payload.themes || ' ',
-      categorys: payload.categorys || ' ',
-      techniques: payload.techniques || ' ',
-      seller: payload.seller || ' ',
-      hots: payload.hots || ' ',
-      news: payload.news || ' ',
-
+      // price: payload.price,
+      priceMin: price.min || 0,
+      priceMax: price.max || 100,
+      // width: payload.width,
+      widthMin: width.min || 0,
+      widthMax: width.max || 100,
+      // height: payload.height,
+      heightMin: height.min || 0,
+      heightMax: height.max || 100,
+      // colors: payload.colors,
+      colorsMin: colorsMin || 0 ,
+      colorsMax: colorsMax || 16777215,
+      state: payload.state || '',
+      shapeId: payload.shapeId || '',
+      themeId: payload.themeId || '',
+      categoryId: payload.categoryId || '',
+      techniqueId: payload.techniqueId || '',
+      sellerId: payload.sellerId || '',
+      hots: payload.hots || '',
+      news: payload.news || '',
+      currentPage: payload.currentPage || 1,
+      pageSize: payload.pageSize || 10,
+      isLocale: payload.isLocale || false,
+      locale: payload.locale || 'zh-cn'
     });
   }
 
@@ -118,10 +199,9 @@ export class CommodityService {
 
   // 更新商品
   async update(payload) {
+    console.log("commodity payload", payload)
     // 查询商品是否存在
-    const commodity = await this.commodityCommodityService.hasId({
-      commodityId: payload.commodityId
-    });
+    const commodity = await this.commodityCommodityService.hasId(payload.commodityId);
     console.log("commodity", commodity)
     //  商品不存在
     if(!commodity.success){
@@ -134,8 +214,8 @@ export class CommodityService {
     const commodityUpdate = await this.commodityCommodityService.update({
       commodityId: payload.commodityId,
       state: payload.state,
-      colors: payload.state,
-      size: payload.size
+      width: payload.width,
+      height: payload.height
     })
     console.log("commodityUpdate", commodityUpdate)
     // 更新失败
@@ -152,6 +232,7 @@ export class CommodityService {
       'ja-jp': payload.name['ja-jp'],
       'fr-fr': payload.name['fr-fr']
     })
+    console.log("commodityName", commodityName)
     if(!commodityName.success) {
       return commodityName;
     }
@@ -164,6 +245,7 @@ export class CommodityService {
       'ja-jp': payload.desc['ja-jp'],
       'fr-fr': payload.desc['fr-fr']
     });
+    console.log("commodityDesc", commodityDesc)
     if(!commodityDesc.success) {
       return commodityDesc;
     }
@@ -171,11 +253,12 @@ export class CommodityService {
     // 更新商品价格
     const commodityPrice = await this.commodityAttributePrice.updatePrice({
       commodityId: payload.commodityId,
-      'zh-cn': payload.desc['zh-cn'],
-      'en-us': payload.desc['en-us'],
-      'ja-jp': payload.desc['ja-jp'],
-      'fr-fr': payload.desc['fr-fr']
+      'zh-cn': payload.price['zh-cn'],
+      'en-us': payload.price['en-us'],
+      'ja-jp': payload.price['ja-jp'],
+      'fr-fr': payload.price['fr-fr']
     });
+    console.log("commodityPrice", commodityPrice)
     if(!commodityPrice.success) {
       return commodityPrice;
     }
@@ -184,7 +267,11 @@ export class CommodityService {
 
     // 更新商品图片
     for(let item of payload.photos){
-      const commodityPhoto = await this.commodityAttributePhoto.update(item)
+      const commodityPhoto = await this.commodityAttributePhoto.update({
+      ...item,
+      commodityId: payload.commodityId,
+      });
+      console.log("commodityPhoto", commodityPhoto)
       if (!commodityPhoto.success) {
         return commodityPhoto
       }
@@ -193,6 +280,24 @@ export class CommodityService {
       //   name: 'photos',
       //   of: { commodityId: payload.commodityId },
       //   add: commodityPhoto.data.identifiers[0].id
+      // })
+    }
+
+    // 更新商品颜色
+    for(let item of payload.colors){
+      const commodityColor = await this.commodityAttributeColor.update({
+      ...item,
+      commodityId: payload.commodityId,
+      });
+      console.log("commodityColor", commodityColor)
+      if (!commodityColor.success) {
+        return commodityColor
+      }
+      // 商品 关联 商品图片
+      // await this.relation({
+      //   name: 'colors',
+      //   of: { commodityId: payload.commodityId },
+      //   add: commodityColor.data.identifiers[0].id
       // })
     }
 
@@ -224,8 +329,11 @@ export class CommodityService {
       add: payload.technique
     })
 
+    // 查询商品
+    return await this.commodityCommodityService.retrieve({
+      commodityId: payload.commodityId
+    });
 
-    // return await this.commodityCommodityService.update(payload);
   }
 
 
@@ -369,16 +477,16 @@ export class CommodityService {
       let data: any;
     switch (payload.type) {
       case 'category':
-        data = await this.commodityOptionsCategoryService.retrieveAll();
+        data = await this.commodityOptionsCategoryService.retrieveAll(payload);
         break;
       case 'shape':
-        data = await this.commodityOptionsShapeService.retrieveAll();
+        data = await this.commodityOptionsShapeService.retrieveAll(payload);
         break;
       case 'technique':
-        data = await this.commodityOptionsTechniqueService.retrieveAll();
+        data = await this.commodityOptionsTechniqueService.retrieveAll(payload);
         break;
       case 'theme':
-        data = await this.commodityOptionsThemeService.retrieveAll();
+        data = await this.commodityOptionsThemeService.retrieveAll(payload);
         break;
       }
       return data;

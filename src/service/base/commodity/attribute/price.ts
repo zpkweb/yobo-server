@@ -10,7 +10,7 @@ export class BaseCommodityPriceServer {
   commodityPriceEntity: Repository<CommodityPriceEntity>;
 
   /**
-   * 创建商品名称
+   * 创建价格
    */
   async BaseCreate(payload) {
     return await this.commodityPriceEntity
@@ -27,7 +27,7 @@ export class BaseCommodityPriceServer {
   }
 
   /**
-   * 查询商品是否存在
+   * 查询价格是否存在
    * @param commodityId
    */
   async BaseHas(commodityId) {
@@ -38,7 +38,7 @@ export class BaseCommodityPriceServer {
   }
 
   /**
-   * 查询商品名称
+   * 查询价格
    */
   async BaseRetrieve(payload) {
     return await this.commodityPriceEntity
@@ -51,12 +51,12 @@ export class BaseCommodityPriceServer {
   }
 
   /**
-   * 查询商品名称Id
+   * 查询价格Id
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(commodityId) {
     return await this.commodityPriceEntity
       .createQueryBuilder('price')
-      .where('price.id = :id', { id: payload.id })
+      .where('price.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
   }
 
@@ -70,7 +70,7 @@ export class BaseCommodityPriceServer {
   }
 
   /**
-   * 修改商品名称
+   * 修改价格
    */
   async BaseUpdate(payload) {
     return await this.commodityPriceEntity
@@ -82,18 +82,18 @@ export class BaseCommodityPriceServer {
         'ja-jp': payload['ja-jp'],
         'fr-fr': payload['fr-fr']
       })
-      .where("id = :id", { id: payload.id })
+      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
       .execute();
   }
 
   /**
-   * 删除商品名称
+   * 删除价格
    */
-  async BaseDelete(payload) {
+  async BaseDelete(commodityId) {
     return await this.commodityPriceEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
 }

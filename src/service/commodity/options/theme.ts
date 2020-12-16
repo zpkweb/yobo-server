@@ -67,8 +67,11 @@ export class CommodityOptionsThemeService {
   /**
    * 查询商品所有选项
    */
-  async retrieveAll() {
-    const data = await this.baseCommodityOptionsThemeServer.BaseRetrieveAll();
+  async retrieveAll(payload) {
+    let data = await this.baseCommodityOptionsThemeServer.BaseRetrieveAll();
+    if(payload.isLocale){
+      data = this.filter(payload.locale || 'zh-cn', data)
+    }
     if (data) {
       return {
         data: data,
@@ -121,5 +124,15 @@ export class CommodityOptionsThemeService {
         code: 10010
       }
     }
+  }
+  /**
+   * 筛选商品
+   * @param  payload
+   * @param type
+   */
+  filter(type, payload) {
+    return payload.map(item => {
+      return {id: item.id, name: item[type]}
+    })
   }
 }

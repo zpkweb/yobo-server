@@ -1,4 +1,4 @@
-import { Inject, Controller, Provide, Get, Param, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Provide, Get, Param, Query, ALL, Config } from '@midwayjs/decorator';
 import { CommodityService } from 'src/service/commodity';
 import { Context } from 'egg';
 
@@ -12,10 +12,39 @@ export class CommodityController {
   @Inject()
   ctx: Context;
 
+  @Config('pagination')
+  pagination;
+
   // 查找商品
   @Get()
-  async find(@Param(ALL) findParams) {
-    return await this.commodityService.find(findParams);
+  async find(@Query(ALL) findQuery) {
+    const data:any = await this.commodityService.findAll({
+      ...findQuery,
+      pageSize: this.pagination.pageSize,
+      currentPage: this.pagination.currentPage,
+      isLocale: true
+    });
+    if(data.success){
+      data.data.pageSize = this.pagination.pageSize;
+      data.data.currentPage = this.pagination.currentPage;
+    }
+    return data;
+  }
+
+  // 搜索
+  @Get('/search')
+  async search(@Query(ALL) searchQuery) {
+    const data:any = await this.commodityService.search({
+      ...searchQuery,
+      pageSize: this.pagination.pageSize,
+      currentPage: this.pagination.currentPage,
+      isLocale: true
+    });
+    if(data.success){
+      data.data.pageSize = this.pagination.pageSize;
+      data.data.currentPage = this.pagination.currentPage;
+    }
+    return data;
   }
 
 
@@ -24,7 +53,9 @@ export class CommodityController {
   @Get('/options/:type')
   async optionsShape(@Param() type) {
     return await this.commodityService.commodityOptionsTypeRetrieveAll({
-      type
+      type,
+
+      isLocale: true
     });
   }
 

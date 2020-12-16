@@ -29,8 +29,8 @@ export class CommodityAttributeDesc {
    * @param payload
    *
    */
-  async hasId(payload) {
-    const data = await this.baseCommodityDescServer.BaseHas(payload.commodityId);
+  async hasId(commodityId) {
+    const data = await this.baseCommodityDescServer.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -63,9 +63,7 @@ export class CommodityAttributeDesc {
   }
 
   async updateDesc(payload) {
-    const updateDesc = await this.hasId({
-      commodityId: payload.commodityId
-    });
+    const updateDesc = await this.hasId(payload.commodityId);
     if(updateDesc.success){
       return await this.update(payload)
     }else{

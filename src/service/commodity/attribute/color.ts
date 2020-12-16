@@ -1,15 +1,21 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPhotoServer } from '../../base/commodity/attribute/Photo';
+import { BaseCommodityColorServer } from '../../base/commodity/attribute/color';
 
 @Provide()
-export class CommodityAttributePhoto {
+export class CommodityAttributeColor {
 
   @Inject()
-  baseCommodityPhotoServer: BaseCommodityPhotoServer;
+  baseCommodityColorServer: BaseCommodityColorServer;
 
-  // 创建图片
+  // 创建颜色
   async create(payload) {
-    const data = await this.baseCommodityPhotoServer.BaseCreate(payload);
+  //   function hexToDec(hex) {
+  //     return hex.toLowerCase().split('').reduce( (result, ch) =>
+  //         result * 16 + '0123456789abcdefgh'.indexOf(ch), 0);
+  // }
+    // const hex = await payload.name.toLowerCase().split('').reduce( (result, ch) => result * 16 + '0123456789abcdefgh'.indexOf(ch), 0);
+
+    const data = await this.baseCommodityColorServer.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -30,7 +36,7 @@ export class CommodityAttributePhoto {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityPhotoServer.BaseHas(commodityId);
+    const data = await this.baseCommodityColorServer.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -49,7 +55,7 @@ export class CommodityAttributePhoto {
    * @param payload
    */
     async getCommodity(commodityId) {
-      const data = await this.baseCommodityPhotoServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityColorServer.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -65,9 +71,9 @@ export class CommodityAttributePhoto {
     }
 
 
-  // 更新商品图片
+  // 更新商品颜色
   async update(payload) {
-    const data = await this.baseCommodityPhotoServer.BaseUpdate(payload);
+    const data = await this.baseCommodityColorServer.BaseUpdate(payload);
     if (data.affected) {
       return {
         data: data,

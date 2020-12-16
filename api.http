@@ -2,7 +2,7 @@
 
 
 //
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1IiwidXNlcklkIjoiNmRiMjAwMDQtOTdlZi00YTljLThlM2ItYTY5NjIxZWU2N2Y1IiwibmFtZSI6InRlc3QiLCJlbWFpbCI6IiIsInBob25lIjoiMTUiLCJpZGVudGl0eXMiOlt7ImlkIjoiMTUiLCJpZGVudGl0eUlkIjoiMTYzNWI2M2YtM2U0Yy00NDA1LWE5ZjAtMGM2Mjk1ZDE3MDNiIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYzNzA2MTF9.AOpmImeh5htOBD5tBE7y0GLNgSeZ7KRnlNsyLgPWaeU
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiOTYiLCJ1c2VySWQiOiJhZmU5NmYyMy00NGI2LTRlMzEtYWMyMC02YzEzYjViMDc0NGYiLCJuYW1lIjoieHh4IiwiZW1haWwiOiJ4eHgiLCJwaG9uZSI6IiIsImNyZWF0ZWREYXRlIjoiMjAyMC0xMi0xNFQwODoxNzowMy42ODhaIiwiaWRlbnRpdHlzIjpbeyJpZCI6Ijk4IiwiaWRlbnRpdHlJZCI6IjZiZDZmZjM2LWUzNmEtNDg5Mi1hZGY0LWUwY2YzNjBjNTk5MCIsIm5hbWUiOiLnlKjmiLciLCJlbmFtZSI6Im9yZGluYXJ5IiwiaW5kZXgiOjgwfV19LCJzdWNjZXNzIjp0cnVlLCJjb2RlIjoxMDAxMSwiaWF0IjoxNjA4MTEwMjEyfQ.aOic5uiL4RfKRxS_LeL2MWYlAubS43rW5YCTXqKBD_A
 
 
 ####################################
@@ -79,14 +79,12 @@ GET {{baseUrl}}/api/admin/identity/user
 ####################################
 
 
-
-
-
 #  获取个人信息
 # GET {{baseUrl}}/api/user?type=identitys&userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?userId=99597435-1240-42a8-9935-1e001cba76f2
 # GET {{baseUrl}}/api/user?type=identitys
-GET {{baseUrl}}/api/admin/user
+GET {{baseUrl}}/api/user/self?userId=afe96f23-44b6-4e31-ac20-6c13b5b0744f
+Authorization: Bearer {{token}}
 # GET {{baseUrl}}/api/user/self
 
 ####################################
@@ -110,8 +108,8 @@ POST {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-  "name": "kefu",
-  "password": "123"
+  "name": "xxx",
+  "password": "xxx"
 }
 
 

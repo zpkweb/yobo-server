@@ -4,6 +4,7 @@ import { CommodityAttributeName } from './attribute/name';
 import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
+import { CommodityAttributeColor } from './attribute/color';
 @Provide()
 export class CommodityCommodityService {
 
@@ -22,17 +23,20 @@ export class CommodityCommodityService {
   @Inject()
   commodityAttributePhoto: CommodityAttributePhoto;
 
+  @Inject()
+  commodityAttributeColor: CommodityAttributeColor;
+
   // 创建商品
   async create(payload) {
     console.log("create", payload)
 
     // 状态 state
-    // 颜色 colors
-    // 大小 size
+    // 宽度 width
+    // 高度 heigth
     const commodity = await this.createMetadata({
       state: payload.state || '0',
-      colors: payload.colors || ['000', 'fff'],
-      size: payload.size || []
+      width: payload.width || 0,
+      height: payload.height || 0
     })
 
     if (!commodity.success) {
@@ -108,36 +112,65 @@ export class CommodityCommodityService {
       })
     }
 
+    // 创建商品颜色
+    for(let item of payload.colors){
+      const commodityColor = await this.commodityAttributeColor.create({
+        name: item.name,
+        value: item.name.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0)
+      })
+      if (!commodityColor.success) {
+        return commodityColor
+      }
+      // 商品 关联 商品图片
+      await this.relation({
+        name: 'colors',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: commodityColor.data.identifiers[0].id
+      })
+    }
+
 
 
     console.log("commodity", commodity.data)
     // 商品 关联 商品形状
-    await this.relation({
-      name: 'shapes',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-      add: payload.shape
-    })
+    for(let item of payload.shapes){
+      await this.relation({
+        name: 'shapes',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: item.id
+      })
+    }
+
 
     // 商品 关联 商品主题
-    await this.relation({
-      name: 'themes',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-      add: payload.theme
-    })
+    for(let item of payload.themes){
+      await this.relation({
+        name: 'themes',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: item.id
+      })
+    }
+
 
     // 商品 关联 商品类别
-    await this.relation({
-      name: 'categorys',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-      add: payload.category
-    })
+    for(let item of payload.categorys){
+      await this.relation({
+        name: 'categorys',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: item.id
+      })
+    }
+
 
     // 商品 关联 商品手法
-    await this.relation({
-      name: 'techniques',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-      add: payload.technique
-    })
+    for(let item of payload.techniques){
+      await this.relation({
+        name: 'techniques',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: item.id
+      })
+    }
+
 
     return commodity
 
@@ -219,6 +252,31 @@ export class CommodityCommodityService {
   async hasCommodityPhoto(payload) {
     const data = await this.baseCommodityServer.BaseHasRelation({
       type: 'photos',
+      commodityId: payload.commodityId,
+      id: payload.id
+    });
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+  /**
+   * 通过commodityId判断商品是否存在
+   * @param payload
+   *
+   */
+  async hasCommodityColor(payload) {
+    const data = await this.baseCommodityServer.BaseHasRelation({
+      type: 'colors',
       commodityId: payload.commodityId,
       id: payload.id
     });
@@ -348,8 +406,8 @@ export class CommodityCommodityService {
     console.log("retrieve", payload)
     let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
 
-    if(!payload.edit) {
-      const filterData = this.filter(payload.lang || 'zh-cn', [data]);
+    if(payload.isLocale) {
+      const filterData = this.filter(payload.locale || 'zh-cn', [data]);
       data = filterData[0];
     }
     console.log("data", data)
@@ -374,11 +432,18 @@ export class CommodityCommodityService {
    */
     async retrieveAll(payload) {
       // 商品Id查找商品
-      const data = await this.baseCommodityServer.BaseRetrieveAll()
-      const filterData = this.filter(payload.lang || 'zh-cn', data)
+      let result = await this.baseCommodityServer.BaseRetrieveAll(payload);
+      let data = result[0];
+      let total = result[1];
+      if(payload.isLocale){
+        data = this.filter(payload.locale, data)
+      }
       if (data) {
         return {
-          data: filterData,
+          data: {
+            list: data,
+            total
+          },
           success: true,
           code: 10009
         }
@@ -410,11 +475,12 @@ export class CommodityCommodityService {
           commodityId: item.commodityId,
           state: item.state,
           colors: item.colors,
-          size: item.size,
+          width: item.width,
+          height: item.height,
+          photos: item.photos,
           name,
           desc,
           price,
-          photos: item.photos,
           shapes,
           themes,
           categorys,
@@ -428,13 +494,18 @@ export class CommodityCommodityService {
 
   // 搜索商品
   async search(payload) {
-    const data = await this.baseCommodityServer.BaseSearch(payload);
-    console.log("commodity search", data)
-
-    const filterData = this.filter(payload.lang || 'zh-cn', data)
-    if (data) {
+    let result = await this.baseCommodityServer.BaseSearch(payload);
+    let data = result[0];
+    let total = result[1];
+    if(payload.isLocale){
+      data = this.filter(payload.locale, data)
+    }
+    if (data && data.length) {
       return {
-        data: filterData,
+        data: {
+          list: data,
+          total
+        },
         success: true,
         code: 10009
       }

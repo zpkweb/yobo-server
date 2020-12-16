@@ -19,10 +19,14 @@ export class AuthorizeMiddleware implements IWebMiddleware {
         const bearerToken = bearer[1];
         try{
           const decoded = await this.jwt.verify(bearerToken, this.jwtConfig.secret)
-          console.log("decoded", decoded)
-          if(ctx.request.body && ctx.request.body.userId){
-            if(ctx.request.body.userId === decoded.userId){
-              ctx.state.user = decoded;
+          // console.log("decoded", decoded)
+          // console.log("ctx.request.body",ctx.request.body)
+          // console.log("ctx.request.query",ctx.request.query)
+
+          if((ctx.request.body && ctx.request.body.userId) || (ctx.request.query && ctx.request.query.userId)){
+            if(ctx.request.body.userId === decoded.userId || ctx.request.query.userId === decoded.userId){
+              ctx.state.user = decoded.data;
+              // console.log("ctx.state.user", ctx.state.user)
 
             }else{
               const invalidToken = () => {

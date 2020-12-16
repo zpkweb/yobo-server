@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Provide, Get, Param, Body, ALL, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Param, Body, ALL, Query, Config } from '@midwayjs/decorator';
 import { CommodityService } from 'src/service/commodity';
 import { Context } from 'egg';
 
@@ -12,6 +12,9 @@ export class CommodityAdminController {
   @Inject()
   ctx: Context;
 
+  @Config('pagination')
+  pagination;
+
   // 添加商品
   @Post('/create')
   async createCommodity(@Body(ALL) createBody) {
@@ -21,25 +24,59 @@ export class CommodityAdminController {
   // 查找商品
   @Get()
   async find(@Query(ALL) findParams) {
-    return await this.commodityService.find(findParams);
+    const data:any = await this.commodityService.find({
+      ...findParams,
+      pageSize: this.pagination.pageSize,
+      currentPage: this.pagination.currentPage,
+      isLocale: true
+    });
+    if(data.success){
+      data.data.pageSize = this.pagination.pageSize;
+      data.data.currentPage = this.pagination.currentPage;
+    }
+    return data;
   }
 
-  // 查找商品
+  // 编辑商品
   @Get('/edit')
   async finEdit(@Query(ALL) findParams) {
-    return await this.commodityService.finEdit(findParams);
+    const data: any = await this.commodityService.find({
+      ...findParams,
+      pageSize: this.pagination.pageSize,
+      currentPage: this.pagination.currentPage
+    });
+    if(data.success){
+      data.data.pageSize = this.pagination.pageSize;
+      data.data.currentPage = this.pagination.currentPage;
+    }
+    return data;
   }
 
   //  查询所有商品
   @Get('/all')
-  async findAll(@Query(ALL) findParams) {
-    return await this.commodityService.findAll(findParams);
+  async findAll(@Query(ALL) findAllParams) {
+    const data: any = await this.commodityService.findAll({
+      ...findAllParams,
+      pageSize: this.pagination.pageSize,
+      currentPage: this.pagination.currentPage,
+    });
+    if(data.success){
+      data.data.pageSize = this.pagination.pageSize;
+      data.data.currentPage = this.pagination.currentPage;
+    }
+    return data;
   }
+
 
   // 搜索
   @Get('/search')
   async search(@Query(ALL) searchParams) {
-    return await this.commodityService.search(searchParams);
+    const data:any = await this.commodityService.search(searchParams);
+    if(data.success){
+      data.data.pageSize = this.pagination.pageSize;
+      data.data.currentPage = this.pagination.currentPage;
+    }
+    return data;
   }
 
   // 删除商品
@@ -54,6 +91,14 @@ export class CommodityAdminController {
   @Post('/update')
   async updateCommodity(@Body(ALL) updateBody) {
     return await this.commodityService.update(updateBody)
+  }
+
+  // 查找商品选项-形状
+  @Get('/options/:type')
+  async optionsShape(@Param() type) {
+    return await this.commodityService.commodityOptionsTypeRetrieveAll({
+      type
+    });
   }
 
   // 添加商品选项

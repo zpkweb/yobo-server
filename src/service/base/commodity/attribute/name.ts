@@ -56,7 +56,7 @@ export class BaseCommodityNameServer {
   async BaseRetrieveId(payload) {
     return await this.commodityNameEntity
       .createQueryBuilder('name')
-      .where('name.id = :id', { id: payload.id })
+      .where('name.commodityId = :commodityId', { commodityId: payload.commodityId })
       .getOne();
   }
 
@@ -73,6 +73,7 @@ export class BaseCommodityNameServer {
    * 修改商品名称
    */
   async BaseUpdate(payload) {
+    console.log("BaseUpdate", payload)
     return await this.commodityNameEntity
       .createQueryBuilder()
       .update(CommodityNameEntity)
@@ -82,18 +83,18 @@ export class BaseCommodityNameServer {
         'ja-jp': payload['ja-jp'],
         'fr-fr': payload['fr-fr']
       })
-      .where("commmodityId = :commmodityId", { commmodityId: payload.commmodityId })
+      .where("commodityId = :commodityId", { commodityId: payload.commodityId })
       .execute();
   }
 
   /**
    * 删除商品名称
    */
-  async BaseDelete(commmodityId) {
+  async BaseDelete(commodityId) {
     return await this.commodityNameEntity
       .createQueryBuilder()
       .delete()
-      .where("commmodityId = :commmodityId", { commmodityId: commmodityId })
+      .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
 }

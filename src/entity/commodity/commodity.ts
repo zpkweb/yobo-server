@@ -12,7 +12,7 @@ import { CommodityNameEntity } from './attribute/name';
 import { CommodityDescEntity } from './attribute/desc';
 import { CommodityPhotoEntity } from './attribute/photo';
 import { CommodityPriceEntity } from './attribute/price';
-// import { CommodityColorEntity } from './attribute/color';
+import { CommodityColorEntity } from './attribute/color';
 
 import { CommodityOptionsShapeEntity } from './options/shape';
 import { CommodityOptionsThemeEntity } from './options/theme';
@@ -47,16 +47,12 @@ export class CommodityEntity {
   @Column()
   state: number;
 
-  // 关联 商品颜色
-  // @OneToMany(type => CommodityColorEntity, CommodityColorEntity => CommodityColorEntity.commodity)
-  // color: CommodityColorEntity[];
 
-  @Column("simple-array")
-  colors: string[];
+  @Column()
+  width: number;
 
-  //  尺寸
-  @Column("simple-array")
-  size: number[];
+  @Column()
+  height: number;
 
   // 关联 商品名称
   @OneToOne(type => CommodityNameEntity, CommodityNameEntity => CommodityNameEntity.commodity, {
@@ -67,8 +63,10 @@ export class CommodityEntity {
   // 关联 商品描述
   @OneToOne(type => CommodityDescEntity, CommodityDescEntity => CommodityDescEntity.commodity, {
     cascade: true,
+    onDelete: 'CASCADE'
   })
   desc: CommodityDescEntity;
+
 
   // 关联 商品价格
   @OneToOne(type => CommodityPriceEntity, CommodityPriceEntity => CommodityPriceEntity.commodity, {
@@ -76,10 +74,17 @@ export class CommodityEntity {
   })
   price: CommodityPriceEntity;
 
-  // 关联 商品图片
-  @OneToMany(type => CommodityPhotoEntity, CommodityPhotoEntity => CommodityPhotoEntity.commodity)
-  photos: CommodityPhotoEntity[];
+  // 关联 商品颜色
+  @OneToMany(type => CommodityColorEntity, CommodityColorEntity => CommodityColorEntity.commodity, {
+    cascade: true,
+  })
+  colors: CommodityColorEntity[];
 
+  // 关联 商品图片
+  @OneToMany(type => CommodityPhotoEntity, CommodityPhotoEntity => CommodityPhotoEntity.commodity, {
+    cascade: true,
+  })
+  photos: CommodityPhotoEntity[];
 
   // options
   // 关联 商品形状

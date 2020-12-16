@@ -17,9 +17,11 @@ export class CommodityPackingLangMetadataEntity {
   @Column()
   name: string;
 
-  // 大小
   @Column()
-  size: string;
+  width: number;
+
+  @Column()
+  height: number;
 
   // 价格
   @Column()

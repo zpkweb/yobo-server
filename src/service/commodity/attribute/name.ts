@@ -89,9 +89,7 @@ export class CommodityAttributeName {
   }
 
   async updateName(payload) {
-    const updateName = await this.hasId({
-      commodityId: payload.commodityId
-    });
+    const updateName = await this.hasId(payload.commodityId);
     if(updateName.success){
       return await this.update(payload)
     }else{
