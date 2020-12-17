@@ -48,13 +48,11 @@ export class CommodityController {
   }
 
 
-
   // 查找商品选项-形状
   @Get('/options/:type')
   async optionsShape(@Param() type) {
     return await this.commodityService.commodityOptionsTypeRetrieveAll({
       type,
-
       isLocale: true
     });
   }

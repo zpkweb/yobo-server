@@ -102,7 +102,7 @@ export class UserSellerEntity {
   user: UserEntity;
 
   // 关联喜欢我的人列表
-  @OneToMany(type => MyLikeSellerEntity, MyLikeSellerEntity => MyLikeSellerEntity.sellers)
+  @OneToMany(type => MyLikeSellerEntity, MyLikeSellerEntity => MyLikeSellerEntity.seller)
   likeSellers: MyLikeSellerEntity[];
 
   // 关联商品

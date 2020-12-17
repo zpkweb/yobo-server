@@ -10,9 +10,9 @@ import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
-import { BaseUserServer } from "../base/user";
-import { BaseSellerServer } from '../base/seller';
-import { BaseIdentityListServer } from '../base/identityList';
+import { BaseUserServer } from "../base/user/user";
+import { BaseSellerServer } from '../base/user/seller';
+import { BaseIdentityListServer } from '../base/user/identity/list';
 @Provide()
 export class UserRegisterService {
 

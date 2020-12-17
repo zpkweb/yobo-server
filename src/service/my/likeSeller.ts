@@ -1,0 +1,218 @@
+import { Inject } from "@midwayjs/decorator";
+import { provide } from "@midwayjs/web";
+import { BaseMyLikeSeller } from "../base/my/likeSeller";
+import { UserService } from "../user/user";
+import { SellerService } from "../user/seller";
+@provide()
+export class MyLikeSellerService {
+
+  @Inject()
+  baseMyLikeSeller: BaseMyLikeSeller;
+
+  @Inject()
+  userService: UserService;
+
+  @Inject()
+  sellerService: SellerService;
+
+  async addMyLikeSeller(payload) {
+    console.log("addMyLikeSeller", payload)
+    // 查找用户
+    const user = await this.userService.hasUser(payload.userId);
+    console.log('user', user)
+    if (!user.success) {
+      return user;
+    }
+
+    // 查找艺术家
+    const seller = await this.sellerService.hasSeller(payload.sellerId);
+    console.log('seller', seller)
+    if (!seller.success) {
+      return seller;
+    }
+
+    // 查找我喜欢的艺术家
+    const likeSeller = await this.hasMyLikeSeller({
+      userId: payload.userId,
+      sellerId: payload.sellerId
+    })
+    console.log('likeSeller', likeSeller)
+    if (likeSeller.success) {
+      return likeSeller;
+    }
+
+    // 创建喜欢的艺术家
+    const creatLikeSeller = await this.creatLikeSeller({
+      userName: payload.name,
+      userId: payload.userId,
+      sellerName: payload.sellerName,
+      sellerId: payload.sellerId
+    });
+    console.log('creatLikeSeller', creatLikeSeller)
+    if(!creatLikeSeller.success) {
+      return creatLikeSeller;
+    }
+
+    // 关联用户
+    await this.relationUser({
+      of: creatLikeSeller.data.identifiers[0].id,
+      set: payload.userId
+    })
+
+    // 关联艺术家
+    await this.relationSeller({
+      of: creatLikeSeller.data.identifiers[0].id,
+      set: payload.sellerId
+    })
+
+    // 返回喜欢的艺术家
+    return await this.myLikeSeller(payload.userId);
+  }
+
+
+
+  /**
+   * 喜欢的艺术家列表
+   */
+  async myLikeSeller(userId) {
+    const data =await this.baseMyLikeSeller.BaseRetrieve(userId);
+    console.log("likeSeller", data)
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  /**
+   * 查找喜欢的艺术家是否存在
+   * @param payload
+   */
+  async hasMyLikeSeller(payload) {
+    console.log("hasMyLikeSeller", payload)
+    const likeSeller =  await this.baseMyLikeSeller.BaseHas({
+      userId: payload.userId,
+      sellerId: payload.sellerId
+    })
+    console.log("likeSeller", likeSeller)
+      if(likeSeller){
+        return {
+          data: likeSeller,
+          success: true,
+          code : 10601
+        }
+      }else{
+        return {
+          success: false,
+          code : 10602
+        }
+      }
+  }
+
+  /**
+   * 创建喜欢的艺术家
+   * @param payload
+   */
+  async creatLikeSeller(payload) {
+    const data = await this.baseMyLikeSeller.BaseCreate(payload);
+    if (data.identifiers[0].id) {
+      return {
+        data: data,
+        success: true,
+        code: 10003
+      }
+    } else {
+      return {
+        success: false,
+        code: 10004
+      }
+    }
+  }
+
+
+
+  /**
+   * 关联 用户
+   */
+    async relationUser(payload) {
+      await this.baseMyLikeSeller.BaseRelation({
+        name: 'user',
+        of: payload.of,
+        set: { userId: payload.set }
+      })
+    }
+    /**
+   * 关联 艺术家
+   */
+  async relationSeller(payload) {
+    await this.baseMyLikeSeller.BaseRelation({
+      name: 'seller',
+      of: payload.of,
+      set: { sellerId: payload.set }
+    })
+  }
+
+  /**
+   * 删除我喜欢的艺术家
+   */
+  async delMyLikeSeller(payload) {
+    // 查找喜欢的艺术家是否存在
+    const likeSeller = await this.hasMyLikeSeller({
+      userId: payload.userId,
+      sellerId: payload.sellerId
+    })
+    console.log('likeSeller', likeSeller)
+    if (!likeSeller.success) {
+      return likeSeller;
+    }
+    // 删除艺术家
+    return await this.delLikeSeller({
+      userId: payload.userId,
+      sellerId: payload.sellerId
+    })
+
+  }
+  /**
+   * 删除艺术家
+   */
+  async delLikeSeller(payload) {
+    const data = await this.baseMyLikeSeller.BaseDelete(payload);
+    if (data.affected) {
+      return {
+        success: true,
+        code: 10005
+      }
+    } else {
+      return {
+        success: false,
+        code: 10006
+      }
+    }
+  }
+  /**
+   * 删除我喜欢的所有艺术家
+   */
+    async delLikeSellerAll(userId) {
+      const data = await this.baseMyLikeSeller.BaseDeleteAll(userId);
+    if (data.affected) {
+      return {
+        success: true,
+        code: 10005
+      }
+    } else {
+      return {
+        success: false,
+        code: 10006
+      }
+    }
+    }
+
+
+}

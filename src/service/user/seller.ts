@@ -7,8 +7,8 @@ import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 import { UserSellerStudioEntity } from 'src/entity/user/seller/studio';
 import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import * as nodemailer from 'nodemailer';
-import { BaseUserServer } from '../base/user';
-import { BaseSellerServer } from "../base/seller";
+import { BaseUserServer } from '../base/user/user';
+import { BaseSellerServer } from "../base/user/seller";
 @Provide()
 export class SellerService {
 
@@ -301,6 +301,26 @@ export class SellerService {
       }
     }
 
+  }
+
+  /**
+   * 查找艺术家是否存在
+   * @param sellerId
+   */
+  async hasSeller(sellerId) {
+    const seller =  await this.baseSellerServer.BaseHas(sellerId)
+      if(seller){
+        return {
+          data: seller,
+          success: true,
+          code : 10411
+        }
+      }else{
+        return {
+          success: false,
+          code : 10412
+        }
+      }
   }
 
   /**

@@ -1,8 +1,10 @@
 @baseUrl = http://127.0.0.1:7001
 
 
-//
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiOTYiLCJ1c2VySWQiOiJhZmU5NmYyMy00NGI2LTRlMzEtYWMyMC02YzEzYjViMDc0NGYiLCJuYW1lIjoieHh4IiwiZW1haWwiOiJ4eHgiLCJwaG9uZSI6IiIsImNyZWF0ZWREYXRlIjoiMjAyMC0xMi0xNFQwODoxNzowMy42ODhaIiwiaWRlbnRpdHlzIjpbeyJpZCI6Ijk4IiwiaWRlbnRpdHlJZCI6IjZiZDZmZjM2LWUzNmEtNDg5Mi1hZGY0LWUwY2YzNjBjNTk5MCIsIm5hbWUiOiLnlKjmiLciLCJlbmFtZSI6Im9yZGluYXJ5IiwiaW5kZXgiOjgwfV19LCJzdWNjZXNzIjp0cnVlLCJjb2RlIjoxMDAxMSwiaWF0IjoxNjA4MTEwMjEyfQ.aOic5uiL4RfKRxS_LeL2MWYlAubS43rW5YCTXqKBD_A
+@userId = b499242d-8b8d-4623-9683-eba72346dced
+@sellerId = 390ca5f3-c50b-4fd0-9759-1895bde56ae3
+# @sellerId = 0c6de44b-6a33-44f1-88f0-a401b854dd50
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImlkIjoiNzkiLCJ1c2VySWQiOiJiNDk5MjQyZC04YjhkLTQ2MjMtOTY4My1lYmE3MjM0NmRjZWQiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQHFxLmNvbSIsInBob25lIjoiIiwiY3JlYXRlZERhdGUiOiIyMDIwLTEyLTA4VDAyOjA5OjM2Ljc4M1oiLCJpZGVudGl0eXMiOlt7ImlkIjoiNzIiLCJpZGVudGl0eUlkIjoiMmY5NTYyODItMmJhZC00MjE0LTliYzgtMjMzYzU0NzA0MDYxIiwibmFtZSI6IueuoeeQhuWRmCIsImVuYW1lIjoiYWRtaW4iLCJpbmRleCI6Mn1dfSwic3VjY2VzcyI6dHJ1ZSwiY29kZSI6MTAwMTEsImlhdCI6MTYwODE2OTIyMX0.5poQ99-Lb7KwvT2CDa3x8SnZW0k4MfU95o_ZzIE5c5w
 
 
 ####################################
@@ -108,8 +110,8 @@ POST {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-  "name": "xxx",
-  "password": "xxx"
+  "name": "admin",
+  "password": "123"
 }
 
 
@@ -284,21 +286,7 @@ Authorization: Bearer {{token}}
 
 ####################################
 
-#  搜索 艺术家
-GET {{baseUrl}}/api/admin/user/seller/search
-Authorization: Bearer {{token}}
 
-{
-  "firstname": "张",
-  "lastname": "三",
-  "phone": "4",
-  "language": "汉语"
-
-}
-
-
-
-####################################
 
 #  通过申请成为艺术家
 POST {{baseUrl}}/api/admin/seller/update
@@ -325,5 +313,121 @@ Content-Type: application/json
   "phone": ""
 
 }
+
+####################################
+
+#  搜索 艺术家
+GET {{baseUrl}}/api/admin/user/seller/search
+Authorization: Bearer {{token}}
+
+####################################
+
+
+# 添加我喜欢的艺术家
+POST {{baseUrl}}/api/my/seller
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "sellerId": "0c6de44b-6a33-44f1-88f0-a401b854dd50"
+
+}
+
+####################################
+
+# 我喜欢的艺术家列表
+GET {{baseUrl}}/api/my/seller?userId={{userId}}
+
+
+####################################
+
+# 我喜欢的艺术家是否存在
+GET {{baseUrl}}/api/my/seller/has?userId={{userId}}&sellerId={{sellerId}}
+
+
+####################################
+
+# 删除我喜欢的艺术家
+POST {{baseUrl}}/api/my/seller/del
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "sellerId": "{{sellerId}}"
+}
+
+####################################
+
+# 删除我喜欢的艺术家
+POST {{baseUrl}}/api/my/seller/delAll
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}"
+
+}
+
+####################################
+
+
+
+
+
+
+
+
+#  搜索 艺术品
+GET {{baseUrl}}/api/commodity
+Authorization: Bearer {{token}}
+
+####################################
+
+
+# 添加我喜欢的艺术品
+POST {{baseUrl}}/api/my/commodity
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "userName": "",
+  "commodityId": "6fd67398-38d6-402d-89cc-8bdbe7f4819b",
+  "commodityName": ""
+}
+
+####################################
+
+# 我喜欢的艺术品列表
+GET {{baseUrl}}/api/my/commodity?userId={{userId}}
+
+
+####################################
+
+# 我喜欢的艺术品是否存在
+GET {{baseUrl}}/api/my/commodity/has?userId={{userId}}&commodityId=
+
+
+####################################
+
+# 删除我喜欢的艺术品
+POST {{baseUrl}}/api/my/commodity/del
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "commodityId": "6fd67398-38d6-402d-89cc-8bdbe7f4819b"
+}
+
+####################################
+
+# 删除我喜欢的艺术品
+POST {{baseUrl}}/api/my/commodity/delAll
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}"
+
+}
+
+####################################
 
 

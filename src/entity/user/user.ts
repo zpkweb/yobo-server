@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne, OneToMany, Generated, AfterInsert } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToOne, OneToMany, Generated } from 'typeorm';
 import { UserAddressEntity } from './address';
 import { UserThirdPartyEntity } from './thirdParty/thirdParty';
 import { UserOrdinaryEntity } from './ordinary/ordinary';
@@ -35,11 +35,11 @@ export class UserEntity {
   @Generated('uuid')
   userId: string;
 
-  @AfterInsert()
-  repealtUUID() {
-    console.log("repealtUUID", this.userId, this.userId.replace('-', ''))
-    // this.userId = this.userId.replace('-', '')
-  }
+  // @AfterInsert()
+  // repealtUUID() {
+  //   console.log("repealtUUID", this.userId, this.userId.replace('-', ''))
+  //   // this.userId = this.userId.replace('-', '')
+  // }
 
   // 姓名
   @Column()
@@ -108,15 +108,15 @@ export class UserEntity {
   @OneToOne(type => UserAdminEntity, UserAdminEntity => UserAdminEntity.user)
   admin: UserAdminEntity;
 
-  // 关联我的喜欢商家列表
+  // 关联我的浏览记录
   @OneToMany(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.user)
   likeSellers: MyBrowsingHistoryEntity[];
 
-  // 关联我的喜欢商品列表
+  // 关联我的喜欢商家列表
   @OneToMany(type => MyLikeSellerEntity, MyLikeSellerEntity => MyLikeSellerEntity.user)
   likeCommoditys: MyLikeSellerEntity[];
 
-  // 关联我的浏览记录
+  // 关联我的喜欢商品列表
   @OneToMany(type => MyLikeCommodityEntity, MyLikeCommodityEntity => MyLikeCommodityEntity.user)
   browsingHistory: MyLikeCommodityEntity[];
 

@@ -4,7 +4,7 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
 
@@ -17,12 +17,18 @@ export class MyLikeCommodityEntity {
   })
   id: number;
 
-  // id
-  @Column({
-    unique: true
-  })
-  @Generated('uuid')
-  myLikeCommodityId: string;
+  // 用户名
+  @Column()
+  userName: string;
+
+  @Column()
+  userId: string;
+
+  @Column()
+  commodityName: string;
+
+  @Column()
+  commodityId: string;
 
   //  创建日期
   @CreateDateColumn({

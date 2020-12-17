@@ -22,17 +22,23 @@
     - [模块：我的](#模块：我的)
       - [`添加喜欢的艺术家-POST:/api/my/seller`](#添加喜欢的艺术家)
       - [`喜欢的艺术家列表-GET:/api/my/seller`](#喜欢艺术家列表)
+      - [`取消喜欢的艺术家-POST:/api/my/seller/del`](#取消喜欢的艺术家)
+      - [`取消喜欢所有的艺术家-POST:/api/my/seller/delAll`](#取消喜欢所有的艺术家)
+
       - [`添加喜欢的艺术品-POST:/api/my/commodity`](#添加喜欢的艺术品)
       - [`喜欢的艺术品列表-GET:/api/my/commodity`](#喜欢艺术品列表)
+      - [`取消喜欢的艺术品-POST:/api/my/commodity/del`](#取消喜欢的艺术品)
+      - [`取消喜欢所有的艺术品-POST:/api/my/commodity/delAll`](#取消喜欢所有的艺术品)
 
     - [模块：艺术品](#模块：艺术品)
       - [`艺术品列表-GET:/api/commodity`](#艺术品列表)
       - [`艺术品搜索-GET:/api/commodity/search`](#艺术品搜索)
+
       - [艺术品选项](#艺术品选项)
-        - [`艺术品形状`-GET:/api/commodity/options/shape](#艺术品形状)
-        - [`艺术品主题`-GET:/api/commodity/options/theme](#艺术品主题)
-        - [`艺术品类别`-GET:/api/commodity/options/category](#艺术品类别)
-        - [`艺术品手法`-GET:/api/commodity/options/technique](#艺术品手法)
+        - [`艺术品形状-GET:/api/commodity/options/shape`](#艺术品形状)
+        - [`艺术品主题-GET:/api/commodity/options/theme`](#艺术品主题)
+        - [`艺术品类别-GET:/api/commodity/options/category`](#艺术品类别)
+        - [`艺术品手法-GET:/api/commodity/options/technique`](#艺术品手法)
 
 
 [接口示例](#接口示例)
@@ -245,6 +251,30 @@ GET  {{baseUrl}}/api/my/seller？userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
 Authorization: Bearer {{token}}
 ```
 
+###### 取消喜欢的艺术家
+```base
+POST {{baseUrl}}/api/my/seller/del
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
+  "sellerId": "6277c751-5748-4f4b-ac4f-de94ac39c60d"
+}
+```
+###### 取消喜欢所有的艺术家
+```base
+POST {{baseUrl}}/api/my/seller/delAll
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2"
+}
+```
+
+
+
 ###### 添加我喜欢的艺术品
 ```base
 POST {{baseUrl}}/api/my/commodity
@@ -262,6 +292,31 @@ Authorization: Bearer {{token}}
 GET  {{baseUrl}}/api/my/commodity？userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
 Authorization: Bearer {{token}}
 ```
+
+
+###### 取消喜欢的艺术品
+```base
+POST {{baseUrl}}/api/my/commodity/del
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
+  "commodityId": "6277c751-5748-4f4b-ac4f-de94ac39c60d"
+}
+```
+###### 取消喜欢所有的艺术品
+```base
+POST {{baseUrl}}/api/my/commodity/delAll
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2"
+}
+```
+
+
 
 ### 艺术品
 

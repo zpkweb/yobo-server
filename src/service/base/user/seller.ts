@@ -64,6 +64,17 @@ export class BaseSellerServer {
   }
 
   /**
+   * 判断用户是否存在
+   * @param payload
+   */
+  async BaseHas(sellerId) {
+    return await this.userSellerEntity
+    .createQueryBuilder('seller')
+    .where('seller.sellerId = :sellerId', { sellerId: sellerId })
+    .getOne();
+  }
+
+  /**
    * 检索
    * @param payload
    * Seller

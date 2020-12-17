@@ -100,7 +100,10 @@ export class CommodityCommodityService {
 
     // 创建商品图片
     for(let item of payload.photos){
-      const commodityPhoto = await this.commodityAttributePhoto.create(item)
+      const commodityPhoto = await this.commodityAttributePhoto.create({
+        src: item.url,
+        name: item.name
+      })
       if (!commodityPhoto.success) {
         return commodityPhoto
       }
@@ -210,14 +213,6 @@ export class CommodityCommodityService {
   }
 
 
-
-
-
-
-
-
-
-
   // 关联
   async relation(payload) {
     if(payload.set) {
@@ -235,12 +230,6 @@ export class CommodityCommodityService {
     }
 
   }
-
-  //
-
-
-
-
 
 
 
@@ -454,6 +443,8 @@ export class CommodityCommodityService {
         }
       }
     }
+
+
   /**
    * 筛选商品
    * @param  payload
@@ -534,7 +525,7 @@ export class CommodityCommodityService {
     }
   }
 
-  async hasId(commodityId) {
+  async hasCommodity(commodityId) {
     const data = await this.baseCommodityServer.BaseHas(commodityId);
     if (data) {
       return {

@@ -112,6 +112,19 @@ export class BaseUserServer {
     .getOne();
   }
 
+
+  /**
+   * 判断用户是否存在
+   * @param payload
+   */
+  async BaseHas(userId) {
+    console.log("BaseHas", userId)
+    return await this.userEntity
+    .createQueryBuilder('user')
+    .where('user.userId = :userId', { userId: userId })
+    .getOne();
+  }
+
   /**
    * 检索用户
    * @param payload
@@ -120,6 +133,7 @@ export class BaseUserServer {
    * phone
    * userId
    */
+
 
   async baseRetrieveUser(payload) {
     if(payload.name){

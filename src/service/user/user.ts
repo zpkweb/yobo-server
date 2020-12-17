@@ -7,7 +7,7 @@ import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAddressEntity } from 'src/entity/user/address';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
-import { BaseUserServer } from '../base/user';
+import { BaseUserServer } from '../base/user/user';
 
 @Provide()
 export class UserService{
@@ -149,6 +149,26 @@ export class UserService{
         return {
           success: false,
           code : 10010
+        }
+      }
+  }
+
+  /**
+   * 查找用户是否存在
+   * @param userId
+   */
+  async hasUser(userId) {
+    const user =  await this.baseUserServer.BaseHas(userId)
+      if(user){
+        return {
+          data: user,
+          success: true,
+          code : 10201
+        }
+      }else{
+        return {
+          success: false,
+          code : 10202
         }
       }
   }

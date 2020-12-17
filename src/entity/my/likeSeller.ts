@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
 import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
@@ -16,12 +16,20 @@ export class MyLikeSellerEntity {
   })
   id: number;
 
-  // id
-  @Column({
-    unique: true
-  })
-  @Generated('uuid')
-  myLikeSellerId: string;
+
+
+  // 用户名
+  @Column()
+  userName: string;
+
+  @Column()
+  userId: string;
+
+  @Column()
+  sellerName: string;
+
+  @Column()
+  sellerId: string;
 
   //  创建日期
   @CreateDateColumn({
@@ -51,6 +59,6 @@ export class MyLikeSellerEntity {
   @JoinColumn({
     referencedColumnName: 'sellerId'
   })
-  sellers: UserSellerEntity;
+  seller: UserSellerEntity;
 
 }

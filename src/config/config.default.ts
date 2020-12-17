@@ -29,6 +29,13 @@ export default (appInfo: EggAppInfo) => {
     currentPage: 1,
   }
 
+  config.host = {
+    origin: 'http://192.168.0.67:7001'
+  }
+
+
+
+
   // add your config here
   config.middleware = [];
 
@@ -66,7 +73,7 @@ export default (appInfo: EggAppInfo) => {
   };
   // 上传
   config.multipart = {
-    mode: 'file',
+    fileSize: '10mb', mode: 'stream',
   }
   // exports.static = {
   //   prefix: '/public/',

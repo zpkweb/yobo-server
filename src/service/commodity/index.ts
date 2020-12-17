@@ -201,7 +201,7 @@ export class CommodityService {
   async update(payload) {
     console.log("commodity payload", payload)
     // 查询商品是否存在
-    const commodity = await this.commodityCommodityService.hasId(payload.commodityId);
+    const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
     console.log("commodity", commodity)
     //  商品不存在
     if(!commodity.success){
@@ -268,7 +268,8 @@ export class CommodityService {
     // 更新商品图片
     for(let item of payload.photos){
       const commodityPhoto = await this.commodityAttributePhoto.update({
-      ...item,
+      src: item.url,
+      name: item.name,
       commodityId: payload.commodityId,
       });
       console.log("commodityPhoto", commodityPhoto)

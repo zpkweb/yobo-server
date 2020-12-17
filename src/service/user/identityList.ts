@@ -1,7 +1,7 @@
 import { Inject, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
-import { BaseIdentityListServer } from "../base/identityList";
+import { BaseIdentityListServer } from "../base/user/identity/list";
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 
 @Provide()

@@ -2,7 +2,7 @@ import { Config, Inject, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
-import { BaseUserServer } from "../base/user";
+import { BaseUserServer } from "../base/user/user";
 @Provide()
 export class LoginService {
 
