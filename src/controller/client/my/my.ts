@@ -40,31 +40,31 @@ export class MyController {
 
 
 
-  // 添加我喜欢的商家
+  // 添加我喜欢的商品
   @Post('/commodity')
   async setCommodity(@Body(ALL) commodityBody) {
     return await this.myService.setCommodity(commodityBody);
   }
 
-  // 查找我喜欢的商家
+  // 查找我喜欢的商品
   @Get('/commodity')
   async getCommodity(@Query() userId) {
     return await this.myService.getCommodity(userId);
   }
 
-  // 查找我喜欢的商家是否存在
+  // 查找我喜欢的商品是否存在
   @Get('/commodity/has')
   async hasCommodity(@Query(ALL) commodityQuery) {
     return await this.myService.hasCommodity(commodityQuery);
   }
 
-  // 删除我喜欢的商家
+  // 删除我喜欢的商品
   @Post('/commodity/del')
   async delCommodity(@Body(ALL) commodityBody) {
     return await this.myService.delCommodity(commodityBody);
   }
 
-  // 删除我喜欢的所有商家
+  // 删除我喜欢的所有商品
   @Post('/commodity/delAll')
   async delCommodityAll(@Body() userId) {
     return await this.myService.delCommodityAll(userId);
@@ -73,10 +73,21 @@ export class MyController {
 
 
 
-  // 查找我的浏览记录
+  // 添加我的浏览记录
   @Post('/browsingHistory')
-  async findBrowsingHistory() {
-    return  await this.myService.findBrowsingHistory();
+  async addBrowsingHistory(@Body(ALL) browsingHistoryBody) {
+    return  await this.myService.addBrowsingHistory({
+      userId: browsingHistoryBody.userId,
+      userName: browsingHistoryBody.userName || '',
+      commodityId: browsingHistoryBody.commodityId,
+      commodityName: browsingHistoryBody.commodityName || ''
+    });
+  }
+
+  // 查找我的浏览记录
+  @Get('/browsingHistory')
+  async findBrowsingHistory(@Query() userId) {
+    return  await this.myService.findBrowsingHistory(userId);
   }
 
 

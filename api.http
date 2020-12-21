@@ -23,31 +23,31 @@ Content-Type: application/json
 [{
   "name": "超级管理员",
   "ename": "superAdmin",
-  "index": 1
+  "index": 1,
 },{
   "name": "管理员",
   "ename": "admin",
-  "index": 2
+  "index": 2,
 },{
   "name": "客服",
   "ename": "customerService",
-  "index": 3
+  "index": 3,
 },{
   "name": "艺术家",
   "ename": "seller",
-  "index": 5
+  "index": 5,
 },{
   "name": "会员",
   "ename": "member",
-  "index": 70
+  "index": 70,
 },{
   "name": "用户",
   "ename": "ordinary",
-  "index": 80
+  "index": 80,
 },{
   "name": "第三方用户",
   "ename": "thirdParty",
-  "index": 90
+  "index": 90,
 }]
 
 
@@ -59,19 +59,21 @@ Content-Type: application/json
 
 {
   "id": 1,
-  "ename": "superAdmin"
+  "ename": "superAdmins"
 }
 
 ####################################
 
 
 #  获取身份列表
-GET {{baseUrl}}/api/admin/identityList
+GET {{baseUrl}}/api/admin/identityList?ename=admin
 
 ####################################
 
 #  删除身份列表
-GET {{baseUrl}}/api/admin/identityList/delete?id=3
+GET {{baseUrl}}/api/admin/identityList/delete
+
+
 
 ####################################
 
@@ -431,3 +433,23 @@ Content-Type: application/json
 ####################################
 
 
+
+
+# 添加我的浏览历史
+POST {{baseUrl}}/api/my/browsingHistory
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "userName": "",
+  "commodityId": "6fd67398-38d6-402d-89cc-8bdbe7f4819b",
+  "commodityName": ""
+}
+
+####################################
+
+# 我的浏览历史
+GET {{baseUrl}}/api/my/browsingHistory?userId={{userId}}
+
+
+####################################

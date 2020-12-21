@@ -22,7 +22,6 @@ export class IdentityListService {
       let identity:any = await this.baseIdentityListServer.baseRetrieveIdentityList(item);
       if (!identity) {
         let newIdentity = await this.baseIdentityListServer.baseCreateIdentityList(item)
-        console.log("newIdentity", newIdentity)
         if (!newIdentity.identifiers[0].id) {
           return {
             success: false,
@@ -95,7 +94,14 @@ export class IdentityListService {
    * @param payload
    */
   async updateIdentityList(payload) {
-    const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList(payload);
+    console.log("updateIdentityList", payload)
+    const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
+      name: payload.name || '',
+      ename: payload.ename || '',
+      index: payload.index || '',
+      id: payload.id || ''
+    });
+    console.log("identityList", identityList)
     if (!identityList) {
       return {
         success: false,
@@ -107,11 +113,19 @@ export class IdentityListService {
       name: identityList.name,
       ename: identityList.ename,
       index: identityList.index,
+      menu: identityList.menu,
       id: identityList.id
     }, payload))
+    console.log("newIdentityList", newIdentityList)
     if(newIdentityList.affected){
+      const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
+        name: payload.name || '',
+        ename: payload.ename || '',
+        index: payload.index || '',
+        id: payload.id || ''
+      });
       return {
-        data: newIdentityList,
+        data: identityList,
         success: true,
         code: 10007
       }

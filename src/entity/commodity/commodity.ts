@@ -13,6 +13,7 @@ import { CommodityDescEntity } from './attribute/desc';
 import { CommodityPhotoEntity } from './attribute/photo';
 import { CommodityPriceEntity } from './attribute/price';
 import { CommodityColorEntity } from './attribute/color';
+import { CommodityBrowsingCountEntity } from './commodityBrowsingCount';
 
 import { CommodityOptionsShapeEntity } from './options/shape';
 import { CommodityOptionsThemeEntity } from './options/theme';
@@ -154,7 +155,11 @@ export class CommodityEntity {
   likeCommoditys: MyLikeCommodityEntity[];
 
   // 关联用户浏览记录
-  @OneToMany(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.commoditys)
+  @OneToOne(type => CommodityBrowsingCountEntity, CommodityBrowsingCountEntity => CommodityBrowsingCountEntity.commodity)
+  browsingCount: CommodityBrowsingCountEntity[];
+
+  // 关联用户浏览记录
+  @OneToMany(type => MyBrowsingHistoryEntity, MyBrowsingHistoryEntity => MyBrowsingHistoryEntity.commodity)
   browsingHistory: MyBrowsingHistoryEntity[];
 
 

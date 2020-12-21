@@ -69,6 +69,7 @@ export class CommodityOptionsShapeService {
    * 查询商品所有选项
    */
   async retrieveAll(payload) {
+    console.log("retrieveAll", payload)
     let data = await this.baseCommodityOptionsShapeServer.BaseRetrieveAll();
     if(payload.isLocale){
       data = this.filter(payload.locale || 'zh-cn', data)

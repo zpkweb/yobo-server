@@ -6,6 +6,7 @@ import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
 import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
 import { CommodityColorEntity } from 'src/entity/commodity/attribute/color';
+import { CommodityBrowsingCountEntity } from 'src/entity/commodity/commodityBrowsingCount';
 
 @Provide()
 export class BaseCommodityServer {
@@ -24,6 +25,9 @@ export class BaseCommodityServer {
 
   @InjectEntityModel(CommodityColorEntity)
   commodityColorEntity: Repository<CommodityColorEntity>;
+
+  @InjectEntityModel(CommodityBrowsingCountEntity)
+  commodityBrowsingCountEntity: Repository<CommodityBrowsingCountEntity>;
 
   /**
     * 创建商品
@@ -150,6 +154,7 @@ export class BaseCommodityServer {
       .leftJoinAndSelect('commodity.categorys', 'categorys')
       .leftJoinAndSelect('commodity.techniques', 'techniques')
       .leftJoinAndSelect('commodity.seller', 'seller')
+      .leftJoinAndSelect('commodity.browsingCount', 'browsingCount')
       .addSelect('commodity.createdDate')
       .where(`commodity.state like :state ${ payload.widthMin && payload.widthMax ? ' AND commodity.width BETWEEN :widthMin AND :widthMax' : ''} ${ payload.heightMin && payload.heightMax ? ' AND commodity.height BETWEEN :heightMin AND :heightMax' : ''} ${ payload.shapeId ? ' AND shapes.id = :shapeId' : ''}${ payload.themeId ? ' AND themes.id = :themeId' : ''}${ payload.categoryId ? ' AND categorys.id = :categoryId' : ''}${ payload.techniqueId ? ' AND techniques.id = :techniqueId' : ''}`)
       .andWhere(qb => {
@@ -158,6 +163,9 @@ export class BaseCommodityServer {
           .select("name.commodityId")
           .from(CommodityNameEntity, "name")
           .where("name.zh-cn like :name")
+          .andWhere("name.en-us like :name")
+          .andWhere("name.ja-jp like :name")
+          .andWhere("name.fr-fr like :name")
           .getQuery();
           console.log("name subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
@@ -168,6 +176,9 @@ export class BaseCommodityServer {
           .select("desc.commodityId")
           .from(CommodityDescEntity, "desc")
           .where("desc.zh-cn like :desc")
+          .andWhere("name.en-us like :desc")
+          .andWhere("name.ja-jp like :desc")
+          .andWhere("name.fr-fr like :desc")
           .getQuery();
           console.log("desc subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
@@ -178,6 +189,9 @@ export class BaseCommodityServer {
           .select("price.commodityId")
           .from(CommodityPriceEntity, "price")
           .where("price.zh-cn BETWEEN :priceMin AND :priceMax")
+          .andWhere("name.en-us BETWEEN :priceMin AND :priceMax")
+          .andWhere("name.ja-jp BETWEEN :priceMin AND :priceMax")
+          .andWhere("name.fr-fr BETWEEN :priceMin AND :priceMax")
           .getQuery();
           console.log("price subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
@@ -192,6 +206,21 @@ export class BaseCommodityServer {
           console.log("color subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
+      // .andWhere(qb => {
+      //   const subQuery = qb
+      //     .subQuery()
+      //     .select("browsingCount.commodityId")
+      //     .from(CommodityBrowsingCountEntity, "browsingCount")
+      //     .where("browsingCount.commodityId = :commodityId")
+      //     .orderBy("browsingCount.count", payload.hots ? "DESC"  :  "ASC")
+      //     .getQuery();
+      //     console.log("browsingCount subQuery", subQuery)
+      //     if(payload.hots){
+      //       return "commodity.commodityId IN " + subQuery;
+      //     }else{
+      //       return " "
+      //     }
+      // })
       .setParameter("name", `%${payload.name}%`)
       .setParameter("desc", `%${payload.desc}%`)
       .setParameter("priceMin", payload.priceMin)
@@ -207,7 +236,8 @@ export class BaseCommodityServer {
       .setParameter("themeId", payload.themeId)
       .setParameter("categoryId", payload.categoryId)
       .setParameter("techniqueId", payload.techniqueId)
-
+      .orderBy("browsingCount.count", payload.hots ? "DESC"  :  "ASC")
+      .orderBy("commodity.createdDate", payload.news ? "DESC"  :  "ASC")
       // .andWhere(qb => {
       //   const subQuery = qb
       //     .subQuery()

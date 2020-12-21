@@ -36,6 +36,7 @@ export class UserIdentityEntity {
   @Column()
   index: number;
 
+
   //  创建日期
   @CreateDateColumn({
     select: false

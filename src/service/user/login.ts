@@ -3,6 +3,8 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
 import { BaseUserServer } from "../base/user/user";
+import { IdentityListService } from './identityList';
+
 @Provide()
 export class LoginService {
 
@@ -11,6 +13,9 @@ export class LoginService {
 
   @Inject()
   baseUserServer: BaseUserServer;
+
+  @Inject()
+  identityListService: IdentityListService;
 
   @Config('root')
   root;
@@ -119,14 +124,29 @@ export class LoginService {
     }
 
     let loginAuth = false;
+    let authMax = 100;
     for(let item of user.identitys){
       if(item.index < 5){
         loginAuth = true;
+        if(item.index < authMax){
+          authMax = item.index;
+        }
       }
     }
     if(loginAuth){
+      // 获取当前用户身份的权限菜单
+      console.log("user.identitys", user.identitys)
+      const menu:any = await this.identityListService.retrieveIdentityList({
+        index: authMax
+      })
+      if(!menu.success){
+        return menu;
+      }
       return {
-        data: user,
+        data: {
+          ...user,
+          menu: menu.data.menu
+        },
         success: true,
         code: 10011
       };

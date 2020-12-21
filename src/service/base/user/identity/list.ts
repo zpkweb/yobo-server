@@ -23,6 +23,7 @@ export class BaseIdentityListServer {
       .values({
         name: payload.name,
         ename: payload.ename,
+        menu: payload.menu,
         index: payload.index
       })
       .execute();
@@ -37,6 +38,7 @@ export class BaseIdentityListServer {
    * id
    */
   async baseRetrieveIdentityList(payload) {
+    console.log("baseRetrieveIdentityList", payload)
     return await this.userIdentityListEntity
     .createQueryBuilder('identityList')
     .where("identityList.name = :name", { name: payload.name })
@@ -63,6 +65,7 @@ export class BaseIdentityListServer {
     .set({
       name: payload.name,
       ename: payload.ename,
+      menu: payload.menu,
       index: payload.index
     })
     .where("id = :id", { id: payload.id })

@@ -422,6 +422,7 @@ export class CommodityCommodityService {
     async retrieveAll(payload) {
       // 商品Id查找商品
       let result = await this.baseCommodityServer.BaseRetrieveAll(payload);
+      console.log("retrieveAll", result)
       let data = result[0];
       let total = result[1];
       if(payload.isLocale){
@@ -486,6 +487,7 @@ export class CommodityCommodityService {
   // 搜索商品
   async search(payload) {
     let result = await this.baseCommodityServer.BaseSearch(payload);
+    // console.log("search", result)
     let data = result[0];
     let total = result[1];
     if(payload.isLocale){

@@ -23,6 +23,12 @@ export class MyBrowsingHistoryEntity {
   @Generated('uuid')
   myBrowsingHistoryId: string;
 
+  @Column()
+  userName: string;
+
+  @Column()
+  commodityName: string;
+
   //  创建日期
   @CreateDateColumn({
     select: false
@@ -51,6 +57,6 @@ export class MyBrowsingHistoryEntity {
   @JoinColumn({
     referencedColumnName: 'commodityId'
   })
-  commoditys: CommodityEntity;
+  commodity: CommodityEntity;
 
 }

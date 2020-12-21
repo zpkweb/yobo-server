@@ -130,6 +130,7 @@ export class UserRegisterService {
    * @param payload
    */
   async registerSeller(payload) {
+    console.log("registerSeller", payload)
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 5,

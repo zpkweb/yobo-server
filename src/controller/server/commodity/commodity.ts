@@ -24,15 +24,17 @@ export class CommodityAdminController {
   // 查找商品
   @Get()
   async find(@Query(ALL) findParams) {
+    const pageSize = Number(findParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(findParams.currentPage) || this.pagination.currentPage;
     const data:any = await this.commodityService.find({
       ...findParams,
-      pageSize: this.pagination.pageSize,
-      currentPage: this.pagination.currentPage,
+      pageSize: pageSize,
+      currentPage: currentPage,
       isLocale: true
     });
     if(data.success){
-      data.data.pageSize = this.pagination.pageSize;
-      data.data.currentPage = this.pagination.currentPage;
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
     }
     return data;
   }
@@ -40,14 +42,16 @@ export class CommodityAdminController {
   // 编辑商品
   @Get('/edit')
   async finEdit(@Query(ALL) findParams) {
+    const pageSize = Number(findParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(findParams.currentPage) || this.pagination.currentPage;
     const data: any = await this.commodityService.find({
       ...findParams,
-      pageSize: this.pagination.pageSize,
-      currentPage: this.pagination.currentPage
+      pageSize: pageSize,
+      currentPage: currentPage,
     });
     if(data.success){
-      data.data.pageSize = this.pagination.pageSize;
-      data.data.currentPage = this.pagination.currentPage;
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
     }
     return data;
   }
@@ -55,14 +59,16 @@ export class CommodityAdminController {
   //  查询所有商品
   @Get('/all')
   async findAll(@Query(ALL) findAllParams) {
+    const pageSize = Number(findAllParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(findAllParams.currentPage) || this.pagination.currentPage;
     const data: any = await this.commodityService.findAll({
       ...findAllParams,
-      pageSize: this.pagination.pageSize,
-      currentPage: this.pagination.currentPage,
+      pageSize: pageSize,
+      currentPage: currentPage,
     });
     if(data.success){
-      data.data.pageSize = this.pagination.pageSize;
-      data.data.currentPage = this.pagination.currentPage;
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
     }
     return data;
   }
@@ -71,10 +77,16 @@ export class CommodityAdminController {
   // 搜索
   @Get('/search')
   async search(@Query(ALL) searchParams) {
-    const data:any = await this.commodityService.search(searchParams);
+    const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const data:any = await this.commodityService.search({
+      ...searchParams,
+      pageSize: pageSize,
+      currentPage: currentPage,
+    });
     if(data.success){
-      data.data.pageSize = this.pagination.pageSize;
-      data.data.currentPage = this.pagination.currentPage;
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
     }
     return data;
   }

@@ -20,6 +20,13 @@ export class UserIdentityListEntity {
   @Column()
   ename: string;
 
+  // 菜单
+  @Column({
+    type: 'text'
+  })
+  menu: string;
+
+
   // 身份序号
   @Column()
   index: number;

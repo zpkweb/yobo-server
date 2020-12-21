@@ -1,7 +1,7 @@
 import { Inject, Provide } from '@midwayjs/decorator';
 import { MyLikeSellerService } from './likeSeller'
 import { MyLikeCommodityService } from './likeCommodity';
-
+import { MyBrowsingHistoryService } from './browsingHistory';
 @Provide()
 export class MyService {
 
@@ -11,6 +11,8 @@ export class MyService {
   @Inject()
   myLikeCommodityService: MyLikeCommodityService;
 
+  @Inject()
+  myBrowsingHistoryService: MyBrowsingHistoryService;
 
   // 添加我喜欢的商家
   async setSeller(payload) {
@@ -63,9 +65,16 @@ export class MyService {
 
 
 
-  // 查找我的浏览记录
-  async findBrowsingHistory() {
+  // 添加我的浏览记录
+  async addBrowsingHistory(payload) {
+    return await this.myBrowsingHistoryService.addBrowsingHistory(payload);
 
+
+  }
+
+  // 查找我的浏览记录
+  async findBrowsingHistory(userId) {
+    return await this.myBrowsingHistoryService.retrieveBrowsingHistory(userId)
   }
 
 

@@ -10,7 +10,6 @@ export class UploadController {
   uploadService: UploadService;
 
 
-
   @Post('/images')
   async uploadImages(@Body(ALL) uploadBody) {
     console.log("/api/upload/images", uploadBody)

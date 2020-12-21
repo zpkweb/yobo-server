@@ -30,6 +30,9 @@
       - [`取消喜欢的艺术品-POST:/api/my/commodity/del`](#取消喜欢的艺术品)
       - [`取消喜欢所有的艺术品-POST:/api/my/commodity/delAll`](#取消喜欢所有的艺术品)
 
+      - [`添加我的浏览历史(艺术品)-POST:/api/my/browsingHistory`](#添加我的浏览历史)
+      - [`我的浏览历史列表(艺术品)-GET:/api/my/browsingHistory`](#我的浏览历史列表)
+
     - [模块：艺术品](#模块：艺术品)
       - [`艺术品列表-GET:/api/commodity`](#艺术品列表)
       - [`艺术品搜索-GET:/api/commodity/search`](#艺术品搜索)

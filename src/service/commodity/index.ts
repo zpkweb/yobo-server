@@ -162,6 +162,16 @@ export class CommodityService {
       colorsMax = colorStart;
     }
 
+    let hots = false;
+    if(payload.hots && payload.hots == 'true'){
+      hots = true;
+    }
+
+    let news = false;
+    if(payload.news && payload.news == 'true'){
+      news = true;
+    }
+
     return await this.commodityCommodityService.search({
       name: payload.name || '',
       desc: payload.desc || '',
@@ -183,8 +193,8 @@ export class CommodityService {
       categoryId: payload.categoryId || '',
       techniqueId: payload.techniqueId || '',
       sellerId: payload.sellerId || '',
-      hots: payload.hots || '',
-      news: payload.news || '',
+      hots,
+      news,
       currentPage: payload.currentPage || 1,
       pageSize: payload.pageSize || 10,
       isLocale: payload.isLocale || false,
@@ -475,6 +485,7 @@ export class CommodityService {
    * 查询商品类型所有
    */
     async commodityOptionsTypeRetrieveAll(payload) {
+      console.log("commodityOptionsTypeRetrieveAll", payload)
       let data: any;
     switch (payload.type) {
       case 'category':
