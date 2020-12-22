@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>api.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<p><a href="#%E6%8E%A5%E5%8F%A3%E9%85%8D%E7%BD%AE">接口配置</a>
+<a href="#%E6%8E%A5%E5%8F%A3">接口</a></p>
+<ul>
+<li><a href="#%E7%94%A8%E9%80%94%EF%BC%9A%E5%AE%A2%E6%88%B7%E7%AB%AF">用途：客户端</a>
+<ul>
+<li>
+<p><a href="#%E6%A8%A1%E5%9D%97%EF%BC%9A%E7%94%A8%E6%88%B7">模块：用户</a></p>
+<ul>
+<li>
+<p><a href="#%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C"><code>用户注册-POST:/api/user/register</code></a></p>
+</li>
+<li>
+<p><a href="#%E7%94%B3%E8%AF%B7%E8%89%BA%E6%9C%AF%E5%AE%B6"><code>申请艺术家-POST:/api/user/seller/register</code></a></p>
+</li>
+<li>
+<p><a href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><code>用户登录-POST:/api/user/login</code></a></p>
+</li>
+<li>
+<p><a href="#%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81"><code>修改密码-POST:/api/user/change/password</code></a></p>
+</li>
+<li>
+<p><a href="#%E8%8E%B7%E5%8F%96%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF"><code>获取个人信息-GET:/api/user/self</code></a></p>
+</li>
+<li>
+<p><a href="#%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><code>更新用户信息-POST:/api/user/update</code></a></p>
+</li>
+<li>
+<p><a href="#%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81">找回密码</a></p>
+<ul>
+<li><a href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81"><code>发送邮件验证码-POST:/api/user/password/retrieve/code/send</code></a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81"><code>验证邮件验证码-POST:/api/user/password/retrieve/code/verify</code></a></li>
+</ul>
+</li>
+<li>
+<p><a href="#%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80">用户地址</a></p>
+<ul>
+<li><a href="#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80"><code>获取用户地址-GET:/api/user/address</code></a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80"><code>添加用户地址-POST:/api/user/address</code></a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80"><code>更新用户地址-POST:/api/user/address/update</code></a></li>
+<li><a href="#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80"><code>删除用户地址-POST:/api/user/address/remove</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="#%E6%A8%A1%E5%9D%97%EF%BC%9A%E6%88%91%E7%9A%84">模块：我的</a></p>
+<ul>
+<li>
+<p><a href="#%E6%B7%BB%E5%8A%A0%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6"><code>添加喜欢的艺术家-POST:/api/my/seller</code></a></p>
+</li>
+<li>
+<p><a href="#%E5%96%9C%E6%AC%A2%E8%89%BA%E6%9C%AF%E5%AE%B6%E5%88%97%E8%A1%A8"><code>喜欢的艺术家列表-GET:/api/my/seller</code></a></p>
+</li>
+<li>
+<p><a href="#%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6"><code>取消喜欢的艺术家-POST:/api/my/seller/del</code></a></p>
+</li>
+<li>
+<p><a href="#%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E6%89%80%E6%9C%89%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6"><code>取消喜欢所有的艺术家-POST:/api/my/seller/delAll</code></a></p>
+</li>
+<li>
+<p><a href="#%E6%B7%BB%E5%8A%A0%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81"><code>添加喜欢的艺术品-POST:/api/my/commodity</code></a></p>
+</li>
+<li>
+<p><a href="#%E5%96%9C%E6%AC%A2%E8%89%BA%E6%9C%AF%E5%93%81%E5%88%97%E8%A1%A8"><code>喜欢的艺术品列表-GET:/api/my/commodity</code></a></p>
+</li>
+<li>
+<p><a href="#%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81"><code>取消喜欢的艺术品-POST:/api/my/commodity/del</code></a></p>
+</li>
+<li>
+<p><a href="#%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E6%89%80%E6%9C%89%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81"><code>取消喜欢所有的艺术品-POST:/api/my/commodity/delAll</code></a></p>
+</li>
+<li>
+<p><a href="#%E6%B7%BB%E5%8A%A0%E6%88%91%E7%9A%84%E6%B5%8F%E8%A7%88%E5%8E%86%E5%8F%B2"><code>添加我的浏览历史(艺术品)-POST:/api/my/browsingHistory</code></a></p>
+</li>
+<li>
+<p><a href="#%E6%88%91%E7%9A%84%E6%B5%8F%E8%A7%88%E5%8E%86%E5%8F%B2%E5%88%97%E8%A1%A8"><code>我的浏览历史列表(艺术品)-GET:/api/my/browsingHistory</code></a></p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="#%E6%A8%A1%E5%9D%97%EF%BC%9A%E8%89%BA%E6%9C%AF%E5%93%81">模块：艺术品</a></p>
+<ul>
+<li>
+<p><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E5%88%97%E8%A1%A8"><code>艺术品列表-GET:/api/commodity</code></a></p>
+</li>
+<li>
+<p><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E6%90%9C%E7%B4%A2"><code>艺术品搜索-GET:/api/commodity/search</code></a></p>
+</li>
+<li>
+<p><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E9%80%89%E9%A1%B9">艺术品选项</a></p>
+<ul>
+<li><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E5%BD%A2%E7%8A%B6"><code>艺术品形状-GET:/api/commodity/options/shape</code></a></li>
+<li><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E4%B8%BB%E9%A2%98"><code>艺术品主题-GET:/api/commodity/options/theme</code></a></li>
+<li><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E7%B1%BB%E5%88%AB"><code>艺术品类别-GET:/api/commodity/options/category</code></a></li>
+<li><a href="#%E8%89%BA%E6%9C%AF%E5%93%81%E6%89%8B%E6%B3%95"><code>艺术品手法-GET:/api/commodity/options/technique</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="#%E6%8E%A5%E5%8F%A3%E7%A4%BA%E4%BE%8B">接口示例</a></p>
+<h1 id="%E6%8E%A5%E5%8F%A3%E9%85%8D%E7%BD%AE">接口配置</h1>
+<pre class="hljs"><code><div>  @baseUrl = http://192.168.0.67:7001
+  @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzIiwidXNlcklkIjoiOTA3ZTNhYjItZDg2OC00OGU0LThlN2MtYzFiMjdjNTI5OTM1IiwibmFtZSI6InRlc3QiLCJlbWFpbCI6IiIsInBob25lIjoiMTMiLCJpZGVudGl0eXMiOlt7ImlkIjoiMTMiLCJpZGVudGl0eUlkIjoiYTAxMWMyMWUtYzU0MC00ZGFmLTgyMTYtN2ZjNTNiOGIwZGYzIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYzNjY3ODR9.VzGR0tr8xKMl9I3x6xt_3LlA8nAoEhYp9ybfKIOg5yI
+</div></code></pre>
+<p>多语言</p>
+<pre class="hljs"><code><div>  语言
+    中文（默认）：?locale=zh-CN
+    英语：?locale=en-US
+  分页（默认设置）
+    currentPage: 1 // 页码
+    pageSize: 10 // 页数
+</div></code></pre>
+<h1 id="%E6%8E%A5%E5%8F%A3">接口</h1>
+<h2 id="%E7%94%A8%E9%80%94%E5%AE%A2%E6%88%B7%E7%AB%AF">用途：客户端</h2>
+<h3 id="%E6%A8%A1%E5%9D%97%E7%94%A8%E6%88%B7">模块：用户</h3>
+<h6 id="%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C">用户注册</h6>
+<pre class="hljs"><code><div>  POST {{baseUrl}}/api/user/register
+  Content-Type: application/json
+
+  {
+    &quot;name&quot;: &quot;test&quot;,
+    &quot;email&quot;: &quot;&quot;,
+    &quot;phone&quot;: &quot;1&quot;,
+    &quot;password&quot;: &quot;1&quot;
+  }
+</div></code></pre>
+<h6 id="%E7%94%B3%E8%AF%B7%E8%89%BA%E6%9C%AF%E5%AE%B6">申请艺术家</h6>
+<pre class="hljs"><code><div>  POST {{baseUrl}}/api/user/seller/register
+  Content-Type: application/json
+
+  {
+    firstname: '请输入姓氏',
+    lastname: '请输入名字',
+    email: '请输入邮箱',
+    phone: '请输入电话',
+    country: '请输入国家',
+    language: '请输入语言',
+    findUs: '您是如何发现我们的',
+    isFullTime: '您是一个全职的专业艺术家么？',
+    onlineSell: '售出的作品中，网上售出的比例占多少？',
+    sold: '您在过去一年里售出多少件自己的作品？',
+    channel: '如果您在网上售出过作品，是通过什么渠道呢？',
+    gallery: '如有其他画廊已合作，是哪一家（方便我们更全面了解您）',
+    medium: '主要媒介',
+    galleryInfo: '您是画廊代表人吗？请告知您的画廊名称，城市，国家',
+    recommend: '最值得一看的展览/画廊/机构名称，城市，国家',
+    prize: '最引人注目的奖项/奖项名称，获得年份',
+    website: '连接到网站',
+    profile: '用户简介',
+  }
+</div></code></pre>
+<h6 id="%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95">用户登录</h6>
+<pre class="hljs"><code><div>  POST {{baseUrl}}/api/user/login
+  Content-Type: application/json
+
+  {
+    &quot;email&quot;: &quot;&quot;,
+    &quot;phone&quot;: &quot;1234567&quot;,
+    &quot;password&quot;: &quot;123456&quot;
+  }
+</div></code></pre>
+<h6 id="%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81">修改密码</h6>
+<pre class="hljs"><code><div>  POST {{baseUrl}}/api/user/change/password
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+
+  {
+    &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+    &quot;email&quot;: &quot;&quot;,
+    &quot;phone&quot;: &quot;1234567&quot;,
+    &quot;password&quot;: &quot;123&quot;
+  }
+</div></code></pre>
+<h6 id="%E8%8E%B7%E5%8F%96%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF">获取个人信息</h6>
+<pre class="hljs"><code><div>  GET {{baseUrl}}/api/user/self?userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
+  Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF">更新用户信息</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/user/update
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;email&quot;: &quot;&quot;,
+  &quot;phone&quot;: &quot;1234567&quot;,
+  &quot;name&quot;: &quot;test77&quot;,
+}
+</div></code></pre>
+<h3 id="%E6%89%BE%E5%9B%9E%E5%AF%86%E7%A0%81">找回密码</h3>
+<h6 id="%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81">发送邮件验证码</h6>
+<pre class="hljs"><code><div>  POST {{baseUrl}}/api/user/password/retrieve/code/send
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+
+  {
+    &quot;userId&quot;: &quot;6db20004-97ef-4a9c-8e3b-a69621ee67f5&quot;,
+    &quot;email&quot;: &quot;zpkweb@icloud.com&quot;
+  }
+</div></code></pre>
+<h6 id="%E9%AA%8C%E8%AF%81%E9%82%AE%E4%BB%B6%E9%AA%8C%E8%AF%81%E7%A0%81">验证邮件验证码</h6>
+<pre class="hljs"><code><div>  POST {{baseUrl}}/api/user/password/retrieve/code/verify
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+
+  {
+    &quot;userId&quot;: &quot;6db20004-97ef-4a9c-8e3b-a69621ee67f5&quot;,
+    &quot;code&quot;: &quot;747215&quot;
+  }
+</div></code></pre>
+<h3 id="%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80">用户地址</h3>
+<h6 id="%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80">获取用户地址</h6>
+<pre class="hljs"><code><div>GET  {{baseUrl}}/api/user/address？userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80">添加用户地址</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/user/address
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;address&quot;: {
+    &quot;name&quot;: &quot;test22&quot;,
+    &quot;phone&quot;: &quot;222&quot;,
+    &quot;city&quot;: &quot;北京&quot;,
+    &quot;address&quot;: &quot;&quot;
+  }
+}
+</div></code></pre>
+<h6 id="%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80">更新用户地址</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/user/address/update
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;address&quot;: {
+    &quot;addressId&quot;: &quot;dcb34b75-2c9a-458d-924e-5689967e7cfa&quot;,
+    &quot;name&quot;: &quot;test2&quot;,
+    &quot;phone&quot;: &quot;22&quot;,
+    &quot;city&quot;: &quot;北京&quot;,
+    &quot;address&quot;: &quot;&quot;
+  }
+}
+</div></code></pre>
+<h6 id="%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E5%9C%B0%E5%9D%80">删除用户地址</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/user/address/remove
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;addressId&quot;: &quot;6277c751-5748-4f4b-ac4f-de94ac39c60d&quot;
+}
+</div></code></pre>
+<h3 id="%E6%88%91%E7%9A%84">我的</h3>
+<h6 id="%E6%B7%BB%E5%8A%A0%E6%88%91%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6">添加我喜欢的艺术家</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/my/seller
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;sellerId&quot;: &quot;6277c751-5748-4f4b-ac4f-de94ac39c60d&quot;
+}
+</div></code></pre>
+<h6 id="%E6%88%91%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6%E5%88%97%E8%A1%A8">我喜欢的艺术家列表</h6>
+<pre class="hljs"><code><div>GET  {{baseUrl}}/api/my/seller？userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6">取消喜欢的艺术家</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/my/seller/del
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;sellerId&quot;: &quot;6277c751-5748-4f4b-ac4f-de94ac39c60d&quot;
+}
+</div></code></pre>
+<h6 id="%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E6%89%80%E6%9C%89%E7%9A%84%E8%89%BA%E6%9C%AF%E5%AE%B6">取消喜欢所有的艺术家</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/my/seller/delAll
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;
+}
+</div></code></pre>
+<h6 id="%E6%B7%BB%E5%8A%A0%E6%88%91%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81">添加我喜欢的艺术品</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/my/commodity
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;commodityId&quot;: &quot;6277c751-5748-4f4b-ac4f-de94ac39c60d&quot;
+}
+</div></code></pre>
+<h6 id="%E6%88%91%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81%E5%88%97%E8%A1%A8">我喜欢的艺术品列表</h6>
+<pre class="hljs"><code><div>GET  {{baseUrl}}/api/my/commodity？userId=2d956538-2aa3-4bb2-9852-a742bffe17e2
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81">取消喜欢的艺术品</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/my/commodity/del
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;,
+  &quot;commodityId&quot;: &quot;6277c751-5748-4f4b-ac4f-de94ac39c60d&quot;
+}
+</div></code></pre>
+<h6 id="%E5%8F%96%E6%B6%88%E5%96%9C%E6%AC%A2%E6%89%80%E6%9C%89%E7%9A%84%E8%89%BA%E6%9C%AF%E5%93%81">取消喜欢所有的艺术品</h6>
+<pre class="hljs"><code><div>POST {{baseUrl}}/api/my/commodity/delAll
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  &quot;userId&quot;: &quot;2d956538-2aa3-4bb2-9852-a742bffe17e2&quot;
+}
+</div></code></pre>
+<h3 id="%E8%89%BA%E6%9C%AF%E5%93%81">艺术品</h3>
+<h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E5%88%97%E8%A1%A8">艺术品列表</h6>
+<pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity
+Authorization: Bearer {{token}}
+{
+  currentPage: 1,
+  pageSize: 10
+}
+</div></code></pre>
+<h6 id="%E6%90%9C%E7%B4%A2%E8%89%BA%E6%9C%AF%E5%93%81">搜索艺术品</h6>
+<pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/search
+Authorization: Bearer {{token}}
+{
+  name: '名称',
+  desc: '描述',
+  price: {&quot;min&quot;:&quot;最小价格&quot;,&quot;max&quot;:&quot;最大价格&quot;}
+  width: {&quot;min&quot;:&quot;最小宽度&quot;,&quot;max&quot;:&quot;最大宽度&quot;}
+  height: {&quot;min&quot;:&quot;最小高度&quot;,&quot;max&quot;:&quot;最大高度&quot;}
+  colors: {&quot;start&quot;:&quot;开始颜色&quot;,&quot;end&quot;:&quot;结束颜色&quot;},
+  sellerId: '艺术家id',
+  shapeId: '形状id',
+  themeId: '主题id',
+  categoryId: '类别id',
+  techniqueId: '手法id',
+  state: '状态',
+  hots: false, // 是否最热
+  news: false, // 是否最新
+  currentPage: 1,
+  pageSize: 10,
+}
+
+</div></code></pre>
+<h4 id="%E8%89%BA%E6%9C%AF%E5%93%81%E9%80%89%E9%A1%B9">艺术品选项</h4>
+<h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E5%BD%A2%E7%8A%B6">艺术品形状</h6>
+<pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/shape
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E4%B8%BB%E9%A2%98">艺术品主题</h6>
+<pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/theme
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E7%B1%BB%E5%88%AB">艺术品类别</h6>
+<pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/category
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E6%89%8B%E6%B3%95">艺术品手法</h6>
+<pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/technique
+Authorization: Bearer {{token}}
+</div></code></pre>
+<h1 id="%E6%8E%A5%E5%8F%A3%E7%A4%BA%E4%BE%8B">接口示例</h1>
+<pre class="hljs"><code><div>import axios from 'axios'
+
+export function register ({commit}, form) {
+  return axios.post('api/auth/register', form)
+    .then(response =&gt; {
+      commit('login', {token: response.data.token, user: response.data.user})
+      setAxiosHeaders(response.data.token)
+    })
+}
+
+function setAxiosHeaders (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
+</div></code></pre>
+
+</body>
+</html>

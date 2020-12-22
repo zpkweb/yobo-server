@@ -1,5 +1,5 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPriceServer } from '../../base/commodity/attribute/Price';
+import { BaseCommodityPriceServer } from '../../base/commodity/attribute/price';
 
 @Provide()
 export class CommodityAttributePrice {
