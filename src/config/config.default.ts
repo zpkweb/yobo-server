@@ -1,4 +1,6 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
+// import { readdirSync } from 'fs';
+// import { fileURLToPath } from 'url';
 // import * as path from 'path';
 export type DefaultConfig = PowerPartial<EggAppConfig>;
 
@@ -48,16 +50,7 @@ export default (appInfo: EggAppInfo) => {
     domainWhiteList: [ 'http://localhost:7001', 'http://localhost:3000' ],
   };
 
-  config.orm = {
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "root",
-    "password": "root1234",
-    "database": "yobo",
-    "synchronize": true,
-    "logging": false
-  }
+
 
 
   config.view = {
@@ -95,14 +88,29 @@ export default (appInfo: EggAppInfo) => {
     defaultLocale: 'zh-CN',
   };
 
-  config.redis = {
-    client: {
-      port: 6379,          // Redis port
-      host: '127.0.0.1',   // Redis host
-      password: null,
-      db: 0,
-    },
+
+  config.orm = {
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "root1234",
+    "database": "yobo",
+    "synchronize": true,
+    "logging": false
   }
+
+
+
+
+  // config.redis = {
+  //   client: {
+  //     host: '127.0.0.1',   // Redis host
+  //     port: 6379,          // Redis port
+  //     password: null,
+  //     db: 0,
+  //   },
+  // }
 
   // config.onerror= {
   //   all(err, ctx) {

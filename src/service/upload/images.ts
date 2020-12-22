@@ -2,7 +2,8 @@ import { Provide, Inject, Config } from "@midwayjs/decorator";
 import { Context } from "egg";
 
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
+import * as path from 'path';
 const sendToWormhole = require('stream-wormhole');
 
 @Provide()

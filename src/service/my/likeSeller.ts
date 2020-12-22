@@ -1,9 +1,8 @@
-import { Inject } from "@midwayjs/decorator";
-import { provide } from "@midwayjs/web";
+import { Inject, Provide } from "@midwayjs/decorator";
 import { BaseMyLikeSellerServer } from "../base/my/likeSeller";
 import { UserService } from "../user/user";
 import { SellerService } from "../user/seller";
-@provide()
+@Provide()
 export class MyLikeSellerService {
 
   @Inject()

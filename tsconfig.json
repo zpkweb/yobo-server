@@ -19,7 +19,7 @@
     "paths": {
       "src/*": ["src/*"],
       "src/service/*": ["src/service/*"]
-    },
+    }
   },
   "include": ["src"],
   "exclude": [

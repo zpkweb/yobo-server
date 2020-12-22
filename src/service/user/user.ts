@@ -1,4 +1,4 @@
-import { Provide, Plugin, Config, Inject } from '@midwayjs/decorator';
+import { Provide, Config, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
@@ -11,9 +11,6 @@ import { BaseUserServer } from '../base/user/user';
 
 @Provide()
 export class UserService{
-
-  @Plugin()
-  redis;
 
   @Config('email')
   email;
@@ -243,11 +240,13 @@ export class UserService{
     });
 
     if(data.messageId){
-      await this.redis.set(`emailCode-${payload.userId}`, payload.code)
+      // await this.redis.set(`emailCode-${payload.userId}`, payload.code)
+      global[`emailCode-${payload.userId}`] = payload.code
       setTimeout(() => {
-        this.redis.del(`emailCode-${payload.userId}`).then((results) => {
-          console.log("del", results)
-        });
+        // this.redis.del(`emailCode-${payload.userId}`).then((results) => {
+        //   console.log("del", results)
+        // });
+        global[`emailCode-${payload.userId}`] = null;
       }, payload.codeTime)
       return {
         success: true,
@@ -266,8 +265,9 @@ export class UserService{
    * @param payload
    */
   async passwordRetrieveCodeVerify(payload) {
-    const redisEmailCode = await this.redis.get(`emailCode-${payload.userId}`);
-    if(redisEmailCode && redisEmailCode === payload.code){
+    // const emailCode = await this.redis.get(`emailCode-${payload.userId}`);
+    const emailCode = global[`emailCode-${payload.userId}`];
+    if(emailCode && emailCode === payload.code){
       // 验证成功
       return {
         success: true,

@@ -26,8 +26,7 @@ export class UserController {
   @Config('jwt')
   jwtConfig;
 
-  @Plugin()
-  redis;
+
   /**
    * 查找个人信息
    */

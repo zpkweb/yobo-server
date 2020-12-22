@@ -1,5 +1,6 @@
 // configuration.ts
 import { Configuration } from '@midwayjs/decorator';
+// import { ILifeCycle, IMidwayContainer } from '@midawyjs/core';
 import * as swagger from '@midwayjs/swagger';
 
 @Configuration({
@@ -8,9 +9,23 @@ import * as swagger from '@midwayjs/swagger';
     swagger
   ]
 })
+
 export class ContainerConfiguratin {
 
 }
+
+
+// export class ContainerConfiguratin implements ILifeCycle {
+//   // @Inject()
+//   // identityService: IdentityService;
+
+//   async onReady(container: IMidwayContainer): Promise<void> {
+//     console.log("onReady", container)
+
+//   }
+// }
+
+
 
 
 
