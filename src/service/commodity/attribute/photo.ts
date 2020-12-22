@@ -1,5 +1,5 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPhotoServer } from '../../base/commodity/attribute/Photo';
+import { BaseCommodityPhotoServer } from '../../base/commodity/attribute/photo';
 
 @Provide()
 export class CommodityAttributePhoto {
