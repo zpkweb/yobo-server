@@ -47,9 +47,14 @@ export default (appInfo: EggAppInfo) => {
       enable: false,
     },
     // 跨域白名单
-    domainWhiteList: [ 'http://localhost:7001', 'http://localhost:3000' ],
+    // domainWhiteList: [ 'http://localhost:7001', 'http://localhost:3000' ],
   };
 
+config.cors = {
+  origin: '*', //允许所有跨域访问，注释掉则允许上面 白名单 访问
+  credentials: true, // 允许跨域请求携带cookies
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
+}
 
 
 

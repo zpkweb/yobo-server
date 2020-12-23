@@ -21,7 +21,12 @@ export class IdentityListService {
     for (let item of payload) {
       let identity:any = await this.baseIdentityListServer.baseRetrieveIdentityList(item);
       if (!identity) {
-        let newIdentity = await this.baseIdentityListServer.baseCreateIdentityList(item)
+        let newIdentity = await this.baseIdentityListServer.baseCreateIdentityList({
+          "name": item.name || '',
+          "ename": item.ename || '',
+          "index": item.index || '',
+          "menu": item.menu || ''
+        })
         if (!newIdentity.identifiers[0].id) {
           return {
             success: false,

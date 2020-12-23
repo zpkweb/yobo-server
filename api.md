@@ -50,7 +50,11 @@
 # 接口配置
 
 ```base
+  // 本地环境
   @baseUrl = http://192.168.0.67:7001
+  // demo环境
+  @baseUrl = http://81.70.62.235:7001
+
   @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEzIiwidXNlcklkIjoiOTA3ZTNhYjItZDg2OC00OGU0LThlN2MtYzFiMjdjNTI5OTM1IiwibmFtZSI6InRlc3QiLCJlbWFpbCI6IiIsInBob25lIjoiMTMiLCJpZGVudGl0eXMiOlt7ImlkIjoiMTMiLCJpZGVudGl0eUlkIjoiYTAxMWMyMWUtYzU0MC00ZGFmLTgyMTYtN2ZjNTNiOGIwZGYzIiwibmFtZSI6IueUqOaItyIsImluZGV4Ijo4MH1dLCJpYXQiOjE2MDYzNjY3ODR9.VzGR0tr8xKMl9I3x6xt_3LlA8nAoEhYp9ybfKIOg5yI
 ```
 多语言

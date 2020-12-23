@@ -25,8 +25,9 @@ export class UserLoginController {
   // 注册成为普通用户
   @Post('/register')
   async register(@Body(ALL) registerBody) {
-
+    console.log("register", registerBody)
     let data:any =  await this.userRegisterService.registerUser(registerBody);
+    console.log("register data", data)
     if(data.success){
       data.data.token = await this.jwt.sign({
         ...data,

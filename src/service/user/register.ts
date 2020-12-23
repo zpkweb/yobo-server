@@ -105,6 +105,9 @@ export class UserRegisterService {
       case 'admin':
         adminRegister = await this.createAdmin(payload);
         break;
+      case 'superAdmin':
+        adminRegister = await this.createSuperAdmin(payload);
+        break;
     }
     return adminRegister;
 
@@ -168,6 +171,22 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 2,
+      name: payload.name || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: payload.password || ''
+    }, payload));
+  }
+
+
+  /**
+   * 注册成为超级管理员 2
+   * @param payload
+   */
+  async createSuperAdmin(payload) {
+    return await this.register(Object.assign({}, {
+      sourceType: 'superAdmin',
+      identityIndex: 1,
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
