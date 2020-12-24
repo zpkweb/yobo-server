@@ -22,7 +22,8 @@ export class ServerUserSellerController {
   @Config('jwt')
   jwtConfig;
 
-
+  @Config('pagination')
+  pagination;
 
   // 获取商家详细信息
   @Get()
@@ -53,9 +54,21 @@ export class ServerUserSellerController {
 
   // 艺术家搜索
   @Get('/search')
-  async search(@Query(ALL) searchQuery) {
-    console.log('search', searchQuery)
-    return await this.sellerService.searchSeller(searchQuery);
+  async search(@Query(ALL) searchParams) {
+    console.log('search', searchParams)
+    // return await this.sellerService.searchSeller(searchQuery);
+    const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const data:any = await this.sellerService.searchSeller({
+      ...searchParams,
+      pageSize: pageSize,
+      currentPage: currentPage,
+    });
+    if(data.success){
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
+    }
+    return data;
   }
 
   // 删除艺术家

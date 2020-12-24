@@ -94,13 +94,15 @@ export class BaseSellerServer {
    * @param payload
    * Seller
    */
-  async baseRetrieveSellerAll() {
+  async baseRetrieveSellerAll(payload) {
     return await this.userSellerEntity
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
       .leftJoinAndSelect('seller.metadata', 'metadata')
       .addSelect('seller.createdDate')
-      .getMany();
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
   }
 
   /**
@@ -122,7 +124,9 @@ export class BaseSellerServer {
       .andWhere("seller.state like :state", { state: `%${payload.state}%` })
       // .andWhere("user.email like :email", { email: `%${payload.email}%` })
       // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
-      .getMany();
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
   }
 
   /**

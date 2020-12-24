@@ -12,7 +12,7 @@ export class AuthorizeMiddleware implements IWebMiddleware {
 
   resolve() {
     return async (ctx: Context, next: IMidwayWebNext) => {
-      console.log("middleware", ctx.request.body)
+      // console.log("middleware", ctx.request.body)
       const bearerHeader = ctx.req.headers['authorization'];
       if(typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(' ');

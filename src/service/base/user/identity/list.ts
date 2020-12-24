@@ -21,8 +21,10 @@ export class BaseIdentityListServer {
       .insert()
       .into(UserIdentityListEntity)
       .values({
-        name: payload.name,
-        ename: payload.ename,
+        'zh-cn': payload['zh-cn'],
+        'en-us': payload['en-us'],
+        'ja-jp': payload['ja-jp'],
+        'fr-fr': payload['fr-fr'],
         menu: payload.menu,
         index: payload.index
       })
@@ -41,8 +43,10 @@ export class BaseIdentityListServer {
     console.log("baseRetrieveIdentityList", payload)
     return await this.userIdentityListEntity
     .createQueryBuilder('identityList')
-    .where("identityList.name = :name", { name: payload.name })
-    .orWhere("identityList.ename = :ename", { ename: payload.ename })
+    .where("identityList.zh-cn = :zhcn", { zhcn: payload['zh-cn'] })
+    .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
+    .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
+    .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
     .orWhere("identityList.index = :index", { index: payload.index })
     .orWhere("identityList.id = :id", { id: payload.id })
     .getOne();
@@ -63,8 +67,10 @@ export class BaseIdentityListServer {
     .createQueryBuilder()
     .update(UserIdentityListEntity)
     .set({
-      name: payload.name,
-      ename: payload.ename,
+      'zh-cn': payload['zh-cn'],
+      'en-us': payload['en-us'],
+      'ja-jp': payload['ja-jp'],
+      'fr-fr': payload['fr-fr'],
       menu: payload.menu,
       index: payload.index
     })
@@ -84,8 +90,10 @@ export class BaseIdentityListServer {
     return await this.userIdentityListEntity
     .createQueryBuilder()
     .delete()
-    .where("name = :name", { name: payload.name })
-    .orWhere("ename = :ename", { ename: payload.ename })
+    .where("identityList.zh-cn = :zhcn", { zhcn: payload['zh-cn'] })
+    .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
+    .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
+    .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
     .orWhere("index = :index", { index: payload.index })
     .orWhere("id = :id", { id: payload.id })
     .execute();

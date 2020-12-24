@@ -274,18 +274,47 @@ export class SellerService {
   async searchSeller(payload) {
     let seller: any;
     if(payload && Object.keys(payload).length){
-      seller = await this.baseSellerServer.baseSearchSeller({
-        firstname: payload.firstname || '',
-        lastname: payload.lastname || '',
-        label: payload.label || '',
-        gender: payload.gender || '',
-        country: payload.country || '',
-        state: payload.state || '',
-        // email: payload.email || '',
-        // phone: payload.phone || '',
-      });
+      // seller = await this.baseSellerServer.baseSearchSeller(payload);
+      let result = await this.baseSellerServer.baseSearchSeller(payload);
+
+      let data = result[0];
+      let total = result[1];
+      if (data) {
+        return {
+          data: {
+            list: data,
+            total
+          },
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
     }else{
-      seller = await this.baseSellerServer.baseRetrieveSellerAll();
+      // seller = await this.baseSellerServer.baseRetrieveSellerAll(payload);
+      let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
+      console.log("searchSeller", result)
+      let data = result[0];
+      let total = result[1];
+      if (data) {
+        return {
+          data: {
+            list: data,
+            total
+          },
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
     }
 
     if(seller){

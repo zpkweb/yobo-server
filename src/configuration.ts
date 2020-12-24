@@ -21,32 +21,46 @@ export class ContainerConfiguration implements ILifeCycle {
 
     if(identityList.data && !identityList.data.length){
       await this.identityListService.createIdentityList([{
-        "name": "超级管理员",
-        "ename": "superAdmin",
+        "zh-cn": "超级管理员",
+        "en-us": "superAdmin",
+        "ja-jp": "スーパーアドミニストレーター",
+        "fr-fr": "Super administrateur",
         "index": 1
       },{
-        "name": "管理员",
-        "ename": "admin",
+        "zh-cn": "管理员",
+        "en-us": "admin",
+        "ja-jp": "管理者",
+        "fr-fr": "administrateur",
         "index": 2
       },{
-        "name": "客服",
-        "ename": "customerService",
+        "zh-cn": "客服",
+        "en-us": "customerService",
+        "ja-jp": "顧客サービス",
+        "fr-fr": "Service Clients",
         "index": 3
       },{
-        "name": "艺术家",
-        "ename": "seller",
+        "zh-cn": "艺术家",
+        "en-us": "seller",
+        "ja-jp": "アーティスト",
+        "fr-fr": "artiste",
         "index": 5
       },{
-        "name": "会员",
-        "ename": "member",
+        "zh-cn": "会员",
+        "en-us": "member",
+        "ja-jp": "メンバー",
+        "fr-fr": "membre",
         "index": 70
       },{
-        "name": "用户",
-        "ename": "ordinary",
+        "zh-cn": "用户",
+        "en-us": "ordinary",
+        "ja-jp": "ユーザー",
+        "fr-fr": "utilisateur",
         "index": 80
       },{
-        "name": "第三方用户",
-        "ename": "thirdParty",
+        "zh-cn": "第三方用户",
+        "en-us": "thirdParty",
+        "ja-jp": "サードパーティユーザー",
+        "fr-fr": "Utilisateur tiers",
         "index": 90
       }])
     }
@@ -68,49 +82,3 @@ export class ContainerConfiguration implements ILifeCycle {
 
 
 
-
-
-/*
-// configuration.ts
-import { Configuration, Inject } from '@midwayjs/decorator';
-import { ILifeCycle, IMidwayContainer } from '@midawyjs/core';
-import { IdentityService } from 'src/service/user/identity';
-
-@Configuration({
-  imports: [
-    '@midwayjs/orm'  					// 加载 orm 组件
-  ]
-})
-export class ContainerConfiguratin implements ILifeCycle {
-  @Inject()
-  identityService: IdentityService;
-
-  async onReady(container: IMidwayContainer): Promise<void> {
-    console.log("onReady", container)
-
-    await this.identityService.createIdentityList([{
-      "name": "超级管理员",
-      "index": 1
-    },{
-      "name": "管理员",
-      "index": 2
-    },{
-      "name": "客服",
-      "index": 3
-    },{
-      "name": "商家",
-      "index": 5
-    },{
-      "name": "会员",
-      "index": 70
-    },{
-      "name": "用户",
-      "index": 80
-    },{
-      "name": "第三方用户",
-      "index": 90
-    }])
-
-  }
-}
-*/

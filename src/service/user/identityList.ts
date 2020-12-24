@@ -1,14 +1,8 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository } from "typeorm";
 import { BaseIdentityListServer } from "../base/user/identity/list";
-import { UserIdentityListEntity } from 'src/entity/user/identity/list';
-
 @Provide()
 export class IdentityListService {
 
-  @InjectEntityModel(UserIdentityListEntity)
-  userIdentityListEntity: Repository<UserIdentityListEntity>;
 
   @Inject()
   baseIdentityListServer: BaseIdentityListServer;
@@ -22,8 +16,10 @@ export class IdentityListService {
       let identity:any = await this.baseIdentityListServer.baseRetrieveIdentityList(item);
       if (!identity) {
         let newIdentity = await this.baseIdentityListServer.baseCreateIdentityList({
-          "name": item.name || '',
-          "ename": item.ename || '',
+          "zh-cn": item['zh-cn'] || '',
+          "en-us": item['en-us'] || '',
+          "ja-jp": item['ja-jp'] || '',
+          "fr-fr": item['fr-fr'] || '',
           "index": item.index || '',
           "menu": item.menu || ''
         })
@@ -101,8 +97,10 @@ export class IdentityListService {
   async updateIdentityList(payload) {
     console.log("updateIdentityList", payload)
     const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
-      name: payload.name || '',
-      ename: payload.ename || '',
+      "zh-cn": payload['zh-cn'] || '',
+      "en-us": payload['en-us'] || '',
+      "ja-jp": payload['ja-jp'] || '',
+      "fr-fr": payload['fr-fr'] || '',
       index: payload.index || '',
       id: payload.id || ''
     });
@@ -115,8 +113,10 @@ export class IdentityListService {
     }
 
     const newIdentityList = await this.baseIdentityListServer.baseUpdateIdentityList(Object.assign({
-      name: identityList.name,
-      ename: identityList.ename,
+      "zh-cn": identityList['zh-cn'] || '',
+      "en-us": identityList['en-us'] || '',
+      "ja-jp": identityList['ja-jp'] || '',
+      "fr-fr": identityList['fr-fr'] || '',
       index: identityList.index,
       menu: identityList.menu,
       id: identityList.id
@@ -124,8 +124,10 @@ export class IdentityListService {
     console.log("newIdentityList", newIdentityList)
     if(newIdentityList.affected){
       const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
-        name: payload.name || '',
-        ename: payload.ename || '',
+        "zh-cn": payload['zh-cn'] || '',
+        "en-us": payload['en-us'] || '',
+        "ja-jp": payload['ja-jp'] || '',
+        "fr-fr": payload['fr-fr'] || '',
         index: payload.index || '',
         id: payload.id || ''
       });

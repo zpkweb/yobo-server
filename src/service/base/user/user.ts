@@ -50,8 +50,10 @@ export class BaseUserServer {
       .insert()
       .into(UserIdentityEntity)
       .values({
-        name: payload.name,
-        ename: payload.ename,
+        'zh-cn': payload['zh-cn'],
+        'en-us': payload['en-us'],
+        'ja-jp': payload['ja-jp'],
+        'fr-fr': payload['fr-fr'],
         index: payload.index
       })
       .execute()
@@ -65,7 +67,10 @@ export class BaseUserServer {
       .createQueryBuilder()
       .delete()
       .where("userId = :userId", { userId: payload.userId })
-      .andWhere("ename = :ename", { ename: payload.identity })
+      .orWhere("identityList.zh-cn = :zhcn", { zhcn: payload['zh-cn'] })
+      .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
+      .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
+      .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
       .execute();
     }
 
@@ -205,23 +210,28 @@ export class BaseUserServer {
   async baseSearchUser(payload) {
     return await this.userEntity
       .createQueryBuilder('user')
+      .leftJoinAndSelect('user.identitys', 'identity')
       .addSelect('user.createdDate')
       .where("user.name like :name", { name: `%${payload.name}%` })
       .andWhere("user.email like :email", { email: `%${payload.email}%` })
       .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
-      .getMany();
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
 
   }
 
   async baseSearchUserIdentity(payload) {
     return await this.userEntity
       .createQueryBuilder('user')
-      .innerJoinAndSelect('user.identitys', 'identity', 'identity.ename like :ename ', { ename: `%${payload.identity}%` })
+      .innerJoinAndSelect('user.identitys', 'identity', 'identity.en-us like :enus ', { enus: `%${payload.identity}%` })
       .addSelect('user.createdDate')
       .where("user.name like :name", { name: `%${payload.name}%` })
       .andWhere("user.email like :email", { email: `%${payload.email}%` })
       .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
-      .getMany();
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
 
   }
 

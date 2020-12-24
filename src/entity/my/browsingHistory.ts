@@ -43,7 +43,8 @@ export class MyBrowsingHistoryEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.browsingHistory, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     referencedColumnName: 'userId'

@@ -18,6 +18,9 @@ export class ServerUserController {
   @Config('jwt')
   jwtConfig;
 
+  @Config('pagination')
+  pagination;
+
   // 删除用户
   @Get('/remove')
   @Get('/delete')
@@ -42,10 +45,24 @@ export class ServerUserController {
 
   // 搜索用户
   @Get('/search')
-  async searchUser(@Query(ALL) searchQuery) {
-    console.log("ctx", searchQuery)
+  async searchUser(@Query(ALL) searchParams) {
+    console.log("ctx", searchParams)
 
-    return await this.userService.search(searchQuery);
+    // return await this.userService.search(searchParams);
+
+    const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const data:any = await this.userService.search({
+      ...searchParams,
+      pageSize: pageSize,
+      currentPage: currentPage,
+    });
+    if(data.success){
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
+    }
+    return data;
+
   }
 
   // 删除用户身份

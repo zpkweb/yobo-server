@@ -7,7 +7,6 @@ import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 import { UserSellerStudioEntity } from 'src/entity/user/seller/studio';
 import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
-import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
 import { BaseUserServer } from "../base/user/user";
@@ -34,8 +33,6 @@ export class UserRegisterService {
   @InjectEntityModel(UserIdentityEntity)
   userIdentityEntity: Repository<UserIdentityEntity>;
 
-  @InjectEntityModel(UserIdentityListEntity)
-  userIdentityListEntity: Repository<UserIdentityListEntity>;
 
   @InjectEntityModel(UserAdminEntity)
   userAdminEntity: Repository<UserAdminEntity>;

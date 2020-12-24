@@ -12,13 +12,18 @@ export class UserIdentityListEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  // 身份名称
+  // 语言
   @Column()
-  name: string;
+  'zh-cn': string;
 
-  // 英文身份名称
   @Column()
-  ename: string;
+  'en-us': string;
+
+  @Column()
+  'ja-jp': string;
+
+  @Column()
+  'fr-fr': string;
 
   // 菜单
   @Column({

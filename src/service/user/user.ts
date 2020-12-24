@@ -2,8 +2,6 @@ import { Provide, Config, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentityEntity } from 'src/entity/user/identity/identity';
-import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { UserAddressEntity } from 'src/entity/user/address';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
@@ -17,13 +15,6 @@ export class UserService{
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
-
-
-  @InjectEntityModel(UserIdentityEntity)
-  userIdentityEntity: Repository<UserIdentityEntity>;
-
-  @InjectEntityModel(UserIdentityListEntity)
-  userIdentityListEntity: Repository<UserIdentityListEntity>;
 
   @InjectEntityModel(UserAddressEntity)
   userAddressEntity: Repository<UserAddressEntity>;
@@ -51,9 +42,45 @@ export class UserService{
       console.log(isParams)
       if(isParams){
         if(payload['identity']){
-          user = await this.baseUserServer.baseSearchUserIdentity(payload)
+          // user = await this.baseUserServer.baseSearchUserIdentity(payload)
+          let result = await this.baseUserServer.baseSearchUserIdentity(payload);
+          let data = result[0];
+          let total = result[1];
+          if (data) {
+            return {
+              data: {
+                list: data,
+                total
+              },
+              success: true,
+              code: 10009
+            }
+          } else {
+            return {
+              success: false,
+              code: 10010
+            }
+          }
         }else{
-          user = await this.baseUserServer.baseSearchUser(payload)
+          // user = await this.baseUserServer.baseSearchUser(payload)
+          let result = await this.baseUserServer.baseSearchUser(payload);
+          let data = result[0];
+          let total = result[1];
+          if (data) {
+            return {
+              data: {
+                list: data,
+                total
+              },
+              success: true,
+              code: 10009
+            }
+          } else {
+            return {
+              success: false,
+              code: 10010
+            }
+          }
         }
 
       }else{
