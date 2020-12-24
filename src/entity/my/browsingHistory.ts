@@ -52,7 +52,8 @@ export class MyBrowsingHistoryEntity {
 
   // 关联商品
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.browsingHistory, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     referencedColumnName: 'commodityId'

@@ -54,7 +54,8 @@ export class MyLikeSellerEntity {
 
   // 关联商家
   @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.likeSellers, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     referencedColumnName: 'sellerId'

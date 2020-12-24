@@ -53,7 +53,8 @@ export class MyLikeCommodityEntity {
 
   // 关联商品
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.likeCommoditys, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     referencedColumnName: 'commodityId'
