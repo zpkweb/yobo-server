@@ -272,10 +272,7 @@ export class SellerService {
    * @param payload
    */
   async searchSeller(payload) {
-    let seller: any;
-    if(payload && Object.keys(payload).length){
-      // seller = await this.baseSellerServer.baseSearchSeller(payload);
-      let result = await this.baseSellerServer.baseSearchSeller(payload);
+    let result = await this.baseSellerServer.baseSearchSeller(payload);
 
       let data = result[0];
       let total = result[1];
@@ -294,44 +291,33 @@ export class SellerService {
           code: 10010
         }
       }
-    }else{
-      // seller = await this.baseSellerServer.baseRetrieveSellerAll(payload);
-      let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
-      console.log("searchSeller", result)
-      let data = result[0];
-      let total = result[1];
-      if (data) {
-        return {
-          data: {
-            list: data,
-            total
-          },
-          success: true,
-          code: 10009
-        }
-      } else {
-        return {
-          success: false,
-          code: 10010
-        }
-      }
-    }
-
-    if(seller){
-      return {
-        data: seller,
-        success: true,
-        code : 10009
-      }
-    }else{
-      return {
-        success: false,
-        code : 10010
-      }
-    }
 
   }
 
+  async retrieveSellerAll(payload) {
+    let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
+      console.log("searchSeller", result)
+      let data = result[0];
+      let total = result[1];
+      // if(payload.isLocale){
+      //   data = this.filter(payload.locale, data)
+      // }
+      if (data) {
+        return {
+          data: {
+            list: data,
+            total
+          },
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
+  }
   /**
    * 查找艺术家是否存在
    * @param sellerId

@@ -28,11 +28,13 @@ export class BaseUserServer {
    * password
    */
   async baseCreateUser(payload) {
+    console.log("baseCreateUser", payload)
     return await this.userEntity
       .createQueryBuilder()
       .insert()
       .into(UserEntity)
       .values({
+        avatar: payload.avatar,
         name: payload.name,
         phone: payload.phone,
         email: payload.email,

@@ -142,9 +142,11 @@ export class CommodityEntity {
 
   // 关联商家
   @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.commoditys, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
+    name: 'sellerId',
     referencedColumnName: 'sellerId'
   })
   seller: UserSellerEntity;

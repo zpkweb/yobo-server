@@ -3,6 +3,7 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserSellerEntity } from "src/entity/user/seller/seller";
 import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
+import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
 
 @Provide()
 export class BaseSellerServer {
@@ -13,7 +14,8 @@ export class BaseSellerServer {
   @InjectEntityModel(UserSellerMetadataEntity)
   userSellerMetadataEntity: Repository<UserSellerMetadataEntity>
 
-
+  @InjectEntityModel(CommodityPhotoEntity)
+  commodityPhotoEntity: Repository<CommodityPhotoEntity>
 
   /**
    * 增加
@@ -26,6 +28,8 @@ export class BaseSellerServer {
       .into(UserSellerEntity)
       .values({
         state: payload.state,
+        type: payload.type,
+        typeName: payload.typeName,
         firstname: payload.firstname,
         lastname: payload.lastname,
         label: payload.label,
@@ -99,6 +103,9 @@ export class BaseSellerServer {
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
       .leftJoinAndSelect('seller.metadata', 'metadata')
+      .leftJoinAndSelect('seller.commoditys', 'commoditys')
+      .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
+      // .leftJoinAndMapMany('seller.commodityPhotos', '')
       .addSelect('seller.createdDate')
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
@@ -114,7 +121,7 @@ export class BaseSellerServer {
     console.log("baseSearchSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder('seller')
-      // .leftJoinAndSelect('seller.user', 'user')
+      .leftJoinAndSelect('seller.metadata', 'metadata')
       .addSelect('seller.createdDate')
       .where("seller.firstname like :firstname", { firstname: `%${payload.firstname}%` })
       .andWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })

@@ -306,12 +306,7 @@ export class UserRegisterService {
 
       }else{
         // 创建用户
-        let newUser: any = await this.baseUserServer.baseCreateUser(Object.assign({
-          name: '',
-          email: '',
-          phone: '',
-          password: ''
-        }, payload));
+        let newUser: any = await this.baseUserServer.baseCreateUser(payload);
         if(newUser.generatedMaps[0].userId){
           return {
             userId: newUser.generatedMaps[0].userId,
@@ -405,6 +400,8 @@ export class UserRegisterService {
       // 添加商家信息
       const seller = await this.baseSellerServer.baseCreateSeller({
         state: payload.state,
+        type: payload.type || 0,
+        typeName: payload.typeName || '',
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',
         label: payload.label || '',

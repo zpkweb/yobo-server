@@ -9,7 +9,7 @@ import { CommodityOptionsCategoryService } from './options/category';
 import { CommodityOptionsShapeService } from './options/shape';
 import { CommodityOptionsTechniqueService } from './options/technique';
 import { CommodityOptionsThemeService } from './options/theme';
-
+import { CommentService } from './comment'
 @Provide()
 export class CommodityService {
 
@@ -42,6 +42,9 @@ export class CommodityService {
 
   @Inject()
   commodityOptionsThemeService: CommodityOptionsThemeService;
+
+  @Inject()
+  commentService: CommentService;
 
   // 创建
   async create(payload) {
@@ -630,4 +633,10 @@ export class CommodityService {
     return data;
   }
 
+  /**
+   * 商品评价
+   */
+    async commodityComment(payload) {
+      return await this.commentService.home(payload);
+    }
 }

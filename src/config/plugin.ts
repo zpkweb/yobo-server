@@ -1,4 +1,6 @@
 import { EggPlugin } from 'egg';
+
+//目录别名映射
 import 'tsconfig-paths/register';
 
 export default {
@@ -18,5 +20,9 @@ export default {
   redis: {
     enable: true,
     package: 'egg-redis'
-  }
+  },
+  // io: {
+  //   enable: true,
+  //   package: 'egg-socket.io',
+  // }
 } as EggPlugin;

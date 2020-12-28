@@ -54,12 +54,15 @@ export class BaseCommodityServer {
    * 选项：shape theme category technique
    */
     async BaseRelationSet(payload) {
+      console.log("BaseRelationSet", payload)
+
       await this.commodityEntity
         .createQueryBuilder()
         .relation(CommodityEntity, payload.name)
         .of(payload.of)
         .set(payload.set);
     }
+
     async BaseRelationAdd(payload) {
       await this.commodityEntity
         .createQueryBuilder()
@@ -107,6 +110,7 @@ export class BaseCommodityServer {
       .leftJoinAndSelect('commodity.themes', 'theme')
       .leftJoinAndSelect('commodity.categorys', 'category')
       .leftJoinAndSelect('commodity.techniques', 'technique')
+      .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();

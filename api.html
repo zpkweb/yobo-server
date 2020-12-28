@@ -698,7 +698,6 @@ Authorization: Bearer {{token}}
 <h3 id="%E8%89%BA%E6%9C%AF%E5%93%81">艺术品</h3>
 <h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E5%88%97%E8%A1%A8">艺术品列表</h6>
 <pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity
-Authorization: Bearer {{token}}
 {
   currentPage: 1,
   pageSize: 10
@@ -706,7 +705,6 @@ Authorization: Bearer {{token}}
 </div></code></pre>
 <h6 id="%E6%90%9C%E7%B4%A2%E8%89%BA%E6%9C%AF%E5%93%81">搜索艺术品</h6>
 <pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/search
-Authorization: Bearer {{token}}
 {
   name: '名称',
   desc: '描述',
@@ -730,19 +728,15 @@ Authorization: Bearer {{token}}
 <h4 id="%E8%89%BA%E6%9C%AF%E5%93%81%E9%80%89%E9%A1%B9">艺术品选项</h4>
 <h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E5%BD%A2%E7%8A%B6">艺术品形状</h6>
 <pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/shape
-Authorization: Bearer {{token}}
 </div></code></pre>
 <h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E4%B8%BB%E9%A2%98">艺术品主题</h6>
 <pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/theme
-Authorization: Bearer {{token}}
 </div></code></pre>
 <h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E7%B1%BB%E5%88%AB">艺术品类别</h6>
 <pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/category
-Authorization: Bearer {{token}}
 </div></code></pre>
 <h6 id="%E8%89%BA%E6%9C%AF%E5%93%81%E6%89%8B%E6%B3%95">艺术品手法</h6>
 <pre class="hljs"><code><div>GET {{baseUrl}}/api/commodity/options/technique
-Authorization: Bearer {{token}}
 </div></code></pre>
 <h1 id="%E6%8E%A5%E5%8F%A3%E7%A4%BA%E4%BE%8B">接口示例</h1>
 <pre class="hljs"><code><div>import axios from 'axios'

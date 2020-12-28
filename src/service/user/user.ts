@@ -22,6 +22,10 @@ export class UserService{
   @Inject()
   baseUserServer: BaseUserServer;
 
+  async getUser() {
+    return 123;
+  }
+
   /**
    * 搜索用户通过：name, email, phone
    * @param payload

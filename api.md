@@ -330,7 +330,6 @@ Authorization: Bearer {{token}}
 ###### 艺术品列表
 ```base
 GET {{baseUrl}}/api/commodity
-Authorization: Bearer {{token}}
 {
   currentPage: 1,
   pageSize: 10
@@ -341,7 +340,6 @@ Authorization: Bearer {{token}}
 
 ```base
 GET {{baseUrl}}/api/commodity/search
-Authorization: Bearer {{token}}
 {
   name: '名称',
   desc: '描述',
@@ -368,25 +366,21 @@ Authorization: Bearer {{token}}
 ###### 艺术品形状
 ```base
 GET {{baseUrl}}/api/commodity/options/shape
-Authorization: Bearer {{token}}
 ```
 
 ###### 艺术品主题
 ```base
 GET {{baseUrl}}/api/commodity/options/theme
-Authorization: Bearer {{token}}
 ```
 
 ###### 艺术品类别
 ```base
 GET {{baseUrl}}/api/commodity/options/category
-Authorization: Bearer {{token}}
 ```
 
 ###### 艺术品手法
 ```base
 GET {{baseUrl}}/api/commodity/options/technique
-Authorization: Bearer {{token}}
 ```
 
 

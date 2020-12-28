@@ -6,6 +6,8 @@ import { LoginService } from 'src/service/user/login';
 @Controller('/', { tagName: '文档', description: 'api'})
 export class apiController {
 
+
+
   @Inject()
   loginService: LoginService;
 

@@ -34,6 +34,13 @@ export class UserSellerEntity {
   @Column()
   state: number;
 
+  // 类型：0:画家，1:雕塑家
+  @Column()
+  type: number;
+
+  @Column()
+  typeName: string;
+
   // 姓氏
   @Column()
   firstname: string;
@@ -68,6 +75,7 @@ export class UserSellerEntity {
 
   // 关联商家信息
   @OneToOne(type => UserSellerMetadataEntity, UserSellerMetadataEntity => UserSellerMetadataEntity.seller)
+
   metadata: UserSellerMetadataEntity;
 
   // 关联商家工作室
@@ -107,6 +115,7 @@ export class UserSellerEntity {
 
   // 关联商品
   @OneToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.seller)
+
   commoditys: CommodityEntity[];
 
   // 关联客服

@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { UserService } from 'src/service/user/user';
 import { SellerService } from 'src/service/user/seller';
@@ -44,39 +44,7 @@ export class UserController {
     return await this.userService.changePassword(changePasswordBody);
   }
 
-  /**
-   * 找回密码：发送验证码
-   * @param retrievePasswordBody
-   */
-  @Post('/password/retrieve/code/send')
-  async passwordRetrieveCodeSend(@Body(ALL) codeSendBody) {
-    const code = Math.random().toString().slice(-6);
 
-    return await this.userService.passwordRetrieveCodeSend({
-      sendMail: {
-        title: 'yobo-找回密码的验证码',
-        code,
-        codeTime: 1000*60*10,
-        codeTimeText: '10分钟内有效',
-      },
-      ...this.email,
-      ...codeSendBody
-    })
-
-  }
-
-  /**
-   * 找回密码：验证验证码
-   * @param retrievePasswordBody
-   */
-  @Post('/password/retrieve/code/verify')
-  async passwordRetrieveCodeVerify(@Body(ALL) codeVerifyBody) {
-
-    return await this.userService.passwordRetrieveCodeVerify({
-      ...codeVerifyBody
-    })
-
-  }
 
 
   /**
@@ -129,11 +97,6 @@ export class UserController {
     return await this.userService.addressRemove(addressBody);
   }
 
-  // 搜索商家
-  @Get('/seller/search')
-  async search(@Query(ALL) searchQuery) {
-    let data:any =  await this.sellerService.searchSeller(searchQuery);
-    return data;
-  }
+
 
 }

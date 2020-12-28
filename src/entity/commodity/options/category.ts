@@ -9,7 +9,7 @@ import { CommodityEntity } from '../commodity';
 @EntityModel('commodity_options_category')
 export class CommodityOptionsCategoryEntity {
 
-  // 商品形状 id
+  // 商品类别 id
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 

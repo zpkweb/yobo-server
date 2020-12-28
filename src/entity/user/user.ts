@@ -41,6 +41,10 @@ export class UserEntity {
   //   // this.userId = this.userId.replace('-', '')
   // }
 
+  // 头像
+  @Column()
+  avatar: string;
+
   // 姓名
   @Column()
   name: string;
