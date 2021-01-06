@@ -143,28 +143,14 @@ export class BaseUserServer {
 
 
   async baseRetrieveUser(payload) {
-    if(payload.name){
-      return await this.userEntity
+    return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
       .addSelect('user.createdDate')
       .where("user.name = :name", { name: payload.name })
+      .orWhere("user.email = :email", { email: payload.name })
+      .orWhere("user.phone = :phone", { phone: payload.name })
       .getOne();
-    }else if(payload.email){
-      return await this.userEntity
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      .addSelect('user.createdDate')
-      .where("user.email = :email", { email: payload.email })
-      .getOne();
-    }else if(payload.phone){
-      return await this.userEntity
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      .addSelect('user.createdDate')
-      .where("user.phone = :phone", { phone: payload.phone })
-      .getOne();
-    }
 
   }
 

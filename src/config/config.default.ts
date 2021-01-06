@@ -32,7 +32,7 @@ export default (appInfo: EggAppInfo) => {
   }
 
   config.host = {
-    origin: 'http://192.168.3.7:7001'
+    origin: 'http://127.0.0.1:7001'
   }
 
 

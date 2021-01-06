@@ -22,7 +22,7 @@ export class UploadImagesService {
     const stream = await ctx.getFileStream();
     // console.log("stream", stream)
     // 创建目录
-    fs.mkdirSync(`public/images/${stream.fields.type || 'other'}`, { recursive: true })
+    fs.mkdirSync(`public/images/${stream.fields.type || 'other'}`, { recursive: true });
     let filename = path.basename(stream.filename).split('.');
     const name = `public/images/${stream.fields.type || 'other'}/${filename[0]}-${new Date().getTime()}.${ filename[1] }`;
 

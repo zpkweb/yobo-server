@@ -60,7 +60,8 @@ export class UserRegisterService {
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
-      password: payload.password || ''
+      password: payload.password || '',
+      avatar: payload.avatar || ''
     }, payload));
   }
 
@@ -78,7 +79,8 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      state: 0
+      state: 0,
+      avatar: payload.avatar || ''
     }, payload));
 
   }
@@ -118,6 +120,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 80,
+      avatar: payload.avatar || '',
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
@@ -134,6 +137,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 5,
+      avatar: payload.avatar || '',
       name: payload.firstname + payload.lastname || '',
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
@@ -153,6 +157,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 3,
+      avatar: payload.avatar || '',
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
@@ -168,6 +173,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 2,
+      avatar: payload.avatar || '',
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
@@ -184,6 +190,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'superAdmin',
       identityIndex: 1,
+      avatar: payload.avatar || '',
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
@@ -202,6 +209,13 @@ export class UserRegisterService {
     // 判断用户是否存在
     const user:any = await this.hasUser(payload);
     console.log("user", user)
+    if(user.success) {
+      return {
+        data: user.data,
+        success: false,
+        code: 10201
+      };
+    }
 
     // 添加用户
     const newUser:any = await this.addUser(payload, user);
@@ -250,9 +264,12 @@ export class UserRegisterService {
 
 
     // 返回用户关联身份
-    if(user){
+    if(newUser.success){
+      // 获取用户
+      const user:any = await this.baseUserServer.baseRetrieveUser(payload)
+      console.log("register user", user)
       return {
-        data: newUser,
+        data: user,
         success: true,
         code : 10003
       }
