@@ -65,16 +65,18 @@ export class BaseCommodityOptionsShapeServer {
    */
   async BaseUpdate(payload) {
     console.log("BaseCommodityOptionsShapeUpdate", payload)
+    const { id, ...setData } = payload;
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder()
       .update(CommodityOptionsShapeEntity)
-      .set({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
-      .where("id = :id", { id: payload.id })
+      // .set({
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr']
+      // })
+      .set(setData)
+      .where("id = :id", { id: id })
       .execute();
   }
 

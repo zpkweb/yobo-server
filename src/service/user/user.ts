@@ -225,6 +225,8 @@ export class UserService{
     }
     const changeUser = await this.baseUserServer.baseUpdateUser({
       userId: user.userId,
+      avatar: user.avatar,
+      isApplyArtist: user.isApplyArtist,
       name: user.name,
       email: user.email,
       phone: user.phone,
@@ -337,6 +339,8 @@ export class UserService{
     }
     const userUpdate = await this.baseUserServer.baseUpdateUser({
       userId: user.userId,
+      avatar: payload.avatar || user.avatar,
+      isApplyArtist: payload.isApplyArtist || user.isApplyArtist,
       name: payload.name || user.name,
       email: payload.email || user.email,
       phone: payload.phone || user.phone,

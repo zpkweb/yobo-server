@@ -46,13 +46,12 @@ export class BaseCommodityBrowsingCountServer {
    */
   async BaseUpdate(payload) {
     console.log("BaseUpdate", payload)
+    const { commodityId, ...setData } = payload;
     return await this.commodityBrowsingCountEntity
       .createQueryBuilder()
       .update(CommodityBrowsingCountEntity)
-      .set({
-        count: payload.count
-      })
-      .where("commodityId = :commodityId", { commodityId: payload.commodityId })
+      .set(setData)
+      .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
 

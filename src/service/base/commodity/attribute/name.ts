@@ -74,16 +74,18 @@ export class BaseCommodityNameServer {
    */
   async BaseUpdate(payload) {
     console.log("BaseUpdate", payload)
+    const { commodityId, ...setData } = payload;
     return await this.commodityNameEntity
       .createQueryBuilder()
       .update(CommodityNameEntity)
-      .set({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
-      .where("commodityId = :commodityId", { commodityId: payload.commodityId })
+      // .set({
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr']
+      // })
+      .set(setData)
+      .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
 

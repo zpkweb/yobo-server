@@ -72,13 +72,12 @@ export class BaseCommodityPhotoServer {
    */
   async BaseUpdate(payload) {
     console.log("BaseUpdate", payload)
+    const { commodityId, ...setData } = payload;
     return await this.commodityPhotoEntity
       .createQueryBuilder()
       .update(CommodityPhotoEntity)
-      .set({
-        'src': payload['src']
-      })
-      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
+      .set(setData)
+      .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
 

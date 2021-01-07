@@ -41,6 +41,10 @@ export class UserEntity {
   //   // this.userId = this.userId.replace('-', '')
   // }
 
+  // 是否申请成为艺术家
+  @Column()
+  isApplyArtist: boolean;
+
   // 头像
   @Column()
   avatar: string;

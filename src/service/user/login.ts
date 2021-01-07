@@ -50,7 +50,7 @@ export class LoginService {
    */
   async login(payload) {
     // 查找用户
-    const user:any = await this.baseUserServer.baseRetrieveUser(payload)
+    const user:any = await this.baseUserServer.baseLoginUser(payload)
 
     if(!user){
       // 用户不存在

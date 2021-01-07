@@ -61,7 +61,8 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      avatar: payload.avatar || ''
+      avatar: payload.avatar || '',
+      isApplyArtist: false
     }, payload));
   }
 
@@ -70,6 +71,33 @@ export class UserRegisterService {
    * @param payload
    */
   async applySeller(payload) {
+
+    if(payload.userId) {
+      // 修改用户isApplyArtist为true
+      const changeUser = await this.baseUserServer.baseUpdateUser({
+        userId: payload.userId,
+        isApplyArtist: true
+      })
+
+      // 用户是否关联艺术家信息
+      const applySeller = await this.baseSellerServer.baseApplySeller(payload.userId);
+      console.log("applySeller", applySeller)
+      if(applySeller){
+        return {
+          success: false,
+          code: 10411
+        }
+      }
+
+      if(!changeUser.affected){
+        return {
+          success: false,
+          code : 10008
+        }
+      }
+    }
+
+
     return await this.register(Object.assign({}, {
       sourceType: 'user',
       identityIndex: 5,
@@ -80,7 +108,8 @@ export class UserRegisterService {
       email: payload.email || '',
       password: payload.password || '',
       state: 0,
-      avatar: payload.avatar || ''
+      avatar: payload.avatar || '',
+      isApplyArtist: true
     }, payload));
 
   }
@@ -124,7 +153,8 @@ export class UserRegisterService {
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
-      password: payload.password || ''
+      password: payload.password || '',
+      isApplyArtist: false
     }, payload));
   }
 
@@ -144,7 +174,8 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      state: payload.state || 1
+      state: payload.state || 1,
+      isApplyArtist: true
     }, payload));
 
   }
@@ -161,7 +192,8 @@ export class UserRegisterService {
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
-      password: payload.password || ''
+      password: payload.password || '',
+      isApplyArtist: false
     }, payload));
   }
 
@@ -177,7 +209,8 @@ export class UserRegisterService {
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
-      password: payload.password || ''
+      password: payload.password || '',
+      isApplyArtist: false
     }, payload));
   }
 
@@ -194,7 +227,8 @@ export class UserRegisterService {
       name: payload.name || '',
       phone: payload.phone || '',
       email: payload.email || '',
-      password: payload.password || ''
+      password: payload.password || '',
+      isApplyArtist: false
     }, payload));
   }
 
@@ -206,23 +240,37 @@ export class UserRegisterService {
    */
   async register(payload) {
     console.log("register", payload)
-    // 判断用户是否存在
-    const user:any = await this.hasUser(payload);
-    console.log("user", user)
-    if(user.success) {
-      return {
-        data: user.data,
-        success: false,
-        code: 10201
-      };
+    let user:any;
+    let newUser:any;
+    // 已有用户
+    if(payload.userId) {
+
+
+      newUser = {
+        success: true,
+        userId: payload.userId
+      }
+
+    }else{
+      // 判断用户是否存在
+      user = await this.hasUser(payload);
+      console.log("user", user)
+      if(user.success && payload.identityIndex !== 5) {
+        return {
+          data: user.data,
+          success: false,
+          code: 10201
+        };
+      }
+
+      // 添加用户
+      newUser = await this.addUser(payload, user);
+      console.log("newUser", newUser)
+      if(!newUser.success){
+        return newUser;
+      }
     }
 
-    // 添加用户
-    const newUser:any = await this.addUser(payload, user);
-    console.log("newUser", newUser)
-    if(!newUser.success){
-      return newUser;
-    }
 
     let identityIndexs = [];
     switch(payload.identityIndex){
@@ -266,7 +314,12 @@ export class UserRegisterService {
     // 返回用户关联身份
     if(newUser.success){
       // 获取用户
-      const user:any = await this.baseUserServer.baseRetrieveUser(payload)
+      if(payload.userId) {
+        user = await this.baseUserServer.baseRetrieveUserId(payload.userId)
+      }else{
+        user = await this.baseUserServer.baseRetrieveUser(payload)
+      }
+
       console.log("register user", user)
       return {
         data: user,
@@ -414,6 +467,7 @@ export class UserRegisterService {
    * @param payload
    */
     async addSeller(payload){
+      console.log("addSeller", payload)
       // 添加商家信息
       const seller = await this.baseSellerServer.baseCreateSeller({
         state: payload.state,
@@ -425,6 +479,7 @@ export class UserRegisterService {
         gender: payload.gender || '',
         country: payload.country || '',
       });
+      console.log("add seller", seller)
       if(!seller.identifiers[0].id){
         return {
           success: false,
@@ -447,6 +502,7 @@ export class UserRegisterService {
         website: payload.website || '',
         profile: payload.profile || '',
       });
+      console.log("add sellerMetadata", sellerMetadata)
       if(!sellerMetadata.identifiers[0].id){
         return {
           success: false,
@@ -459,14 +515,12 @@ export class UserRegisterService {
         .relation(UserSellerEntity, "metadata")
         .of({ sellerId: seller.generatedMaps[0].sellerId })
         .set(sellerMetadata.identifiers[0].id);
-
       // 商家 关联 用户
       await this.userSellerEntity
         .createQueryBuilder()
         .relation(UserSellerEntity, "user")
         .of(seller.identifiers[0].id)
         .set({ userId: payload.userId });
-
       return {
         success: true,
         code: 10003

@@ -62,16 +62,18 @@ export class BaseCommodityOptionsThemeServer {
    * 修改商品形状选项
    */
   async BaseUpdate(payload) {
+    const { id, ...setData } = payload;
     return await this.commodityOptionsThemeEntity
       .createQueryBuilder()
       .update(CommodityOptionsThemeEntity)
-      .set({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
-      .where("id = :id", { id: payload.id })
+      // .set({
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr']
+      // })
+      .set(setData)
+      .where("id = :id", { id: id })
       .execute();
   }
 

@@ -34,6 +34,7 @@ export class BaseUserServer {
       .insert()
       .into(UserEntity)
       .values({
+        isApplyArtist: payload.isApplyArtist,
         avatar: payload.avatar,
         name: payload.name,
         phone: payload.phone,
@@ -148,10 +149,20 @@ export class BaseUserServer {
       .leftJoinAndSelect('user.identitys', 'identitys')
       .addSelect('user.createdDate')
       .where("user.name = :name", { name: payload.name })
-      .orWhere("user.email = :email", { email: payload.name })
-      .orWhere("user.phone = :phone", { phone: payload.name })
+      // .orWhere("user.email = :email", { email: payload.email })
+      // .orWhere("user.phone = :phone", { phone: payload.phone })
       .getOne();
+  }
 
+  async baseRetrieveUserId(userId) {
+    return await this.userEntity
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.identitys', 'identitys')
+      .addSelect('user.createdDate')
+      .where("user.userId = :userId", { userId: userId })
+      // .orWhere("user.email = :email", { email: payload.email })
+      // .orWhere("user.phone = :phone", { phone: payload.phone })
+      .getOne();
   }
 
   async baseRetrieveUserPass(payload) {
@@ -228,16 +239,12 @@ export class BaseUserServer {
    * @param payload
    */
   async baseUpdateUser(payload) {
+    const { userId, ...setData} = payload;
     return await this.userEntity
       .createQueryBuilder()
       .update(UserEntity)
-      .set({
-        name: payload.name,
-        email: payload.email,
-        phone: payload.phone,
-        password: payload.password
-      })
-      .where("user.userId = :userId", { userId: payload.userId })
+      .set(setData)
+      .where("user.userId = :userId", { userId: userId })
       .execute();
 
   }
@@ -295,17 +302,19 @@ export class BaseUserServer {
    *  更新用户地址
    */
     async baseUpdateUserAddress(payload) {
-    return await this.userAddressEntity
-    .createQueryBuilder('address')
-    .update(UserAddressEntity)
-    .set({
-      name: payload.address.name,
-      phone: payload.address.email,
-      city: payload.address.phone,
-      address: payload.address.address
-    })
-    .where("addressId = :addressId", { addressId: payload.address.addressId })
-    .execute();
+      const { addressId, ...setData } = payload.address;
+      return await this.userAddressEntity
+        .createQueryBuilder('address')
+        .update(UserAddressEntity)
+        // .set({
+        //   name: payload.address.name,
+        //   phone: payload.address.email,
+        //   city: payload.address.phone,
+        //   address: payload.address.address
+        // })
+        .set(setData)
+        .where("addressId = :addressId", { addressId: addressId })
+        .execute();
   }
   /**
    * 删除用户地址

@@ -3,7 +3,7 @@
   - [用途：客户端](#用途：客户端)
     - [模块：用户](#模块：用户)
       - [`用户注册-POST:/api/user/register`](#用户注册)
-      - [`申请艺术家-POST:/api/user/seller/register`](#申请艺术家)
+      - [`申请艺术家-POST:/api/user/seller/apply`](#申请艺术家)
       - [`用户登录-POST:/api/user/login`](#用户登录)
       - [`修改密码-POST:/api/user/change/password`](#修改密码)
       - [`获取个人信息-GET:/api/user/self`](#获取个人信息)
@@ -83,7 +83,7 @@
 ```
 ###### 申请艺术家
 ```base
-  POST {{baseUrl}}/api/user/seller/register
+  POST {{baseUrl}}/api/user/seller/apply
   Content-Type: application/json
 
   {

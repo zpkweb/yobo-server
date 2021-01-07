@@ -66,6 +66,8 @@ export class SellerService {
       // 设置密码
       const password = await this.baseUserServer.baseUpdateUser({
         userId: seller.user.userId,
+        avatar: seller.user.avatar,
+        isApplyArtist: seller.user.isApplyArtist,
         name: seller.user.name,
         email: seller.user.email,
         phone: seller.user.phone,
@@ -191,7 +193,9 @@ export class SellerService {
       name: payload.firstname + payload.lastname || '',
       email: payload.email || '',
       phone: payload.phone || '',
-      password: payload.password || ''
+      password: payload.password || '',
+      avatar: payload.avatar || '',
+      isApplyArtist: payload.isApplyArtist || '',
     })
     if(!user.affected){
       return {

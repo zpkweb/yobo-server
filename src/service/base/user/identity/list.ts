@@ -63,18 +63,20 @@ export class BaseIdentityListServer {
    * @param payload
    */
   async baseUpdateIdentityList(payload) {
+    const { id, ...setData } = payload;
     return await this.userIdentityListEntity
     .createQueryBuilder()
     .update(UserIdentityListEntity)
-    .set({
-      'zh-cn': payload['zh-cn'],
-      'en-us': payload['en-us'],
-      'ja-jp': payload['ja-jp'],
-      'fr-fr': payload['fr-fr'],
-      menu: payload.menu,
-      index: payload.index
-    })
-    .where("id = :id", { id: payload.id })
+    // .set({
+    //   'zh-cn': payload['zh-cn'],
+    //   'en-us': payload['en-us'],
+    //   'ja-jp': payload['ja-jp'],
+    //   'fr-fr': payload['fr-fr'],
+    //   menu: payload.menu,
+    //   index: payload.index
+    // })
+    .set(setData)
+    .where("id = :id", { id: id })
     .execute();
   }
 

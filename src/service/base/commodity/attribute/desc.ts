@@ -73,16 +73,18 @@ export class BaseCommodityDescServer {
    * 修改详情
    */
   async BaseUpdate(payload) {
+    const { commodityId, ...setData } = payload;
     return await this.commodityDescEntity
       .createQueryBuilder()
       .update(CommodityDescEntity)
-      .set({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
-      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
+      // .set({
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr']
+      // })
+      .set(setData)
+      .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
 

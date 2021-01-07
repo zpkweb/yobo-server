@@ -274,15 +274,12 @@ export class BaseCommodityServer {
    */
   async BaseUpdate(payload) {
     console.log("BaseUpdate", payload)
+    const { commodityId, ...setData } = payload;
     return await this.commodityEntity
       .createQueryBuilder()
       .update(CommodityEntity)
-      .set({
-        state: payload.state,
-        width: payload.width,
-        height: payload.height
-      })
-      .where("commodityId = :commodityId", { commodityId: payload.commodityId })
+      .set(setData)
+      .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
 }

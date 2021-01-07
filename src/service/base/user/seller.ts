@@ -22,6 +22,7 @@ export class BaseSellerServer {
    * @param payload
    */
   async baseCreateSeller(payload) {
+    console.log("baseCreateSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder()
       .insert()
@@ -44,6 +45,7 @@ export class BaseSellerServer {
    * @param payload
    */
   async baseCreateSellerMetadata(payload) {
+    console.log("baseCreateSellerMetadata", payload)
     return await this.userSellerMetadataEntity
       .createQueryBuilder()
       .insert()
@@ -75,6 +77,19 @@ export class BaseSellerServer {
     return await this.userSellerEntity
     .createQueryBuilder('seller')
     .where('seller.sellerId = :sellerId', { sellerId: sellerId })
+    .getOne();
+  }
+
+  /**
+   * 判断用户是否申请艺术家
+   *
+   * @memberof BaseSellerServer
+   */
+  async baseApplySeller(userId) {
+    return await this.userSellerEntity
+    .createQueryBuilder('seller')
+    .leftJoinAndSelect('seller.user', 'user')
+    .where('user.userId = :userId', { userId: userId })
     .getOne();
   }
 
@@ -145,18 +160,20 @@ export class BaseSellerServer {
    */
   async baseUpdateSeller(payload) {
     console.log("baseUpdateSeller", payload)
+    const { sellerId, ...setData } = payload;
     return await this.userSellerEntity
       .createQueryBuilder()
       .update(UserSellerEntity)
-      .set({
-        state: payload.state,
-        firstname: payload.firstname,
-        lastname: payload.lastname,
-        label: payload.label,
-        gender: payload.gender,
-        country: payload.country,
-      })
-      .where("sellerId = :sellerId", { sellerId: payload.sellerId })
+      // .set({
+      //   state: payload.state,
+      //   firstname: payload.firstname,
+      //   lastname: payload.lastname,
+      //   label: payload.label,
+      //   gender: payload.gender,
+      //   country: payload.country,
+      // })
+      .set(setData)
+      .where("sellerId = :sellerId", { sellerId: sellerId })
       .execute();
   }
   /**
@@ -168,25 +185,27 @@ export class BaseSellerServer {
    */
   async baseUpdateSellerMetadata(payload) {
     console.log("baseUpdateSellerMetadata", payload)
+    const { sellerId, ...setData } = payload;
     return await this.userSellerMetadataEntity
       .createQueryBuilder()
       .update(UserSellerMetadataEntity)
-      .set({
-        language: payload.language,
-        findUs: payload.findUs,
-        isFullTime: payload.isFullTime,
-        onlineSell: payload.onlineSell,
-        sold: payload.sold,
-        channel: payload.channel,
-        gallery: payload.gallery,
-        medium: payload.medium,
-        galleryInfo: payload.galleryInfo,
-        recommend: payload.recommend,
-        prize: payload.prize,
-        website: payload.website,
-        profile: payload.profile,
-      })
-      .where("sellerId = :sellerId", { sellerId: payload.sellerId })
+      // .set({
+      //   language: payload.language,
+      //   findUs: payload.findUs,
+      //   isFullTime: payload.isFullTime,
+      //   onlineSell: payload.onlineSell,
+      //   sold: payload.sold,
+      //   channel: payload.channel,
+      //   gallery: payload.gallery,
+      //   medium: payload.medium,
+      //   galleryInfo: payload.galleryInfo,
+      //   recommend: payload.recommend,
+      //   prize: payload.prize,
+      //   website: payload.website,
+      //   profile: payload.profile,
+      // })
+      .set(setData)
+      .where("sellerId = :sellerId", { sellerId: sellerId })
       .execute()
   }
 
@@ -222,13 +241,15 @@ export class BaseSellerServer {
    * sellerId
    */
     async basseSetSellerState(payload) {
+      const { sellerId, ...setData } = payload;
       return await this.userSellerEntity
-      .createQueryBuilder()
-      .update(UserSellerEntity)
-      .set({
-        state: payload.state
-      })
-      .where("sellerId = :sellerId", { sellerId: payload.sellerId })
-      .execute()
+        .createQueryBuilder()
+        .update(UserSellerEntity)
+        // .set({
+        //   state: payload.state
+        // })
+        .set(setData)
+        .where("sellerId = :sellerId", { sellerId: sellerId })
+        .execute()
     }
 }

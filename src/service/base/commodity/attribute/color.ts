@@ -72,14 +72,12 @@ export class BaseCommodityColorServer {
    */
   async BaseUpdate(payload) {
     console.log("BaseUpdate", payload)
+    const { commodityId, ...setData } = payload;
     return await this.commodityColorEntity
       .createQueryBuilder()
       .update(CommodityColorEntity)
-      .set({
-        'value': payload['value'],
-        'name': payload['name']
-      })
-      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
+      .set(setData)
+      .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
 
