@@ -275,6 +275,16 @@ export class SellerService {
    * 搜索艺术家
    * @param payload
    */
+
+   async search(payload) {
+     const { locale, currentPage, pageSize, ...searchData } = payload;
+     if(searchData && Object.keys(searchData).length) {
+       return this.searchSeller(payload)
+     }else{
+      return this.retrieveSellerAll(payload)
+     }
+   }
+
   async searchSeller(payload) {
     let result = await this.baseSellerServer.baseSearchSeller(payload);
 
