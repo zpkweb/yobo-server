@@ -176,12 +176,15 @@ export class CommodityCommodityService {
 
     console.log("商品 关联 商家", { commodityId: commodity.data.generatedMaps[0].commodityId, sellerId: payload.sellerId })
     // 商品 关联 商家
-    await this.relation({
-      name: 'seller',
-      of: commodity.data.identifiers[0].id,
-      // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-      set: { sellerId: payload.sellerId }
-    })
+    if(payload.sellerId){
+      await this.relation({
+        name: 'seller',
+        of: commodity.data.identifiers[0].id,
+        // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        set: { sellerId: payload.sellerId }
+      })
+    }
+
 
 
     return commodity

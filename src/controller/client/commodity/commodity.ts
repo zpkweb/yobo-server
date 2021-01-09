@@ -18,15 +18,17 @@ export class CommodityController {
   // 查找商品
   @Get()
   async find(@Query(ALL) findQuery) {
+    const pageSize = Number(findQuery.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(findQuery.currentPage) || this.pagination.currentPage;
     const data:any = await this.commodityService.findAll({
       ...findQuery,
-      pageSize: this.pagination.pageSize,
-      currentPage: this.pagination.currentPage,
+      pageSize: pageSize,
+      currentPage: currentPage,
       isLocale: true
     });
     if(data.success){
-      data.data.pageSize = this.pagination.pageSize;
-      data.data.currentPage = this.pagination.currentPage;
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
     }
     return data;
   }
@@ -34,15 +36,17 @@ export class CommodityController {
   // 搜索
   @Get('/search')
   async search(@Query(ALL) searchQuery) {
+    const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
     const data:any = await this.commodityService.search({
       ...searchQuery,
-      pageSize: this.pagination.pageSize,
-      currentPage: this.pagination.currentPage,
+      pageSize: pageSize,
+      currentPage: currentPage,
       isLocale: true
     });
     if(data.success){
-      data.data.pageSize = this.pagination.pageSize;
-      data.data.currentPage = this.pagination.currentPage;
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
     }
     return data;
   }

@@ -103,6 +103,7 @@ export class BaseSellerServer {
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
       .leftJoinAndSelect('seller.metadata', 'metadata')
+      .leftJoinAndSelect('seller.commoditys', 'commoditys')
       .addSelect('seller.createdDate')
       .where("seller.userId = :userId", { userId: payload.userId })
       .orWhere("seller.sellerId = :sellerId", { sellerId: payload.sellerId })
@@ -136,6 +137,7 @@ export class BaseSellerServer {
     console.log("baseSearchSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder('seller')
+      .leftJoinAndSelect('seller.user', 'user')
       .leftJoinAndSelect('seller.metadata', 'metadata')
       .addSelect('seller.createdDate')
       .where("seller.firstname like :firstname", { firstname: `%${payload.firstname}%` })
