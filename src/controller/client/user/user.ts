@@ -1,10 +1,11 @@
-import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL, Query } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { UserService } from 'src/service/user/user';
 import { SellerService } from 'src/service/user/seller';
 
 @Provide()
-@Controller('/api/user',  { tagName: 'user', middleware: [ 'authorizeMiddleware' ] })
+// @Controller('/api/user',  { tagName: 'user', middleware: [ 'authorizeMiddleware' ] })
+@Controller('/api/user')
 export class UserController {
 
   @Inject()
@@ -31,8 +32,8 @@ export class UserController {
    * 查找个人信息
    */
   @Get('/self')
-  async self() {
-    return await this.userService.findSelf(this.ctx.state.user.userId);
+  async self(@Query() userId) {
+    return await this.userService.findSelf(userId);
   }
 
   /**

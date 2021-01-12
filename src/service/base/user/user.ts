@@ -186,7 +186,7 @@ export class BaseUserServer {
    * 查找个人信息
    * @param payload
    */
-    async baseRetrieveSelf(payload) {
+    async baseRetrieveSelf(userId) {
       return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
@@ -194,7 +194,7 @@ export class BaseUserServer {
       .leftJoinAndSelect('user.likeSellers', 'likeSellers')
       .leftJoinAndSelect('user.likeCommoditys', 'likeCommoditys')
       .leftJoinAndSelect('user.browsingHistory', 'browsingHistory')
-      .where("user.userId = :userId", { userId: payload.userId })
+      .where("user.userId = :userId", { userId: userId })
       .getOne();
     }
 

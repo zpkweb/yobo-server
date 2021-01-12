@@ -18,14 +18,23 @@ export class CommodityController {
   // 查找商品
   @Get()
   async find(@Query(ALL) findQuery) {
-    const pageSize = Number(findQuery.pageSize) || this.pagination.pageSize;
-    const currentPage = Number(findQuery.currentPage) || this.pagination.currentPage;
-    const data:any = await this.commodityService.findAll({
-      ...findQuery,
-      pageSize: pageSize,
-      currentPage: currentPage,
-      isLocale: true
-    });
+    const { pageSize, currentPage, ...query } = findQuery;
+    const getPageSize = Number(pageSize) || this.pagination.pageSize;
+    const getCurrentPage = Number(currentPage) || this.pagination.currentPage;
+    let data:any;
+    if(query && Object.keys(query).length){
+      data = await this.commodityService.find({
+        ...findQuery,
+        isLocale: true
+      });
+    }else{
+      data = await this.commodityService.findAll({
+        ...findQuery,
+        pageSize: getPageSize,
+        currentPage: getCurrentPage,
+        isLocale: true
+      });
+    }
     if(data.success){
       data.data.pageSize = pageSize;
       data.data.currentPage = currentPage;

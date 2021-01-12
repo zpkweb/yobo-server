@@ -43,9 +43,7 @@ export class UserIdentityEntity {
 
 
   //  创建日期
-  @CreateDateColumn({
-    select: false
-  })
+  @CreateDateColumn()
   createdDate: Date;
 
   // 更新日期

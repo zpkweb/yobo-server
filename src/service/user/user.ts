@@ -164,9 +164,8 @@ export class UserService{
    * @param userId
    */
   async findSelf(userId) {
-    const user =  await this.baseUserServer.baseRetrieveSelf({
-      userId
-    })
+    const user =  await this.baseUserServer.baseRetrieveSelf(userId)
+
       if(user){
         return {
           data: user,

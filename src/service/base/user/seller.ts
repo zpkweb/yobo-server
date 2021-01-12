@@ -104,6 +104,7 @@ export class BaseSellerServer {
       .leftJoinAndSelect('seller.user', 'user')
       .leftJoinAndSelect('seller.metadata', 'metadata')
       .leftJoinAndSelect('seller.commoditys', 'commoditys')
+      .leftJoinAndMapMany('commoditys.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
       .addSelect('seller.createdDate')
       .where("seller.userId = :userId", { userId: payload.userId })
       .orWhere("seller.sellerId = :sellerId", { sellerId: payload.sellerId })

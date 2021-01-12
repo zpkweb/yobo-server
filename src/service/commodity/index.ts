@@ -82,9 +82,7 @@ export class CommodityService {
 
   // 查找商品
   async find(payload) {
-    return await this.commodityCommodityService.retrieve({
-      commodityId: payload.commodityId
-    });
+    return await this.commodityCommodityService.retrieve(payload);
   }
 
 

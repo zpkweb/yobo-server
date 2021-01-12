@@ -468,8 +468,8 @@ export class CommodityCommodityService {
         let name = item.name ? item.name[type] : '';
 
         let desc = item.desc ? item.desc[type] : '';
-        let price = item.price ? item.price[type] : '';
-
+        // let price = item.price ? item.price[type] : '';
+        let price = item.price;
         let shapes = item.shapes ? item.shapes.map(item => {return {id: item.id, name: item[type]}}) : '';
         let themes = item.themes ? item.themes.map(item => {return {id: item.id, name: item[type]}})  : '';
         let categorys = item.categorys ? item.categorys.map(item => {return {id: item.id, name: item[type]}})  : '';
@@ -499,7 +499,7 @@ export class CommodityCommodityService {
   // 搜索商品
   async search(payload) {
     let result = await this.baseCommodityServer.BaseSearch(payload);
-    // console.log("search", result)
+    console.log("search", result)
     let data = result[0];
     let total = result[1];
     if(payload.isLocale){

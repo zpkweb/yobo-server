@@ -18,13 +18,13 @@ export class BFFController {
 
   // 首页
   @Get('/home')
-  async home(@Query(ALL) homeQuery) {
-    return await this.bffService.home(homeQuery);
+  async home(@Query(ALL) query) {
+    return await this.bffService.home(query);
   }
 
   // 购买
   @Get('/buy')
-  async buy() {
-    return 'buy'
+  async buy(@Query(ALL) query) {
+    return await this.bffService.buy(query)
   }
 }
