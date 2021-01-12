@@ -17,6 +17,10 @@ $ open http://localhost:7001/
 
 ### 部署
 
+接口部署（监听端口: 7001, path: /api）
+创建yobo-server目录，把文件解压到yobo-server。
+执行命令：pm2 start
+
 ```bash
 $ npm start
 $ npm stop
