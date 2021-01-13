@@ -94,14 +94,14 @@ export class CommodityOptionsThemeService {
     const data = await this.baseCommodityOptionsThemeServer.BaseUpdate(payload);
     if (data.affected) {
       return {
-        data: data,
+        // data: data,
         success: true,
-        code: 10009
+        code: 10007
       }
     } else {
       return {
         success: false,
-        code: 10010
+        code: 1008
       }
     }
   }
@@ -114,7 +114,7 @@ export class CommodityOptionsThemeService {
     const data = await this.baseCommodityOptionsThemeServer.BaseDelete(payload);
     if (data.affected) {
       return {
-        data: data,
+        // data: data,
         success: true,
         code: 10009
       }
@@ -132,7 +132,8 @@ export class CommodityOptionsThemeService {
    */
   filter(type, payload) {
     return payload.map(item => {
-      return {id: item.id, name: item[type]}
+      const { id, img } = item;
+      return {id, img, name: item[type]}
     })
   }
 }

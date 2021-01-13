@@ -37,14 +37,21 @@ export class MyLikeCommodityService {
     })
     console.log('likeCommodity', likeCommodity)
     if (likeCommodity.success) {
-      return likeCommodity;
+      // return likeCommodity;
+      return {
+        success: false,
+        code: 10010
+      }
     }
 
     // 创建喜欢的艺术家
     const creatLikeCommodity = await this.createLikeCommodity({
-      userName: payload.userName,
+      userName: payload.userName  || user.data.name,
       userId: payload.userId,
-      commodityName: payload.commodityName,
+      'zh-cn': payload['zh-cn'] || commodity.data.name['zh-cn'],
+      'en-us': payload['en-us'] || commodity.data.name['en-us'],
+      'ja-jp': payload['ja-jp'] || commodity.data.name['ja-jp'],
+      'fr-fr': payload['fr-fr'] || commodity.data.name['fr-fr'],
       commodityId: payload.commodityId
     });
     console.log('creatLikeCommodity', creatLikeCommodity)
@@ -65,7 +72,11 @@ export class MyLikeCommodityService {
     })
 
     // 返回喜欢的艺术家
-    return await this.myLikeCommodity(payload.userId);
+    // return await this.myLikeCommodity(payload.userId);
+    return {
+      success: true,
+      code: 10003
+    }
   }
 
 
@@ -73,9 +84,11 @@ export class MyLikeCommodityService {
   /**
    * 喜欢的艺术家列表
    */
-  async myLikeCommodity(userId) {
-    const data = await this.baseMyLikeCommodityServer.BaseRetrieve(userId);
-    console.log("likeCommodity", data)
+  async myLikeCommodity(payload) {
+    let data = await this.baseMyLikeCommodityServer.BaseRetrieve(payload.userId);
+    if(payload.isLocale) {
+      data = this.filter(payload.locale, data);
+    }
     if (data) {
       return {
         data: data,
@@ -88,6 +101,35 @@ export class MyLikeCommodityService {
         code: 10010
       }
     }
+  }
+
+  /**
+   * 筛选商品
+   * @param  payload
+   * @param type
+   */
+  filter(type, payload) {
+    return payload.map(item => {
+      let name = item.name ? item.name[type] : '';
+
+      let desc = item.desc ? item.desc[type] : '';
+      // let price = item.price ? item.price[type] : '';
+      let price = item.price;
+      let shapes = item.shapes ? item.shapes.map(item => {return {id: item.id, name: item[type]}}) : '';
+      let themes = item.themes ? item.themes.map(item => {return {id: item.id, name: item[type]}})  : '';
+      let categorys = item.categorys ? item.categorys.map(item => {return {id: item.id, name: item[type]}})  : '';
+      let techniques = item.techniques ? item.techniques.map(item => {return {id: item.id, name: item[type]}})  : '';
+
+      return Object.assign(item,{
+        name,
+        desc,
+        price,
+        shapes,
+        themes,
+        categorys,
+        techniques,
+      })
+    })
   }
 
   /**

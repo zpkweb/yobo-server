@@ -13,6 +13,10 @@ export class CommodityOptionsTechniqueEntity {
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
+  // 图片
+  @Column()
+  img: string;
+
   // 语言
   @Column()
   'zh-cn': string;

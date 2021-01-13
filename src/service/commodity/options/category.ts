@@ -94,14 +94,14 @@ export class CommodityOptionsCategoryService {
     const data = await this.baseCommodityOptionsCategoryServer.BaseUpdate(payload);
     if (data.affected) {
       return {
-        data: data,
+        // data: data,
         success: true,
-        code: 10009
+        code: 10007
       }
     } else {
       return {
         success: false,
-        code: 10010
+        code: 10008
       }
     }
   }
@@ -114,7 +114,7 @@ export class CommodityOptionsCategoryService {
     const data = await this.baseCommodityOptionsCategoryServer.BaseDelete(payload);
     if (data.affected) {
       return {
-        data: data,
+        // data: data,
         success: true,
         code: 10009
       }
@@ -133,7 +133,8 @@ export class CommodityOptionsCategoryService {
    */
   filter(type, payload) {
     return payload.map(item => {
-      return {id: item.id, name: item[type]}
+      const { id, img } = item;
+      return {id, img, name: item[type]}
     })
   }
 

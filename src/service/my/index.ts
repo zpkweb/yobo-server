@@ -53,8 +53,8 @@ export class MyService {
   }
 
   // 查找我喜欢的商家
-  async getCommodity(userId) {
-    return await this.myLikeCommodityService.myLikeCommodity(userId)
+  async getCommodity(payload) {
+    return await this.myLikeCommodityService.myLikeCommodity(payload)
   }
 
   // 查找我喜欢的商家
@@ -68,7 +68,6 @@ export class MyService {
   // 添加我的浏览记录
   async addBrowsingHistory(payload) {
     return await this.myBrowsingHistoryService.addBrowsingHistory(payload);
-
 
   }
 

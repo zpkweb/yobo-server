@@ -18,6 +18,7 @@ export class BaseCommodityOptionsThemeServer {
       .insert()
       .into(CommodityOptionsThemeEntity)
       .values({
+        img: payload.img,
         'zh-cn': payload['zh-cn'],
         'en-us': payload['en-us'],
         'ja-jp': payload['ja-jp'],

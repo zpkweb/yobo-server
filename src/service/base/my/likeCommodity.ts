@@ -2,12 +2,19 @@ import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { MyLikeCommodityEntity } from 'src/entity/my/likeCommodity';
+import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
+import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
+import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
+import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
+import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @Provide()
 export class BaseMyLikeCommodityServer {
 
   @InjectEntityModel(MyLikeCommodityEntity)
   myLikeCommodityEntity: Repository<MyLikeCommodityEntity>;
+
+
 
   /**
    * 创建我喜欢的艺术家
@@ -21,7 +28,10 @@ export class BaseMyLikeCommodityServer {
       .values({
         userName: payload.userName,
         userId: payload.userId,
-        commodityName: payload.commodityName,
+        'zh-cn': payload['zh-cn'],
+        'en-us': payload['en-us'],
+        'ja-jp': payload['ja-jp'],
+        'fr-fr': payload['fr-fr'],
         commodityId: payload.commodityId
       })
       .execute();
@@ -47,6 +57,12 @@ export class BaseMyLikeCommodityServer {
       console.log("BaseRetrieve", userId)
       return await this.myLikeCommodityEntity
         .createQueryBuilder('myLikeCommodity')
+        .leftJoinAndSelect('myLikeCommodity.commodity', 'commodity')
+        .leftJoinAndMapOne('myLikeCommodity.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
+        .leftJoinAndMapOne('myLikeCommodity.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
+        .leftJoinAndMapOne('myLikeCommodity.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
+        .leftJoinAndMapMany('myLikeCommodity.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
+        .leftJoinAndMapOne('myLikeCommodity.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
         .where("myLikeCommodity.userId = :userId", { userId: userId })
         .getMany();
     }

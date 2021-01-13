@@ -37,14 +37,18 @@ export class MyLikeSellerService {
     })
     console.log('likeSeller', likeSeller)
     if (likeSeller.success) {
-      return likeSeller;
+      // return likeSeller;
+      return {
+        success: false,
+        code : 10602
+      }
     }
 
     // 创建喜欢的艺术家
     const creatLikeSeller = await this.createLikeSeller({
-      userName: payload.name,
+      userName: payload.name || user.data.name,
       userId: payload.userId,
-      sellerName: payload.sellerName,
+      sellerName: payload.sellerName || seller.data.firstname + seller.data.lastname,
       sellerId: payload.sellerId
     });
     console.log('creatLikeSeller', creatLikeSeller)
@@ -96,14 +100,14 @@ export class MyLikeSellerService {
    */
   async hasMyLikeSeller(payload) {
     console.log("hasMyLikeSeller", payload)
-    const likeSeller =  await this.baseMyLikeSellerServer.BaseHas({
+    const hasLikeSeller =  await this.baseMyLikeSellerServer.BaseHas({
       userId: payload.userId,
       sellerId: payload.sellerId
     })
-    console.log("likeSeller", likeSeller)
-      if(likeSeller){
+    console.log("hasLikeSeller", hasLikeSeller)
+      if(hasLikeSeller){
         return {
-          data: likeSeller,
+          data: hasLikeSeller,
           success: true,
           code : 10601
         }

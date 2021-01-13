@@ -38,7 +38,8 @@ export class UploadImagesService {
       return {
         data: {
           src: `${this.host.origin}/${name.substr(7)}`,
-          name: path.basename(stream.filename)
+          title: path.basename(stream.filename),
+          ...stream.fields
         },
         success: true,
         code: 10015

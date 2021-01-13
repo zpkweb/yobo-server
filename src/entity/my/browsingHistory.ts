@@ -23,11 +23,9 @@ export class MyBrowsingHistoryEntity {
   @Generated('uuid')
   myBrowsingHistoryId: string;
 
+  // 浏览数
   @Column()
-  userName: string;
-
-  @Column()
-  commodityName: string;
+  count: number;
 
   //  创建日期
   @CreateDateColumn({

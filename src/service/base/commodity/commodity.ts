@@ -78,6 +78,7 @@ export class BaseCommodityServer {
       console.log("BaseHas commodityId", commodityId)
       return await this.commodityEntity
       .createQueryBuilder('commodity')
+      .leftJoinAndSelect('commodity.name', 'name')
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
     }

@@ -48,8 +48,11 @@ export class MyController {
 
   // 查找我喜欢的商品
   @Get('/commodity')
-  async getCommodity(@Query() userId) {
-    return await this.myService.getCommodity(userId);
+  async getCommodity(@Query(ALL) query) {
+    return await this.myService.getCommodity({
+      ...query,
+      isLocale: true
+    });
   }
 
   // 查找我喜欢的商品是否存在
@@ -86,8 +89,11 @@ export class MyController {
 
   // 查找我的浏览记录
   @Get('/browsingHistory')
-  async findBrowsingHistory(@Query() userId) {
-    return  await this.myService.findBrowsingHistory(userId);
+  async findBrowsingHistory(@Query(ALL) query) {
+    return  await this.myService.findBrowsingHistory({
+      ...query,
+      isLocale: true
+    });
   }
 
 

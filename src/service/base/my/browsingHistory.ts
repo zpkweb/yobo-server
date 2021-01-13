@@ -3,6 +3,11 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { MyBrowsingHistoryEntity } from 'src/entity/my/browsingHistory';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
+import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
+import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
+import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
+import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
+import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @Provide()
 export class BaseBrowsingHistoryServer {
@@ -23,8 +28,7 @@ export class BaseBrowsingHistoryServer {
       .insert()
       .into(MyBrowsingHistoryEntity)
       .values({
-        userName: payload.userName,
-        commodityName: payload.commodityName,
+        count: payload.count
       })
       .execute();
   }
@@ -40,7 +44,12 @@ export class BaseBrowsingHistoryServer {
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
       .leftJoinAndSelect("myBrowsingHistory.user", "user")
-      .leftJoinAndSelect("myBrowsingHistory.commodity", "commodity")
+      .leftJoinAndSelect('myBrowsingHistory.commodity', 'commodity')
+      .leftJoinAndMapOne('myBrowsingHistory.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
+      .leftJoinAndMapOne('myBrowsingHistory.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
+      .leftJoinAndMapOne('myBrowsingHistory.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
+      .leftJoinAndMapMany('myBrowsingHistory.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
+      .leftJoinAndMapOne('myBrowsingHistory.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
       .where("user.userId = :userId", { userId: userId })
       // .andWhere(qb => {
       //   const subQuery = qb
@@ -65,6 +74,22 @@ export class BaseBrowsingHistoryServer {
       .where("user.userId = :userId", { userId: payload.userId })
       .andWhere("commodity.commodityId = :commodityId", { commodityId: payload.commodityId })
       .getOne();
+  }
+
+  /**
+   * 更新
+   * @param payload
+   */
+  async BaseUpdate(payload) {
+    console.log("BaseUpdate", payload)
+    const { userId, commodityId, ...setData } = payload;
+    return await this.myBrowsingHistoryEntity
+      .createQueryBuilder()
+      .update(MyBrowsingHistoryEntity)
+      .set(setData)
+      .where("user.userId = :userId", { userId: payload.userId })
+      .andWhere("commodity.commodityId = :commodityId", { commodityId: payload.commodityId })
+      .execute();
   }
 
   /**

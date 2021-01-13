@@ -41,7 +41,7 @@ export class BaseCommodityBrowsingCountServer {
   }
 
   /**
-   * 更新商品
+   * 更新
    * @param payload
    */
   async BaseUpdate(payload) {

@@ -521,9 +521,10 @@ export class CommodityService {
       }
     }
 
-    return await this.commodityOptionsTypeUpdate({
+    return  await this.commodityOptionsTypeUpdate({
       'type': payload.type,
       'id': commodityOptionsShape.data.id,
+      img: payload.img || commodityOptionsShape.data.img,
       'zh-cn': payload['zh-cn'] || commodityOptionsShape.data['zh-cn'],
       'en-us': payload['en-us'] || commodityOptionsShape.data['en-us'],
       'ja-jp': payload['ja-jp'] || commodityOptionsShape.data['ja-jp'],
@@ -541,7 +542,8 @@ export class CommodityService {
     switch (payload.type) {
       case 'category':
         data = await this.commodityOptionsCategoryService.update({
-          'id': payload.id,
+          id: payload.id,
+          img: payload.img,
           'zh-cn': payload['zh-cn'],
           'en-us': payload['en-us'],
           'ja-jp': payload['ja-jp'],
@@ -550,7 +552,8 @@ export class CommodityService {
         break;
       case 'shape':
         data = await this.commodityOptionsShapeService.update({
-          'id': payload.id,
+          id: payload.id,
+          img: payload.img,
           'zh-cn': payload['zh-cn'],
           'en-us': payload['en-us'],
           'ja-jp': payload['ja-jp'],
@@ -559,7 +562,8 @@ export class CommodityService {
         break;
       case 'technique':
         data = await this.commodityOptionsTechniqueService.update({
-          'id': payload.id,
+          id: payload.id,
+          img: payload.img,
           'zh-cn': payload['zh-cn'],
           'en-us': payload['en-us'],
           'ja-jp': payload['ja-jp'],
@@ -568,7 +572,8 @@ export class CommodityService {
         break;
       case 'theme':
         data = await this.commodityOptionsThemeService.update({
-          'id': payload.id,
+          id: payload.id,
+          img: payload.img,
           'zh-cn': payload['zh-cn'],
           'en-us': payload['en-us'],
           'ja-jp': payload['ja-jp'],

@@ -18,6 +18,7 @@ export class BaseCommodityOptionsTechniqueServer {
       .insert()
       .into(CommodityOptionsTechniqueEntity)
       .values({
+        img: payload.img,
         'zh-cn': payload['zh-cn'],
         'en-us': payload['en-us'],
         'ja-jp': payload['ja-jp'],

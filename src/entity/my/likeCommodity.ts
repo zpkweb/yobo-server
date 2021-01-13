@@ -24,8 +24,18 @@ export class MyLikeCommodityEntity {
   @Column()
   userId: string;
 
+  // 语言
   @Column()
-  commodityName: string;
+  'zh-cn': string;
+
+  @Column()
+  'en-us': string;
+
+  @Column()
+  'ja-jp': string;
+
+  @Column()
+  'fr-fr': string;
 
   @Column()
   commodityId: string;
