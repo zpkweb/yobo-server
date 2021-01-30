@@ -212,12 +212,10 @@ Authorization: Bearer {{token}}
 
 {
   "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
-  "address": {
-    "name": "test22",
-    "phone": "222",
-    "city": "北京",
-    "address": ""
-  }
+  "name": "test22",
+  "phone": "222",
+  "city": "北京",
+  "address": ""
 
 }
 
@@ -231,13 +229,11 @@ Authorization: Bearer {{token}}
 
 {
   "userId": "2d956538-2aa3-4bb2-9852-a742bffe17e2",
-  "address": {
-    "addressId": "dcb34b75-2c9a-458d-924e-5689967e7cfa",
-    "name": "test2",
-    "phone": "22",
-    "city": "北京",
-    "address": ""
-  }
+  "addressId": "dcb34b75-2c9a-458d-924e-5689967e7cfa",
+  "name": "test2",
+  "phone": "22",
+  "city": "北京",
+  "address": ""
 }
 
 

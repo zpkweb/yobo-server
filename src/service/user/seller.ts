@@ -67,7 +67,6 @@ export class SellerService {
       const password = await this.baseUserServer.baseUpdateUser({
         userId: seller.user.userId,
         avatar: seller.user.avatar,
-        isApplyArtist: seller.user.isApplyArtist,
         name: seller.user.name,
         email: seller.user.email,
         phone: seller.user.phone,
@@ -195,7 +194,6 @@ export class SellerService {
       phone: payload.phone || '',
       password: payload.password || '',
       avatar: payload.avatar || '',
-      isApplyArtist: payload.isApplyArtist || '',
     })
     if(!user.affected){
       return {
@@ -209,6 +207,7 @@ export class SellerService {
       state: payload.state || 0,
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
+      tags: payload.tags || '',
       label: payload.label || '',
       gender: payload.gender || '',
       country: payload.country || ''
@@ -310,12 +309,13 @@ export class SellerService {
 
   async retrieveSellerAll(payload) {
     let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
-      console.log("searchSeller", result)
+      // console.log("searchSeller", result)
       let data = result[0];
       let total = result[1];
-      // if(payload.isLocale){
-      //   data = this.filter(payload.locale, data)
-      // }
+      if(payload.isLocale){
+        data = this.retrieveSellerAllFilter(payload.locale, data)
+      }
+      // console.log("searchSellerFilter", data)
       if (data) {
         return {
           data: {
@@ -332,6 +332,14 @@ export class SellerService {
         }
       }
   }
+
+  retrieveSellerAllFilter(type, payload) {
+    return payload.map(item => {
+      return Object.assign(item, {commodityName: item.commodityName[type]})
+
+    })
+  }
+
   /**
    * 查找艺术家是否存在
    * @param sellerId
@@ -389,6 +397,7 @@ export class SellerService {
     console.log("deleteSeller", sellerId)
     const seller = await this.baseSellerServer.baseDeleteSeller(sellerId);
     if(seller.affected){
+
       return {
         success: true,
         code : 10005

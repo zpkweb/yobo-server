@@ -4,7 +4,7 @@ import { Context } from 'egg';
 
 @Provide()
 @Controller('/api/admin/commodity')
-export class CommodityAdminController {
+export class AdminCommodityController {
 
   @Inject()
   commodityService: CommodityService;

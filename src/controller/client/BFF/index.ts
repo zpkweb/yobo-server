@@ -27,4 +27,13 @@ export class BFFController {
   async buy(@Query(ALL) query) {
     return await this.bffService.buy(query)
   }
+
+  //  艺术品选项
+  @Get('/artwork/options')
+  async artworkOptions(@Query() locale) {
+    return await this.bffService.artworkOptions({
+      locale,
+      isLocale: true
+    });
+  }
 }

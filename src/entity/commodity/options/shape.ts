@@ -17,7 +17,6 @@ export class CommodityOptionsShapeEntity {
   @Column()
   img: string;
 
-  // lang: ['zh-cn', 'en-us', 'ja-jp', 'fr-fr'],
   // 汉语
   @Column()
   'zh-cn': string;
@@ -30,6 +29,9 @@ export class CommodityOptionsShapeEntity {
 
   @Column()
   'fr-fr': string;
+
+  @Column()
+  'es-es': string;
 
   //  创建日期
   @CreateDateColumn({

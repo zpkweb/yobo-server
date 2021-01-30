@@ -37,6 +37,9 @@ export class UserIdentityEntity {
   @Column()
   'fr-fr': string;
 
+  @Column()
+  'es-es': string;
+
   // 身份序号
   @Column()
   index: number;

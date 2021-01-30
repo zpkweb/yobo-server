@@ -17,12 +17,14 @@ export class BaseCommodityDescServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityDescEntity)
-      .values({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
+      // .values({
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr'],
+      //   'es-es': payload['es-es']
+      // })
+      .values(payload)
       .execute();
   }
 
@@ -47,6 +49,7 @@ export class BaseCommodityDescServer {
       .orWhere('desc.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('desc.ja-jp = :jajp', { jajp: payload['ja-jp'] })
       .orWhere('desc.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .orWhere('desc.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
 

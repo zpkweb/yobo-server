@@ -2,6 +2,7 @@ import { Inject, Controller, Post, Provide, Get, Config, Plugin, Body, ALL, Quer
 import { Context } from 'egg';
 import { UserService } from 'src/service/user/user';
 import { SellerService } from 'src/service/user/seller';
+import UserAddressService from 'src/service/user/address';
 
 @Provide()
 // @Controller('/api/user',  { tagName: 'user', middleware: [ 'authorizeMiddleware' ] })
@@ -13,6 +14,9 @@ export class UserController {
 
   @Inject()
   sellerService: SellerService;
+
+  @Inject()
+  userAddressService: UserAddressService;
 
   @Inject()
   ctx: Context;
@@ -31,6 +35,11 @@ export class UserController {
   /**
    * 查找个人信息
    */
+  @Get('/info')
+  async info(@Query() userId) {
+    return await this.userService.findInfo(userId);
+  }
+
   @Get('/self')
   async self(@Query() userId) {
     return await this.userService.findSelf(userId);
@@ -55,7 +64,7 @@ export class UserController {
   @Post('/update')
   async updateUser(@Body(ALL) updateBody) {
     return await this.userService.update({
-      userId: this.ctx.state.user.userId,
+      userId: updateBody.userId,
       ...updateBody
     });
   }
@@ -65,10 +74,8 @@ export class UserController {
    * @param addressBody
    */
   @Get('/address')
-  async getAddress(@Body(ALL) addressBody) {
-    return await this.userService.getAddress({
-      userId: this.ctx.state.user.userId
-    });
+  async getAddress(@Body() userId) {
+    return await this.userAddressService.retrieve(userId);
   }
 
   /**
@@ -77,7 +84,7 @@ export class UserController {
    */
   @Post('/address')
   async address(@Body(ALL) addressBody) {
-    return await this.userService.address(addressBody);
+    return await this.userAddressService.create(addressBody);
   }
 
   /**
@@ -86,7 +93,7 @@ export class UserController {
    */
   @Post('/address/update')
   async addressUpdate(@Body(ALL) addressBody) {
-    return await this.userService.addressUpdate(addressBody);
+    return await this.userAddressService.updateAddress(addressBody);
   }
 
   /**
@@ -94,8 +101,8 @@ export class UserController {
    * @param addressBody
    */
   @Post('/address/remove')
-  async addressRemove(@Body(ALL) addressBody) {
-    return await this.userService.addressRemove(addressBody);
+  async addressRemove(@Body() userId) {
+    return await this.userAddressService.remove(userId);
   }
 
 

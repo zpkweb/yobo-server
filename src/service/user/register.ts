@@ -62,7 +62,6 @@ export class UserRegisterService {
       email: payload.email || '',
       password: payload.password || '',
       avatar: payload.avatar || '',
-      isApplyArtist: false
     }, payload));
   }
 
@@ -73,11 +72,9 @@ export class UserRegisterService {
   async applySeller(payload) {
 
     if(payload.userId) {
-      // 修改用户isApplyArtist为true
-      const changeUser = await this.baseUserServer.baseUpdateUser({
-        userId: payload.userId,
-        isApplyArtist: true
-      })
+      // const changeUser = await this.baseUserServer.baseUpdateUser({
+      //   userId: payload.userId,
+      // })
 
       // 用户是否关联艺术家信息
       const applySeller = await this.baseSellerServer.baseApplySeller(payload.userId);
@@ -89,12 +86,12 @@ export class UserRegisterService {
         }
       }
 
-      if(!changeUser.affected){
-        return {
-          success: false,
-          code : 10008
-        }
-      }
+      // if(!changeUser.affected){
+      //   return {
+      //     success: false,
+      //     code : 10008
+      //   }
+      // }
     }
 
 
@@ -109,7 +106,6 @@ export class UserRegisterService {
       password: payload.password || '',
       state: 0,
       avatar: payload.avatar || '',
-      isApplyArtist: true
     }, payload));
 
   }
@@ -154,7 +150,6 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      isApplyArtist: false
     }, payload));
   }
 
@@ -175,7 +170,6 @@ export class UserRegisterService {
       email: payload.email || '',
       password: payload.password || '',
       state: payload.state || 1,
-      isApplyArtist: true
     }, payload));
 
   }
@@ -193,7 +187,6 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      isApplyArtist: false
     }, payload));
   }
 
@@ -210,7 +203,6 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      isApplyArtist: false
     }, payload));
   }
 
@@ -228,7 +220,6 @@ export class UserRegisterService {
       phone: payload.phone || '',
       email: payload.email || '',
       password: payload.password || '',
-      isApplyArtist: false
     }, payload));
   }
 
@@ -475,6 +466,7 @@ export class UserRegisterService {
         typeName: payload.typeName || '',
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',
+        tags: payload.tags || [],
         label: payload.label || '',
         gender: payload.gender || '',
         country: payload.country || '',

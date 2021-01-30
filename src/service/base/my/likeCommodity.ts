@@ -28,10 +28,11 @@ export class BaseMyLikeCommodityServer {
       .values({
         userName: payload.userName,
         userId: payload.userId,
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr'],
+        'zh-cn': payload['zh-cn'] || '',
+        'en-us': payload['en-us'] || '',
+        'ja-jp': payload['ja-jp'] || '',
+        'fr-fr': payload['fr-fr'] || '',
+        'es-es': payload['es-es'] || '',
         commodityId: payload.commodityId
       })
       .execute();

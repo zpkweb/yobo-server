@@ -4,7 +4,7 @@ import { UserRegisterService } from 'src/service/user/register';
 // import { AdminUserRegisterDTO } from 'src/dto/user/register';
 @Provide()
 @Controller('/api/admin/user')
-export class ServerUserRegisterController {
+export class AdminUserRegisterController {
 
   @Inject()
   userRegisterService: UserRegisterService;

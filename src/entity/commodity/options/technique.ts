@@ -30,6 +30,9 @@ export class CommodityOptionsTechniqueEntity {
   @Column()
   'fr-fr': string;
 
+  @Column()
+  'es-es': string;
+
   //  创建日期
   @CreateDateColumn({
     select: false

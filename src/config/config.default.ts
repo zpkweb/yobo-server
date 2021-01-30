@@ -106,6 +106,7 @@ config.cors = {
   }
 
 
+
   config.io = {
     // init: { }, // passed to engine.io
     // namespace: {

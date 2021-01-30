@@ -21,10 +21,11 @@ export class BaseIdentityListServer {
       .insert()
       .into(UserIdentityListEntity)
       .values({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr'],
+        'zh-cn': payload['zh-cn'] || '',
+        'en-us': payload['en-us'] || '',
+        'ja-jp': payload['ja-jp'] || '',
+        'fr-fr': payload['fr-fr'] || '',
+        'es-es': payload['es-es'] || '',
         menu: payload.menu,
         index: payload.index
       })
@@ -47,6 +48,7 @@ export class BaseIdentityListServer {
     .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
     .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
     .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
+    .orWhere("identityList.es-es = :eses", { eses: payload['es-es'] })
     .orWhere("identityList.index = :index", { index: payload.index })
     .orWhere("identityList.id = :id", { id: payload.id })
     .getOne();
@@ -96,6 +98,7 @@ export class BaseIdentityListServer {
     .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
     .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
     .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
+    .orWhere("identityList.es-es = :eses", { eses: payload['es-es'] })
     .orWhere("index = :index", { index: payload.index })
     .orWhere("id = :id", { id: payload.id })
     .execute();

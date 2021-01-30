@@ -11,6 +11,7 @@ export class CommodityOptionsShapeService {
    * 创建商品选项
    */
   async create(payload) {
+    console.log("shape create", payload)
     const data = await this.baseCommodityOptionsShapeServer.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {

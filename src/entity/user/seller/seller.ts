@@ -50,6 +50,9 @@ export class UserSellerEntity {
   lastname: string;
 
   // 标签
+  @Column('simple-array')
+  tags: string[];
+
   @Column()
   label: string;
 

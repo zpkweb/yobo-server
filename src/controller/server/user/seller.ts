@@ -5,7 +5,7 @@ import { SellerService } from 'src/service/user/seller';
 
 @Provide()
 @Controller('/api/admin/user/seller')
-export class ServerUserSellerController {
+export class AdminUserSellerController {
 
   @Inject()
   userRegisterService: UserRegisterService;

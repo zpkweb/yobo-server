@@ -41,10 +41,6 @@ export class UserEntity {
   //   // this.userId = this.userId.replace('-', '')
   // }
 
-  // 是否申请成为艺术家
-  @Column()
-  isApplyArtist: boolean;
-
   // 头像
   @Column()
   avatar: string;
@@ -70,9 +66,7 @@ export class UserEntity {
   password: string;
 
   //  创建日期
-  @CreateDateColumn({
-    select: false
-  })
+  @CreateDateColumn()
   createdDate: Date;
 
   // 更新日期
@@ -80,7 +74,6 @@ export class UserEntity {
     select: false
   })
   updatedDate: Date;
-
 
   //  关联用户身份
   @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user, {

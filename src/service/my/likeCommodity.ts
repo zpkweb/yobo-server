@@ -52,6 +52,7 @@ export class MyLikeCommodityService {
       'en-us': payload['en-us'] || commodity.data.name['en-us'],
       'ja-jp': payload['ja-jp'] || commodity.data.name['ja-jp'],
       'fr-fr': payload['fr-fr'] || commodity.data.name['fr-fr'],
+      'es-es': payload['es-es'] || commodity.data.name['es-es'],
       commodityId: payload.commodityId
     });
     console.log('creatLikeCommodity', creatLikeCommodity)

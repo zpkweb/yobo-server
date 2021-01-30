@@ -25,6 +25,9 @@ export class CommodityPriceEntity {
   @Column()
   'fr-fr': number;
 
+  @Column()
+  'es-es': number;
+
   //  创建日期
   @CreateDateColumn({
     select: false

@@ -17,13 +17,15 @@ export class BaseCommodityOptionsTechniqueServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsTechniqueEntity)
-      .values({
-        img: payload.img,
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
+      // .values({
+      //   img: payload.img,
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr'],
+      //   'es-es': payload['es-es']
+      // })
+      .values(payload)
       .execute();
   }
 
@@ -37,6 +39,7 @@ export class BaseCommodityOptionsTechniqueServer {
       .orWhere('technique.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('technique.ja-jp = :jajp', { jajp: payload['ja-jp'] })
       .orWhere('technique.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .orWhere('technique.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
 

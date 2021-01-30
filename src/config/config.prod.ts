@@ -9,7 +9,19 @@ export default (appInfo: EggAppInfo) => {
 
 
   config.host = {
-    origin: 'http://81.70.62.235:7001'
+    origin: 'http://39.105.190.188:7001'
+  }
+
+
+  config.orm = {
+    "type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "Test123!@#",
+    "database": "yobo",
+    "synchronize": true,
+    "logging": false
   }
 
   config.security = {
@@ -22,16 +34,9 @@ export default (appInfo: EggAppInfo) => {
   };
 
 
-  config.orm = {
-    "type": "mysql",
-    "host": "bj-cdb-pepg2x0k.sql.tencentcdb.com",
-    "port": 61047,
-    "username": "root",
-    "password": "root1234",
-    "database": "yobo",
-    "synchronize": true,
-    "logging": false
-  }
+
+
+
 
   // config.redis = {
   //   client: {

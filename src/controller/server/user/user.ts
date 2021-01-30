@@ -4,7 +4,7 @@ import { UserService } from 'src/service/user/user'
 
 @Provide()
 @Controller('/api/admin/user')
-export class ServerUserController {
+export class AdminUserController {
 
   @Inject()
   userService: UserService;

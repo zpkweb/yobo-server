@@ -25,6 +25,9 @@ export class UserIdentityListEntity {
   @Column()
   'fr-fr': string;
 
+  @Column()
+  'es-es': string;
+
   // 菜单
   @Column({
     type: 'text'

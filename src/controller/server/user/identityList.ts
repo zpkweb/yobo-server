@@ -3,7 +3,7 @@ import { IdentityListService } from 'src/service/user/identityList';
 
 @Provide()
 @Controller('/api/admin/identityList')
-export class ServerUserIdentityController {
+export class AdminUserIdentityController {
 
   @Inject()
   identityListService: IdentityListService;

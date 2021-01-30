@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { UserSellerEntity } from "src/entity/user/seller/seller";
 import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
+import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 
 @Provide()
 export class BaseSellerServer {
@@ -14,8 +15,6 @@ export class BaseSellerServer {
   @InjectEntityModel(UserSellerMetadataEntity)
   userSellerMetadataEntity: Repository<UserSellerMetadataEntity>
 
-  @InjectEntityModel(CommodityPhotoEntity)
-  commodityPhotoEntity: Repository<CommodityPhotoEntity>
 
   /**
    * 增加
@@ -33,6 +32,7 @@ export class BaseSellerServer {
         typeName: payload.typeName,
         firstname: payload.firstname,
         lastname: payload.lastname,
+        tags: payload.tags,
         label: payload.label,
         gender: payload.gender,
         country: payload.country,
@@ -122,6 +122,7 @@ export class BaseSellerServer {
       .leftJoinAndSelect('seller.metadata', 'metadata')
       .leftJoinAndSelect('seller.commoditys', 'commoditys')
       .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
+      .leftJoinAndMapOne('seller.commodityName', CommodityNameEntity, "commodityName", "commodityName.commodityId = commoditys.commodityId")
       // .leftJoinAndMapMany('seller.commodityPhotos', '')
       .addSelect('seller.createdDate')
       .skip((payload.currentPage-1)*payload.pageSize)

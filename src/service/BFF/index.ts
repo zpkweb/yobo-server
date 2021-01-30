@@ -3,12 +3,16 @@ import { BannerService } from './banner';
 import { SellerService } from '../user/seller';
 import { CommodityService } from '../commodity';
 import { MyService } from 'src/service/my';
+import { ArtworkOptionsService } from './artworkOptions';
 
 @Provide()
 export class BFFService {
 
   @Inject()
   bannerService: BannerService;
+
+  @Inject()
+  artworkOptionsService: ArtworkOptionsService;
 
   @Inject()
   sellerService: SellerService;
@@ -43,6 +47,7 @@ export class BFFService {
       isLocale: true,
       locale: payload.locale || 'zh-cn'
     });
+    console.log("gallerySeller", JSON.stringify(gallerySeller))
     if(!gallerySeller.success) {
       return gallerySeller;
     }
@@ -105,6 +110,7 @@ export class BFFService {
       }
     }
   }
+
   /**
    * 购买
    *
@@ -183,5 +189,14 @@ export class BFFService {
         browsingHistory: browsingHistory.data
       }
     }
+  }
+
+  /**
+   * 艺术品选项
+   *
+   * @memberof BFFService
+   */
+  async artworkOptions(payload) {
+    return await this.artworkOptionsService.get(payload);
   }
 }

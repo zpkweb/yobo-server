@@ -20,6 +20,7 @@ export class IdentityListService {
           "en-us": item['en-us'] || '',
           "ja-jp": item['ja-jp'] || '',
           "fr-fr": item['fr-fr'] || '',
+          "es-es": item['es-es'] || '',
           "index": item.index || '',
           "menu": item.menu || ''
         })
@@ -101,6 +102,7 @@ export class IdentityListService {
       "en-us": payload['en-us'] || '',
       "ja-jp": payload['ja-jp'] || '',
       "fr-fr": payload['fr-fr'] || '',
+      "es-es": payload['es-es'] || '',
       index: payload.index || '',
       id: payload.id || ''
     });
@@ -117,6 +119,7 @@ export class IdentityListService {
       "en-us": identityList['en-us'] || '',
       "ja-jp": identityList['ja-jp'] || '',
       "fr-fr": identityList['fr-fr'] || '',
+      "es-es": identityList['es-es'] || '',
       index: identityList.index,
       menu: identityList.menu,
       id: identityList.id
@@ -128,6 +131,7 @@ export class IdentityListService {
         "en-us": payload['en-us'] || '',
         "ja-jp": payload['ja-jp'] || '',
         "fr-fr": payload['fr-fr'] || '',
+        "es-es": payload['es-es'] || '',
         index: payload.index || '',
         id: payload.id || ''
       });

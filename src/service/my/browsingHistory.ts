@@ -154,14 +154,23 @@ export class MyBrowsingHistoryService {
    * @param payload
    */
   async retrieveBrowsingHistory(payload) {
-    let data = await this.baseBrowsingHistoryServer.BaseRetrieve(payload.userId);
+    let result = await this.baseBrowsingHistoryServer.BaseRetrieve({
+      userId: payload.userId,
+      currentPage: payload.currentPage,
+      pageSize: payload.pageSize
+    });
+    let data = result[0];
+      let total = result[1];
     if(payload.isLocale) {
       data = this.filter(payload.locale, data);
     }
     console.log("data", data)
     if(data){
       return {
-        data,
+        data: {
+          list: data,
+          total
+        },
         success: true,
         code: 10009
       }

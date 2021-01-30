@@ -2,7 +2,6 @@ import { Provide, Config, Inject } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserAddressEntity } from 'src/entity/user/address';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
 import { BaseUserServer } from '../base/user/user';
@@ -16,8 +15,7 @@ export class UserService{
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
 
-  @InjectEntityModel(UserAddressEntity)
-  userAddressEntity: Repository<UserAddressEntity>;
+
 
   @Inject()
   baseUserServer: BaseUserServer;
@@ -36,14 +34,11 @@ export class UserService{
     if(payload && Object.keys(payload).length){
       let isParams = false;
       Object.keys(payload).forEach((item) => {
-        console.log("item", item, payload[item])
         if(payload[item]){
-          console.log("params", payload[item])
           isParams = true;
         }
 
       })
-      console.log(isParams)
       if(isParams){
         if(payload['identity']){
           // user = await this.baseUserServer.baseSearchUserIdentity(payload)
@@ -163,6 +158,22 @@ export class UserService{
    * 查找个人信息
    * @param userId
    */
+  async findInfo(userId) {
+    const user =  await this.baseUserServer.baseRetrieveInfo(userId)
+
+      if(user){
+        return {
+          data: user,
+          success: true,
+          code : 10009
+        }
+      }else{
+        return {
+          success: false,
+          code : 10010
+        }
+      }
+  }
   async findSelf(userId) {
     const user =  await this.baseUserServer.baseRetrieveSelf(userId)
 
@@ -225,7 +236,6 @@ export class UserService{
     const changeUser = await this.baseUserServer.baseUpdateUser({
       userId: user.userId,
       avatar: user.avatar,
-      isApplyArtist: user.isApplyArtist,
       name: user.name,
       email: user.email,
       phone: user.phone,
@@ -252,6 +262,17 @@ export class UserService{
    * @param payload
    */
   async passwordRetrieveCodeSend(payload) {
+    console.log("passwordRetrieveCodeSend", payload)
+    // 通过邮箱查找用户
+    const user = await this.baseUserServer.baseRetrieveUser(payload);
+    console.log("email user", user)
+    if(!user) {
+      return {
+        success: false,
+        code: 10413
+      }
+    }
+
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",
       service: this.email.service,
@@ -268,19 +289,22 @@ export class UserService{
       from: this.email.user,
       to: payload.email,
       subject: payload.sendMail.title,
-      html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
+      // html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
+      html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p>`
     });
 
     if(data.messageId){
+      console.log("payload.sendMail.code", payload.sendMail.code)
       // await this.redis.set(`emailCode-${payload.userId}`, payload.code)
-      global[`emailCode-${payload.userId}`] = payload.code
-      setTimeout(() => {
-        // this.redis.del(`emailCode-${payload.userId}`).then((results) => {
-        //   console.log("del", results)
-        // });
-        global[`emailCode-${payload.userId}`] = null;
-      }, payload.codeTime)
+      global[`emailCode-${user.userId}`] = payload.sendMail.code
+      // setTimeout(() => {
+      //   // this.redis.del(`emailCode-${payload.userId}`).then((results) => {
+      //   //   console.log("del", results)
+      //   // });
+      //   global[`emailCode-${user.userId}-${payload.sendMail.code}`] = null;
+      // }, payload.codeTime)
       return {
+        data: user,
         success: true,
         code : 10405
       }
@@ -297,6 +321,8 @@ export class UserService{
    * @param payload
    */
   async passwordRetrieveCodeVerify(payload) {
+    console.log("passwordRetrieveCodeVerify", payload)
+    console.log("global", global[`emailCode-${payload.userId}`])
     // const emailCode = await this.redis.get(`emailCode-${payload.userId}`);
     const emailCode = global[`emailCode-${payload.userId}`];
     if(emailCode && emailCode === payload.code){
@@ -339,7 +365,6 @@ export class UserService{
     const userUpdate = await this.baseUserServer.baseUpdateUser({
       userId: user.userId,
       avatar: payload.avatar || user.avatar,
-      isApplyArtist: payload.isApplyArtist || user.isApplyArtist,
       name: payload.name || user.name,
       email: payload.email || user.email,
       phone: payload.phone || user.phone,
@@ -347,11 +372,15 @@ export class UserService{
     });
 
     if(userUpdate.affected){
-      // 修改成功
-      return {
-        success: true,
-        code : 10007
-      }
+      // 获取用户
+      const user = await this.baseUserServer.baseRetrieveUser(payload);
+        // 修改成功
+        return {
+          data: user,
+          success: true,
+          code : 10007
+        }
+
     }else{
       // 修改失败
       return {
@@ -362,122 +391,6 @@ export class UserService{
 
   }
 
-
-
-
-  /**
-   * 获取用户地址
-   * @param payload
-   */
-  async getAddress(payload) {
-    const address =  await this.baseUserServer.baseRetrieveUserAddress(payload);
-
-    if(address){
-      return{
-        data: address,
-        success: true,
-        code: 10009
-      }
-    }else{
-      return{
-        success: false,
-        code: 10010
-      }
-    }
-  }
-
-  /**
-   * 创建用户地址
-   * @param payload
-   */
-  async address(payload) {
-    let address = await this.baseUserServer.baseCreateUserAddress(payload);
-
-    if(address.identifiers[0].id){
-
-      await this.userAddressEntity
-      .createQueryBuilder()
-      .relation(UserAddressEntity, "user")
-      .of(address.identifiers[0].id)
-      .set({userId: payload.userId})
-
-    let userAddress = await this.baseUserServer.baseRetrieveUserAddress(payload);
-    if(userAddress){
-      return {
-        data: userAddress,
-        success: true,
-        code : 10003
-      }
-    }else{
-      return{
-        success: false,
-        code: 10010
-      }
-    }
-
-    }else{
-      return {
-        success: false,
-        code : 10004
-      }
-    }
-
-
-  }
-
-  /**
-   * 更新用户地址
-   * @param payload
-   */
-  async addressUpdate(payload) {
-
-    const address = await this.baseUserServer.baseUpdateUserAddress({
-      name: payload.address.name || '',
-        phone: payload.address.email || '',
-        city: payload.address.phone || '',
-        address: payload.address.address || ''
-    })
-      if(address.affected){
-        let user = await this.baseUserServer.baseRetrieveUserAddress(payload)
-        if(user){
-          return {
-            data: user,
-            success: true,
-            code : 10007
-          }
-        }else{
-          return{
-            success: false,
-            code: 10010
-          }
-        }
-
-      }else{
-        return {
-          success: false,
-          code : 10008
-        }
-      }
-  }
-
-  /**
-   * 删除用户地址
-   * @param payload
-   */
-  async addressRemove(payload) {
-    const address = await this.baseUserServer.baseDeleteUserAddress(payload);
-      if(address.affected){
-        return {
-          success: true,
-          code : 10005
-        }
-      }else{
-        return {
-          success: false,
-          code : 10006
-        }
-      }
-  }
 
   /**
    * 删除用户身份

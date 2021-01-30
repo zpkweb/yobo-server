@@ -5,7 +5,7 @@ import { AdminUserLoginDTO } from 'src/dto/user/login';
 
 @Provide()
 @Controller('/api/admin/user', { tagName: 'admin' })
-export class ServerUserLoginController {
+export class AdminUserLoginController {
 
   @Inject()
   loginService: LoginService;

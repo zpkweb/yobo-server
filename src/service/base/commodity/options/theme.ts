@@ -17,13 +17,15 @@ export class BaseCommodityOptionsThemeServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsThemeEntity)
-      .values({
-        img: payload.img,
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
+      // .values({
+      //   img: payload.img,
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr'],
+      //   'es-es': payload['es-es']
+      // })
+      .values(payload)
       .execute();
   }
 
@@ -37,6 +39,7 @@ export class BaseCommodityOptionsThemeServer {
       .orWhere('theme.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('theme.ja-jp = :jajp', { jajp: payload['ja-jp'] })
       .orWhere('theme.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .orWhere('theme.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
 

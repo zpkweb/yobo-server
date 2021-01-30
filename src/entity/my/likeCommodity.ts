@@ -38,6 +38,9 @@ export class MyLikeCommodityEntity {
   'fr-fr': string;
 
   @Column()
+  'es-es': string;
+
+  @Column()
   commodityId: string;
 
   //  创建日期

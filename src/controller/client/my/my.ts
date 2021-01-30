@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Provide, Get, Body, ALL, Query } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Get, Body, ALL, Query, Config } from '@midwayjs/decorator';
 import { MyService } from 'src/service/my';
 
 @Provide()
@@ -7,6 +7,9 @@ export class MyController {
 
   @Inject()
   myService: MyService;
+
+  @Config('pagination')
+  pagination;
 
   // 添加我喜欢的商家
   @Post('/seller')
@@ -89,11 +92,25 @@ export class MyController {
 
   // 查找我的浏览记录
   @Get('/browsingHistory')
-  async findBrowsingHistory(@Query(ALL) query) {
-    return  await this.myService.findBrowsingHistory({
+  async findBrowsingHistory(@Query(ALL) findQuery) {
+    const { pageSize, currentPage, ...query } = findQuery;
+    const getPageSize = Number(pageSize) || this.pagination.pageSize;
+    const getCurrentPage = Number(currentPage) || this.pagination.currentPage;
+    let data:any;
+
+    data =  await this.myService.findBrowsingHistory({
       ...query,
+      pageSize: getPageSize,
+      currentPage: getCurrentPage,
       isLocale: true
     });
+
+    if(data.success){
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
+    }
+    return data;
+
   }
 
 

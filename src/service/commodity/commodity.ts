@@ -45,10 +45,11 @@ export class CommodityCommodityService {
 
     // 创建商品名称
     const commodityName = await this.commodityAttributeName.create({
-      'zh-cn': payload.name['zh-cn'],
-      'en-us': payload.name['en-us'],
-      'ja-jp': payload.name['ja-jp'],
-      'fr-fr': payload.name['fr-fr']
+      'zh-cn': payload.name['zh-cn'] || '',
+      'en-us': payload.name['en-us'] || '',
+      'ja-jp': payload.name['ja-jp'] || '',
+      'fr-fr': payload.name['fr-fr'] || '',
+      'es-es': payload.name['es-es'] || ''
     })
     if (!commodityName.success) {
       return commodityName
@@ -63,10 +64,11 @@ export class CommodityCommodityService {
 
     // 创建商品详情
     const commodityDesc = await this.commodityAttributeDesc.create({
-      'zh-cn': payload.desc['zh-cn'],
-      'en-us': payload.desc['en-us'],
-      'ja-jp': payload.desc['ja-jp'],
-      'fr-fr': payload.desc['fr-fr']
+      'zh-cn': payload.desc['zh-cn'] || '',
+      'en-us': payload.desc['en-us'] || '',
+      'ja-jp': payload.desc['ja-jp'] || '',
+      'fr-fr': payload.desc['fr-fr'] || '',
+      'es-es': payload.desc['es-es'] || ''
     })
     if (!commodityDesc.success) {
       return commodityDesc
@@ -84,7 +86,8 @@ export class CommodityCommodityService {
       'zh-cn': payload.price['zh-cn'],
       'en-us': payload.price['en-us'],
       'ja-jp': payload.price['ja-jp'],
-      'fr-fr': payload.price['fr-fr']
+      'fr-fr': payload.price['fr-fr'],
+      'es-es': payload.price['es-es']
     })
     if (!commodityPrice.success) {
       return commodityPrice

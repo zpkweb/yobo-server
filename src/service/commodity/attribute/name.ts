@@ -31,10 +31,11 @@ export class CommodityAttributeName {
    */
   async hasName(payload) {
     const data = await this.baseCommodityNameServer.BaseRetrieve({
-      'zh-cn': payload['zh-cn'],
-      'en-us': payload['en-us'],
-      'ja-jp': payload['ja-jp'],
-      'fr-fr': payload['fr-fr']
+      'zh-cn': payload['zh-cn'] || '',
+      'en-us': payload['en-us'] || '',
+      'ja-jp': payload['ja-jp'] || '',
+      'fr-fr': payload['fr-fr'] || '',
+      'es-es': payload['es-es'] || ''
     });
     if (data) {
       return {

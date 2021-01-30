@@ -34,7 +34,6 @@ export class BaseUserServer {
       .insert()
       .into(UserEntity)
       .values({
-        isApplyArtist: payload.isApplyArtist,
         avatar: payload.avatar,
         name: payload.name,
         phone: payload.phone,
@@ -53,10 +52,11 @@ export class BaseUserServer {
       .insert()
       .into(UserIdentityEntity)
       .values({
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr'],
+        'zh-cn': payload['zh-cn'] || '',
+        'en-us': payload['en-us'] || '',
+        'ja-jp': payload['ja-jp'] || '',
+        'fr-fr': payload['fr-fr'] || '',
+        'es-es': payload['es-es'] || '',
         index: payload.index
       })
       .execute()
@@ -74,6 +74,7 @@ export class BaseUserServer {
       .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
       .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
       .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
+      .orWhere("identityList.es-es = :eses", { eses: payload['es-es'] })
       .execute();
     }
 
@@ -85,6 +86,7 @@ export class BaseUserServer {
       return await this.userEntity
         .createQueryBuilder('user')
         .leftJoinAndSelect('user.identitys', 'identitys')
+        .leftJoinAndSelect('user.seller', 'seller')
         .where("user.name = :name", { name: payload.name })
         .orWhere("user.email = :email", { email: payload.name })
         .orWhere("user.phone = :phone", { phone: payload.name })
@@ -147,10 +149,11 @@ export class BaseUserServer {
     return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
-      .addSelect('user.createdDate')
+      .leftJoinAndSelect('user.seller', 'seller')
       .where("user.name = :name", { name: payload.name })
-      // .orWhere("user.email = :email", { email: payload.email })
+      .orWhere("user.email = :email", { email: payload.email })
       // .orWhere("user.phone = :phone", { phone: payload.phone })
+      .orWhere("user.userId = :userId", { userId: payload.userId })
       .getOne();
   }
 
@@ -158,7 +161,7 @@ export class BaseUserServer {
     return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
-      .addSelect('user.createdDate')
+      .leftJoinAndSelect('user.seller', 'seller')
       .where("user.userId = :userId", { userId: userId })
       // .orWhere("user.email = :email", { email: payload.email })
       // .orWhere("user.phone = :phone", { phone: payload.phone })
@@ -169,9 +172,9 @@ export class BaseUserServer {
     return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
-      // .addSelect('user.createdDate')
       .addSelect("user.password")
       .where("user.userId = :userId", { userId: payload.userId })
+      .orWhere("user.email = :email", { email: payload.email })
       .getOne();
   }
 
@@ -186,10 +189,19 @@ export class BaseUserServer {
    * 查找个人信息
    * @param payload
    */
+  async baseRetrieveInfo(userId) {
+    return await this.userEntity
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.identitys', 'identitys')
+    .leftJoinAndSelect('user.address', 'address')
+    .where("user.userId = :userId", { userId: userId })
+    .getOne();
+  }
     async baseRetrieveSelf(userId) {
       return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
+      .leftJoinAndSelect('user.seller', 'seller')
       .leftJoinAndSelect('user.address', 'address')
       .leftJoinAndSelect('user.likeSellers', 'likeSellers')
       .leftJoinAndSelect('user.likeCommoditys', 'likeCommoditys')
@@ -210,7 +222,6 @@ export class BaseUserServer {
     return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identity')
-      .addSelect('user.createdDate')
       .where("user.name like :name", { name: `%${payload.name}%` })
       .andWhere("user.email like :email", { email: `%${payload.email}%` })
       .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
@@ -224,7 +235,6 @@ export class BaseUserServer {
     return await this.userEntity
       .createQueryBuilder('user')
       .innerJoinAndSelect('user.identitys', 'identity', 'identity.en-us like :enus ', { enus: `%${payload.identity}%` })
-      .addSelect('user.createdDate')
       .where("user.name like :name", { name: `%${payload.name}%` })
       .andWhere("user.email like :email", { email: `%${payload.email}%` })
       .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
@@ -274,11 +284,11 @@ export class BaseUserServer {
    * 获取用户地址
    *
    */
-    async baseRetrieveUserAddress(payload) {
-      return await this.userEntity
-        .createQueryBuilder('user')
-        .leftJoinAndSelect('user.address', 'address')
-        .where('user.userId = :userId', { userId : payload.userId})
+    async baseRetrieveUserAddress(userId) {
+      return await this.userAddressEntity
+        .createQueryBuilder('address')
+        .leftJoinAndSelect('address.user', 'user')
+        .where('user.userId = :userId', { userId : userId})
         .getOne();
     }
   /**
@@ -290,10 +300,11 @@ export class BaseUserServer {
       .insert()
       .into(UserAddressEntity)
       .values({
-        name: payload.address.name || '',
-        phone: payload.address.phone || '',
-        city: payload.address.city || '',
-        address: payload.address.address || ''
+        name: payload.name || '',
+        phone: payload.phone || '',
+        country: payload.country || '',
+        city: payload.city || '',
+        address: payload.address || ''
       })
       .execute()
 
@@ -302,9 +313,11 @@ export class BaseUserServer {
    *  更新用户地址
    */
     async baseUpdateUserAddress(payload) {
-      const { addressId, ...setData } = payload.address;
+      console.log("baseUpdateUserAddress", payload)
+      const { userId, ...setData } = payload;
       return await this.userAddressEntity
         .createQueryBuilder('address')
+        .leftJoinAndSelect('address.user', 'user')
         .update(UserAddressEntity)
         // .set({
         //   name: payload.address.name,
@@ -313,17 +326,17 @@ export class BaseUserServer {
         //   address: payload.address.address
         // })
         .set(setData)
-        .where("addressId = :addressId", { addressId: addressId })
+        .where("user.userId = :userId", { userId: userId })
         .execute();
   }
   /**
    * 删除用户地址
    */
-    async baseDeleteUserAddress(payload) {
+    async baseDeleteUserAddress(userId) {
       return await this.userAddressEntity
       .createQueryBuilder('address')
       .delete()
-      .where("addressId = :addressId", { addressId: payload.addressId })
+      .where("userId = :userId", { userId: userId })
       .execute();
     }
 }

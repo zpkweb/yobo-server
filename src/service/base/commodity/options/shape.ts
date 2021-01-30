@@ -17,13 +17,15 @@ export class BaseCommodityOptionsShapeServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsShapeEntity)
-      .values({
-        img: payload.img,
-        'zh-cn': payload['zh-cn'],
-        'en-us': payload['en-us'],
-        'ja-jp': payload['ja-jp'],
-        'fr-fr': payload['fr-fr']
-      })
+      // .values({
+      //   img: payload.img,
+      //   'zh-cn': payload['zh-cn'],
+      //   'en-us': payload['en-us'],
+      //   'ja-jp': payload['ja-jp'],
+      //   'fr-fr': payload['fr-fr'],
+      //   'es-es': payload['es-es']
+      // })
+      .values(payload)
       .execute();
   }
 
@@ -38,6 +40,7 @@ export class BaseCommodityOptionsShapeServer {
       .orWhere('shape.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('shape.ja-jp = :jajp', { jajp: payload['ja-jp'] })
       .orWhere('shape.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      .orWhere('shape.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
 

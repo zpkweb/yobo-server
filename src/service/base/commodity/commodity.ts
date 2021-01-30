@@ -171,6 +171,7 @@ export class BaseCommodityServer {
           .andWhere("name.en-us like :name")
           .andWhere("name.ja-jp like :name")
           .andWhere("name.fr-fr like :name")
+          .andWhere("name.es-es like :name")
           .getQuery();
           console.log("name subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
@@ -184,6 +185,7 @@ export class BaseCommodityServer {
           .andWhere("name.en-us like :desc")
           .andWhere("name.ja-jp like :desc")
           .andWhere("name.fr-fr like :desc")
+          .andWhere("name.es-es like :desc")
           .getQuery();
           console.log("desc subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
@@ -197,6 +199,7 @@ export class BaseCommodityServer {
           .andWhere("name.en-us BETWEEN :priceMin AND :priceMax")
           .andWhere("name.ja-jp BETWEEN :priceMin AND :priceMax")
           .andWhere("name.fr-fr BETWEEN :priceMin AND :priceMax")
+          .andWhere("name.es-es BETWEEN :priceMin AND :priceMax")
           .getQuery();
           console.log("price subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;

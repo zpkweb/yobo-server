@@ -54,7 +54,8 @@ export class CommodityService {
       'zh-cn': payload['zh-cn'],
       'en-us': payload['en-us'],
       'ja-jp': payload['ja-jp'],
-      'fr-fr': payload['fr-fr']
+      'fr-fr': payload['fr-fr'],
+      'es-es': payload['es-es']
     });
     if(commodity.success){
       return {
@@ -238,10 +239,11 @@ export class CommodityService {
     // 更新商品名称
     const commodityName = await this.commodityAttributeName.updateName({
       commodityId: payload.commodityId,
-      'zh-cn': payload.name['zh-cn'],
-      'en-us': payload.name['en-us'],
-      'ja-jp': payload.name['ja-jp'],
-      'fr-fr': payload.name['fr-fr']
+      'zh-cn': payload.name['zh-cn'] || '',
+      'en-us': payload.name['en-us'] || '',
+      'ja-jp': payload.name['ja-jp'] || '',
+      'fr-fr': payload.name['fr-fr'] || '',
+      'es-es': payload.name['es-es'] || ''
     })
     console.log("commodityName", commodityName)
     if(!commodityName.success) {
@@ -251,10 +253,11 @@ export class CommodityService {
     // 更新商品详情
     const commodityDesc = await this.commodityAttributeDesc.updateDesc({
       commodityId: payload.commodityId,
-      'zh-cn': payload.desc['zh-cn'],
-      'en-us': payload.desc['en-us'],
-      'ja-jp': payload.desc['ja-jp'],
-      'fr-fr': payload.desc['fr-fr']
+      'zh-cn': payload.desc['zh-cn'] || '',
+      'en-us': payload.desc['en-us'] || '',
+      'ja-jp': payload.desc['ja-jp'] || '',
+      'fr-fr': payload.desc['fr-fr'] || '',
+      'es-es': payload.desc['es-es'] || ''
     });
     console.log("commodityDesc", commodityDesc)
     if(!commodityDesc.success) {
@@ -264,10 +267,11 @@ export class CommodityService {
     // 更新商品价格
     const commodityPrice = await this.commodityAttributePrice.updatePrice({
       commodityId: payload.commodityId,
-      'zh-cn': payload.price['zh-cn'],
-      'en-us': payload.price['en-us'],
-      'ja-jp': payload.price['ja-jp'],
-      'fr-fr': payload.price['fr-fr']
+      'zh-cn': payload.price['zh-cn'] || '',
+      'en-us': payload.price['en-us'] || '',
+      'ja-jp': payload.price['ja-jp'] || '',
+      'fr-fr': payload.price['fr-fr'] || '',
+      'es-es': payload.price['es-es'] || ''
     });
     console.log("commodityPrice", commodityPrice)
     if(!commodityPrice.success) {
@@ -278,15 +282,35 @@ export class CommodityService {
 
     // 更新商品图片
     for(let item of payload.photos){
-      const commodityPhoto = await this.commodityAttributePhoto.update({
-      src: item.url,
-      name: item.name,
-      commodityId: payload.commodityId,
-      });
-      console.log("commodityPhoto", commodityPhoto)
-      if (!commodityPhoto.success) {
-        return commodityPhoto
+      if(item.id){
+        // 更新图片
+        const commodityPhotoUpdate = await this.commodityAttributePhoto.update({
+          src: item.url,
+          name: item.name,
+          commodityId: payload.commodityId,
+        });
+        console.log("commodityPhotoUpdate", commodityPhotoUpdate)
+        if (!commodityPhotoUpdate.success) {
+          return commodityPhotoUpdate
+        }
+      }else{
+        //  添加图片
+        const commodityPhotoCreate = await this.commodityAttributePhoto.create({
+          src: item.url,
+          name: item.name
+        })
+        if (!commodityPhotoCreate.success) {
+          return commodityPhotoCreate
+        }
+        // 商品 关联 商品图片
+        await this.commodityCommodityService.relation({
+          name: 'photos',
+          of: { commodityId: payload.commodityId },
+          add: commodityPhotoCreate.data.identifiers[0].id
+        })
       }
+
+
       // 商品 关联 商品图片
       // await this.relation({
       //   name: 'photos',
@@ -412,19 +436,48 @@ export class CommodityService {
    * type
    */
   async commodityOptionsTypeCreate(payload) {
+    console.log("commodityOptionsTypeCreate", payload)
     let data: any;
     switch (payload.type) {
       case 'category':
-        data = await this.commodityOptionsCategoryService.create(payload);
+        data = await this.commodityOptionsCategoryService.create({
+          'img': payload['img'] || '',
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
+        });
         break;
       case 'shape':
-        data = await this.commodityOptionsShapeService.create(payload);
+        data = await this.commodityOptionsShapeService.create({
+          'img': payload['img'] || '',
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
+        });
         break;
       case 'technique':
-        data = await this.commodityOptionsTechniqueService.create(payload);
+        data = await this.commodityOptionsTechniqueService.create({
+          'img': payload['img'] || '',
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
+        });
         break;
       case 'theme':
-        data = await this.commodityOptionsThemeService.create(payload);
+        data = await this.commodityOptionsThemeService.create({
+          'img': payload['img'] || '',
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
+        });
         break;
     }
     return data;
@@ -528,7 +581,8 @@ export class CommodityService {
       'zh-cn': payload['zh-cn'] || commodityOptionsShape.data['zh-cn'],
       'en-us': payload['en-us'] || commodityOptionsShape.data['en-us'],
       'ja-jp': payload['ja-jp'] || commodityOptionsShape.data['ja-jp'],
-      'fr-fr': payload['fr-fr'] || commodityOptionsShape.data['fr-fr']
+      'fr-fr': payload['fr-fr'] || commodityOptionsShape.data['fr-fr'],
+      'es-es': payload['es-es'] || commodityOptionsShape.data['es-es']
     })
 
   }
@@ -544,40 +598,44 @@ export class CommodityService {
         data = await this.commodityOptionsCategoryService.update({
           id: payload.id,
           img: payload.img,
-          'zh-cn': payload['zh-cn'],
-          'en-us': payload['en-us'],
-          'ja-jp': payload['ja-jp'],
-          'fr-fr': payload['fr-fr']
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
         });
         break;
       case 'shape':
         data = await this.commodityOptionsShapeService.update({
           id: payload.id,
           img: payload.img,
-          'zh-cn': payload['zh-cn'],
-          'en-us': payload['en-us'],
-          'ja-jp': payload['ja-jp'],
-          'fr-fr': payload['fr-fr']
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
         });
         break;
       case 'technique':
         data = await this.commodityOptionsTechniqueService.update({
           id: payload.id,
           img: payload.img,
-          'zh-cn': payload['zh-cn'],
-          'en-us': payload['en-us'],
-          'ja-jp': payload['ja-jp'],
-          'fr-fr': payload['fr-fr']
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
         });
         break;
       case 'theme':
         data = await this.commodityOptionsThemeService.update({
           id: payload.id,
           img: payload.img,
-          'zh-cn': payload['zh-cn'],
-          'en-us': payload['en-us'],
-          'ja-jp': payload['ja-jp'],
-          'fr-fr': payload['fr-fr']
+          'zh-cn': payload['zh-cn'] || '',
+          'en-us': payload['en-us'] || '',
+          'ja-jp': payload['ja-jp'] || '',
+          'fr-fr': payload['fr-fr'] || '',
+          'es-es': payload['es-es'] || ''
         });
         break;
     }
@@ -642,4 +700,6 @@ export class CommodityService {
     async commodityComment(payload) {
       return await this.commentService.home(payload);
     }
+
+
 }

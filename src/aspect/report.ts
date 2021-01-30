@@ -3,24 +3,24 @@ import { Context } from 'egg';
 import { UserController } from 'src/controller/client/user/user';
 import { UserLoginController } from 'src/controller/client/user/login';
 
-import { ServerUserController } from 'src/controller/server/user/user';
-import { ServerUserLoginController } from 'src/controller/server/user/login';
-import { ServerUserRegisterController } from 'src/controller/server/user/register';
-import { ServerUserSellerController } from 'src/controller/server/user/seller';
+import { AdminUserController } from 'src/controller/server/user/user';
+import { AdminUserLoginController } from 'src/controller/server/user/login';
+import { AdminUserRegisterController } from 'src/controller/server/user/register';
+import { AdminUserSellerController } from 'src/controller/server/user/seller';
 
 import { CommodityController } from 'src/controller/client/commodity/commodity';
-import { CommodityAdminController } from 'src/controller/server/commodity/commodity';
+import { AdminCommodityController } from 'src/controller/server/commodity/commodity';
 
 @Provide()
 @Aspect([
   UserController,
   UserLoginController,
-  ServerUserController,
-  ServerUserLoginController,
-  ServerUserRegisterController,
-  ServerUserSellerController,
+  AdminUserController,
+  AdminUserLoginController,
+  AdminUserRegisterController,
+  AdminUserSellerController,
   CommodityController,
-  CommodityAdminController
+  AdminCommodityController
 ])
 export class ReportInfo implements IMethodAspect {
 

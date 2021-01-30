@@ -39,8 +39,8 @@ export class BaseBrowsingHistoryServer {
    * 查找
    * @param payload
    */
-  async BaseRetrieve(userId) {
-    console.log("BaseRetrieve", userId)
+  async BaseRetrieve(payload) {
+    console.log("BaseRetrieve", payload.userId)
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
       .leftJoinAndSelect("myBrowsingHistory.user", "user")
@@ -50,7 +50,7 @@ export class BaseBrowsingHistoryServer {
       .leftJoinAndMapOne('myBrowsingHistory.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
       .leftJoinAndMapMany('myBrowsingHistory.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
       .leftJoinAndMapOne('myBrowsingHistory.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
-      .where("user.userId = :userId", { userId: userId })
+      .where("user.userId = :userId", { userId: payload.userId })
       // .andWhere(qb => {
       //   const subQuery = qb
       //     .subQuery()
@@ -59,7 +59,9 @@ export class BaseBrowsingHistoryServer {
       //     .getQuery();
       //   return "commodity.commodityId IN " + subQuery;
       // })
-      .getMany();
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
   }
 
   /**
