@@ -15,8 +15,6 @@ export class UserService{
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
 
-
-
   @Inject()
   baseUserServer: BaseUserServer;
 
