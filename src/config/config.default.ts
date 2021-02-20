@@ -12,6 +12,31 @@ export default (appInfo: EggAppInfo) => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1605490437736_6554';
 
+  config.host = {
+    origin: 'http://localhost:7001'
+  }
+
+  config.orm = {
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "root1234",
+    "database": "yobo",
+    "synchronize": true,
+    "logging": false
+  }
+  // config.orm = {
+  //   "type": "mysql",
+  //   "host": "127.0.0.1",
+  //   "port": 3306,
+  //   "username": "root",
+  //   "password": "Test123!@#",
+  //   "database": "yobo",
+  //   "synchronize": true,
+  //   "logging": false
+  // }
+
   config.root = {
     name: 'root',
     password: '123456'
@@ -31,9 +56,7 @@ export default (appInfo: EggAppInfo) => {
     currentPage: 1,
   }
 
-  config.host = {
-    origin: 'http://localhost:7001'
-  }
+
 
 
 
@@ -94,16 +117,7 @@ config.cors = {
   };
 
 
-  config.orm = {
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "root",
-    "password": "root1234",
-    "database": "yobo",
-    "synchronize": true,
-    "logging": false
-  }
+
 
 
 
