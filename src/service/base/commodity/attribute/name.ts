@@ -46,10 +46,10 @@ export class BaseCommodityNameServer {
     return await this.commodityNameEntity
       .createQueryBuilder('name')
       .where('name.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('name.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('name.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('name.fr-fr = :frfr', { frfr: payload['fr-fr'] })
-      .orWhere('name.es-es = :eses', { eses: payload['es-es'] })
+      // .orWhere('name.en-us = :enus', { enus: payload['en-us'] })
+      // .orWhere('name.ja-jp = :jajp', { jajp: payload['ja-jp'] })
+      // .orWhere('name.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('name.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
 

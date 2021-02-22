@@ -47,7 +47,7 @@ export class BaseCommodityPriceServer {
       .where('price.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('price.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('price.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('price.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('price.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('price.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }

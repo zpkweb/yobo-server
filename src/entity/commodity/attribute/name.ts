@@ -23,7 +23,9 @@ export class CommodityNameEntity {
   @Column()
   'ja-jp': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'fr-fr': string;
 
   @Column()

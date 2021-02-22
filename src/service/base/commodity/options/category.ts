@@ -40,7 +40,7 @@ export class BaseCommodityOptionsCategoryServer {
       .where('category.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('category.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('category.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('category.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('category.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('category.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }

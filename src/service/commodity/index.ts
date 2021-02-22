@@ -57,6 +57,7 @@ export class CommodityService {
       'fr-fr': payload['fr-fr'],
       'es-es': payload['es-es']
     });
+    console.log("create commodity", commodity)
     if(commodity.success){
       return {
         success: false,

@@ -22,7 +22,9 @@ export class CommodityPriceEntity {
   @Column()
   'ja-jp': number;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'fr-fr': number;
 
   @Column()

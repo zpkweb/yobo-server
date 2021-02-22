@@ -38,7 +38,7 @@ export class BaseCommodityOptionsThemeServer {
       .where('theme.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('theme.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('theme.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('theme.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('theme.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('theme.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }

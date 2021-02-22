@@ -10,6 +10,8 @@ module.exports = {
       env: {
         NODE_ENV: "prod",
         MIDWAY_SERVER_ENV: "prod",
+        // NODE_ENV: "dev",
+        // MIDWAY_SERVER_ENV: "dev",
       }
     }
   ]

@@ -309,13 +309,14 @@ export class SellerService {
 
   async retrieveSellerAll(payload) {
     let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
-      // console.log("searchSeller", result)
+      console.log("searchSeller", result)
       let data = result[0];
       let total = result[1];
+
       if(payload.isLocale){
         data = this.retrieveSellerAllFilter(payload.locale, data)
       }
-      // console.log("searchSellerFilter", data)
+      console.log("searchSellerFilter", data)
       if (data) {
         return {
           data: {
@@ -335,7 +336,8 @@ export class SellerService {
 
   retrieveSellerAllFilter(type, payload) {
     return payload.map(item => {
-      return Object.assign(item, {commodityName: item.commodityName[type]})
+        return Object.assign(item, {commodityName: item.commodityName && item.commodityName[type] ? item.commodityName[type] : ''})
+
 
     })
   }

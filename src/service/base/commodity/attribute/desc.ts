@@ -48,7 +48,7 @@ export class BaseCommodityDescServer {
       .where('desc.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('desc.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('desc.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('desc.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('desc.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('desc.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }

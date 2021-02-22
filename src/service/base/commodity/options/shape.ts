@@ -39,7 +39,7 @@ export class BaseCommodityOptionsShapeServer {
       .where('shape.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('shape.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('shape.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('shape.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('shape.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('shape.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }

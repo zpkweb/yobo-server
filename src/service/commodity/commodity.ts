@@ -83,11 +83,11 @@ export class CommodityCommodityService {
 
     // 创建商品价格
     const commodityPrice = await this.commodityAttributePrice.create({
-      'zh-cn': payload.price['zh-cn'],
-      'en-us': payload.price['en-us'],
-      'ja-jp': payload.price['ja-jp'],
-      'fr-fr': payload.price['fr-fr'],
-      'es-es': payload.price['es-es']
+      'zh-cn': payload.price['zh-cn'] || 0,
+      'en-us': payload.price['en-us'] || 0,
+      'ja-jp': payload.price['ja-jp'] || 0,
+      'fr-fr': payload.price['fr-fr'] || 0,
+      'es-es': payload.price['es-es'] || 0
     })
     if (!commodityPrice.success) {
       return commodityPrice

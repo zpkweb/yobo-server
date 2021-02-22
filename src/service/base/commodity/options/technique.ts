@@ -38,7 +38,7 @@ export class BaseCommodityOptionsTechniqueServer {
       .where('technique.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('technique.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('technique.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      .orWhere('technique.fr-fr = :frfr', { frfr: payload['fr-fr'] })
+      // .orWhere('technique.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('technique.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
