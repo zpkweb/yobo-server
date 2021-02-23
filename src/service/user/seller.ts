@@ -286,7 +286,7 @@ export class SellerService {
 
   async searchSeller(payload) {
     let result = await this.baseSellerServer.baseSearchSeller(payload);
-
+      console.log("searchSeller result", result)
       let data = result[0];
       let total = result[1];
       if (data) {

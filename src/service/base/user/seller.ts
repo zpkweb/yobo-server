@@ -1,6 +1,6 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository } from "typeorm";
+import { Repository, Like } from "typeorm";
 import { UserSellerEntity } from "src/entity/user/seller/seller";
 import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
@@ -137,23 +137,67 @@ export class BaseSellerServer {
    */
   async baseSearchSeller(payload) {
     console.log("baseSearchSeller", payload)
-    return await this.userSellerEntity
-      .createQueryBuilder('seller')
-      .leftJoinAndSelect('seller.user', 'user')
-      .leftJoinAndSelect('seller.metadata', 'metadata')
-      .addSelect('seller.createdDate')
-      .where("seller.firstname like :firstname", { firstname: `%${payload.firstname}%` })
-      .orWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })
-      .orWhere("seller.label like :label", { label: `%${payload.label}%` })
-      .orWhere("seller.gender like :gender", { gender: `%${payload.gender}%` })
-      .orWhere("seller.country like :country", { country: `%${payload.country}%` })
-      .orWhere("seller.state like :state", { state: `%${payload.state}%` })
-      .orWhere("seller.type like :type", { type: `%${+payload.type}%` })
-      // .andWhere("user.email like :email", { email: `%${payload.email}%` })
-      // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
-      .skip((payload.currentPage-1)*payload.pageSize)
-      .take(payload.pageSize)
-      .getManyAndCount();
+    const where: any = {};
+
+    if (payload.surname) {
+      where.firstname = Like(payload.surname);
+    }
+
+    if (payload.label) {
+      where.label = Like(payload.label);
+    }
+
+    if (payload.gender) {
+      where.gender = Like(payload.gender);
+    }
+
+    if (payload.country) {
+      where.country = Like(payload.country);
+    }
+
+    if (payload.state) {
+      where.state = Like(payload.state);
+    }
+
+    if (payload.type) {
+      where.type = Like(payload.type);
+    }
+
+    if (payload.email) {
+      where.email = Like(payload.email);
+    }
+
+    if (payload.phone) {
+      where.phone = Like(payload.phone);
+    }
+
+    // list total
+    return await this.userSellerEntity.findAndCount({
+      where,
+      take: payload.pageSize,
+      skip: payload.pageSize * (payload.currentPage - 1),
+    });
+
+
+
+    // return await this.userSellerEntity
+    //   .createQueryBuilder('seller')
+    //   .leftJoinAndSelect('seller.user', 'user')
+    //   .leftJoinAndSelect('seller.metadata', 'metadata')
+    //   .addSelect('seller.createdDate')
+    //   .where("seller.firstname like :firstname", { firstname: `%${payload.surname}%` })
+    //   .orWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })
+    //   .orWhere("seller.label like :label", { label: `%${payload.label}%` })
+    //   .orWhere("seller.gender like :gender", { gender: `%${payload.gender}%` })
+    //   // .orWhere("seller.country like :country", { country: `%${payload.country}%` })
+    //   .orWhere("seller.country = :country", { country: payload.country })
+    //   .orWhere("seller.state like :state", { state: `%${payload.state}%` })
+    //   .orWhere("seller.type like :type", { type: `%${+payload.type}%` })
+    //   // .andWhere("user.email like :email", { email: `%${payload.email}%` })
+    //   // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
+    //   .skip((payload.currentPage-1)*payload.pageSize)
+    //   .take(payload.pageSize)
+    //   .getManyAndCount();
   }
 
   /**

@@ -134,7 +134,7 @@ export class BFFService {
 
     // 商家
     let seller:any = {
-      data: []
+      data: {}
     }
     // 其他作品
     // let sellerCommodity:any = {
