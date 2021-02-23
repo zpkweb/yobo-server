@@ -2,7 +2,7 @@ import { Inject, Controller, Provide, Post, Body, ALL, Config, Plugin } from '@m
 import EmailService from 'src/service/email';
 
 @Provide()
-@Controller('/api/email')
+@Controller('/api/email', {tagName: '前端-发送邮件'})
 export class EmailController {
 
   @Config('email')
@@ -18,10 +18,10 @@ export class EmailController {
   jwtConfig;
 
   /**
-   * 出价
+   * 直接联系
    * @param retrievePasswordBody
    */
-  @Post('/send')
+  @Post('/send', {summary: '直接联系'})
   async send(@Body(ALL) body) {
     return await this.emailService.send(body)
   }
@@ -30,7 +30,7 @@ export class EmailController {
    * 出价
    * @param retrievePasswordBody
    */
-  @Post('/bid')
+  @Post('/bid', {summary: '出价'})
   async bid(@Body(ALL) body) {
     return await this.emailService.bid(body)
   }

@@ -4,7 +4,7 @@ import { UserRegisterService } from 'src/service/user/register';
 import { SellerService } from 'src/service/user/seller';
 
 @Provide()
-@Controller('/api/admin/user/seller')
+@Controller('/api/admin/user/seller',{tagName:'后台管理-艺术家'})
 export class AdminUserSellerController {
 
   @Inject()
@@ -25,14 +25,14 @@ export class AdminUserSellerController {
   @Config('pagination')
   pagination;
 
-  // 获取商家详细信息
-  @Get()
+  // 获取艺术家详细信息
+  @Get('/',{summary:'获取艺术家详细信息'})
   async find(@Query(ALL) findQuery) {
     return await this.sellerService.find(findQuery)
   }
 
   // 更新艺术家信息
-  @Post('/update')
+  @Post('/update',{summary:'更新艺术家信息'})
   async update(@Body(ALL) registerBody) {
     return await this.sellerService.updateSeller(registerBody);
   }
@@ -47,13 +47,13 @@ export class AdminUserSellerController {
    * 设置艺术家状态
    * @param stateBody sellerId state
    */
-  @Post('/setState')
+  @Post('/setState',{summary:'设置艺术家状态'})
   async setState(@Body(ALL) stateBody) {
     return await this.sellerService.updateSellerState(stateBody);
   }
 
   // 艺术家搜索
-  @Get('/search')
+  @Get('/search',{summary:'艺术家搜索'})
   async search(@Query(ALL) searchParams) {
     console.log('search', searchParams)
     // return await this.sellerService.searchSeller(searchQuery);
@@ -72,7 +72,7 @@ export class AdminUserSellerController {
   }
 
   // 删除艺术家
-  @Get('/delete')
+  @Get('/delete',{summary:'删除艺术家'})
   async delete(@Query() sellerId) {
     return await this.sellerService.deleteSeller(sellerId);
   }

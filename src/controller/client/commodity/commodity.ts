@@ -3,7 +3,7 @@ import { CommodityService } from 'src/service/commodity';
 import { Context } from 'egg';
 
 @Provide()
-@Controller('/api/commodity')
+@Controller('/api/commodity', {tagName: '前端-商品'})
 export class CommodityController {
 
   @Inject()
@@ -16,7 +16,7 @@ export class CommodityController {
   pagination;
 
   // 查找商品
-  @Get()
+  @Get('',{summary: '查找商品'})
   async find(@Query(ALL) findQuery) {
     const { pageSize, currentPage, ...query } = findQuery;
     const getPageSize = Number(pageSize) || this.pagination.pageSize;
@@ -43,7 +43,7 @@ export class CommodityController {
   }
 
   // 搜索
-  @Get('/search')
+  @Get('/search', { summary: '搜索商品'})
   async search(@Query(ALL) searchQuery) {
     const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
@@ -62,7 +62,7 @@ export class CommodityController {
 
 
   // 查找商品选项-形状
-  @Get('/options/:type')
+  @Get('/options/:type', { summary: '查找商品选项'})
   async optionsShape(@Param() type) {
     return await this.commodityService.commodityOptionsTypeRetrieveAll({
       type,

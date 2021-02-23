@@ -6,7 +6,7 @@ import UserAddressService from 'src/service/user/address';
 
 @Provide()
 // @Controller('/api/user',  { tagName: 'user', middleware: [ 'authorizeMiddleware' ] })
-@Controller('/api/user')
+@Controller('/api/user',{tagName: '用户'})
 export class UserController {
 
   @Inject()
@@ -35,12 +35,12 @@ export class UserController {
   /**
    * 查找个人信息
    */
-  @Get('/info')
+  @Get('/info',{summary:'查找个人信息'})
   async info(@Query() userId) {
     return await this.userService.findInfo(userId);
   }
 
-  @Get('/self')
+  @Get('/self',{summary:'查找个人信息'})
   async self(@Query() userId) {
     return await this.userService.findSelf(userId);
   }
@@ -49,7 +49,7 @@ export class UserController {
    * 修改密码
    * @param changePasswordBody
    */
-  @Post('/password/update')
+  @Post('/password/update',{summary:'修改密码'})
   async changePassword(@Body(ALL) changePasswordBody){
     return await this.userService.changePassword(changePasswordBody);
   }
@@ -61,7 +61,7 @@ export class UserController {
    * 更新个人信息
    * @param updateBody
    */
-  @Post('/update')
+  @Post('/update',{summary:'更新个人信息'})
   async updateUser(@Body(ALL) updateBody) {
     return await this.userService.update({
       userId: updateBody.userId,
@@ -73,7 +73,7 @@ export class UserController {
    * 获取用户地址
    * @param addressBody
    */
-  @Get('/address')
+  @Get('/address',{summary:'获取用户地址'})
   async getAddress(@Body() userId) {
     return await this.userAddressService.retrieve(userId);
   }
@@ -82,7 +82,7 @@ export class UserController {
    * 添加用户地址
    * @param addressBody
    */
-  @Post('/address')
+  @Post('/address',{summary:'添加用户地址'})
   async address(@Body(ALL) addressBody) {
     return await this.userAddressService.create(addressBody);
   }
@@ -91,7 +91,7 @@ export class UserController {
    * 更新用户地址
    * @param addressBody
    */
-  @Post('/address/update')
+  @Post('/address/update',{summary:'更新用户地址'})
   async addressUpdate(@Body(ALL) addressBody) {
     return await this.userAddressService.updateAddress(addressBody);
   }
@@ -100,7 +100,7 @@ export class UserController {
    * 删除用户地址
    * @param addressBody
    */
-  @Post('/address/remove')
+  @Post('/address/remove',{summary:'删除用户地址'})
   async addressRemove(@Body() userId) {
     return await this.userAddressService.remove(userId);
   }

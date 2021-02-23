@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Provide, Query, ALL } from "@midwayjs/decorato
 import PuppeteerService from 'src/service/puppeteer'
 
 @Provide()
-@Controller('/api/admin/puppeteer')
+@Controller('/api/admin/puppeteer', {tagName:'后台管理-爬虫'})
 export class AdminPuppeteerController {
 
   @Inject()

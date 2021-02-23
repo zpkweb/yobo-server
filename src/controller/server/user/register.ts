@@ -3,7 +3,7 @@ import { Context } from 'egg';
 import { UserRegisterService } from 'src/service/user/register';
 // import { AdminUserRegisterDTO } from 'src/dto/user/register';
 @Provide()
-@Controller('/api/admin/user')
+@Controller('/api/admin/user',{tagName:'后台管理-注册'})
 export class AdminUserRegisterController {
 
   @Inject()
@@ -19,7 +19,7 @@ export class AdminUserRegisterController {
   jwtConfig;
 
   // 注册用户
-  @Post('/register')
+  @Post('/register',{summary:'注册用户'})
   @Validate()
   async register(@Body(ALL) registerBody) {
     return await this.userRegisterService.adminRegister(registerBody);
@@ -32,7 +32,7 @@ export class AdminUserRegisterController {
   }
 
   // 添加管理员
-  @Post('/admin/register')
+  @Post('/admin/register',{summary:'添加管理员'})
   async adminRegister(@Body(ALL) registerBody) {
     return await this.userRegisterService.createAdmin(registerBody);
     // if(!data.code){
@@ -45,7 +45,7 @@ export class AdminUserRegisterController {
   }
 
   // 添加客服
-  @Post('/customerService/register')
+  @Post('/customerService/register',{summary:'添加客服'})
   async customerServiceRegister(@Body(ALL) registerBody) {
     let data:any =  await this.userRegisterService.createCustomerService(registerBody);
     if(!data.code){
@@ -58,7 +58,7 @@ export class AdminUserRegisterController {
   }
 
   // 申请成为艺术家
-  @Post('/seller/apply')
+  @Post('/seller/apply',{summary:'申请成为艺术家'})
   async apply(@Body(ALL) applySellerBody) {
     const data =  await this.userRegisterService.applySeller(applySellerBody);
     console.log("申请成为艺术家", data)

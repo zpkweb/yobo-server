@@ -4,7 +4,7 @@ import { UserRegisterService } from 'src/service/user/register';
 import { SellerService } from 'src/service/user/seller';
 
 @Provide()
-@Controller('/api/seller')
+@Controller('/api/seller',{tagName:'艺术家'})
 export class ServerSellerController {
 
   @Inject()
@@ -34,13 +34,13 @@ export class ServerSellerController {
    * userId
    * sellerId
    */
-  @Get()
+  @Get('/',{summary:'获取艺术家详细信息'})
   async find(@Query(ALL) findQuery) {
     return await this.sellerService.find(findQuery)
   }
 
   // 更新艺术家信息
-  @Post('/update')
+  @Post('/update',{summary:'更新艺术家信息'})
   async update(@Body(ALL) registerBody) {
     return await this.sellerService.updateSeller(registerBody);
   }
@@ -55,13 +55,13 @@ export class ServerSellerController {
    * 设置艺术家状态
    * @param stateBody sellerId state
    */
-  @Post('/setState')
+  @Post('/setState',{summary:'设置艺术家状态'})
   async setState(@Body(ALL) stateBody) {
     return await this.sellerService.updateSellerState(stateBody);
   }
 
   // 艺术家搜索
-  @Get('/search')
+  @Get('/search',{summary:'艺术家搜索'})
   async search(@Query(ALL) searchParams) {
     console.log('search', searchParams)
     // return await this.sellerService.searchSeller(searchQuery);

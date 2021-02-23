@@ -3,7 +3,7 @@ import { Context } from 'egg';
 import { UserService } from 'src/service/user/user'
 
 @Provide()
-@Controller('/api/admin/user')
+@Controller('/api/admin/user',{tagName:'后台管理-用户'})
 export class AdminUserController {
 
   @Inject()
@@ -22,20 +22,20 @@ export class AdminUserController {
   pagination;
 
   // 删除用户
-  @Get('/remove')
-  @Get('/delete')
+  @Get('/remove',{summary:'删除用户'})
+  @Get('/delete',{summary:'删除用户'})
   async removeUser(@Query() userId) {
     return await this.userService.remove(userId);
   }
 
   // 更新用户
-  @Post('/update')
+  @Post('/update',{summary:'更新用户'})
   async updateUser(@Body(ALL) updateBody) {
     return await this.userService.update(updateBody);
   }
 
   // 查找用户
-  @Get()
+  @Get('/',{summary:'查找用户'})
   async findUser(@Query(ALL) findQuery) {
     return await this.userService.find({
       type: findQuery.type,
@@ -44,7 +44,7 @@ export class AdminUserController {
   }
 
   // 搜索用户
-  @Get('/search')
+  @Get('/search',{summary:'搜索用户'})
   async searchUser(@Query(ALL) searchParams) {
     console.log("ctx", searchParams)
 
@@ -66,7 +66,7 @@ export class AdminUserController {
   }
 
   // 删除用户身份
-  @Get('/identity/delete')
+  @Get('/identity/delete',{summary:'删除用户身份'})
   async deleteUserIdentity(@Query(ALL) identityDeleteQuery) {
     return await this.userService.deleteUserIdentity(identityDeleteQuery);
   }

@@ -6,7 +6,7 @@ import { UserService } from 'src/service/user/user';
 import { SellerService } from 'src/service/user/seller';
 
 @Provide()
-@Controller('/api/user')
+@Controller('/api/user',{tagName: '登录'})
 export class UserLoginController {
 
   @Inject()
@@ -34,7 +34,7 @@ export class UserLoginController {
   email;
 
   // 注册成为普通用户
-  @Post('/register')
+  @Post('/register',{summary: '注册成为普通用户'})
   async register(@Body(ALL) registerBody) {
     console.log("register", registerBody)
     let data:any =  await this.userRegisterService.registerUser(registerBody);
@@ -51,7 +51,7 @@ export class UserLoginController {
   }
 
   // 申请成为艺术家
-  @Post('/seller/apply')
+  @Post('/seller/apply',{summary:'申请成为艺术家'})
   async apply(@Body(ALL) applySellerBody) {
     const data =  await this.userRegisterService.applySeller(applySellerBody);
     console.log("申请成为艺术家", data)
@@ -60,7 +60,7 @@ export class UserLoginController {
   }
 
   // 登录
-  @Post('/login')
+  @Post('/login',{summary:'登录'})
   async login(@Body(ALL) loginBody) {
     let data:any =  await this.loginService.login(loginBody);
     if(data.success){
@@ -79,7 +79,7 @@ export class UserLoginController {
    * 找回密码：发送验证码
    * @param retrievePasswordBody
    */
-  @Post('/password/retrieve/code/send')
+  @Post('/password/retrieve/code/send',{summary:'找回密码：发送验证码'})
   async passwordRetrieveCodeSend(@Body(ALL) codeSendBody) {
     const code = Math.random().toString().slice(-6);
 
@@ -100,7 +100,7 @@ export class UserLoginController {
    * 找回密码：验证验证码
    * @param retrievePasswordBody
    */
-  @Post('/password/retrieve/code/verify')
+  @Post('/password/retrieve/code/verify',{summary:'找回密码：验证验证码'})
   async passwordRetrieveCodeVerify(@Body(ALL) codeVerifyBody) {
 
     return await this.userService.passwordRetrieveCodeVerify({
@@ -110,7 +110,7 @@ export class UserLoginController {
   }
 
   // 搜索商家
-  @Get('/seller/search')
+  @Get('/seller/search',{summary:'搜索商家'})
   async search(@Query(ALL) searchQuery) {
     let data:any =  await this.sellerService.searchSeller(searchQuery);
     return data;

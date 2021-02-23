@@ -4,7 +4,7 @@ import { LoginService } from 'src/service/user/login';
 import { AdminUserLoginDTO } from 'src/dto/user/login';
 
 @Provide()
-@Controller('/api/admin/user', { tagName: 'admin' })
+@Controller('/api/admin/user', { tagName: '后台管理-登录' })
 export class AdminUserLoginController {
 
   @Inject()
@@ -20,7 +20,7 @@ export class AdminUserLoginController {
   jwtConfig;
 
   // 后台登录
-  @Post('/login')
+  @Post('/login',{summary:'登录'})
   @Validate()
   async login(@Body(ALL) loginBody: AdminUserLoginDTO) {
     console.log("admin login", loginBody)
