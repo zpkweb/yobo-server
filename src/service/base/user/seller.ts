@@ -173,6 +173,14 @@ export class BaseSellerServer {
 
     // list total
     return await this.userSellerEntity.findAndCount({
+      // relations: ['seller'],
+      join: {
+        alias: "seller",
+        leftJoinAndSelect: {
+          user: "seller.user",
+          metadata: "seller.metadata"
+        }
+      },
       where,
       take: payload.pageSize,
       skip: payload.pageSize * (payload.currentPage - 1),

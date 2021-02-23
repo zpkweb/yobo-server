@@ -268,11 +268,11 @@ export class CommodityService {
     // 更新商品价格
     const commodityPrice = await this.commodityAttributePrice.updatePrice({
       commodityId: payload.commodityId,
-      'zh-cn': payload.price['zh-cn'] || '',
-      'en-us': payload.price['en-us'] || '',
-      'ja-jp': payload.price['ja-jp'] || '',
-      'fr-fr': payload.price['fr-fr'] || '',
-      'es-es': payload.price['es-es'] || ''
+      'zh-cn': payload.price['zh-cn'] || 0,
+      'en-us': payload.price['en-us'] || 0,
+      'ja-jp': payload.price['ja-jp'] || 0,
+      'fr-fr': payload.price['fr-fr'] || 0,
+      'es-es': payload.price['es-es'] || 0
     });
     console.log("commodityPrice", commodityPrice)
     if(!commodityPrice.success) {
@@ -366,12 +366,27 @@ export class CommodityService {
       add: payload.technique
     })
 
+    // 更新艺术家
+    // 商品 关联 商家
+    if(payload.sellerId){
+      await this.commodityCommodityService.relation({
+        name: 'seller',
+        // of: commodity.data.identifiers[0].id,
+        // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        // of: payload.commodityId,
+        // of: { commodityId: payload.commodityId },
+        of: commodity.data.id,
+        set: { sellerId: payload.sellerId }
+      })
+    }
+
     // 查询商品
     return await this.commodityCommodityService.retrieve({
       commodityId: payload.commodityId
     });
 
   }
+
 
 
 
