@@ -1,42 +1,171 @@
-# yobo
+# api
 
-接口
+提供官网和后台的接口
 
-## 快速入门
-
-<!-- 在此次添加使用文档 -->
-
-
-### 本地开发
+### 安装
 
 ```bash
-$ npm i
-$ npm run dev
-$ open http://localhost:7001/
+npm run install / yarn
 ```
+### 开发
 
+```bash
+npm run dev / yarn dev
+```
+### 编译
+
+```bash
+npm run build / yarn build
+```
 ### 部署
 
-接口部署（监听端口: 7001, path: /api）
+```bash
+服务器部署（监听端口: 7001, path: /api）
 创建yobo-server目录，把文件解压到yobo-server。
 执行命令：pm2 start
-
-```bash
-$ npm start
-$ npm stop
 ```
 
-### 单元测试
+### 目录
 
-- [midway-bin] 内置了 [mocha], [thunk-mocha], [power-assert], [istanbul] 等框架，让你可以专注于写单元测试，无需理会配套工具。
-- 断言库非常推荐使用 [power-assert]。
-- 具体参见 [midway 文档 - 单元测试](https://eggjs.org/zh-cn/core/unittest)。
-
-### 内置指令
-
-- 使用 `npm run lint` 来做代码风格检查。
-- 使用 `npm test` 来执行单元测试。
-- 使用 `npm run autod` 来自动检测依赖更新，详细参见 [autod](https://www.npmjs.com/package/autod) 。
-
-
-[midway]: https://midwayjs.org
+```bash
+.
+├── README.md
+├── api.html
+├── api.http
+├── api.md
+├── dist
+├── ecosystem.config.js
+├── index.js
+├── logs
+├── package.json
+├── public
+├── run
+├── screenshot.png
+├── server.js
+├── src
+│   ├── app
+│   │   └── view
+│   │       └── api.nj
+│   ├── aspect
+│   │   └── report.ts
+│   ├── config
+│   │   ├── config.default.ts
+│   │   ├── config.local.ts
+│   │   ├── config.prod.ts
+│   │   ├── config.unittest.ts
+│   │   ├── locale
+│   │   │   ├── en-US.json
+│   │   │   └── zh-CN.json
+│   │   └── plugin.ts
+│   ├── configuration.ts
+│   ├── controller
+│   │   ├── client
+│   │   │   ├── BFF
+│   │   │   ├── commodity
+│   │   │   ├── email
+│   │   │   ├── my
+│   │   │   ├── seller
+│   │   │   └── user
+│   │   ├── index.ts
+│   │   ├── server
+│   │   │   ├── commodity
+│   │   │   ├── page
+│   │   │   ├── puppeteer
+│   │   │   └── user
+│   │   └── upload
+│   │       └── index.ts
+│   ├── dto
+│   │   └── user
+│   │       ├── login.ts
+│   │       └── register.ts
+│   ├── entity
+│   │   ├── activity
+│   │   │   └── activity.ts
+│   │   ├── commodity
+│   │   │   ├── attribute
+│   │   │   ├── commodity.ts
+│   │   │   ├── commodityBrowsingCount.ts
+│   │   │   ├── options
+│   │   │   └── packing
+│   │   ├── coupon
+│   │   │   └── coupon.ts
+│   │   ├── my
+│   │   │   ├── activity.ts
+│   │   │   ├── browsingHistory.ts
+│   │   │   ├── coupon.ts
+│   │   │   ├── likeCommodity.ts
+│   │   │   ├── likeSeller.ts
+│   │   │   ├── order.ts
+│   │   │   └── shoppingCart.ts
+│   │   ├── order
+│   │   │   └── order.ts
+│   │   ├── page
+│   │   │   └── banner.ts
+│   │   └── user
+│   │       ├── address.ts
+│   │       ├── admin
+│   │       ├── customerService
+│   │       ├── identity
+│   │       ├── member
+│   │       ├── ordinary
+│   │       ├── seller
+│   │       ├── thirdParty
+│   │       └── user.ts
+│   ├── middleware
+│   │   ├── authorize.ts
+│   │   └── global.ts
+│   └── service
+│       ├── BFF
+│       │   ├── artworkOptions.ts
+│       │   ├── banner.ts
+│       │   └── index.ts
+│       ├── base
+│       │   ├── commodity
+│       │   ├── my
+│       │   ├── page
+│       │   └── user
+│       ├── commodity
+│       │   ├── attribute
+│       │   ├── comment.ts
+│       │   ├── commodity.ts
+│       │   ├── index.ts
+│       │   └── options
+│       ├── email
+│       │   └── index.ts
+│       ├── my
+│       │   ├── browsingHistory.ts
+│       │   ├── index.ts
+│       │   ├── likeCommodity.ts
+│       │   └── likeSeller.ts
+│       ├── page
+│       │   ├── banner.ts
+│       │   └── index.ts
+│       ├── puppeteer
+│       │   ├── index.ts
+│       │   └── seller.ts
+│       ├── upload
+│       │   ├── images.ts
+│       │   └── index.ts
+│       └── user
+│           ├── address.ts
+│           ├── identityList.ts
+│           ├── login.ts
+│           ├── register.ts
+│           ├── seller.ts
+│           └── user.ts
+├── test
+│   └── controller
+│       ├── api.test.ts
+│       └── home.test.ts
+├── tree.md
+├── tsconfig.json
+├── typings
+│   ├── app
+│   │   └── index.d.ts
+│   └── config
+│       ├── index.d.ts
+│       └── plugin.d.ts
+├── work-logs.md
+├── yarn-error.log
+├── yarn.lock
+```
