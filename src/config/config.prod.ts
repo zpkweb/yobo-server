@@ -7,6 +7,11 @@ export default (appInfo: EggAppInfo) => {
 
   const config = {} as DefaultConfig;
 
+  config.email = {
+    service: 'qq',
+    user: '41728127@qq.com',
+    pass: 'cblmwxiolsxycada'
+  }
 
   config.host = {
     origin: 'http://39.105.190.188:7001'

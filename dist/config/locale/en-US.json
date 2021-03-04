@@ -1,0 +1,40 @@
+{
+  "10001": "success",
+  "10002": "failure",
+  "10003": "added successfully",
+  "10004": "add failed",
+  "10005": "deleted successfully",
+  "10006": "deletion failed",
+  "10007": "modified successfully",
+  "10008": "modification failed",
+  "10009": "query succeeded",
+  "10010": "query failed",
+
+
+  "10101": "no token uploaded",
+  "10102": "token is invalid",
+  "10103": "token validation failed",
+
+  "10201": "user already exists",
+  "10202": "user does not exist",
+  "10203": "the user does not have the permission",
+  "10204": "the user's password is incorrect",
+  "10205": "the user's old password is incorrect",
+
+
+  "10301": "user identity list cannot be empty",
+  "10302": "this user identity does not exist",
+
+  "10401": "mail sent successfully",
+  "10402": "failed to send mail",
+  "10403": "the email for the artist's application has been sent successfully",
+  "10404": "failed to send email to agree with artist application",
+  "10405": "user email verification code sent successfully",
+  "10406": "verification and sending of user email verification code failed",
+  "10407": "email verification code verified successfully",
+  "10408": "email verification code failed to verify",
+
+  "11001": "name or sequence number exists"
+
+
+}

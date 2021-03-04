@@ -44,6 +44,7 @@
     "node": ">=12.0.0"
   },
   "scripts": {
+    "push": "bash ./commit-push.sh",
     "start": "egg-scripts start --daemon --env=prod --title=midway-server-my_midway_project --framework=midway --sticky",
     "stop": "egg-scripts stop --title=midway-server-my_midway_project",
     "start_build": "npm run build && cross-env NODE_ENV=development midway-bin dev",

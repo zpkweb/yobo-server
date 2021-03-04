@@ -1,0 +1,30 @@
+import { UserEntity } from "../user";
+import { UserCustomerServiceEntity } from "../customerService/customerService";
+import { CommodityEntity } from "../../commodity/commodity";
+import { UserSellerMetadataEntity } from "./metadata";
+import { UserSellerStudioEntity } from "./studio";
+import { OrderEntity } from "../../order/order";
+import { MyLikeSellerEntity } from "../../my/likeSeller";
+export declare class UserSellerEntity {
+    id: number;
+    sellerId: string;
+    state: number;
+    type: number;
+    typeName: string;
+    firstname: string;
+    lastname: string;
+    tags: string[];
+    label: string;
+    gender: string;
+    country: string;
+    createdDate: Date;
+    updatedDate: Date;
+    metadata: UserSellerMetadataEntity;
+    studios: UserSellerStudioEntity[];
+    resumes: UserSellerStudioEntity[];
+    user: UserEntity;
+    likeSellers: MyLikeSellerEntity[];
+    commoditys: CommodityEntity[];
+    customerServices: UserCustomerServiceEntity[];
+    orders: OrderEntity[];
+}

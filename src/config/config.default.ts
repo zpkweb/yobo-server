@@ -41,11 +41,19 @@ export default (appInfo: EggAppInfo) => {
     name: 'root',
     password: '123456'
   }
+
   config.email = {
     service: 'qq',
     user: '547790132@qq.com',
     pass: 'vgmowhcgqcpobcaf'
   }
+
+  // config.email = {
+  //   service: 'qq',
+  //   user: '41728127@qq.com',
+  //   pass: 'cblmwxiolsxycada'
+  // }
+
 
   config.jwt = {
     secret: "yobo"
