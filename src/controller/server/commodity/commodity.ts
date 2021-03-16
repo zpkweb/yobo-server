@@ -105,30 +105,30 @@ export class AdminCommodityController {
     return await this.commodityService.update(updateBody)
   }
 
-  // 查找商品选项
-  @Get('/options/:type',{summary:'查找商品选项'})
-  async optionsShape(@Param() type) {
-    return await this.commodityService.commodityOptionsTypeRetrieveAll({
-      type
-    });
-  }
+
 
   // 添加商品选项
-  @Post('/options/:type/create',{summary:'添加商品选项'})
-  async optionsCreate(@Param() type, @Body(ALL) optionsBody) {
-    return await this.commodityService.commodityOptionsCreate({type, options: optionsBody});
+  @Post('/create/:type',{summary:'添加商品选项'})
+  async createOptions(@Param() type, @Body(ALL) optionsBody) {
+    return await this.commodityService.createOptions({type, options: optionsBody});
+  }
+
+  // 查找商品选项
+  @Get('/retrieve/:type',{summary:'查找商品选项'})
+  async retrieveOption(@Param() type) {
+    return await this.commodityService.retrieveOptionAll({type});
   }
 
   // 更新商品选项
-  @Post('/options/:type/update',{summary:'更新商品选项'})
-  async optionsUpdate(@Param() type, @Body(ALL) optionsBody) {
-    return await this.commodityService.commodityOptionsUpdate({type, ...optionsBody});
+  @Post('/update/:type',{summary:'更新商品选项'})
+  async updateOptions(@Param() type, @Body(ALL) optionsBody) {
+    return await this.commodityService.updateOptions({type, ...optionsBody});
   }
 
   // 删除商品选项
-  @Post('/options/:type/delete',{summary:'删除商品选项'})
-  async optionsDelete(@Param() type, @Body(ALL) optionsBody) {
-    return await this.commodityService.commodityOptionsDelete({type, ...optionsBody});
+  @Post('/delete/:type',{summary:'删除商品选项'})
+  async deleteOptions(@Param() type, @Body(ALL) optionsBody) {
+    return await this.commodityService.deleteOptions({type, ...optionsBody});
   }
 
 }

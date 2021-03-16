@@ -1,5 +1,8 @@
+/**商品选项
+ *
+ */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsThemeServer } from '../../base/commodity/options/theme';
+import { BaseCommodityOptionsThemeServer } from 'src/service/base/commodity/options/theme';
 
 @Provide()
 export class CommodityOptionsThemeService {
@@ -8,7 +11,7 @@ export class CommodityOptionsThemeService {
   baseCommodityOptionsThemeServer: BaseCommodityOptionsThemeServer;
 
   /**
-   * 创建商品选项
+   * 创建
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseCreate(payload);
@@ -27,7 +30,7 @@ export class CommodityOptionsThemeService {
   }
 
   /**
-   * 查询商品选项
+   * 查询
    */
   async retrieve(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseRetrieve(payload);
@@ -46,7 +49,7 @@ export class CommodityOptionsThemeService {
   }
 
   /**
-   * 查询商品选项
+   * 查询
    */
   async retrieveId(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseRetrieveId(payload);
@@ -65,12 +68,15 @@ export class CommodityOptionsThemeService {
   }
 
   /**
-   * 查询商品所有选项
+   * 查询所有
    */
-  async retrieveAll(payload) {
+  async retrieveAll({
+    isLocale = false,
+    locale = 'zh-cn'
+  } = {}) {
     let data = await this.baseCommodityOptionsThemeServer.BaseRetrieveAll();
-    if(payload.isLocale){
-      data = this.filter(payload.locale || 'zh-cn', data)
+    if(isLocale){
+      data = this.filter(locale, data)
     }
     if (data) {
       return {
@@ -88,7 +94,7 @@ export class CommodityOptionsThemeService {
 
 
   /**
-   * 修改商品选项
+   * 修改
    */
   async update(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseUpdate(payload);
@@ -101,14 +107,14 @@ export class CommodityOptionsThemeService {
     } else {
       return {
         success: false,
-        code: 1008
+        code: 10008
       }
     }
   }
 
 
   /**
-   * 删除商品选项
+   * 删除
    */
   async delete(payload) {
     const data = await this.baseCommodityOptionsThemeServer.BaseDelete(payload);
@@ -125,8 +131,9 @@ export class CommodityOptionsThemeService {
       }
     }
   }
+
   /**
-   * 筛选商品
+   * 筛选
    * @param  payload
    * @param type
    */
@@ -136,4 +143,5 @@ export class CommodityOptionsThemeService {
       return {id, img, name: item[type]}
     })
   }
+
 }

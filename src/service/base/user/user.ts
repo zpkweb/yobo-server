@@ -62,6 +62,17 @@ export class BaseUserServer {
       .execute()
   }
   /**
+   * 查询用户身份
+   * @param payload
+   */
+   async baseRetrieveUserIdentity(payload) {
+    return await this.userIdentityEntity
+    .createQueryBuilder('userIdentity')
+    .where('userIdentity.userId = :userId', { userId: payload.userId })
+    .andWhere("userIdentity.zh-cn = :zhcn", { zhcn: payload.zhcn })
+    .getOne();
+  }
+  /**
    * 删除用户身份
    * @param payload
    */
@@ -70,11 +81,11 @@ export class BaseUserServer {
       .createQueryBuilder()
       .delete()
       .where("userId = :userId", { userId: payload.userId })
-      .orWhere("identityList.zh-cn = :zhcn", { zhcn: payload['zh-cn'] })
-      .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
-      .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
-      .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
-      .orWhere("identityList.es-es = :eses", { eses: payload['es-es'] })
+      // .orWhere("identityList.zh-cn = :zhcn", { zhcn: payload['zh-cn'] })
+      // .orWhere("identityList.en-us = :enus", { enus: payload['en-us'] })
+      // .orWhere("identityList.ja-jp = :jajp", { jajp: payload['ja-jp'] })
+      // .orWhere("identityList.fr-fr = :frfr", { frfr: payload['fr-fr'] })
+      // .orWhere("identityList.es-es = :eses", { eses: payload['es-es'] })
       .execute();
     }
 
@@ -143,6 +154,23 @@ export class BaseUserServer {
    * phone
    * userId
    */
+   async baseRetrieveUserName(name) {
+    return await this.userEntity
+      .createQueryBuilder('user')
+      // .leftJoinAndSelect('user.identitys', 'identitys')
+      // .leftJoinAndSelect('user.seller', 'seller')
+      .where("user.name = :name", { name: name })
+      .getOne();
+  }
+
+  async baseRetrieveUserEmail(email) {
+    return await this.userEntity
+      .createQueryBuilder('user')
+      // .leftJoinAndSelect('user.identitys', 'identitys')
+      // .leftJoinAndSelect('user.seller', 'seller')
+      .where("user.email = :email", { email: email })
+      .getOne();
+  }
 
 
   async baseRetrieveUser(payload) {
@@ -151,9 +179,9 @@ export class BaseUserServer {
       .leftJoinAndSelect('user.identitys', 'identitys')
       .leftJoinAndSelect('user.seller', 'seller')
       .where("user.name = :name", { name: payload.name })
-      .orWhere("user.email = :email", { email: payload.email })
+      .andWhere("user.email = :email", { email: payload.email })
       // .orWhere("user.phone = :phone", { phone: payload.phone })
-      .orWhere("user.userId = :userId", { userId: payload.userId })
+      // .orWhere("user.userId = :userId", { userId: payload.userId })
       .getOne();
   }
 
@@ -194,6 +222,7 @@ export class BaseUserServer {
     .createQueryBuilder('user')
     .leftJoinAndSelect('user.identitys', 'identitys')
     .leftJoinAndSelect('user.address', 'address')
+    .leftJoinAndSelect('user.seller', 'seller')
     .where("user.userId = :userId", { userId: userId })
     .getOne();
   }

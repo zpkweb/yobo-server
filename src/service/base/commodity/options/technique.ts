@@ -17,15 +17,13 @@ export class BaseCommodityOptionsTechniqueServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsTechniqueEntity)
-      // .values({
-      //   img: payload.img,
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr'],
-      //   'es-es': payload['es-es']
-      // })
-      .values(payload)
+      .values({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
       .execute();
   }
 
@@ -35,11 +33,10 @@ export class BaseCommodityOptionsTechniqueServer {
   async BaseRetrieve(payload) {
     return await this.commodityOptionsTechniqueEntity
       .createQueryBuilder('technique')
-      .where('technique.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('technique.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('technique.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      // .orWhere('technique.fr-fr = :frfr', { frfr: payload['fr-fr'] })
-      .orWhere('technique.es-es = :eses', { eses: payload['es-es'] })
+      .where('technique.zh-cn = :zhcn', { zhcn: payload.zhcn })
+      .orWhere('technique.en-us = :enus', { enus: payload.enus })
+      .orWhere('technique.ja-jp = :jajp', { jajp: payload.jajp })
+      .orWhere('technique.es-es = :eses', { eses: payload.eses })
       .getOne();
   }
 
@@ -70,25 +67,19 @@ export class BaseCommodityOptionsTechniqueServer {
     return await this.commodityOptionsTechniqueEntity
       .createQueryBuilder()
       .update(CommodityOptionsTechniqueEntity)
-      // .set({
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr']
-      // })
       .set(setData)
-      .where("id = :id", { id: id })
+      .where("id = :id", { id })
       .execute();
   }
 
   /**
    * 删除商品形状选项
    */
-  async BaseDelete(payload) {
+  async BaseDelete(id) {
     return await this.commodityOptionsTechniqueEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where("id = :id", { id })
       .execute();
   }
 }

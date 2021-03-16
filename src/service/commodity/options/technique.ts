@@ -1,5 +1,8 @@
+/**商品选项
+ *
+ */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsTechniqueServer } from '../../base/commodity/options/technique';
+import { BaseCommodityOptionsTechniqueServer } from 'src/service/base/commodity/options/technique';
 
 @Provide()
 export class CommodityOptionsTechniqueService {
@@ -8,7 +11,7 @@ export class CommodityOptionsTechniqueService {
   baseCommodityOptionsTechniqueServer: BaseCommodityOptionsTechniqueServer;
 
   /**
-   * 创建商品选项
+   * 创建
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseCreate(payload);
@@ -27,7 +30,7 @@ export class CommodityOptionsTechniqueService {
   }
 
   /**
-   * 查询商品选项
+   * 查询
    */
   async retrieve(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseRetrieve(payload);
@@ -46,7 +49,7 @@ export class CommodityOptionsTechniqueService {
   }
 
   /**
-   * 查询商品选项
+   * 查询
    */
   async retrieveId(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseRetrieveId(payload);
@@ -65,12 +68,15 @@ export class CommodityOptionsTechniqueService {
   }
 
   /**
-   * 查询商品所有选项
+   * 查询所有
    */
-  async retrieveAll(payload) {
+  async retrieveAll({
+    isLocale = false,
+    locale = 'zh-cn'
+  } = {}) {
     let data = await this.baseCommodityOptionsTechniqueServer.BaseRetrieveAll();
-    if(payload.isLocale){
-      data = this.filter(payload.locale || 'zh-cn', data)
+    if(isLocale){
+      data = this.filter(locale, data)
     }
     if (data) {
       return {
@@ -88,7 +94,7 @@ export class CommodityOptionsTechniqueService {
 
 
   /**
-   * 修改商品选项
+   * 修改
    */
   async update(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseUpdate(payload);
@@ -108,7 +114,7 @@ export class CommodityOptionsTechniqueService {
 
 
   /**
-   * 删除商品选项
+   * 删除
    */
   async delete(payload) {
     const data = await this.baseCommodityOptionsTechniqueServer.BaseDelete(payload);
@@ -125,8 +131,9 @@ export class CommodityOptionsTechniqueService {
       }
     }
   }
+
   /**
-   * 筛选商品
+   * 筛选
    * @param  payload
    * @param type
    */
@@ -136,4 +143,5 @@ export class CommodityOptionsTechniqueService {
       return {id, img, name: item[type]}
     })
   }
+
 }

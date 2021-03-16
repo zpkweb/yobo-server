@@ -1,4 +1,4 @@
-import { Inject, Provide } from '@midwayjs/decorator';
+import { Inject, Provide, Config } from '@midwayjs/decorator';
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
@@ -12,6 +12,8 @@ import { UserCustomerServiceEntity } from 'src/entity/user/customerService/custo
 import { BaseUserServer } from "../base/user/user";
 import { BaseSellerServer } from '../base/user/seller';
 import { BaseIdentityListServer } from '../base/user/identity/list';
+import * as nodemailer from 'nodemailer';
+
 @Provide()
 export class UserRegisterService {
 
@@ -49,12 +51,15 @@ export class UserRegisterService {
   @Inject()
   baseIdentityListServer: BaseIdentityListServer;
 
+  @Config('email')
+  email;
+
   /**
    * 注册普通用户 80
    * @param payload
    */
   async registerUser(payload) {
-    return await this.register(Object.assign({}, {
+    const registerUser = await this.register(Object.assign({}, {
       sourceType: 'user',
       identityIndex: 80,
       name: payload.name || '',
@@ -63,6 +68,42 @@ export class UserRegisterService {
       password: payload.password || '',
       avatar: payload.avatar || '',
     }, payload));
+
+    if(registerUser.success){
+      let transporter = nodemailer.createTransport({
+        // host: "smtp.qq.com",
+        service: this.email.service,
+        port: 465,
+        secureConnection: true,
+        auth: {
+          user: this.email.user,
+          pass: this.email.pass
+        },
+      });
+
+      // send mail with defined transport object
+      await transporter.sendMail({
+        from: this.email.user,
+        to: payload.email,
+        subject: 'yobo-注册成功',
+        // html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
+        html: `<p>恭喜您注册成功！</p>`
+      });
+
+      // if(data.messageId){
+      //   return {
+      //     success: true,
+      //     code : 10405
+      //   }
+      // }else{
+      //   return {
+      //     success: false,
+      //     code : 10406
+      //   }
+      // }
+    }
+
+    return registerUser;
   }
 
   /**
@@ -70,14 +111,22 @@ export class UserRegisterService {
    * @param payload
    */
   async applySeller(payload) {
+    let userId = payload.userId;
+    // 判断用户身份
+    if(payload.email){
+      const user = await this.hasUserEmail(payload.email);
+      if(user.success){
+        userId = user.data.userId;
+      }
+    }
 
-    if(payload.userId) {
+    if(userId) {
       // const changeUser = await this.baseUserServer.baseUpdateUser({
       //   userId: payload.userId,
       // })
 
       // 用户是否关联艺术家信息
-      const applySeller = await this.baseSellerServer.baseApplySeller(payload.userId);
+      const applySeller = await this.baseSellerServer.baseApplySeller(userId);
       console.log("applySeller", applySeller)
       if(applySeller){
         return {
@@ -232,10 +281,11 @@ export class UserRegisterService {
   async register(payload) {
     console.log("register", payload)
     let user:any;
+    let userName:any;
+    let userEmail:any;
     let newUser:any;
     // 已有用户
     if(payload.userId) {
-
 
       newUser = {
         success: true,
@@ -245,17 +295,20 @@ export class UserRegisterService {
     }else{
       // 判断用户是否存在
       user = await this.hasUser(payload);
+      userName = await this.hasUserName(payload.name);
+      userEmail = await this.hasUserEmail(payload.email);
       console.log("user", user)
-      if(user.success && payload.identityIndex !== 5) {
-        return {
-          data: user.data,
-          success: false,
-          code: 10201
-        };
+
+      if(userName.success && payload.identityIndex !== 5) {
+        return Object.assign({}, userName, {success:false})
+      }
+
+      if(userEmail.success && payload.identityIndex !== 5) {
+        return Object.assign({}, userEmail, {success:false})
       }
 
       // 添加用户
-      newUser = await this.addUser(payload, user);
+      newUser = await this.addUser(payload, userEmail);
       console.log("newUser", newUser)
       if(!newUser.success){
         return newUser;
@@ -305,11 +358,7 @@ export class UserRegisterService {
     // 返回用户关联身份
     if(newUser.success){
       // 获取用户
-      if(payload.userId) {
-        user = await this.baseUserServer.baseRetrieveUserId(payload.userId)
-      }else{
-        user = await this.baseUserServer.baseRetrieveUser(payload)
-      }
+      user = await this.baseUserServer.baseRetrieveUserId(newUser.userId)
 
       console.log("register user", user)
       return {
@@ -346,13 +395,53 @@ export class UserRegisterService {
       }
     }
   /**
+   * 判断用户名是否存在
+   * @param payload
+   */
+   async hasUserName(name) {
+    const user:any = await this.baseUserServer.baseRetrieveUserName(name);
+    console.log("user", user)
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code: 10208
+      }
+    }else{
+      return {
+        success: false,
+        code: 10209
+      }
+    }
+  }
+  /**
+   * 判断用户邮箱是否存在
+   * @param payload
+   */
+   async hasUserEmail(email) {
+    const user:any = await this.baseUserServer.baseRetrieveUserEmail(email);
+    console.log("user", user)
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code: 10210
+      }
+    }else{
+      return {
+        success: false,
+        code: 10211
+      }
+    }
+  }
+  /**
    * 添加用户
    * @param payload
    */
     async addUser(payload, user) {
-
+      console.log("addUser",payload,user)
       if(user.success){
-        if(payload.identityIndex === '5'){
+        if(payload.identityIndex == '5'){
           return {
             userId: user.data.userId,
             success: true,
@@ -421,31 +510,50 @@ export class UserRegisterService {
           code: 10010
         };
       }
+      let identity: any;
+      // 查询用户身份
+      identity = await this.baseUserServer.baseRetrieveUserIdentity({
+        userId: payload.userId,
+        zhcn: identityList['zh-cn']
+      });
+      console.log("查询用户身份", identity)
+      if(identity){
 
-      // 创建用户的身份
-      let identity: any = await this.baseUserServer.baseCreateUserIdentity(identityList);
-      console.log("identity", identity)
-      if(!identity){
-        return {
-          success: false,
-          code: 10010
-        };
+      }else{
+        // 创建用户的身份
+        identity = await this.baseUserServer.baseCreateUserIdentity(identityList);
+        console.log("identity", identity)
+        if(!identity){
+          return {
+            success: false,
+            code: 10010
+          };
+        }
+
+        // 用户身份 关联 用户身份列表
+        console.log("用户身份 关联 用户身份列表", {
+          of: identity.identifiers[0].id,
+          set: identityList.id
+        })
+        await this.userIdentityEntity
+          .createQueryBuilder()
+          .relation(UserIdentityEntity, "identityList")
+          .of(identity.identifiers[0].id)
+          .set(identityList.id);
+
+
+        // 用户身份 关联 用户
+        console.log("用户身份 关联 用户", {
+          id: identity.identifiers[0].id,
+          userId: payload.userId
+        })
+        await this.userIdentityEntity
+          .createQueryBuilder()
+          .relation(UserIdentityEntity, "user")
+          .of(identity.identifiers[0].id)
+          .set({ userId: payload.userId })
       }
 
-      // 用户身份 关联 用户身份列表
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "identityList")
-        .of(identity.identifiers[0].id)
-        .set(identityList.id);
-
-
-      // 用户身份 关联 用户
-      await this.userIdentityEntity
-        .createQueryBuilder()
-        .relation(UserIdentityEntity, "user")
-        .of(identity.identifiers[0].id)
-        .set({ userId: payload.userId })
 
       return {
         success: true,

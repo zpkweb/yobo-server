@@ -1,3 +1,6 @@
+/**
+ * 商品形状
+ */
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
@@ -7,90 +10,82 @@ import { CommodityOptionsCategoryEntity } from 'src/entity/commodity/options/cat
 export class BaseCommodityOptionsCategoryServer {
 
   @InjectEntityModel(CommodityOptionsCategoryEntity)
-  commodityOptionsCategoryEntity: Repository<CommodityOptionsCategoryEntity>;
+  CommodityOptionsCategoryEntity: Repository<CommodityOptionsCategoryEntity>;
 
   /**
-   * 创建商品形状选项
+   * 创建
    */
   async BaseCreate(payload) {
-    return await this.commodityOptionsCategoryEntity
+    return await this.CommodityOptionsCategoryEntity
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsCategoryEntity)
-      // .values({
-      //   img: payload.img,
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr'],
-      //   'es-es': payload['es-es']
-      // })
-      .values(payload)
+      .values({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
       .execute();
   }
 
 
 
   /**
-   * 查询商品形状选项
+   * 查询
    */
   async BaseRetrieve(payload) {
-    return await this.commodityOptionsCategoryEntity
+    console.log("BaseRetrieve", payload)
+    return await this.CommodityOptionsCategoryEntity
       .createQueryBuilder('category')
-      .where('category.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('category.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('category.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      // .orWhere('category.fr-fr = :frfr', { frfr: payload['fr-fr'] })
-      .orWhere('category.es-es = :eses', { eses: payload['es-es'] })
+      .where('category.zh-cn = :zhcn', { zhcn: payload.zhcn })
+      .orWhere('category.en-us = :enus', { enus: payload.enus })
+      .orWhere('category.ja-jp = :jajp', { jajp: payload.jajp })
+      .orWhere('category.es-es = :eses', { eses: payload.eses })
       .getOne();
   }
 
   /**
-   * 查询商品形状选项Id
+   * 查询
    */
   async BaseRetrieveId(payload) {
-    return await this.commodityOptionsCategoryEntity
+    return await this.CommodityOptionsCategoryEntity
       .createQueryBuilder('category')
       .where('category.id = :id', { id: payload.id })
       .getOne();
   }
 
   /**
-   * 查询商品所有形状选项
+   * 查询
    */
   async BaseRetrieveAll() {
-    return await this.commodityOptionsCategoryEntity
+    return await this.CommodityOptionsCategoryEntity
       .createQueryBuilder()
       .getMany();
   }
 
   /**
-   * 修改商品形状选项
+   * 修改
    */
   async BaseUpdate(payload) {
     const { id, ...setData } = payload;
-    return await this.commodityOptionsCategoryEntity
+    return await this.CommodityOptionsCategoryEntity
       .createQueryBuilder()
       .update(CommodityOptionsCategoryEntity)
-      // .set({
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr']
-      // })
       .set(setData)
-      .where("id = :id", { id: id })
+      .where("id = :id", { id })
       .execute();
   }
 
   /**
-   * 删除商品形状选项
+   * 删除
    */
-  async BaseDelete(payload) {
-    return await this.commodityOptionsCategoryEntity
+  async BaseDelete(id) {
+    return await this.CommodityOptionsCategoryEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where("id = :id", { id })
       .execute();
   }
 }

@@ -2,19 +2,20 @@
  *
  */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsCategoryServer } from 'src/service/base/commodity/options/category';
+import { BaseCommodityOptionsClassificationServer } from 'src/service/base/commodity/options/classification';
 
 @Provide()
-export class CommodityOptionsCategoryService {
+export class CommodityOptionsClassificationService {
 
   @Inject()
-  baseCommodityOptionsCategoryServer: BaseCommodityOptionsCategoryServer;
+  baseCommodityOptionsClassificationServer: BaseCommodityOptionsClassificationServer;
 
   /**
    * 创建
    */
   async create(payload) {
-    const data = await this.baseCommodityOptionsCategoryServer.BaseCreate(payload);
+    const data = await this.baseCommodityOptionsClassificationServer.BaseCreate(payload);
+    console.log("CommodityOptionsClassificationService", data)
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -33,7 +34,7 @@ export class CommodityOptionsCategoryService {
    * 查询
    */
   async retrieve(payload) {
-    const data = await this.baseCommodityOptionsCategoryServer.BaseRetrieve(payload);
+    const data = await this.baseCommodityOptionsClassificationServer.BaseRetrieve(payload);
     if (data) {
       return {
         data: data,
@@ -52,7 +53,7 @@ export class CommodityOptionsCategoryService {
    * 查询
    */
   async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsCategoryServer.BaseRetrieveId(payload);
+    const data = await this.baseCommodityOptionsClassificationServer.BaseRetrieveId(payload);
     if (data) {
       return {
         data: data,
@@ -74,7 +75,7 @@ export class CommodityOptionsCategoryService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    let data = await this.baseCommodityOptionsCategoryServer.BaseRetrieveAll();
+    let data = await this.baseCommodityOptionsClassificationServer.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)
     }
@@ -97,7 +98,7 @@ export class CommodityOptionsCategoryService {
    * 修改
    */
   async update(payload) {
-    const data = await this.baseCommodityOptionsCategoryServer.BaseUpdate(payload);
+    const data = await this.baseCommodityOptionsClassificationServer.BaseUpdate(payload);
     if (data.affected) {
       return {
         // data: data,
@@ -117,7 +118,7 @@ export class CommodityOptionsCategoryService {
    * 删除
    */
   async delete(payload) {
-    const data = await this.baseCommodityOptionsCategoryServer.BaseDelete(payload);
+    const data = await this.baseCommodityOptionsClassificationServer.BaseDelete(payload);
     if (data.affected) {
       return {
         // data: data,

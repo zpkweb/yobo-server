@@ -136,7 +136,7 @@ export class BaseSellerServer {
    * Seller
    */
   async baseSearchSeller(payload) {
-    console.log("baseSearchSeller", payload)
+    // console.log("baseSearchSeller payload", payload)
     const where: any = {};
 
     if (payload.surname) {
@@ -170,7 +170,7 @@ export class BaseSellerServer {
     if (payload.phone) {
       where.phone = Like(payload.phone);
     }
-
+    // console.log("baseSearchSeller where", where)
     // list total
     return await this.userSellerEntity.findAndCount({
       // relations: ['seller'],

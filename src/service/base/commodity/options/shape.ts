@@ -17,15 +17,13 @@ export class BaseCommodityOptionsShapeServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsShapeEntity)
-      // .values({
-      //   img: payload.img,
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr'],
-      //   'es-es': payload['es-es']
-      // })
-      .values(payload)
+      .values({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
       .execute();
   }
 
@@ -33,14 +31,12 @@ export class BaseCommodityOptionsShapeServer {
    * 查询商品形状选项
    */
   async BaseRetrieve(payload) {
-    console.log("BaseCommodityOptionsShapeRetrieve", payload)
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder('shape')
-      .where('shape.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('shape.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('shape.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      // .orWhere('shape.fr-fr = :frfr', { frfr: payload['fr-fr'] })
-      .orWhere('shape.es-es = :eses', { eses: payload['es-es'] })
+      .where('shape.zh-cn = :zhcn', { zhcn: payload.zhcn })
+      .orWhere('shape.en-us = :enus', { enus: payload.enus })
+      .orWhere('shape.ja-jp = :jajp', { jajp: payload.jajp })
+      .orWhere('shape.es-es = :eses', { eses: payload.eses })
       .getOne();
   }
 
@@ -48,7 +44,6 @@ export class BaseCommodityOptionsShapeServer {
    * 查询商品形状选项Id
    */
   async BaseRetrieveId(payload) {
-    console.log("BaseCommodityOptionsShapeRetrieve", payload)
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder('shape')
       .where('shape.id = :id', { id: payload.id })
@@ -68,31 +63,23 @@ export class BaseCommodityOptionsShapeServer {
    * 修改商品形状选项
    */
   async BaseUpdate(payload) {
-    console.log("BaseCommodityOptionsShapeUpdate", payload)
     const { id, ...setData } = payload;
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder()
       .update(CommodityOptionsShapeEntity)
-      // .set({
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr']
-      // })
       .set(setData)
-      .where("id = :id", { id: id })
+      .where("id = :id", { id })
       .execute();
   }
 
   /**
    * 删除商品形状选项
    */
-  async BaseDelete(payload) {
-    console.log("BaseCommodityOptionsShapeDelete", payload)
+  async BaseDelete(id) {
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where("id = :id", { id })
       .execute();
   }
 }

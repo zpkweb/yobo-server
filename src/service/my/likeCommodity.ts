@@ -121,7 +121,7 @@ export class MyLikeCommodityService {
       let categorys = item.categorys ? item.categorys.map(item => {return {id: item.id, name: item[type]}})  : '';
       let techniques = item.techniques ? item.techniques.map(item => {return {id: item.id, name: item[type]}})  : '';
 
-      return Object.assign(item,{
+      return Object.assign(item, {
         name,
         desc,
         price,

@@ -1,42 +1,45 @@
 /**
- * 商品描述
+ * 商品分类
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Column, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { CommodityEntity } from '../commodity';
 
-@EntityModel('commodity_desc')
-export class CommodityDescEntity {
+@EntityModel('commodity_options_classification')
+export class CommodityOptionsClassificationEntity {
 
-  // 商品描述 id
+  // 商品 id
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
+  // 图片
+  @Column()
+  img: string;
+
   // 语言
   @Column({
-    type: "text"
+    nullable: true
   })
   'zh-cn': string;
 
   @Column({
-    type: "text"
+    nullable: true
   })
   'en-us': string;
 
   @Column({
-    type: "text"
+    nullable: true
   })
   'ja-jp': string;
 
   @Column({
-    nullable: true,
-    type: "text"
+    nullable: true
   })
   'fr-fr': string;
 
   @Column({
-    type: "text"
+    nullable: true
   })
   'es-es': string;
 
@@ -53,12 +56,9 @@ export class CommodityDescEntity {
   updatedDate: Date;
 
   // // 关联商品选项
-  @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.desc, {
-    onDelete: 'CASCADE'
-  })
-  @JoinColumn({
-    name: 'commodityId',
-    referencedColumnName: 'commodityId'
+  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.classifications, {
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   commodity: CommodityEntity;
 

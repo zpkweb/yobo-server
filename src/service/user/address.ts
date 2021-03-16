@@ -141,7 +141,7 @@ export default class UserAddressService {
     if(userAddress.success){
       // 更新
       updateAddress = await this.update({
-        name: payload.name || '',
+        name: payload.name || payload.firstname + payload.lastname || '',
         phone: payload.phone || '',
         country: payload.country || '',
         city: payload.city || '',

@@ -5,11 +5,9 @@ import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
 import { CommodityAttributeColor } from './attribute/color';
-import { CommodityOptionsCategoryService } from './options/category';
-import { CommodityOptionsShapeService } from './options/shape';
-import { CommodityOptionsTechniqueService } from './options/technique';
-import { CommodityOptionsThemeService } from './options/theme';
-import { CommentService } from './comment'
+
+import { CommentService } from './comment';
+import { CommodityOptionService } from './commodityOption';
 @Provide()
 export class CommodityService {
 
@@ -32,19 +30,10 @@ export class CommodityService {
   commodityAttributeColor: CommodityAttributeColor;
 
   @Inject()
-  commodityOptionsCategoryService: CommodityOptionsCategoryService;
-
-  @Inject()
-  commodityOptionsShapeService: CommodityOptionsShapeService;
-
-  @Inject()
-  commodityOptionsTechniqueService: CommodityOptionsTechniqueService;
-
-  @Inject()
-  commodityOptionsThemeService: CommodityOptionsThemeService;
-
-  @Inject()
   commentService: CommentService;
+
+  @Inject()
+  commodityOptionService: CommodityOptionService;
 
   // 创建
   async create(payload) {
@@ -396,15 +385,20 @@ export class CommodityService {
    * @param payload
    * type
    */
-  async commodityOptionsCreate(payload) {
+  async createOptions(payload) {
+    console.log("createOptions", payload)
     let data: any = [];
     if (payload.options && payload.options.length) {
       for (let item of payload.options) {
-        console.log("item", item)
         // 查询商品选项
-        const commodityOptions = await this.commodityOptionsTypeRetrieve({
+        const commodityOptions = await this.commodityOptionService.commodityOptionsTypeRetrieve({
           type: payload.type,
-          ...item
+          img: item.img,
+          zhcn: item['zh-cn'],
+          enus: item['en-us'],
+          jajp: item['ja-jp'],
+          eses: item['es-es'],
+          frfr: item['fr-fr'],
         });
         console.log("commodityOptions", commodityOptions)
         if (commodityOptions.success) {
@@ -414,9 +408,14 @@ export class CommodityService {
           }
         }
         // 商品选项不存在, 创建商品选项
-        const commodityOptionsNew = await this.commodityOptionsTypeCreate({
+        const commodityOptionsNew = await this.commodityOptionService.commodityOptionsTypeCreate({
           type: payload.type,
-          ...item
+          img: item.img,
+          zhcn: item['zh-cn'],
+          enus: item['en-us'],
+          jajp: item['ja-jp'],
+          eses: item['es-es'],
+          frfr: item['fr-fr'],
         });
         if (!commodityOptionsNew.success) {
           return {
@@ -425,9 +424,14 @@ export class CommodityService {
           }
         }
         // 获取刚创建的商品选项
-        const commodityOption = await this.commodityOptionsTypeRetrieve({
+        const commodityOption = await this.commodityOptionService.commodityOptionsTypeRetrieve({
           type: payload.type,
-          ...item
+          img: item.img,
+          zhcn: item['zh-cn'],
+          enus: item['en-us'],
+          jajp: item['ja-jp'],
+          eses: item['es-es'],
+          frfr: item['fr-fr'],
         });
         if (commodityOption.success) {
           data.push(commodityOption.data)
@@ -446,224 +450,77 @@ export class CommodityService {
       code: 10003
     }
   }
+
   /**
-   * 创建商品类型选项
+   * 查询 商品选项
    * @param payload
    * type
    */
-  async commodityOptionsTypeCreate(payload) {
-    console.log("commodityOptionsTypeCreate", payload)
-    let data: any;
-    switch (payload.type) {
-      case 'category':
-        data = await this.commodityOptionsCategoryService.create({
-          'img': payload['img'] || '',
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-      case 'shape':
-        data = await this.commodityOptionsShapeService.create({
-          'img': payload['img'] || '',
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-      case 'technique':
-        data = await this.commodityOptionsTechniqueService.create({
-          'img': payload['img'] || '',
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-      case 'theme':
-        data = await this.commodityOptionsThemeService.create({
-          'img': payload['img'] || '',
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-    }
-    return data;
+
+
+  async retrieveOption({
+    type = '',
+
+  } = {}) {
+    return this.commodityOptionService.commodityOptionsTypeRetrieve({
+      type
+    });
   }
 
-  /**
-   * 查询商品类型选项
-   */
-  async commodityOptionsTypeRetrieve(payload) {
-    let data: any;
-    switch (payload.type) {
-      case 'category':
-        data = await this.commodityOptionsCategoryService.retrieve(payload);
-        break;
-      case 'shape':
-        data = await this.commodityOptionsShapeService.retrieve(payload);
-        break;
-      case 'technique':
-        data = await this.commodityOptionsTechniqueService.retrieve(payload);
-        break;
-      case 'theme':
-        data = await this.commodityOptionsThemeService.retrieve(payload);
-        break;
-    }
-    return data;
+
+  async retrieveOptionAll(payload) {
+    return this.commodityOptionService.commodityOptionsTypeRetrieveAll({
+      type: payload.type,
+      isLocale: payload.isLocal || false,
+      locale: 'zh-cn'
+    });
   }
 
-  /**
-   * 查询商品类型选项
-   */
-  async commodityOptionsTypeRetrieveId(payload) {
-    let data: any;
-    switch (payload.type) {
-      case 'category':
-        data = await this.commodityOptionsCategoryService.retrieveId({
-          id: payload.id
-        });
-        break;
-      case 'shape':
-        data = await this.commodityOptionsShapeService.retrieveId({
-          id: payload.id
-        });
-        break;
-      case 'technique':
-        data = await this.commodityOptionsTechniqueService.retrieveId({
-          id: payload.id
-        });
-        break;
-      case 'theme':
-        data = await this.commodityOptionsThemeService.retrieveId({
-          id: payload.id
-        });
-        break;
-    }
-    return data;
-  }
 
-  /**
-   * 查询商品类型所有
-   */
-    async commodityOptionsTypeRetrieveAll(payload) {
-      console.log("commodityOptionsTypeRetrieveAll", payload)
-      let data: any;
-    switch (payload.type) {
-      case 'category':
-        data = await this.commodityOptionsCategoryService.retrieveAll(payload);
-        break;
-      case 'shape':
-        data = await this.commodityOptionsShapeService.retrieveAll(payload);
-        break;
-      case 'technique':
-        data = await this.commodityOptionsTechniqueService.retrieveAll(payload);
-        break;
-      case 'theme':
-        data = await this.commodityOptionsThemeService.retrieveAll(payload);
-        break;
-      }
-      return data;
-    }
 
   /**
    * 修改商品选项
    * @param payload
    */
-  async commodityOptionsUpdate(payload) {
+  async updateOptions({
+    type = '',
+    id = '',
+    img = '',
+    zhcn = '',
+    enus = '',
+    jajp = '',
+    eses = ''
+  } = {}) {
 
     // 查询商品选项
-    const commodityOptionsShape = await this.commodityOptionsTypeRetrieveId(payload);
-    console.log("commodityOptionsShape", commodityOptionsShape )
-    if (!commodityOptionsShape.success) {
+    const commodityOptions = await this.commodityOptionService.commodityOptionsTypeRetrieveId({type, id});
+    console.log("commodityOptions", commodityOptions )
+    if (!commodityOptions.success) {
       return {
         success: false,
         code: 10014
       }
     }
 
-    return  await this.commodityOptionsTypeUpdate({
-      'type': payload.type,
-      'id': commodityOptionsShape.data.id,
-      img: payload.img || commodityOptionsShape.data.img,
-      'zh-cn': payload['zh-cn'] || commodityOptionsShape.data['zh-cn'],
-      'en-us': payload['en-us'] || commodityOptionsShape.data['en-us'],
-      'ja-jp': payload['ja-jp'] || commodityOptionsShape.data['ja-jp'],
-      'fr-fr': payload['fr-fr'] || commodityOptionsShape.data['fr-fr'],
-      'es-es': payload['es-es'] || commodityOptionsShape.data['es-es']
+    return  await this.commodityOptionService.commodityOptionsTypeUpdate({
+      'type': type,
+      'id': id || commodityOptions.data.id,
+      'img': img || commodityOptions.data.img,
+      'zhcn': zhcn || commodityOptions.data['zh-cn'],
+      'enus': enus || commodityOptions.data['en-us'],
+      'jajp': jajp || commodityOptions.data['ja-jp'],
+      'eses': eses || commodityOptions.data['es-es']
     })
 
   }
 
-  /**
-   * 修改商品类型选项
-   * @param payload
-   */
-  async commodityOptionsTypeUpdate(payload) {
-    let data: any;
-    switch (payload.type) {
-      case 'category':
-        data = await this.commodityOptionsCategoryService.update({
-          id: payload.id,
-          img: payload.img,
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-      case 'shape':
-        data = await this.commodityOptionsShapeService.update({
-          id: payload.id,
-          img: payload.img,
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-      case 'technique':
-        data = await this.commodityOptionsTechniqueService.update({
-          id: payload.id,
-          img: payload.img,
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-      case 'theme':
-        data = await this.commodityOptionsThemeService.update({
-          id: payload.id,
-          img: payload.img,
-          'zh-cn': payload['zh-cn'] || '',
-          'en-us': payload['en-us'] || '',
-          'ja-jp': payload['ja-jp'] || '',
-          'fr-fr': payload['fr-fr'] || '',
-          'es-es': payload['es-es'] || ''
-        });
-        break;
-    }
-    return data;
-  }
 
   /**
    * 删除商品选项
    */
-  async commodityOptionsDelete(payload) {
+  async deleteOptions(payload) {
     // 查询商品选项
-    const commodityOptionsShape = await this.commodityOptionsTypeRetrieveId({
+    const commodityOptionsShape = await this.commodityOptionService.commodityOptionsTypeRetrieveId({
       type: payload.type,
       id: payload.id
     });
@@ -674,41 +531,13 @@ export class CommodityService {
       }
     }
 
-    return await this.commodityOptionsTypeDelete({
+    return await this.commodityOptionService.commodityOptionsTypeDelete({
       type: payload.type,
       id: payload.id
     })
   }
 
-  /**
-   * 删除商品类型选项
-   */
-  async commodityOptionsTypeDelete(payload) {
-    let data: any;
-    switch (payload.type) {
-      case 'category':
-        data = await this.commodityOptionsCategoryService.delete({
-          id: payload.id
-        });
-        break;
-      case 'shape':
-        data = await this.commodityOptionsShapeService.delete({
-          id: payload.id
-        });
-        break;
-      case 'technique':
-        data = await this.commodityOptionsTechniqueService.delete({
-          id: payload.id
-        });
-        break;
-      case 'theme':
-        data = await this.commodityOptionsThemeService.delete({
-          id: payload.id
-        });
-        break;
-    }
-    return data;
-  }
+
 
   /**
    * 商品评价

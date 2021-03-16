@@ -17,15 +17,13 @@ export class BaseCommodityOptionsThemeServer {
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsThemeEntity)
-      // .values({
-      //   img: payload.img,
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr'],
-      //   'es-es': payload['es-es']
-      // })
-      .values(payload)
+      .values({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
       .execute();
   }
 
@@ -35,11 +33,10 @@ export class BaseCommodityOptionsThemeServer {
   async BaseRetrieve(payload) {
     return await this.commodityOptionsThemeEntity
       .createQueryBuilder('theme')
-      .where('theme.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
-      .orWhere('theme.en-us = :enus', { enus: payload['en-us'] })
-      .orWhere('theme.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      // .orWhere('theme.fr-fr = :frfr', { frfr: payload['fr-fr'] })
-      .orWhere('theme.es-es = :eses', { eses: payload['es-es'] })
+      .where('theme.zh-cn = :zhcn', { zhcn: payload.zhcn })
+      .orWhere('theme.en-us = :enus', { enus: payload.enus })
+      .orWhere('theme.ja-jp = :jajp', { jajp: payload.jajp })
+      .orWhere('theme.es-es = :eses', { eses: payload.eses })
       .getOne();
   }
 
@@ -70,25 +67,19 @@ export class BaseCommodityOptionsThemeServer {
     return await this.commodityOptionsThemeEntity
       .createQueryBuilder()
       .update(CommodityOptionsThemeEntity)
-      // .set({
-      //   'zh-cn': payload['zh-cn'],
-      //   'en-us': payload['en-us'],
-      //   'ja-jp': payload['ja-jp'],
-      //   'fr-fr': payload['fr-fr']
-      // })
       .set(setData)
-      .where("id = :id", { id: id })
+      .where("id = :id", { id })
       .execute();
   }
 
   /**
    * 删除商品形状选项
    */
-  async BaseDelete(payload) {
+  async BaseDelete(id) {
     return await this.commodityOptionsThemeEntity
       .createQueryBuilder()
       .delete()
-      .where("id = :id", { id: payload.id })
+      .where("id = :id", { id })
       .execute();
   }
 }

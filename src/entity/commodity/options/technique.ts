@@ -9,7 +9,7 @@ import { CommodityEntity } from '../commodity';
 @EntityModel('commodity_options_technique')
 export class CommodityOptionsTechniqueEntity {
 
-  // 商品形状 id
+  // 商品手法 id
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
@@ -18,19 +18,29 @@ export class CommodityOptionsTechniqueEntity {
   img: string;
 
   // 语言
-  @Column()
+  @Column({
+    nullable: true
+  })
   'zh-cn': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'en-us': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'ja-jp': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'fr-fr': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'es-es': string;
 
   //  创建日期

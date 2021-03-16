@@ -18,19 +18,29 @@ export class CommodityOptionsThemeEntity {
   img: string;
 
   // 语言
-  @Column()
+  @Column({
+    nullable: true
+  })
   'zh-cn': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'en-us': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'ja-jp': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'fr-fr': string;
 
-  @Column()
+  @Column({
+    nullable: true
+  })
   'es-es': string;
 
   //  创建日期

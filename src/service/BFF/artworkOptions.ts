@@ -1,25 +1,91 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { CommodityOptionsShapeService } from '../commodity/options/shape';
-import { CommodityOptionsThemeService } from '../commodity/options/theme';
-import { CommodityOptionsCategoryService } from '../commodity/options/category';
-import { CommodityOptionsTechniqueService } from '../commodity/options/technique';
+
+
+
+import { CommodityOptionsCategoryService } from 'src/service/commodity/options/category';
+import { CommodityOptionsClassificationService } from 'src/service/commodity/options/classification';
+import { CommodityOptionsMaterialService } from 'src/service/commodity/options/material';
+import { CommodityOptionsModelService } from 'src/service/commodity/options/model';
+import { CommodityOptionsPlaceService } from 'src/service/commodity/options/place';
+import { CommodityOptionsShapeService } from 'src/service/commodity/options/shape';
+import { CommodityOptionsSpecificationService } from 'src/service/commodity/options/specification';
+import { CommodityOptionsStyleService } from 'src/service/commodity/options/style';
+import { CommodityOptionsTechniqueService } from 'src/service/commodity/options/technique';
+import { CommodityOptionsThemeService } from 'src/service/commodity/options/theme';
+import { CommodityOptionsTypeService } from 'src/service/commodity/options/type';
+import { CommodityOptionsUseService } from 'src/service/commodity/options/use';
 
 @Provide()
 export class ArtworkOptionsService {
 
   @Inject()
-  commodityOptionsShapeService: CommodityOptionsShapeService;
+commodityOptionsCategoryService: CommodityOptionsCategoryService;
 
   @Inject()
-  commodityOptionsThemeService: CommodityOptionsThemeService;
+commodityOptionsClassificationService: CommodityOptionsClassificationService;
 
   @Inject()
-  commodityOptionsCategoryService: CommodityOptionsCategoryService;
+commodityOptionsMaterialService: CommodityOptionsMaterialService;
 
   @Inject()
-  commodityOptionsTechniqueService: CommodityOptionsTechniqueService;
+commodityOptionsModelService: CommodityOptionsModelService;
+
+  @Inject()
+commodityOptionsPlaceService: CommodityOptionsPlaceService;
+
+  @Inject()
+commodityOptionsShapeService: CommodityOptionsShapeService;
+
+  @Inject()
+commodityOptionsSpecificationService: CommodityOptionsSpecificationService;
+
+  @Inject()
+commodityOptionsStyleService: CommodityOptionsStyleService;
+
+  @Inject()
+commodityOptionsTechniqueService: CommodityOptionsTechniqueService;
+
+  @Inject()
+commodityOptionsThemeService: CommodityOptionsThemeService;
+
+  @Inject()
+commodityOptionsTypeService: CommodityOptionsTypeService;
+
+  @Inject()
+commodityOptionsUseService: CommodityOptionsUseService;
 
   async get(payload) {
+
+    const category = await this.commodityOptionsCategoryService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!category.success) {
+      return category;
+    }
+    const classification = await this.commodityOptionsClassificationService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!classification.success) {
+      return classification;
+    }
+
+    const material = await this.commodityOptionsMaterialService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!material.success) {
+      return material;
+    }
+
+    const model = await this.commodityOptionsModelService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!model.success) {
+      return model;
+    }
 
     const shape = await this.commodityOptionsShapeService.retrieveAll({
       isLocale: payload.isLocale,
@@ -29,20 +95,20 @@ export class ArtworkOptionsService {
       return shape;
     }
 
-    const theme = await this.commodityOptionsThemeService.retrieveAll({
+    const specification = await this.commodityOptionsSpecificationService.retrieveAll({
       isLocale: payload.isLocale,
       locale: payload.locale
     });
-    if(!theme.success) {
-      return theme;
+    if(!specification.success) {
+      return specification;
     }
 
-    const category = await this.commodityOptionsCategoryService.retrieveAll({
+    const style = await this.commodityOptionsStyleService.retrieveAll({
       isLocale: payload.isLocale,
       locale: payload.locale
     });
-    if(!category.success) {
-      return category;
+    if(!style.success) {
+      return style;
     }
 
     const technique = await this.commodityOptionsTechniqueService.retrieveAll({
@@ -53,15 +119,45 @@ export class ArtworkOptionsService {
       return technique;
     }
 
+    const theme = await this.commodityOptionsThemeService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!theme.success) {
+      return theme;
+    }
+
+    const type = await this.commodityOptionsTypeService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!type.success) {
+      return type;
+    }
+
+    const use = await this.commodityOptionsUseService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!use.success) {
+      return use;
+    }
 
     return {
       success: true,
       code: 10009,
       data: {
-        shape: shape.data,
-        theme: theme.data,
         category: category.data,
-        technique: technique.data
+        classification: classification.data,
+        material: material.data,
+        model: model.data,
+        shape: shape.data,
+        specification: specification.data,
+        style: style.data,
+        technique: technique.data,
+        theme: theme.data,
+        type: type.data,
+        use: use.data,
       }
     }
   }

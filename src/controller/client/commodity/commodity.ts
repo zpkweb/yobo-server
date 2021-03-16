@@ -63,8 +63,8 @@ export class CommodityController {
 
   // 查找商品选项-形状
   @Get('/options/:type', { summary: '查找商品选项'})
-  async optionsShape(@Param() type) {
-    return await this.commodityService.commodityOptionsTypeRetrieveAll({
+  async options(@Param() type) {
+    return await this.commodityService.retrieveOptionAll({
       type,
       isLocale: true
     });

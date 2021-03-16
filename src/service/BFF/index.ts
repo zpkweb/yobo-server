@@ -65,7 +65,7 @@ export class BFFService {
     }
 
     // 通过画作看世界:艺术品分类
-    const commodityOption = await this.commodityService.commodityOptionsTypeRetrieveAll({
+    const commodityOption = await this.commodityService.retrieveOptionAll({
       type: 'theme',
       isLocale: true,
       locale: payload.locale || 'zh-cn'
@@ -87,7 +87,7 @@ export class BFFService {
 
     // 我们热卖的艺术家
     const hotSaleSeller = await this.sellerService.retrieveSellerAll({
-      pageSize: payload.pageSize || 4,
+      pageSize: payload.pageSize || 5,
       currentPage: payload.currentPage || 1,
       isLocale: true,
       locale: payload.locale || 'zh-cn'
