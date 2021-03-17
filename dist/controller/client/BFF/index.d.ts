@@ -58,6 +58,8 @@ export declare class BFFController {
             classification: import("../../../entity/commodity/options/classification").CommodityOptionsClassificationEntity[];
             material: import("../../../entity/commodity/options/material").CommodityOptionsMaterialEntity[];
             model: import("../../../entity/commodity/options/model").CommodityOptionsModelEntity[];
+            place: import("../../../entity/commodity/options/place").CommodityOptionsPlaceEntity[];
+            ruiwu: import("../../../entity/commodity/options/ruiwu").CommodityOptionsRuiwuEntity[];
             shape: import("../../../entity/commodity/options/shape").CommodityOptionsShapeEntity[];
             specification: import("../../../entity/commodity/options/specification").CommodityOptionsSpecificationEntity[];
             style: import("../../../entity/commodity/options/style").CommodityOptionsStyleEntity[];

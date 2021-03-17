@@ -9,6 +9,7 @@ import { CommodityOptionsClassificationEntity } from "./options/classification";
 import { CommodityOptionsMaterialEntity } from "./options/material";
 import { CommodityOptionsModelEntity } from "./options/model";
 import { CommodityOptionsPlaceEntity } from "./options/place";
+import { CommodityOptionsRuiwuEntity } from "./options/ruiwu";
 import { CommodityOptionsShapeEntity } from "./options/shape";
 import { CommodityOptionsSpecificationEntity } from "./options/specification";
 import { CommodityOptionsStyleEntity } from "./options/style";
@@ -38,6 +39,7 @@ export declare class CommodityEntity {
     materials: CommodityOptionsMaterialEntity[];
     models: CommodityOptionsModelEntity[];
     places: CommodityOptionsPlaceEntity[];
+    ruiwus: CommodityOptionsRuiwuEntity[];
     shapes: CommodityOptionsShapeEntity[];
     specifications: CommodityOptionsSpecificationEntity[];
     styles: CommodityOptionsStyleEntity[];

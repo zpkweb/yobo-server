@@ -3,6 +3,7 @@ import { CommodityOptionsClassificationService } from "./options/classification"
 import { CommodityOptionsMaterialService } from "./options/material";
 import { CommodityOptionsModelService } from "./options/model";
 import { CommodityOptionsPlaceService } from "./options/place";
+import { CommodityOptionsRuiwuService } from "./options/ruiwu";
 import { CommodityOptionsShapeService } from "./options/shape";
 import { CommodityOptionsSpecificationService } from "./options/specification";
 import { CommodityOptionsStyleService } from "./options/style";
@@ -16,6 +17,7 @@ export declare class CommodityOptionService {
     commodityOptionsMaterialService: CommodityOptionsMaterialService;
     commodityOptionsModelService: CommodityOptionsModelService;
     commodityOptionsPlaceService: CommodityOptionsPlaceService;
+    commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
     commodityOptionsShapeService: CommodityOptionsShapeService;
     commodityOptionsSpecificationService: CommodityOptionsSpecificationService;
     commodityOptionsStyleService: CommodityOptionsStyleService;

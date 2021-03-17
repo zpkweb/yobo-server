@@ -44,7 +44,7 @@ export declare class CommodityOptionsPlaceService {
         success: boolean;
         code: number;
     }>;
-    delete(payload: any): Promise<{
+    delete(id: any): Promise<{
         success: boolean;
         code: number;
     }>;

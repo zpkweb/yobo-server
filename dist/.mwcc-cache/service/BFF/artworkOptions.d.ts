@@ -3,6 +3,7 @@ import { CommodityOptionsClassificationService } from "../commodity/options/clas
 import { CommodityOptionsMaterialService } from "../commodity/options/material";
 import { CommodityOptionsModelService } from "../commodity/options/model";
 import { CommodityOptionsPlaceService } from "../commodity/options/place";
+import { CommodityOptionsRuiwuService } from "../commodity/options/ruiwu";
 import { CommodityOptionsShapeService } from "../commodity/options/shape";
 import { CommodityOptionsSpecificationService } from "../commodity/options/specification";
 import { CommodityOptionsStyleService } from "../commodity/options/style";
@@ -16,6 +17,7 @@ export declare class ArtworkOptionsService {
     commodityOptionsMaterialService: CommodityOptionsMaterialService;
     commodityOptionsModelService: CommodityOptionsModelService;
     commodityOptionsPlaceService: CommodityOptionsPlaceService;
+    commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
     commodityOptionsShapeService: CommodityOptionsShapeService;
     commodityOptionsSpecificationService: CommodityOptionsSpecificationService;
     commodityOptionsStyleService: CommodityOptionsStyleService;
@@ -39,6 +41,8 @@ export declare class ArtworkOptionsService {
             classification: import("../../entity/commodity/options/classification").CommodityOptionsClassificationEntity[];
             material: import("../../entity/commodity/options/material").CommodityOptionsMaterialEntity[];
             model: import("../../entity/commodity/options/model").CommodityOptionsModelEntity[];
+            place: import("../../entity/commodity/options/place").CommodityOptionsPlaceEntity[];
+            ruiwu: import("../../entity/commodity/options/ruiwu").CommodityOptionsRuiwuEntity[];
             shape: import("../../entity/commodity/options/shape").CommodityOptionsShapeEntity[];
             specification: import("../../entity/commodity/options/specification").CommodityOptionsSpecificationEntity[];
             style: import("../../entity/commodity/options/style").CommodityOptionsStyleEntity[];
