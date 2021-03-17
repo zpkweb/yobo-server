@@ -16,19 +16,28 @@
   珠宝：风格，款式，颜色，用途
 
 
-  分类：油画，雕塑，版刻，国画，文玩，佛教，珠宝，其他
-  形状：圆形，方形，长形，其他
-  颜色：粉色，黄色，红色，绿色，黑色，白色，蓝色，紫色，灰色，其他
-  风格：抽象，具象，古典，现代，写意，写实，超写实，观念，卡通，奢华，复古，小清新，时尚，商务休闲，其他
-  题材：花鸟，肖像，风景，城市，人物，抽象，动物，静物，历史，风俗，宗教神话，城市景观，其他
-  类型：纸本油画，布画油画，木板油画，木刻版画，丝网版画，铜板画，综合版版画，纸本水墨，绢本设色，其他
-  摆放空间：商业空间，办公，个人住宅，其他
-  材质：木雕，青铜，黄铜，陶瓷，玻璃，玻璃钢，水晶，黏土，其他
+
+
   类别：手串，神像雕塑，把件，画像/唐卡，佛珠/念珠，银元，贡器贡品，书/字画，瑞物，镇物，塔，修行穿用，扇画，熏香，其他
-  规格：单颗，12mm17颗，20mm12颗，手持18颗，108+6颗，其他
-  瑞物：葫芦，风水轮，金蟾，金钱龟，貔貅，聚宝盆，如意，元宝，其他
+  分类：油画，雕塑，版刻，国画，文玩，佛教，珠宝，其他
+  材质：木雕，青铜，黄铜，陶瓷，玻璃，玻璃钢，水晶，黏土，其他
   款式：项链，手链，戒指，耳饰，吊坠，脚链，胸针，其他
+  摆放：商业空间，办公，个人住宅，其他
+  形状：圆形，方形，长形，其他
+  规格：单颗，12mm17颗，20mm12颗，手持18颗，108+6颗，其他
+  风格：抽象，具象，古典，现代，写意，写实，超写实，观念，卡通，奢华，复古，小清新，时尚，商务休闲，其他
+  手法：其他
+  主题：花鸟，肖像，风景，城市，人物，抽象，动物，静物，历史，风俗，宗教神话，城市景观，其他
+  类型：纸本油画，布画油画，木板油画，木刻版画，丝网版画，铜板画，综合版版画，纸本水墨，绢本设色，其他
   用途：自带，生日礼物，婚庆，送女友，送男友，送长辈，其他
+  瑞物：葫芦，风水轮，金蟾，金钱龟，貔貅，聚宝盆，如意，元宝，其他
+
+
+
+
+
+
+
 
  */
 
@@ -46,6 +55,7 @@ import { CommodityOptionsClassificationEntity } from 'src/entity/commodity/optio
 import { CommodityOptionsMaterialEntity } from 'src/entity/commodity/options/material';
 import { CommodityOptionsModelEntity } from 'src/entity/commodity/options/model';
 import { CommodityOptionsPlaceEntity } from 'src/entity/commodity/options/place';
+import { CommodityOptionsRuiwuEntity } from 'src/entity/commodity/options/ruiwu';
 import { CommodityOptionsShapeEntity } from 'src/entity/commodity/options/shape';
 import { CommodityOptionsSpecificationEntity } from 'src/entity/commodity/options/specification';
 import { CommodityOptionsStyleEntity } from 'src/entity/commodity/options/style';
@@ -188,7 +198,18 @@ export class CommodityEntity {
   })
   places: CommodityOptionsPlaceEntity[];
 
-
+  // 关联 瑞物
+  @ManyToMany(type => CommodityOptionsRuiwuEntity, CommodityOptionsRuiwuEntity => CommodityOptionsRuiwuEntity.commodity)
+  @JoinTable({
+    name: 'commodity_ruiwu',
+    joinColumn:{
+      referencedColumnName: 'commodityId'
+    },
+    inverseJoinColumn:{
+      referencedColumnName: 'id'
+    }
+  })
+  ruiwus: CommodityOptionsRuiwuEntity[];
 
   // 关联 商品形状
   @ManyToMany(type => CommodityOptionsShapeEntity, CommodityOptionsShapeEntity => CommodityOptionsShapeEntity.commodity)

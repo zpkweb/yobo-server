@@ -116,8 +116,8 @@ export class CommodityOptionsStyleService {
   /**
    * 删除
    */
-  async delete(payload) {
-    const data = await this.baseCommodityOptionsStyleServer.BaseDelete(payload);
+  async delete(id) {
+    const data = await this.baseCommodityOptionsStyleServer.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

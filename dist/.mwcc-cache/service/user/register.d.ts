@@ -22,6 +22,7 @@ export declare class UserRegisterService {
     baseUserServer: BaseUserServer;
     baseSellerServer: BaseSellerServer;
     baseIdentityListServer: BaseIdentityListServer;
+    email: any;
     registerUser(payload: any): Promise<any>;
     applySeller(payload: any): Promise<any>;
     adminRegister(payload: any): Promise<any>;
@@ -32,6 +33,24 @@ export declare class UserRegisterService {
     createSuperAdmin(payload: any): Promise<any>;
     register(payload: any): Promise<any>;
     hasUser(payload: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    hasUserName(name: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    hasUserEmail(email: any): Promise<{
         data: any;
         success: boolean;
         code: number;

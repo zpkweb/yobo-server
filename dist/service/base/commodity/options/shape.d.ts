@@ -7,5 +7,5 @@ export declare class BaseCommodityOptionsShapeServer {
     BaseRetrieveId(payload: any): Promise<CommodityOptionsShapeEntity>;
     BaseRetrieveAll(): Promise<CommodityOptionsShapeEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
-    BaseDelete(payload: any): Promise<import("typeorm").DeleteResult>;
+    BaseDelete(id: any): Promise<import("typeorm").DeleteResult>;
 }

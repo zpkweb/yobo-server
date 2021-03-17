@@ -46,8 +46,7 @@ export declare class AdminCommodityController {
         success: boolean;
         code: number;
     }>;
-    optionsShape(type: any): Promise<any>;
-    optionsCreate(type: any, optionsBody: any): Promise<{
+    createOptions(type: any, optionsBody: any): Promise<{
         success: boolean;
         code: number;
         data?: undefined;
@@ -56,6 +55,7 @@ export declare class AdminCommodityController {
         success: boolean;
         code: number;
     }>;
-    optionsUpdate(type: any, optionsBody: any): Promise<any>;
-    optionsDelete(type: any, optionsBody: any): Promise<any>;
+    retrieveOption(type: any): Promise<any>;
+    updateOptions(type: any, optionsBody: any): Promise<any>;
+    deleteOptions(type: any, optionsBody: any): Promise<any>;
 }

@@ -10,13 +10,13 @@ import { CommodityOptionsStyleEntity } from 'src/entity/commodity/options/style'
 export class BaseCommodityOptionsStyleServer {
 
   @InjectEntityModel(CommodityOptionsStyleEntity)
-  CommodityOptionsStyleEntity: Repository<CommodityOptionsStyleEntity>;
+  commodityOptionsStyleEntity: Repository<CommodityOptionsStyleEntity>;
 
   /**
    * 创建
    */
   async BaseCreate(payload) {
-    return await this.CommodityOptionsStyleEntity
+    return await this.commodityOptionsStyleEntity
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsStyleEntity)
@@ -36,7 +36,7 @@ export class BaseCommodityOptionsStyleServer {
    * 查询
    */
   async BaseRetrieve(payload) {
-    return await this.CommodityOptionsStyleEntity
+    return await this.commodityOptionsStyleEntity
       .createQueryBuilder('style')
       .where('style.zh-cn = :zhcn', { zhcn: payload.zhcn })
       .orWhere('style.en-us = :enus', { enus: payload.enus })
@@ -49,7 +49,7 @@ export class BaseCommodityOptionsStyleServer {
    * 查询
    */
   async BaseRetrieveId(payload) {
-    return await this.CommodityOptionsStyleEntity
+    return await this.commodityOptionsStyleEntity
       .createQueryBuilder('style')
       .where('style.id = :id', { id: payload.id })
       .getOne();
@@ -59,7 +59,7 @@ export class BaseCommodityOptionsStyleServer {
    * 查询
    */
   async BaseRetrieveAll() {
-    return await this.CommodityOptionsStyleEntity
+    return await this.commodityOptionsStyleEntity
       .createQueryBuilder()
       .getMany();
   }
@@ -67,13 +67,18 @@ export class BaseCommodityOptionsStyleServer {
   /**
    * 修改
    */
-  async BaseUpdate(payload) {
-    const { id, ...setData } = payload;
-    return await this.CommodityOptionsStyleEntity
+   async BaseUpdate(payload) {
+    return await this.commodityOptionsStyleEntity
       .createQueryBuilder()
       .update(CommodityOptionsStyleEntity)
-      .set(setData)
-      .where("id = :id", { id })
+      .set({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
+      .where("id = :id", { id: payload.id })
       .execute();
   }
 
@@ -81,7 +86,7 @@ export class BaseCommodityOptionsStyleServer {
    * 删除
    */
   async BaseDelete(id) {
-    return await this.CommodityOptionsStyleEntity
+    return await this.commodityOptionsStyleEntity
       .createQueryBuilder()
       .delete()
       .where("id = :id", { id })

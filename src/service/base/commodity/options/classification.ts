@@ -10,14 +10,14 @@ import { CommodityOptionsClassificationEntity } from 'src/entity/commodity/optio
 export class BaseCommodityOptionsClassificationServer {
 
   @InjectEntityModel(CommodityOptionsClassificationEntity)
-  CommodityOptionsClassificationEntity: Repository<CommodityOptionsClassificationEntity>;
+  commodityOptionsClassificationEntity: Repository<CommodityOptionsClassificationEntity>;
 
   /**
    * 创建
    */
   async BaseCreate(payload) {
     console.log("BaseCommodityOptionsClassificationServer payload", payload)
-    return await this.CommodityOptionsClassificationEntity
+    return await this.commodityOptionsClassificationEntity
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsClassificationEntity)
@@ -38,7 +38,7 @@ export class BaseCommodityOptionsClassificationServer {
    */
   async BaseRetrieve(payload) {
     console.log("BaseCommodityOptionsClassificationServer BaseRetrieve", payload)
-    return await this.CommodityOptionsClassificationEntity
+    return await this.commodityOptionsClassificationEntity
       .createQueryBuilder('classification')
       .where('classification.zh-cn = :zhcn', { zhcn: payload.zhcn })
       .orWhere('classification.en-us = :enus', { enus: payload.enus })
@@ -51,7 +51,7 @@ export class BaseCommodityOptionsClassificationServer {
    * 查询
    */
   async BaseRetrieveId(payload) {
-    return await this.CommodityOptionsClassificationEntity
+    return await this.commodityOptionsClassificationEntity
       .createQueryBuilder('classification')
       .where('classification.id = :id', { id: payload.id })
       .getOne();
@@ -61,7 +61,7 @@ export class BaseCommodityOptionsClassificationServer {
    * 查询
    */
   async BaseRetrieveAll() {
-    return await this.CommodityOptionsClassificationEntity
+    return await this.commodityOptionsClassificationEntity
       .createQueryBuilder()
       .getMany();
   }
@@ -70,12 +70,17 @@ export class BaseCommodityOptionsClassificationServer {
    * 修改
    */
   async BaseUpdate(payload) {
-    const { id, ...setData } = payload;
-    return await this.CommodityOptionsClassificationEntity
+    return await this.commodityOptionsClassificationEntity
       .createQueryBuilder()
       .update(CommodityOptionsClassificationEntity)
-      .set(setData)
-      .where("id = :id", { id })
+      .set({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
+      .where("id = :id", { id: payload.id })
       .execute();
   }
 
@@ -83,7 +88,7 @@ export class BaseCommodityOptionsClassificationServer {
    * 删除
    */
   async BaseDelete(id) {
-    return await this.CommodityOptionsClassificationEntity
+    return await this.commodityOptionsClassificationEntity
       .createQueryBuilder()
       .delete()
       .where("id = :id", { id })

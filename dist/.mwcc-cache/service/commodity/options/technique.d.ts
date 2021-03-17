@@ -28,7 +28,10 @@ export declare class CommodityOptionsTechniqueService {
         code: number;
         data?: undefined;
     }>;
-    retrieveAll(payload: any): Promise<{
+    retrieveAll({ isLocale, locale }?: {
+        isLocale?: boolean;
+        locale?: string;
+    }): Promise<{
         data: import("../../../entity/commodity/options/technique").CommodityOptionsTechniqueEntity[];
         success: boolean;
         code: number;

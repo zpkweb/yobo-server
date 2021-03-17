@@ -7,5 +7,5 @@ export declare class BaseCommodityOptionsTechniqueServer {
     BaseRetrieveId(payload: any): Promise<CommodityOptionsTechniqueEntity>;
     BaseRetrieveAll(): Promise<CommodityOptionsTechniqueEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
-    BaseDelete(payload: any): Promise<import("typeorm").DeleteResult>;
+    BaseDelete(id: any): Promise<import("typeorm").DeleteResult>;
 }

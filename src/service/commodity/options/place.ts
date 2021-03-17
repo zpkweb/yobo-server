@@ -116,8 +116,8 @@ export class CommodityOptionsPlaceService {
   /**
    * 删除
    */
-  async delete(payload) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseDelete(payload);
+  async delete(id) {
+    const data = await this.baseCommodityOptionsPlaceServer.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

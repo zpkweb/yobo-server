@@ -10,13 +10,13 @@ import { CommodityOptionsCategoryEntity } from 'src/entity/commodity/options/cat
 export class BaseCommodityOptionsCategoryServer {
 
   @InjectEntityModel(CommodityOptionsCategoryEntity)
-  CommodityOptionsCategoryEntity: Repository<CommodityOptionsCategoryEntity>;
+  commodityOptionsCategoryEntity: Repository<CommodityOptionsCategoryEntity>;
 
   /**
    * 创建
    */
   async BaseCreate(payload) {
-    return await this.CommodityOptionsCategoryEntity
+    return await this.commodityOptionsCategoryEntity
       .createQueryBuilder()
       .insert()
       .into(CommodityOptionsCategoryEntity)
@@ -37,7 +37,7 @@ export class BaseCommodityOptionsCategoryServer {
    */
   async BaseRetrieve(payload) {
     console.log("BaseRetrieve", payload)
-    return await this.CommodityOptionsCategoryEntity
+    return await this.commodityOptionsCategoryEntity
       .createQueryBuilder('category')
       .where('category.zh-cn = :zhcn', { zhcn: payload.zhcn })
       .orWhere('category.en-us = :enus', { enus: payload.enus })
@@ -49,10 +49,10 @@ export class BaseCommodityOptionsCategoryServer {
   /**
    * 查询
    */
-  async BaseRetrieveId(payload) {
-    return await this.CommodityOptionsCategoryEntity
+  async BaseRetrieveId(id) {
+    return await this.commodityOptionsCategoryEntity
       .createQueryBuilder('category')
-      .where('category.id = :id', { id: payload.id })
+      .where('category.id = :id', { id })
       .getOne();
   }
 
@@ -60,7 +60,7 @@ export class BaseCommodityOptionsCategoryServer {
    * 查询
    */
   async BaseRetrieveAll() {
-    return await this.CommodityOptionsCategoryEntity
+    return await this.commodityOptionsCategoryEntity
       .createQueryBuilder()
       .getMany();
   }
@@ -69,12 +69,17 @@ export class BaseCommodityOptionsCategoryServer {
    * 修改
    */
   async BaseUpdate(payload) {
-    const { id, ...setData } = payload;
-    return await this.CommodityOptionsCategoryEntity
+    return await this.commodityOptionsCategoryEntity
       .createQueryBuilder()
       .update(CommodityOptionsCategoryEntity)
-      .set(setData)
-      .where("id = :id", { id })
+      .set({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
+      .where("id = :id", { id: payload.id })
       .execute();
   }
 
@@ -82,7 +87,7 @@ export class BaseCommodityOptionsCategoryServer {
    * 删除
    */
   async BaseDelete(id) {
-    return await this.CommodityOptionsCategoryEntity
+    return await this.commodityOptionsCategoryEntity
       .createQueryBuilder()
       .delete()
       .where("id = :id", { id })

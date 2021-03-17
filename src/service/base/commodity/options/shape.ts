@@ -62,13 +62,18 @@ export class BaseCommodityOptionsShapeServer {
   /**
    * 修改商品形状选项
    */
-  async BaseUpdate(payload) {
-    const { id, ...setData } = payload;
+   async BaseUpdate(payload) {
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder()
       .update(CommodityOptionsShapeEntity)
-      .set(setData)
-      .where("id = :id", { id })
+      .set({
+        'img': payload.img,
+        'zh-cn': payload.zhcn,
+        'en-us': payload.enus,
+        'ja-jp': payload.jajp,
+        'es-es': payload.eses
+      })
+      .where("id = :id", { id: payload.id })
       .execute();
   }
 

@@ -7,6 +7,7 @@ import { CommodityOptionsClassificationService } from 'src/service/commodity/opt
 import { CommodityOptionsMaterialService } from 'src/service/commodity/options/material';
 import { CommodityOptionsModelService } from 'src/service/commodity/options/model';
 import { CommodityOptionsPlaceService } from 'src/service/commodity/options/place';
+import { CommodityOptionsRuiwuService } from 'src/service/commodity/options/ruiwu';
 import { CommodityOptionsShapeService } from 'src/service/commodity/options/shape';
 import { CommodityOptionsSpecificationService } from 'src/service/commodity/options/specification';
 import { CommodityOptionsStyleService } from 'src/service/commodity/options/style';
@@ -32,6 +33,9 @@ commodityOptionsModelService: CommodityOptionsModelService;
 
   @Inject()
 commodityOptionsPlaceService: CommodityOptionsPlaceService;
+
+@Inject()
+commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
 
   @Inject()
 commodityOptionsShapeService: CommodityOptionsShapeService;
@@ -85,6 +89,22 @@ commodityOptionsUseService: CommodityOptionsUseService;
     });
     if(!model.success) {
       return model;
+    }
+
+    const place = await this.commodityOptionsPlaceService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!place.success) {
+      return place;
+    }
+
+    const ruiwu = await this.commodityOptionsRuiwuService.retrieveAll({
+      isLocale: payload.isLocale,
+      locale: payload.locale
+    });
+    if(!ruiwu.success) {
+      return ruiwu;
     }
 
     const shape = await this.commodityOptionsShapeService.retrieveAll({
@@ -151,6 +171,8 @@ commodityOptionsUseService: CommodityOptionsUseService;
         classification: classification.data,
         material: material.data,
         model: model.data,
+        place: place.data,
+        ruiwu: ruiwu.data,
         shape: shape.data,
         specification: specification.data,
         style: style.data,

@@ -5,6 +5,7 @@ import { CommodityOptionsClassificationService } from 'src/service/commodity/opt
 import { CommodityOptionsMaterialService } from 'src/service/commodity/options/material';
 import { CommodityOptionsModelService } from 'src/service/commodity/options/model';
 import { CommodityOptionsPlaceService } from 'src/service/commodity/options/place';
+import { CommodityOptionsRuiwuService } from 'src/service/commodity/options/ruiwu';
 import { CommodityOptionsShapeService } from 'src/service/commodity/options/shape';
 import { CommodityOptionsSpecificationService } from 'src/service/commodity/options/specification';
 import { CommodityOptionsStyleService } from 'src/service/commodity/options/style';
@@ -31,6 +32,9 @@ export class CommodityOptionService {
 
   @Inject()
   commodityOptionsPlaceService: CommodityOptionsPlaceService;
+
+  @Inject()
+  commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
 
   @Inject()
   commodityOptionsShapeService: CommodityOptionsShapeService;
@@ -85,6 +89,9 @@ export class CommodityOptionService {
         break;
       case 'place':
         data = await this.commodityOptionsPlaceService.create(createData);
+        break;
+      case 'ruiwu':
+        data = await this.commodityOptionsRuiwuService.create(createData);
         break;
       case 'shape':
         data = await this.commodityOptionsShapeService.create(createData);
@@ -144,6 +151,9 @@ export class CommodityOptionService {
       case 'place':
         data = await this.commodityOptionsPlaceService.retrieve(retrieveData);
         break;
+      case 'ruiwu':
+        data = await this.commodityOptionsRuiwuService.retrieve(retrieveData);
+        break;
       case 'shape':
         data = await this.commodityOptionsShapeService.retrieve(retrieveData);
         break;
@@ -195,6 +205,9 @@ export class CommodityOptionService {
         break;
       case 'place':
         data = await this.commodityOptionsPlaceService.retrieveId(id);
+        break;
+      case 'ruiwu':
+        data = await this.commodityOptionsRuiwuService.retrieveId(id);
         break;
       case 'shape':
         data = await this.commodityOptionsShapeService.retrieveId(id);
@@ -250,6 +263,9 @@ export class CommodityOptionService {
       case 'place':
         data = await this.commodityOptionsPlaceService.retrieveAll({ isLocale, locale });
         break;
+      case 'ruiwu':
+        data = await this.commodityOptionsRuiwuService.retrieveAll({ isLocale, locale });
+        break;
       case 'shape':
         data = await this.commodityOptionsShapeService.retrieveAll({ isLocale, locale });
         break;
@@ -294,7 +310,7 @@ export class CommodityOptionService {
   } = {}) {
     let data: any;
     let updateData = { id, img, zhcn, enus, jajp, frfr, eses };
-
+    console.log("commodityOptionsTypeUpdate", updateData)
     switch (type) {
       case 'category':
         data = await this.commodityOptionsCategoryService.update(updateData);
@@ -310,6 +326,9 @@ export class CommodityOptionService {
         break;
       case 'place':
         data = await this.commodityOptionsPlaceService.update(updateData);
+        break;
+      case 'Ruiwu':
+        data = await this.commodityOptionsRuiwuService.update(updateData);
         break;
       case 'shape':
         data = await this.commodityOptionsShapeService.update(updateData);
@@ -346,24 +365,45 @@ export class CommodityOptionService {
     let data: any;
     switch (payload.type) {
       case 'category':
-        data = await this.commodityOptionsCategoryService.delete({
-          id: payload.id
-        });
+        data = await this.commodityOptionsCategoryService.delete(payload.id);
+        break;
+      case 'classification':
+        data = await this.commodityOptionsClassificationService.delete(payload.id);
+        break;
+      case 'material':
+        data = await this.commodityOptionsMaterialService.delete(payload.id);
+        break;
+      case 'model':
+        data = await this.commodityOptionsModelService.delete(payload.id);
+        break;
+      case 'place':
+        data = await this.commodityOptionsPlaceService.delete(payload.id);
+        break;
+      case 'Ruiwu':
+        data = await this.commodityOptionsRuiwuService.delete(payload.id);
         break;
       case 'shape':
-        data = await this.commodityOptionsShapeService.delete({
-          id: payload.id
-        });
+        data = await this.commodityOptionsShapeService.delete(payload.id);
+        break;
+      case 'specification':
+        data = await this.commodityOptionsSpecificationService.delete(payload.id);
+        break;
+      case 'style':
+        data = await this.commodityOptionsStyleService.delete(payload.id);
         break;
       case 'technique':
-        data = await this.commodityOptionsTechniqueService.delete({
-          id: payload.id
-        });
+        data = await this.commodityOptionsTechniqueService.delete(payload.id);
         break;
       case 'theme':
-        data = await this.commodityOptionsThemeService.delete({
-          id: payload.id
-        });
+        data = await this.commodityOptionsThemeService.delete(payload.id);
+        break;
+      case 'type':
+        data = await this.commodityOptionsTypeService.delete(payload.id);
+        break;
+      case 'use':
+        data = await this.commodityOptionsUseService.delete(payload.id);
+        break;
+      default:
         break;
     }
     return data;

@@ -491,7 +491,7 @@ export class CommodityService {
     jajp = '',
     eses = ''
   } = {}) {
-
+    console.log("updateOptions", type, id, img, zhcn, enus, jajp, eses)
     // 查询商品选项
     const commodityOptions = await this.commodityOptionService.commodityOptionsTypeRetrieveId({type, id});
     console.log("commodityOptions", commodityOptions )

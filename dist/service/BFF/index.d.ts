@@ -59,10 +59,17 @@ export declare class BFFService {
         success: boolean;
         code: number;
         data: {
-            shape: import("../../entity/commodity/options/shape").CommodityOptionsShapeEntity[];
-            theme: import("../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
             category: import("../../entity/commodity/options/category").CommodityOptionsCategoryEntity[];
+            classification: import("../../entity/commodity/options/classification").CommodityOptionsClassificationEntity[];
+            material: import("../../entity/commodity/options/material").CommodityOptionsMaterialEntity[];
+            model: import("../../entity/commodity/options/model").CommodityOptionsModelEntity[];
+            shape: import("../../entity/commodity/options/shape").CommodityOptionsShapeEntity[];
+            specification: import("../../entity/commodity/options/specification").CommodityOptionsSpecificationEntity[];
+            style: import("../../entity/commodity/options/style").CommodityOptionsStyleEntity[];
             technique: import("../../entity/commodity/options/technique").CommodityOptionsTechniqueEntity[];
+            theme: import("../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
+            type: import("../../entity/commodity/options/type").CommodityOptionsTypeEntity[];
+            use: import("../../entity/commodity/options/use").CommodityOptionsUseEntity[];
         };
     }>;
 }

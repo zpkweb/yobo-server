@@ -122,7 +122,15 @@ export class AdminCommodityController {
   // 更新商品选项
   @Post('/update/:type',{summary:'更新商品选项'})
   async updateOptions(@Param() type, @Body(ALL) optionsBody) {
-    return await this.commodityService.updateOptions({type, ...optionsBody});
+    return await this.commodityService.updateOptions({
+      type,
+      id: optionsBody.id,
+      img: optionsBody.img,
+      zhcn: optionsBody['zh-cn'],
+      enus: optionsBody['en-us'],
+      jajp: optionsBody['ja-jp'],
+      eses: optionsBody['es-es']
+    });
   }
 
   // 删除商品选项

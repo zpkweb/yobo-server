@@ -117,8 +117,8 @@ export class CommodityOptionsClassificationService {
   /**
    * 删除
    */
-  async delete(payload) {
-    const data = await this.baseCommodityOptionsClassificationServer.BaseDelete(payload);
+  async delete(id) {
+    const data = await this.baseCommodityOptionsClassificationServer.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

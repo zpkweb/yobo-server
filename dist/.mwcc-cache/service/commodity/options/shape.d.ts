@@ -28,7 +28,10 @@ export declare class CommodityOptionsShapeService {
         code: number;
         data?: undefined;
     }>;
-    retrieveAll(payload: any): Promise<{
+    retrieveAll({ isLocale, locale }?: {
+        isLocale?: boolean;
+        locale?: string;
+    }): Promise<{
         data: import("../../../entity/commodity/options/shape").CommodityOptionsShapeEntity[];
         success: boolean;
         code: number;

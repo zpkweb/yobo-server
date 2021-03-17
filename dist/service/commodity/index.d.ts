@@ -4,11 +4,8 @@ import { CommodityAttributeDesc } from "./attribute/desc";
 import { CommodityAttributePrice } from "./attribute/price";
 import { CommodityAttributePhoto } from "./attribute/photo";
 import { CommodityAttributeColor } from "./attribute/color";
-import { CommodityOptionsCategoryService } from "./options/category";
-import { CommodityOptionsShapeService } from "./options/shape";
-import { CommodityOptionsTechniqueService } from "./options/technique";
-import { CommodityOptionsThemeService } from "./options/theme";
 import { CommentService } from "./comment";
+import { CommodityOptionService } from "./commodityOption";
 export declare class CommodityService {
     commodityCommodityService: CommodityCommodityService;
     commodityAttributeName: CommodityAttributeName;
@@ -16,11 +13,8 @@ export declare class CommodityService {
     commodityAttributePrice: CommodityAttributePrice;
     commodityAttributePhoto: CommodityAttributePhoto;
     commodityAttributeColor: CommodityAttributeColor;
-    commodityOptionsCategoryService: CommodityOptionsCategoryService;
-    commodityOptionsShapeService: CommodityOptionsShapeService;
-    commodityOptionsTechniqueService: CommodityOptionsTechniqueService;
-    commodityOptionsThemeService: CommodityOptionsThemeService;
     commentService: CommentService;
+    commodityOptionService: CommodityOptionService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -92,7 +86,7 @@ export declare class CommodityService {
         success: boolean;
         code: number;
     }>;
-    commodityOptionsCreate(payload: any): Promise<{
+    createOptions(payload: any): Promise<{
         success: boolean;
         code: number;
         data?: undefined;
@@ -101,14 +95,20 @@ export declare class CommodityService {
         success: boolean;
         code: number;
     }>;
-    commodityOptionsTypeCreate(payload: any): Promise<any>;
-    commodityOptionsTypeRetrieve(payload: any): Promise<any>;
-    commodityOptionsTypeRetrieveId(payload: any): Promise<any>;
-    commodityOptionsTypeRetrieveAll(payload: any): Promise<any>;
-    commodityOptionsUpdate(payload: any): Promise<any>;
-    commodityOptionsTypeUpdate(payload: any): Promise<any>;
-    commodityOptionsDelete(payload: any): Promise<any>;
-    commodityOptionsTypeDelete(payload: any): Promise<any>;
+    retrieveOption({ type, }?: {
+        type?: string;
+    }): Promise<any>;
+    retrieveOptionAll(payload: any): Promise<any>;
+    updateOptions({ type, id, img, zhcn, enus, jajp, eses }?: {
+        type?: string;
+        id?: string;
+        img?: string;
+        zhcn?: string;
+        enus?: string;
+        jajp?: string;
+        eses?: string;
+    }): Promise<any>;
+    deleteOptions(payload: any): Promise<any>;
     commodityComment(payload: any): Promise<{
         success: boolean;
         code: number;
