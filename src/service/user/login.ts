@@ -27,7 +27,6 @@ export class LoginService {
    * password
    */
   async validatePassword(payload) {
-    console.log("validatePassword", payload)
     const validataPassword = await this.baseUserServer.baseValidatePassword(payload);
 
     if(validataPassword){

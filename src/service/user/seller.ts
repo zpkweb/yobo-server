@@ -9,6 +9,8 @@ import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import * as nodemailer from 'nodemailer';
 import { BaseUserServer } from '../base/user/user';
 import { BaseSellerServer } from "../base/user/seller";
+import * as crypto from 'crypto';
+
 @Provide()
 export class SellerService {
 
@@ -64,13 +66,14 @@ export class SellerService {
         }
       }
       // 设置密码
+      const passwordCrypto = crypto.createHash('md5').update('123456').digest('hex');
       const password = await this.baseUserServer.baseUpdateUser({
         userId: seller.user.userId,
         avatar: seller.user.avatar,
         name: seller.user.name,
         email: seller.user.email,
         phone: seller.user.phone,
-        password: '123456'
+        password: passwordCrypto
       })
       if(!password.affected){
         return {
@@ -84,7 +87,7 @@ export class SellerService {
         ...payload,
         email: seller.user.email,
         subject: 'yobo-审核通过',
-        html: `<p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://39.105.190.188:8088/">http://39.105.190.188:8088/</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
+        html: `<p><img src="http://39.105.190.188:7001/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://39.105.190.188:8088/">http://39.105.190.188:8088/</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
       });
       if(sendmail.messageId){
         return {

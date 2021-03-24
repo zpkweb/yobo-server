@@ -449,3 +449,44 @@ GET {{baseUrl}}/api/my/browsingHistory?userId={{userId}}
 
 
 ####################################
+
+
+# 查询用户
+
+GET {{baseUrl}}/api/admin/user/search?identity=&name=&email=&phone=&pageSize=8&currentPage=1
+
+
+####################################
+
+# 创建订阅
+
+POST {{baseUrl}}/api/subscriber
+Content-Type: application/json
+
+{
+  "email": "1@qq.com",
+  "userId1": "3ffd4135-f2d1-4a94-902e-a6b6de7e4837",
+  "userId": "4782ad27-ae9a-469d-a655-6c6c6e1a220c"
+}
+
+
+####################################
+
+# 查询订阅
+
+GET {{baseUrl}}/api/subscriber?userId=4782ad27-ae9a-469d-a655-6c6c6e1a220c&email=2@qq.com
+
+
+####################################
+
+# 删除订阅
+
+DELETE {{baseUrl}}/api/subscriber
+Content-Type: application/json
+
+{
+  "userId": "4782ad27-ae9a-469d-a655-6c6c6e1a220c"
+}
+
+
+

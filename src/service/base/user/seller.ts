@@ -170,6 +170,11 @@ export class BaseSellerServer {
     if (payload.phone) {
       where.phone = Like(payload.phone);
     }
+
+    if (payload.sellerId) {
+      where.sellerId = Like(payload.sellerId);
+    }
+
     // console.log("baseSearchSeller where", where)
     // list total
     return await this.userSellerEntity.findAndCount({

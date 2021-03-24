@@ -469,9 +469,10 @@ export class CommodityService {
 
 
   async retrieveOptionAll(payload) {
+    console.log("retrieveOptionAll", payload)
     return this.commodityOptionService.commodityOptionsTypeRetrieveAll({
       type: payload.type,
-      isLocale: payload.isLocal || false,
+      isLocale: payload.isLocale || false,
       locale: 'zh-cn'
     });
   }

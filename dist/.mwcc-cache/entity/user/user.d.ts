@@ -14,6 +14,7 @@ import { MyLikeCommodityEntity } from "../my/likeCommodity";
 import { MyCouponEntity } from "../my/coupon";
 import { MyActivityEntity } from "../my/activity";
 import { OrderEntity } from "../order/order";
+import { SubscriberEntity } from "../subscribe/subscriber";
 export declare class UserEntity {
     id: number;
     userId: string;
@@ -40,4 +41,5 @@ export declare class UserEntity {
     myOrders: MyOrderEntity[];
     myCoupons: MyCouponEntity[];
     myActivitys: MyActivityEntity[];
+    subscriber: SubscriberEntity[];
 }

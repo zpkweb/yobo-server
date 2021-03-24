@@ -13,6 +13,7 @@ import { UserSellerMetadataEntity } from './metadata';
 import { UserSellerStudioEntity } from './studio';
 import { OrderEntity } from 'src/entity/order/order';
 import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
+import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 
 @EntityModel('user_seller')
 export class UserSellerEntity {
@@ -111,6 +112,12 @@ export class UserSellerEntity {
     referencedColumnName: 'userId'
   })
   user: UserEntity;
+
+  //  关联身份
+  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.seller, {
+    onDelete: "CASCADE"
+  })
+  identitys: UserIdentityEntity[];
 
   // 关联喜欢我的人列表
   @OneToMany(type => MyLikeSellerEntity, MyLikeSellerEntity => MyLikeSellerEntity.seller)

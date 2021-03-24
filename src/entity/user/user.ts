@@ -20,6 +20,7 @@ import { MyLikeCommodityEntity } from 'src/entity/my/likeCommodity';
 import { MyCouponEntity } from 'src/entity/my/coupon';
 import { MyActivityEntity } from 'src/entity/my/activity';
 import { OrderEntity } from 'src/entity/order/order';
+import { SubscriberEntity } from 'src/entity/subscribe/subscriber';
 
 @EntityModel('user')
 export class UserEntity {
@@ -81,6 +82,7 @@ export class UserEntity {
   })
   identitys: UserIdentityEntity[];
 
+
   // 关联地址
   @OneToMany(type => UserAddressEntity, UserAddressEntity => UserAddressEntity.user)
   address: UserAddressEntity[];
@@ -140,5 +142,11 @@ export class UserEntity {
    // 关联我的活动列表
    @OneToMany(type => MyActivityEntity, MyActivityEntity => MyActivityEntity.user)
    myActivitys: MyActivityEntity[];
+
+   //  关联用户订阅
+  @OneToMany(type => SubscriberEntity, SubscriberEntity => SubscriberEntity.user, {
+    onDelete: "CASCADE"
+  })
+  subscriber: SubscriberEntity[];
 
 }

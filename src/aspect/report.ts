@@ -11,6 +11,8 @@ import { AdminUserSellerController } from 'src/controller/server/user/seller';
 import { CommodityController } from 'src/controller/client/commodity/commodity';
 import { AdminCommodityController } from 'src/controller/server/commodity/commodity';
 
+import { SubscriberController } from 'src/controller/client/subscribe/subscriber'
+
 @Provide()
 @Aspect([
   UserController,
@@ -20,7 +22,8 @@ import { AdminCommodityController } from 'src/controller/server/commodity/commod
   AdminUserRegisterController,
   AdminUserSellerController,
   CommodityController,
-  AdminCommodityController
+  AdminCommodityController,
+  SubscriberController
 ])
 export class ReportInfo implements IMethodAspect {
 
