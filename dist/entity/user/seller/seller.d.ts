@@ -5,6 +5,7 @@ import { UserSellerMetadataEntity } from "./metadata";
 import { UserSellerStudioEntity } from "./studio";
 import { OrderEntity } from "../../order/order";
 import { MyLikeSellerEntity } from "../../my/likeSeller";
+import { UserIdentityEntity } from "../identity/identity";
 export declare class UserSellerEntity {
     id: number;
     sellerId: string;
@@ -23,6 +24,7 @@ export declare class UserSellerEntity {
     studios: UserSellerStudioEntity[];
     resumes: UserSellerStudioEntity[];
     user: UserEntity;
+    identitys: UserIdentityEntity[];
     likeSellers: MyLikeSellerEntity[];
     commoditys: CommodityEntity[];
     customerServices: UserCustomerServiceEntity[];

@@ -47,6 +47,7 @@ export class BaseUserServer {
    * @param payload
    */
   async baseCreateUserIdentity(payload) {
+    console.log("baseCreateUserIdentity", payload)
     return await this.userIdentityEntity
       .createQueryBuilder()
       .insert()
@@ -57,6 +58,9 @@ export class BaseUserServer {
         'ja-jp': payload['ja-jp'] || '',
         'fr-fr': payload['fr-fr'] || '',
         'es-es': payload['es-es'] || '',
+        'userName': payload.userName || '',
+        'userEmail': payload.userEmail || '',
+        'userPhone': payload.userPhone || '',
         index: payload.index
       })
       .execute()

@@ -77,9 +77,7 @@ export class UserEntity {
   updatedDate: Date;
 
   //  关联用户身份
-  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user, {
-    onDelete: "CASCADE"
-  })
+  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.user)
   identitys: UserIdentityEntity[];
 
 
@@ -144,9 +142,7 @@ export class UserEntity {
    myActivitys: MyActivityEntity[];
 
    //  关联用户订阅
-  @OneToMany(type => SubscriberEntity, SubscriberEntity => SubscriberEntity.user, {
-    onDelete: "CASCADE"
-  })
+  @OneToMany(type => SubscriberEntity, SubscriberEntity => SubscriberEntity.user)
   subscriber: SubscriberEntity[];
 
 }

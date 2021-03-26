@@ -45,16 +45,17 @@ export class UserIdentityEntity {
   @Column()
   index: number;
 
+  // 用户名
+  @Column()
+  userName: string;
 
-  //  创建日期
-  @CreateDateColumn()
-  createdDate: Date;
+  // 邮箱
+  @Column()
+  userEmail: string;
 
-  // 更新日期
-  @UpdateDateColumn({
-    select: false
-  })
-  updatedDate: Date;
+  // 手机号
+  @Column()
+  userPhone: string;
 
   // 关联 用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.identitys, {
@@ -67,14 +68,14 @@ export class UserIdentityEntity {
   })
   user: UserEntity;
 
-  // 关联 用户
+  // 关联 商家
   @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.identitys, {
     cascade: true,
     onDelete: 'CASCADE'
   })
   @JoinColumn({
-    name: 'userId',
-    referencedColumnName: "userId"
+    name: 'sellerId',
+    referencedColumnName: "sellerId"
   })
   seller: UserSellerEntity;
 
@@ -89,4 +90,15 @@ export class UserIdentityEntity {
   })
   identityList: UserIdentityListEntity;
 
+
+
+  //  创建日期
+  @CreateDateColumn()
+  createdDate: Date;
+
+  // 更新日期
+  @UpdateDateColumn({
+    select: false
+  })
+  updatedDate: Date;
 }

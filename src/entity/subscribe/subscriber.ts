@@ -31,7 +31,10 @@ export class SubscriberEntity {
   @Column()
   userPhone: string;
 
-  @ManyToOne(type => UserEntity, UserEntity => UserEntity.subscriber)
+  @ManyToOne(type => UserEntity, UserEntity => UserEntity.subscriber, {
+    cascade: true,
+    onDelete: 'CASCADE'
+  })
   @JoinColumn({
     name: 'userId',
     referencedColumnName: 'userId'

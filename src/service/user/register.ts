@@ -336,7 +336,10 @@ export class UserRegisterService {
     // 添加身份
     const userIdentity:any = await this.addUserIdentitys({
       identityIndexs: identityIndexs,
-      userId: newUser.userId
+      userId: newUser.userId,
+      userName: payload.name,
+      userEmail: payload.email,
+      userPhone: payload.phone
     });
     console.log("userIdentity", userIdentity)
     if(!userIdentity.success) {
@@ -481,8 +484,12 @@ export class UserRegisterService {
       console.log(item)
       let userIdentity = await this.addUserIdentity({
         identityIndex: item,
-        userId: payload.userId
+        userId: payload.userId,
+        userName: payload.userName,
+        userEmail: payload.userEmail,
+        userPhone: payload.userPhone
       });
+
       if(!userIdentity.success){
         return userIdentity;
       }
@@ -498,7 +505,7 @@ export class UserRegisterService {
    * @param payload
    */
     async addUserIdentity(payload) {
-
+      console.log("addUserIdentity", payload)
       // 通过用户身份列表获取 用户身份
       let identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
         index: payload.identityIndex
@@ -521,7 +528,12 @@ export class UserRegisterService {
 
       }else{
         // 创建用户的身份
-        identity = await this.baseUserServer.baseCreateUserIdentity(identityList);
+        identity = await this.baseUserServer.baseCreateUserIdentity({
+          ...identityList,
+          userName: payload.userName,
+          userEmail: payload.userEmail,
+          userPhone: payload.userPhone
+        });
         console.log("identity", identity)
         if(!identity){
           return {

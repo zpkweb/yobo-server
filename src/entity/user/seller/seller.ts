@@ -114,9 +114,7 @@ export class UserSellerEntity {
   user: UserEntity;
 
   //  关联身份
-  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.seller, {
-    onDelete: "CASCADE"
-  })
+  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.seller)
   identitys: UserIdentityEntity[];
 
   // 关联喜欢我的人列表
