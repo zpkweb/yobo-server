@@ -24,16 +24,22 @@ export class UploadImagesService {
     // 创建目录
     fs.mkdirSync(`public/images/${stream.fields.type || 'other'}`, { recursive: true });
     let filename = path.basename(stream.filename).split('.');
-    const name = `public/images/${stream.fields.type || 'other'}/${filename[0]}-${new Date().getTime()}.${ filename[1] }`;
+    const name = `public/images/${stream.fields.type || 'other'}/${filename[0]}-${new Date().getTime()}.${ filename[filename.length-1] }`;
 
     try {
       const writeStream = fs.createWriteStream(name);
       await stream.pipe(writeStream);
       stream.on('error', () => {
+        console.log("try error")
         return {
           success: false,
           code: 10016
         }
+      })
+      console.log("try", {
+        src: `${this.host.origin}/${name.substr(7)}`,
+        title: path.basename(stream.filename),
+        ...stream.fields
       })
       return {
         data: {
@@ -45,6 +51,7 @@ export class UploadImagesService {
         code: 10015
       }
     } catch (err) {
+      console.log("catch error")
       // 必须将上传的文件流消费掉，要不然浏览器响应会卡死
       await sendToWormhole(stream);
       return {

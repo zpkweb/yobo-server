@@ -102,8 +102,11 @@ config.cors = {
   };
   // 上传
   config.multipart = {
-    fileSize: '10mb', mode: 'stream',
+    fields: 50,
+    fileSize: '10mb',
+    mode: 'stream',
   }
+
   // exports.static = {
   //   prefix: '/public/',
   //   dir: path.join(appInfo.baseDir, 'public')
