@@ -52,7 +52,6 @@ export class CommodityDescEntity {
   })
   updatedDate: Date;
 
-  // // 关联商品选项
   @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.desc, {
     onDelete: 'CASCADE'
   })

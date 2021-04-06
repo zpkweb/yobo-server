@@ -50,7 +50,7 @@ import { CommodityPriceEntity } from './attribute/price';
 import { CommodityColorEntity } from './attribute/color';
 import { CommodityBrowsingCountEntity } from './commodityBrowsingCount';
 
-import { CommodityOptionsCategoryEntity } from 'src/entity/commodity/options/category';
+import { CommodityCategoryEntity } from 'src/entity/commodity/commodity-options/category';
 import { CommodityOptionsClassificationEntity } from 'src/entity/commodity/options/classification';
 import { CommodityOptionsMaterialEntity } from 'src/entity/commodity/options/material';
 import { CommodityOptionsModelEntity } from 'src/entity/commodity/options/model';
@@ -109,7 +109,6 @@ export class CommodityEntity {
   // 关联 商品描述
   @OneToOne(type => CommodityDescEntity, CommodityDescEntity => CommodityDescEntity.commodity, {
     cascade: true,
-    onDelete: 'CASCADE'
   })
   desc: CommodityDescEntity;
 
@@ -134,23 +133,17 @@ export class CommodityEntity {
 
   // options
   // 关联 商品类别
-  @ManyToMany(type => CommodityOptionsCategoryEntity, CommodityOptionsCategoryEntity => CommodityOptionsCategoryEntity.commodity)
-  @JoinTable({
-    name: 'commodity_category',
-    joinColumn:{
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityCategoryEntity, CommodityCategoryEntity => CommodityCategoryEntity.commoditys, {
+    cascade: true,
   })
-  categorys: CommodityOptionsCategoryEntity[];
+  categorys: CommodityCategoryEntity[];
 
   // 关联 商品分类
   @ManyToMany(type => CommodityOptionsClassificationEntity, CommodityOptionsClassificationEntity => CommodityOptionsClassificationEntity.commodity)
   @JoinTable({
     name: 'commodity_classification',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -164,6 +157,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_material',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -177,6 +171,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_model',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -190,6 +185,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_place',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -203,6 +199,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_ruiwu',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -216,6 +213,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_shape',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -229,6 +227,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_specification',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -242,6 +241,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_style',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -255,6 +255,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_technique',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -268,6 +269,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_theme',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -281,6 +283,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_type',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{
@@ -294,6 +297,7 @@ export class CommodityEntity {
   @JoinTable({
     name: 'commodity_use',
     joinColumn:{
+      name: "commodityId",
       referencedColumnName: 'commodityId'
     },
     inverseJoinColumn:{

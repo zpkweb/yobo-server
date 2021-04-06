@@ -43,7 +43,6 @@ export class CommodityNameEntity {
   })
   updatedDate: Date;
 
-  // // 关联商品选项
   @OneToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.name, {
     onDelete: 'CASCADE'
   })

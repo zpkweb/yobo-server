@@ -3,8 +3,8 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { CommodityEntity } from '../commodity';
+import { Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import { CommodityCategoryEntity } from '../commodity-options/category';
 
 @EntityModel('commodity_options_category')
 export class CommodityOptionsCategoryEntity {
@@ -55,11 +55,9 @@ export class CommodityOptionsCategoryEntity {
   })
   updatedDate: Date;
 
-  // // 关联商品选项
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.categorys, {
+  @OneToMany(type => CommodityCategoryEntity, CommodityCategoryEntity => CommodityCategoryEntity.categorys, {
     cascade: true,
-    onDelete: 'SET NULL'
   })
-  commodity: CommodityEntity;
+  commoditys: CommodityCategoryEntity[];
 
 }

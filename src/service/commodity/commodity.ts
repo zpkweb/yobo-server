@@ -5,6 +5,7 @@ import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
 import { CommodityAttributeColor } from './attribute/color';
+import { CommodityCategoryService } from './commodity-options/category'
 @Provide()
 export class CommodityCommodityService {
 
@@ -25,6 +26,9 @@ export class CommodityCommodityService {
 
   @Inject()
   commodityAttributeColor: CommodityAttributeColor;
+
+  @Inject()
+  commodityCategoryService: CommodityCategoryService;
 
   // 创建商品
   async create(payload) {
@@ -138,44 +142,143 @@ export class CommodityCommodityService {
 
 
     console.log("commodity", commodity.data)
+
+
     // 商品 关联 商品形状
-    for(let item of payload.shapes){
-      await this.relation({
-        name: 'shapes',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: item.id
-      })
-    }
+    // for(let item of payload.shapes){
+    //   await this.relation({
+    //     name: 'shapes',
+    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+    //     add: item.id
+    //   })
+    // }
 
 
     // 商品 关联 商品主题
-    for(let item of payload.themes){
-      await this.relation({
-        name: 'themes',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: item.id
-      })
-    }
+    // for(let item of payload.themes){
+    //   await this.relation({
+    //     name: 'themes',
+    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+    //     add: item.id
+    //   })
+    // }
 
 
     // 商品 关联 商品类别
-    for(let item of payload.categorys){
-      await this.relation({
-        name: 'categorys',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: item.id
-      })
-    }
+    // for(let item of payload.categorys){
+    //   await this.relation({
+    //     name: 'categorys',
+    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+    //     add: item.id
+    //   })
+    // }
 
 
     // 商品 关联 商品手法
-    for(let item of payload.techniques){
+    // for(let item of payload.techniques){
+    //   await this.relation({
+    //     name: 'techniques',
+    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+    //     add: item.id
+    //   })
+    // }
+
+
+    // 创建商品价格
+    for(let item of payload.categorys){
+      const commodityCategory = await this.commodityCategoryService.create({
+        commodityName: payload.name['zh-cn'],
+        categoryName: item['zh-cn']
+      })
+      if (!commodityCategory.success) {
+        return commodityCategory
+      }
+      console.log("commodity.data.generatedMaps[0].commodityId", commodity.data.generatedMaps[0].commodityId)
+      console.log("commodityCategory.data.identifiers[0].id", commodityCategory.data.identifiers[0].id)
+      console.log("item.id", item.id)
+      // 商品 关联 商品图片
+      await this.commodityCategoryService.relation({
+        name: 'commoditys',
+        of: commodityCategory.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+
+      await this.commodityCategoryService.relation({
+        name: 'categorys',
+        of:  commodityCategory.data.identifiers[0].id,
+        set: item.id
+      })
+
+
+    }
+
+      // await this.relation({
+      //   name: 'categorys',
+      //   of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      //   add: payload.categorys
+      // })
+
+
+      await this.relation({
+        name: 'classifications',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.classifications
+      })
+      await this.relation({
+        name: 'materials',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.materials
+      })
+      await this.relation({
+        name: 'models',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.models
+      })
+      await this.relation({
+        name: 'places',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.places
+      })
+      await this.relation({
+        name: 'ruiwus',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.ruiwus
+      })
+      await this.relation({
+        name: 'shapes',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.shapes
+      })
+      await this.relation({
+        name: 'specifications',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.specifications
+      })
+      await this.relation({
+        name: 'styles',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.styles
+      })
       await this.relation({
         name: 'techniques',
         of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: item.id
+        add: payload.techniques
       })
-    }
+      await this.relation({
+        name: 'themes',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.themes
+      })
+      await this.relation({
+        name: 'types',
+        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        add: payload.types
+      })
+
+
+
+
+
 
     console.log("商品 关联 商家", { commodityId: commodity.data.generatedMaps[0].commodityId, sellerId: payload.sellerId })
     // 商品 关联 商家
@@ -241,6 +344,12 @@ export class CommodityCommodityService {
         name: payload.name,
         of: payload.of,
         add: payload.add
+      })
+    }else if(payload.remove) {
+      return await this.baseCommodityServer.BaseRelationRemove({
+        name: payload.name,
+        of: payload.of,
+        remove: payload.remove
       })
     }
 
@@ -449,6 +558,24 @@ export class CommodityCommodityService {
             list: data,
             total
           },
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
+    }
+
+    async retrieveCategory(id) {
+      let data = await this.baseCommodityServer.BaseRetrieveCategory(id);
+
+      console.log("data", data)
+      if (data) {
+        return {
+          data: data,
           success: true,
           code: 10009
         }
