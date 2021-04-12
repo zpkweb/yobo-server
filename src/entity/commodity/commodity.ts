@@ -42,7 +42,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToMany, OneToOne, JoinTable } from "typeorm";
+import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToMany, OneToOne } from "typeorm";
 import { CommodityNameEntity } from './attribute/name';
 import { CommodityDescEntity } from './attribute/desc';
 import { CommodityPhotoEntity } from './attribute/photo';
@@ -51,18 +51,18 @@ import { CommodityColorEntity } from './attribute/color';
 import { CommodityBrowsingCountEntity } from './commodityBrowsingCount';
 
 import { CommodityCategoryEntity } from 'src/entity/commodity/commodity-options/category';
-import { CommodityOptionsClassificationEntity } from 'src/entity/commodity/options/classification';
-import { CommodityOptionsMaterialEntity } from 'src/entity/commodity/options/material';
-import { CommodityOptionsModelEntity } from 'src/entity/commodity/options/model';
-import { CommodityOptionsPlaceEntity } from 'src/entity/commodity/options/place';
-import { CommodityOptionsRuiwuEntity } from 'src/entity/commodity/options/ruiwu';
-import { CommodityOptionsShapeEntity } from 'src/entity/commodity/options/shape';
-import { CommodityOptionsSpecificationEntity } from 'src/entity/commodity/options/specification';
-import { CommodityOptionsStyleEntity } from 'src/entity/commodity/options/style';
-import { CommodityOptionsTechniqueEntity } from 'src/entity/commodity/options/technique';
-import { CommodityOptionsThemeEntity } from 'src/entity/commodity/options/theme';
-import { CommodityOptionsTypeEntity } from 'src/entity/commodity/options/type';
-import { CommodityOptionsUseEntity } from 'src/entity/commodity/options/use';
+import { CommodityClassificationEntity } from 'src/entity/commodity/commodity-options/classification';
+import { CommodityMaterialEntity } from 'src/entity/commodity/commodity-options/material';
+import { CommodityModelEntity } from 'src/entity/commodity/commodity-options/model';
+import { CommodityPlaceEntity } from 'src/entity/commodity/commodity-options/place';
+import { CommodityRuiwuEntity } from 'src/entity/commodity/commodity-options/ruiwu';
+import { CommodityShapeEntity } from 'src/entity/commodity/commodity-options/shape';
+import { CommoditySpecificationEntity } from 'src/entity/commodity/commodity-options/specification';
+import { CommodityStyleEntity } from 'src/entity/commodity/commodity-options/style';
+import { CommodityTechniqueEntity } from 'src/entity/commodity/commodity-options/technique';
+import { CommodityThemeEntity } from 'src/entity/commodity/commodity-options/theme';
+import { CommodityTypeEntity } from 'src/entity/commodity/commodity-options/type';
+import { CommodityUseEntity } from 'src/entity/commodity/commodity-options/use';
 
 
 import { UserSellerEntity } from 'src/entity/user/seller/seller';
@@ -139,172 +139,76 @@ export class CommodityEntity {
   categorys: CommodityCategoryEntity[];
 
   // 关联 商品分类
-  @ManyToMany(type => CommodityOptionsClassificationEntity, CommodityOptionsClassificationEntity => CommodityOptionsClassificationEntity.commodity)
-  @JoinTable({
-    name: 'commodity_classification',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityClassificationEntity, CommodityClassificationEntity => CommodityClassificationEntity.commoditys, {
+    cascade: true
   })
-  classifications: CommodityOptionsClassificationEntity[];
+  classifications: CommodityClassificationEntity[];
 
   // 关联 商品材质
-  @ManyToMany(type => CommodityOptionsMaterialEntity, CommodityOptionsMaterialEntity => CommodityOptionsMaterialEntity.commodity)
-  @JoinTable({
-    name: 'commodity_material',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityMaterialEntity, CommodityMaterialEntity => CommodityMaterialEntity.commoditys, {
+    cascade: true
   })
-  materials: CommodityOptionsMaterialEntity[];
+  materials: CommodityMaterialEntity[];
 
   // 关联 商品款式
-  @ManyToMany(type => CommodityOptionsModelEntity, CommodityOptionsModelEntity => CommodityOptionsModelEntity.commodity)
-  @JoinTable({
-    name: 'commodity_model',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityModelEntity, CommodityModelEntity => CommodityModelEntity.commoditys, {
+    cascade: true
   })
-  models: CommodityOptionsModelEntity[];
+  models: CommodityModelEntity[];
 
   // 关联 商品摆放
-  @ManyToMany(type => CommodityOptionsPlaceEntity, CommodityOptionsPlaceEntity => CommodityOptionsPlaceEntity.commodity)
-  @JoinTable({
-    name: 'commodity_place',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityPlaceEntity, CommodityPlaceEntity => CommodityPlaceEntity.commoditys, {
+    cascade: true
   })
-  places: CommodityOptionsPlaceEntity[];
+  places: CommodityPlaceEntity[];
 
   // 关联 瑞物
-  @ManyToMany(type => CommodityOptionsRuiwuEntity, CommodityOptionsRuiwuEntity => CommodityOptionsRuiwuEntity.commodity)
-  @JoinTable({
-    name: 'commodity_ruiwu',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityRuiwuEntity, CommodityRuiwuEntity => CommodityRuiwuEntity.commoditys, {
+    cascade: true
   })
-  ruiwus: CommodityOptionsRuiwuEntity[];
+  ruiwus: CommodityRuiwuEntity[];
 
   // 关联 商品形状
-  @ManyToMany(type => CommodityOptionsShapeEntity, CommodityOptionsShapeEntity => CommodityOptionsShapeEntity.commodity)
-  @JoinTable({
-    name: 'commodity_shape',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityShapeEntity, CommodityShapeEntity => CommodityShapeEntity.commoditys, {
+    cascade: true
   })
-  shapes: CommodityOptionsShapeEntity[];
+  shapes: CommodityShapeEntity[];
 
   // 关联 商品规格
-  @ManyToMany(type => CommodityOptionsSpecificationEntity, CommodityOptionsSpecificationEntity => CommodityOptionsSpecificationEntity.commodity)
-  @JoinTable({
-    name: 'commodity_specification',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommoditySpecificationEntity, CommoditySpecificationEntity => CommoditySpecificationEntity.commoditys, {
+    cascade: true
   })
-  specifications: CommodityOptionsSpecificationEntity[];
+  specifications: CommoditySpecificationEntity[];
 
   // 关联 商品风格
-  @ManyToMany(type => CommodityOptionsStyleEntity, CommodityOptionsStyleEntity => CommodityOptionsStyleEntity.commodity)
-  @JoinTable({
-    name: 'commodity_style',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityStyleEntity, CommodityStyleEntity => CommodityStyleEntity.commoditys, {
+    cascade: true
   })
-  styles: CommodityOptionsStyleEntity[];
+  styles: CommodityStyleEntity[];
 
   // 关联 商品手法
-  @ManyToMany(type => CommodityOptionsTechniqueEntity, CommodityOptionsTechniqueEntity => CommodityOptionsTechniqueEntity.commodity)
-  @JoinTable({
-    name: 'commodity_technique',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityTechniqueEntity, CommodityTechniqueEntity => CommodityTechniqueEntity.commoditys, {
+    cascade: true
   })
-  techniques: CommodityOptionsTechniqueEntity[];
+  techniques: CommodityTechniqueEntity[];
 
   // 关联 商品主题
-  @ManyToMany(type => CommodityOptionsThemeEntity, CommodityOptionsThemeEntity => CommodityOptionsThemeEntity.commodity)
-  @JoinTable({
-    name: 'commodity_theme',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityThemeEntity, CommodityThemeEntity => CommodityThemeEntity.commoditys, {
+    cascade: true
   })
-  themes: CommodityOptionsThemeEntity[];
+  themes: CommodityThemeEntity[];
 
   // 关联 商品类型
-  @ManyToMany(type => CommodityOptionsTypeEntity, CommodityOptionsTypeEntity => CommodityOptionsTypeEntity.commodity)
-  @JoinTable({
-    name: 'commodity_type',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityTypeEntity, CommodityTypeEntity => CommodityTypeEntity.commoditys, {
+    cascade: true
   })
-  types: CommodityOptionsTypeEntity[];
+  types: CommodityTypeEntity[];
 
   // 关联 商品用途
-  @ManyToMany(type => CommodityOptionsUseEntity, CommodityOptionsUseEntity => CommodityOptionsUseEntity.commodity)
-  @JoinTable({
-    name: 'commodity_use',
-    joinColumn:{
-      name: "commodityId",
-      referencedColumnName: 'commodityId'
-    },
-    inverseJoinColumn:{
-      referencedColumnName: 'id'
-    }
+  @OneToMany(type => CommodityUseEntity, CommodityUseEntity => CommodityUseEntity.commoditys, {
+    cascade: true
   })
-  uses: CommodityOptionsUseEntity[];
+  uses: CommodityUseEntity[];
 
 
 

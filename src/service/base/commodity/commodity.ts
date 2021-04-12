@@ -10,18 +10,18 @@ import { CommodityColorEntity } from 'src/entity/commodity/attribute/color';
 import { CommodityBrowsingCountEntity } from 'src/entity/commodity/commodityBrowsingCount';
 
 import { CommodityCategoryEntity } from 'src/entity/commodity/commodity-options/category';
-// import { CommodityOptionsClassificationEntity } from 'src/entity/commodity/options/classification';
-// import { CommodityOptionsMaterialEntity } from 'src/entity/commodity/options/material';
-// import { CommodityOptionsModelEntity } from 'src/entity/commodity/options/model';
-// import { CommodityOptionsPlaceEntity } from 'src/entity/commodity/options/place';
-// import { CommodityOptionsRuiwuEntity } from 'src/entity/commodity/options/ruiwu';
-// import { CommodityOptionsShapeEntity } from 'src/entity/commodity/options/shape';
-// import { CommodityOptionsSpecificationEntity } from 'src/entity/commodity/options/specification';
-// import { CommodityOptionsStyleEntity } from 'src/entity/commodity/options/style';
-// import { CommodityOptionsTechniqueEntity } from 'src/entity/commodity/options/technique';
-// import { CommodityOptionsThemeEntity } from 'src/entity/commodity/options/theme';
-// import { CommodityOptionsTypeEntity } from 'src/entity/commodity/options/type';
-// import { CommodityOptionsUseEntity } from 'src/entity/commodity/options/use';
+import { CommodityClassificationEntity } from 'src/entity/commodity/commodity-options/classification';
+import { CommodityMaterialEntity } from 'src/entity/commodity/commodity-options/material';
+import { CommodityModelEntity } from 'src/entity/commodity/commodity-options/model';
+import { CommodityPlaceEntity } from 'src/entity/commodity/commodity-options/place';
+import { CommodityRuiwuEntity } from 'src/entity/commodity/commodity-options/ruiwu';
+import { CommodityShapeEntity } from 'src/entity/commodity/commodity-options/shape';
+import { CommoditySpecificationEntity } from 'src/entity/commodity/commodity-options/specification';
+import { CommodityStyleEntity } from 'src/entity/commodity/commodity-options/style';
+import { CommodityTechniqueEntity } from 'src/entity/commodity/commodity-options/technique';
+import { CommodityThemeEntity } from 'src/entity/commodity/commodity-options/theme';
+import { CommodityTypeEntity } from 'src/entity/commodity/commodity-options/type';
+import { CommodityUseEntity } from 'src/entity/commodity/commodity-options/use';
 
 @Provide()
 export class BaseCommodityServer {
@@ -48,7 +48,43 @@ export class BaseCommodityServer {
   commodityBrowsingCountEntity: Repository<CommodityBrowsingCountEntity>;
 
   @InjectEntityModel(CommodityCategoryEntity)
-  commodityCategoryEntity: Repository<CommodityCategoryEntity>
+  commodityCategoryEntity: Repository<CommodityCategoryEntity>;
+
+  @InjectEntityModel(CommodityClassificationEntity)
+  CommodityClassificationEntity: Repository<CommodityClassificationEntity>;
+
+  @InjectEntityModel(CommodityMaterialEntity)
+  CommodityMaterialEntity: Repository<CommodityMaterialEntity>;
+
+  @InjectEntityModel(CommodityModelEntity)
+  CommodityModelEntity: Repository<CommodityModelEntity>;
+
+  @InjectEntityModel(CommodityPlaceEntity)
+  CommodityPlaceEntity: Repository<CommodityPlaceEntity>;
+
+  @InjectEntityModel(CommodityRuiwuEntity)
+  CommodityRuiwuEntity: Repository<CommodityRuiwuEntity>;
+
+  @InjectEntityModel(CommodityShapeEntity)
+  CommodityShapeEntity: Repository<CommodityShapeEntity>;
+
+  @InjectEntityModel(CommoditySpecificationEntity)
+  CommoditySpecificationEntity: Repository<CommoditySpecificationEntity>;
+
+  @InjectEntityModel(CommodityStyleEntity)
+  CommodityStyleEntity: Repository<CommodityStyleEntity>;
+
+  @InjectEntityModel(CommodityTechniqueEntity)
+  CommodityTechniqueEntity: Repository<CommodityTechniqueEntity>;
+
+  @InjectEntityModel(CommodityThemeEntity)
+  CommodityThemeEntity: Repository<CommodityThemeEntity>;
+
+  @InjectEntityModel(CommodityTypeEntity)
+  CommodityTypeEntity: Repository<CommodityTypeEntity>;
+
+  @InjectEntityModel(CommodityUseEntity)
+  CommodityUseEntity: Repository<CommodityUseEntity>;
 
   /**
     * 创建商品
@@ -129,20 +165,21 @@ export class BaseCommodityServer {
    * 查询商品
    */
   async BaseRetrieve(commodityId) {
-    return await this.commodityEntity
+    console.log("commodityId", commodityId)
+    const data =  await this.commodityEntity
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.name', 'name')
       .leftJoinAndSelect('commodity.desc', 'desc')
       .leftJoinAndSelect('commodity.price', 'price')
       .leftJoinAndSelect('commodity.photos', 'photos')
       .leftJoinAndSelect('commodity.colors', 'colors')
-      .leftJoinAndSelect('commodity.categorys', 'category')
-      .leftJoinAndSelect('commodity.classifications', 'classification')
-      .leftJoinAndSelect('commodity.materials', 'material')
-      .leftJoinAndSelect('commodity.models', 'model')
-      .leftJoinAndSelect('commodity.places', 'place')
-      .leftJoinAndSelect('commodity.ruiwus', 'ruiwu')
-      .leftJoinAndSelect('commodity.shapes', 'shape')
+      .leftJoinAndSelect('commodity.categorys', 'categorys')
+      .leftJoinAndSelect('commodity.classifications', 'classifications')
+      .leftJoinAndSelect('commodity.materials', 'materials')
+      .leftJoinAndSelect('commodity.models', 'models')
+      .leftJoinAndSelect('commodity.places', 'places')
+      .leftJoinAndSelect('commodity.ruiwus', 'ruiwus')
+      .leftJoinAndSelect('commodity.shapes', 'shapes')
       .leftJoinAndSelect('commodity.specifications', 'specification')
       .leftJoinAndSelect('commodity.styles', 'style')
       .leftJoinAndSelect('commodity.techniques', 'technique')
@@ -153,6 +190,8 @@ export class BaseCommodityServer {
       .addSelect('commodity.createdDate')
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
+    console.log("commodity retrieve data", data)
+    return data
   }
   /**
    * 查询所有商品
@@ -320,45 +359,6 @@ export class BaseCommodityServer {
     // }
 
 
-
-
-
-
-    // console.log("BaseSearch where", where)
-    // // list total
-    // return await this.commodityEntity.findAndCount({
-    //   // relations: ['seller'],
-    //   join: {
-    //     alias: "commodity",
-    //     leftJoinAndSelect: {
-    //       name: "commodity.name",
-    //       desc: "commodity.desc",
-    //       price: "commodity.price",
-    //       photos: "commodity.photos",
-    //       colors: "commodity.colors",
-    //       categorys: "commodity.categorys",
-    //       classifications: "commodity.classifications",
-    //       materials: "commodity.materials",
-    //       models: "commodity.models",
-    //       places: "commodity.places",
-    //       ruiwus: "commodity.ruiwus",
-    //       shapes: "commodity.shapes",
-    //       specifications: "commodity.specifications",
-    //       styles: "commodity.styles",
-    //       techniques: "commodity.techniques",
-    //       themes: "commodity.themes",
-    //       types: "commodity.types",
-    //       uses: "commodity.uses",
-    //       seller: "commodity.seller",
-    //       browsingCount: "commodity.browsingCount",
-    //     }
-    //   },
-    //   where,
-    //   take: payload.pageSize,
-    //   skip: payload.pageSize * (payload.currentPage - 1),
-    // });
-
-
     const where: any = {};
 
     if (payload.id) {
@@ -406,41 +406,8 @@ export class BaseCommodityServer {
     console.log("where", where)
 
     let andWhere;
-
-
-    // 艺术家id
-      // .andWhere(qb => {
-      //   let subQuery;
-      //   if(payload.sellerId){
-      //     subQuery = qb
-      //     .subQuery()
-      //     .select("seller.sellerId")
-      //     .from(UserSellerEntity, "seller")
-      //     .where("seller.sellerId = :sellerId")
-      //     .getQuery();
-      //   return "commodity.sellerId IN " + subQuery;
-      //   }else{
-      //     subQuery = qb
-      //     .subQuery()
-      //     .select("seller.sellerId")
-      //     .from(UserSellerEntity, "seller")
-      //     .getQuery();
-      //     return "commodity.sellerId IN " + subQuery;
-      //   }
-
-      // })
-    // if(payload.sellerId) {
-    //   const userSellerQb = await this.userSellerEntity
-    //     .createQueryBuilder("seller")
-    //     .select("seller.sellerId")
-    //     .where("seller.sellerId = :sellerId", { sellerId: payload.sellerId });
-    //   // andWhere = "commodity.sellerId IN (" + userSellerQb.getQuery() + ")"
-    //   andWhere = `commodity.sellerId IN (${userSellerQb.getQuery()})`
-    // }
     console.log("andWhere", andWhere)
 
-
-    // ${ payload.widthMin && payload.widthMax ? ' AND BETWEEN :widthMin AND :widthMax' : ''} ${ payload.heightMin && payload.heightMax ? ' AND BETWEEN :heightMin AND :heightMax' : ''}
     return await this.commodityEntity
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.name', 'name')
@@ -465,9 +432,6 @@ export class BaseCommodityServer {
       .leftJoinAndSelect('commodity.browsingCount', 'browsingCount')
       .addSelect('commodity.createdDate')
       .where(where)
-      // .andWhere(andWhere)
-      // .where(`commodity.state like :state ${ payload.id ? ' AND commodity.id = :id' : ''}${ payload.widthMin && payload.widthMax ? ' AND commodity.width BETWEEN :widthMin AND :widthMax' : ''} ${ payload.heightMin && payload.heightMax ? ' AND commodity.height BETWEEN :heightMin AND :heightMax' : ''} ${ payload.shapeId ? ' AND shapes.id = :shapeId' : ''}${ payload.themeId ? ' AND themes.id = :themeId' : ''}${ payload.categoryId ? ' AND categorys.id = :categoryId' : ''}${ payload.techniqueId ? ' AND techniques.id = :techniqueId' : ''}`)
-      // .orWhere("commodity.sellerId = :sellerId", { sellerId: payload.sellerId })
 
       // 艺术品名称
       .andWhere(qb => {
@@ -497,8 +461,6 @@ export class BaseCommodityServer {
           .getQuery();
         return "commodity.commodityId IN " + subQuery;
       })
-
-
       // 艺术品分类
       .andWhere(qb => {
         let subQuery;
@@ -516,7 +478,222 @@ export class BaseCommodityServer {
           .from(CommodityCategoryEntity, "category")
           .getQuery();
         }
-
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.classifications.length) {
+          subQuery = qb
+          .subQuery()
+          .select("classification.commodityId")
+          .from(CommodityClassificationEntity, "classification")
+          .where("classification.classificationId IN (:...classifications)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("classification.commodityId")
+          .from(CommodityClassificationEntity, "classification")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.materials.length) {
+          subQuery = qb
+          .subQuery()
+          .select("material.commodityId")
+          .from(CommodityMaterialEntity, "material")
+          .where("material.materialId IN (:...materials)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("material.commodityId")
+          .from(CommodityMaterialEntity, "material")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.models.length) {
+          subQuery = qb
+          .subQuery()
+          .select("model.commodityId")
+          .from(CommodityModelEntity, "model")
+          .where("model.modelId IN (:...models)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("model.commodityId")
+          .from(CommodityModelEntity, "model")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.places.length) {
+          subQuery = qb
+          .subQuery()
+          .select("place.commodityId")
+          .from(CommodityPlaceEntity, "place")
+          .where("place.placeId IN (:...places)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("place.commodityId")
+          .from(CommodityPlaceEntity, "place")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.ruiwus.length) {
+          subQuery = qb
+          .subQuery()
+          .select("ruiwu.commodityId")
+          .from(CommodityRuiwuEntity, "ruiwu")
+          .where("ruiwu.ruiwuId IN (:...ruiwus)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("ruiwu.commodityId")
+          .from(CommodityRuiwuEntity, "ruiwu")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.shapes.length) {
+          subQuery = qb
+          .subQuery()
+          .select("shape.commodityId")
+          .from(CommodityShapeEntity, "shape")
+          .where("shape.shapeId IN (:...shapes)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("shape.commodityId")
+          .from(CommodityShapeEntity, "shape")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.specifications.length) {
+          subQuery = qb
+          .subQuery()
+          .select("specification.commodityId")
+          .from(CommoditySpecificationEntity, "specification")
+          .where("specification.specificationId IN (:...specifications)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("specification.commodityId")
+          .from(CommoditySpecificationEntity, "specification")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.styles.length) {
+          subQuery = qb
+          .subQuery()
+          .select("style.commodityId")
+          .from(CommodityStyleEntity, "style")
+          .where("style.styleId IN (:...styles)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("style.commodityId")
+          .from(CommodityStyleEntity, "style")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.techniques.length) {
+          subQuery = qb
+          .subQuery()
+          .select("technique.commodityId")
+          .from(CommodityTechniqueEntity, "technique")
+          .where("technique.techniqueId IN (:...techniques)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("technique.commodityId")
+          .from(CommodityTechniqueEntity, "technique")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.themes.length) {
+          subQuery = qb
+          .subQuery()
+          .select("theme.commodityId")
+          .from(CommodityThemeEntity, "theme")
+          .where("theme.themeId IN (:...themes)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("theme.commodityId")
+          .from(CommodityThemeEntity, "theme")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.types.length) {
+          subQuery = qb
+          .subQuery()
+          .select("type.commodityId")
+          .from(CommodityTypeEntity, "type")
+          .where("type.typeId IN (:...types)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("type.commodityId")
+          .from(CommodityTypeEntity, "type")
+          .getQuery();
+        }
+        return "commodity.commodityId IN " + subQuery;
+      })
+      .andWhere(qb => {
+        let subQuery;
+        if(payload.uses.length) {
+          subQuery = qb
+          .subQuery()
+          .select("use.commodityId")
+          .from(CommodityUseEntity, "use")
+          .where("use.useId IN (:...uses)")
+          .getQuery();
+        }else {
+          subQuery = qb
+          .subQuery()
+          .select("use.commodityId")
+          .from(CommodityUseEntity, "use")
+          .getQuery();
+        }
         return "commodity.commodityId IN " + subQuery;
       })
 
@@ -658,10 +835,19 @@ export class BaseCommodityServer {
       .setParameter("colorsMin", payload.colorsMin)
       .setParameter("colorsMax", payload.colorsMax)
       .setParameter("state", `%${payload.state}%`)
-      .setParameter("shapeId", payload.shapeId)
-      .setParameter("themeId", payload.themeId)
       .setParameter("categorys", payload.categorys)
-      .setParameter("techniqueId", payload.techniqueId)
+      .setParameter("classifications", payload.classifications)
+      .setParameter("materials", payload.materials)
+      .setParameter("models", payload.models)
+      .setParameter("places", payload.places)
+      .setParameter("ruiwus", payload.ruiwus)
+      .setParameter("shapes", payload.shapes)
+      .setParameter("specifications", payload.specifications)
+      .setParameter("styles", payload.styles)
+      .setParameter("techniques", payload.techniques)
+      .setParameter("themes", payload.themes)
+      .setParameter("types", payload.types)
+      .setParameter("uses", payload.uses)
       .orderBy("browsingCount.count", payload.hots ? "DESC"  :  "ASC")
       .orderBy("commodity.createdDate", payload.news ? "DESC"  :  "ASC")
       // .andWhere(qb => {

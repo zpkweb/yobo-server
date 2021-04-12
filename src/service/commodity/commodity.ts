@@ -5,7 +5,20 @@ import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
 import { CommodityAttributeColor } from './attribute/color';
-import { CommodityCategoryService } from './commodity-options/category'
+import { CommodityCategoryService } from './commodity-options/category';
+import { CommodityClassificationService } from './commodity-options/classification';
+import { CommodityMaterialService } from './commodity-options/material';
+import { CommodityModelService } from './commodity-options/model';
+import { CommodityPlaceService } from './commodity-options/place';
+import { CommodityRuiwuService } from './commodity-options/ruiwu';
+import { CommodityShapeService } from './commodity-options/shape';
+import { CommoditySpecificationService } from './commodity-options/specification';
+import { CommodityStyleService } from './commodity-options/style';
+import { CommodityTechniqueService } from './commodity-options/technique';
+import { CommodityThemeService } from './commodity-options/theme';
+import { CommodityTypeService } from './commodity-options/type';
+import { CommodityUseService } from './commodity-options/use';
+
 @Provide()
 export class CommodityCommodityService {
 
@@ -29,6 +42,42 @@ export class CommodityCommodityService {
 
   @Inject()
   commodityCategoryService: CommodityCategoryService;
+
+  @Inject()
+  commodityClassificationService: CommodityClassificationService;
+
+  @Inject()
+  commodityMaterialService: CommodityMaterialService;
+
+  @Inject()
+  commodityModelService: CommodityModelService;
+
+  @Inject()
+  commodityPlaceService: CommodityPlaceService;
+
+  @Inject()
+  commodityRuiwuService: CommodityRuiwuService;
+
+  @Inject()
+  commodityShapeService: CommodityShapeService;
+
+  @Inject()
+  commoditySpecificationService: CommoditySpecificationService;
+
+  @Inject()
+  commodityStyleService: CommodityStyleService;
+
+  @Inject()
+  commodityTechniqueService: CommodityTechniqueService;
+
+  @Inject()
+  commodityThemeService: CommodityThemeService;
+
+  @Inject()
+  commodityTypeService: CommodityTypeService;
+
+  @Inject()
+  commodityUseService: CommodityUseService;
 
   // 创建商品
   async create(payload) {
@@ -184,99 +233,256 @@ export class CommodityCommodityService {
     // }
 
 
-    // 创建商品价格
+
     for(let item of payload.categorys){
-      const commodityCategory = await this.commodityCategoryService.create({
+      const categorys = await this.commodityCategoryService.create({
         commodityName: payload.name['zh-cn'],
         categoryName: item['zh-cn']
       })
-      if (!commodityCategory.success) {
-        return commodityCategory
+      if (!categorys.success) {
+        return categorys
       }
-      console.log("commodity.data.generatedMaps[0].commodityId", commodity.data.generatedMaps[0].commodityId)
-      console.log("commodityCategory.data.identifiers[0].id", commodityCategory.data.identifiers[0].id)
-      console.log("item.id", item.id)
-      // 商品 关联 商品图片
       await this.commodityCategoryService.relation({
         name: 'commoditys',
-        of: commodityCategory.data.identifiers[0].id,
+        of: categorys.data.identifiers[0].id,
         set: { commodityId: commodity.data.generatedMaps[0].commodityId }
       })
-
       await this.commodityCategoryService.relation({
         name: 'categorys',
-        of:  commodityCategory.data.identifiers[0].id,
+        of:  categorys.data.identifiers[0].id,
         set: item.id
       })
-
-
     }
-
-      // await this.relation({
-      //   name: 'categorys',
-      //   of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-      //   add: payload.categorys
-      // })
-
-
-      await this.relation({
+    for(let item of payload.classifications){
+      const classifications = await this.commodityClassificationService.create({
+        commodityName: payload.name['zh-cn'],
+        classificationName: item['zh-cn']
+      })
+      if (!classifications.success) {
+        return classifications
+      }
+      await this.commodityClassificationService.relation({
+        name: 'commoditys',
+        of: classifications.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityClassificationService.relation({
         name: 'classifications',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.classifications
+        of:  classifications.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.materials){
+      const materials = await this.commodityMaterialService.create({
+        commodityName: payload.name['zh-cn'],
+        materialName: item['zh-cn']
+      })
+      if (!materials.success) {
+        return materials
+      }
+      await this.commodityMaterialService.relation({
+        name: 'commoditys',
+        of: materials.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityMaterialService.relation({
         name: 'materials',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.materials
+        of:  materials.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.models){
+      const models = await this.commodityModelService.create({
+        commodityName: payload.name['zh-cn'],
+        modelName: item['zh-cn']
+      })
+      if (!models.success) {
+        return models
+      }
+      await this.commodityModelService.relation({
+        name: 'commoditys',
+        of: models.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityModelService.relation({
         name: 'models',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.models
+        of:  models.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    console.log("payload.places", payload.places)
+    for(let item of payload.places){
+      const places = await this.commodityPlaceService.create({
+        commodityName: payload.name['zh-cn'],
+        placeName: item['zh-cn']
+      })
+      console.log("places", places)
+      if (!places.success) {
+        return places
+      }
+      await this.commodityPlaceService.relation({
+        name: 'commoditys',
+        of: places.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityPlaceService.relation({
         name: 'places',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.places
+        of:  places.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.ruiwus){
+      const ruiwus = await this.commodityRuiwuService.create({
+        commodityName: payload.name['zh-cn'],
+        ruiwuName: item['zh-cn']
+      })
+      if (!ruiwus.success) {
+        return ruiwus
+      }
+      await this.commodityRuiwuService.relation({
+        name: 'commoditys',
+        of: ruiwus.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityRuiwuService.relation({
         name: 'ruiwus',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.ruiwus
+        of:  ruiwus.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.shapes){
+      const shapes = await this.commodityShapeService.create({
+        commodityName: payload.name['zh-cn'],
+        shapeName: item['zh-cn']
+      })
+      if (!shapes.success) {
+        return shapes
+      }
+      await this.commodityShapeService.relation({
+        name: 'commoditys',
+        of: shapes.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityShapeService.relation({
         name: 'shapes',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.shapes
+        of:  shapes.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.specifications){
+      const specifications = await this.commoditySpecificationService.create({
+        commodityName: payload.name['zh-cn'],
+        specificationName: item['zh-cn']
+      })
+      if (!specifications.success) {
+        return specifications
+      }
+      await this.commoditySpecificationService.relation({
+        name: 'commoditys',
+        of: specifications.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commoditySpecificationService.relation({
         name: 'specifications',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.specifications
+        of:  specifications.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.styles){
+      const styles = await this.commodityStyleService.create({
+        commodityName: payload.name['zh-cn'],
+        styleName: item['zh-cn']
+      })
+      if (!styles.success) {
+        return styles
+      }
+      await this.commodityStyleService.relation({
+        name: 'commoditys',
+        of: styles.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityStyleService.relation({
         name: 'styles',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.styles
+        of:  styles.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.techniques){
+      const techniques = await this.commodityTechniqueService.create({
+        commodityName: payload.name['zh-cn'],
+        techniqueName: item['zh-cn']
+      })
+      if (!techniques.success) {
+        return techniques
+      }
+      await this.commodityTechniqueService.relation({
+        name: 'commoditys',
+        of: techniques.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityTechniqueService.relation({
         name: 'techniques',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.techniques
+        of:  techniques.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.themes){
+      const themes = await this.commodityThemeService.create({
+        commodityName: payload.name['zh-cn'],
+        themeName: item['zh-cn']
+      })
+      if (!themes.success) {
+        return themes
+      }
+      await this.commodityThemeService.relation({
+        name: 'commoditys',
+        of: themes.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityThemeService.relation({
         name: 'themes',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.themes
+        of:  themes.data.identifiers[0].id,
+        set: item.id
       })
-      await this.relation({
+    }
+    for(let item of payload.types){
+      const types = await this.commodityTypeService.create({
+        commodityName: payload.name['zh-cn'],
+        typeName: item['zh-cn']
+      })
+      if (!types.success) {
+        return types
+      }
+      await this.commodityTypeService.relation({
+        name: 'commoditys',
+        of: types.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityTypeService.relation({
         name: 'types',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        add: payload.types
+        of:  types.data.identifiers[0].id,
+        set: item.id
       })
-
-
-
+    }
+    for(let item of payload.uses){
+      const uses = await this.commodityUseService.create({
+        commodityName: payload.name['zh-cn'],
+        useName: item['zh-cn']
+      })
+      if (!uses.success) {
+        return uses
+      }
+      await this.commodityUseService.relation({
+        name: 'commoditys',
+        of: uses.data.identifiers[0].id,
+        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
+      })
+      await this.commodityUseService.relation({
+        name: 'uses',
+        of:  uses.data.identifiers[0].id,
+        set: item.id
+      })
+    }
 
 
 
@@ -518,7 +724,7 @@ export class CommodityCommodityService {
   async retrieve(payload) {
     console.log("retrieve", payload)
     let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
-
+    console.log("data", data)
     if(payload.isLocale) {
       const filterData = this.filter(payload.locale || 'zh-cn', [data]);
       data = filterData[0];

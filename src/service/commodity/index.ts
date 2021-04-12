@@ -55,7 +55,7 @@ export class CommodityService {
     }
 
     const commodityNew =  await this.commodityCommodityService.create(payload);
-
+    console.log("commodityNew", commodityNew)
     if(!commodityNew.success){
       return commodityNew
     }
@@ -188,18 +188,18 @@ export class CommodityService {
       colorsMax: colorsMax || 0, // 16777215
       state: payload.state || '',
       categorys: (payload.categorys && payload.categorys.length) ? JSON.parse(payload.categorys) : [],
-      classificationId: payload.classificationId || '',
-      materialId: payload.materialId || '',
-      modelId: payload.modelId || '',
-      placeId: payload.placeId || '',
-      ruiwuId: payload.ruiwuId || '',
-      shapeId: payload.shapeId || '',
-      specificationId: payload.specificationId || '',
-      styleId: payload.styleId || '',
-      techniqueId: payload.techniqueId || '',
-      themeId: payload.themeId || '',
-      typeId: payload.typeId || '',
-      useId: payload.useId || '',
+      classifications: (payload.classifications && payload.classifications.length) ? JSON.parse(payload.classifications) : [],
+      materials: (payload.materials && payload.materials.length) ? JSON.parse(payload.materials) : [],
+      models: (payload.models && payload.models.length) ? JSON.parse(payload.models) : [],
+      places: (payload.places && payload.places.length) ? JSON.parse(payload.places) : [],
+      ruiwus: (payload.ruiwus && payload.ruiwus.length) ? JSON.parse(payload.ruiwus) : [],
+      shapes: (payload.shapes && payload.shapes.length) ? JSON.parse(payload.shapes) : [],
+      specifications: (payload.specifications && payload.specifications.length) ? JSON.parse(payload.specifications) : [],
+      styles: (payload.styles && payload.styles.length) ? JSON.parse(payload.styles) : [],
+      techniques: (payload.techniques && payload.techniques.length) ? JSON.parse(payload.techniques) : [],
+      themes: (payload.themes && payload.themes.length) ? JSON.parse(payload.themes) : [],
+      types: (payload.types && payload.types.length) ? JSON.parse(payload.types) : [],
+      uses: (payload.uses && payload.uses.length) ? JSON.parse(payload.uses) : [],
       hots,
       news,
       currentPage: payload.currentPage || 1,

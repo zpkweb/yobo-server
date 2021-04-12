@@ -111,6 +111,7 @@ commodityOptionsUseService: CommodityOptionsUseService;
       isLocale: payload.isLocale,
       locale: payload.locale
     });
+    console.log("artworkOptions", shape)
     if(!shape.success) {
       return shape;
     }

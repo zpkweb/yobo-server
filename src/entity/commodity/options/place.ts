@@ -4,7 +4,7 @@
 
 import { EntityModel } from "@midwayjs/orm";
 import { Column, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { CommodityEntity } from '../commodity';
+import { CommodityPlaceEntity } from '../commodity-options/place';
 
 @EntityModel('commodity_options_place')
 export class CommodityOptionsPlaceEntity {
@@ -56,10 +56,9 @@ export class CommodityOptionsPlaceEntity {
   updatedDate: Date;
 
   // // 关联商品选项
-  @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.places, {
-    cascade: true,
-    onDelete: 'SET NULL'
+  @ManyToMany(type => CommodityPlaceEntity, CommodityPlaceEntity => CommodityPlaceEntity.places, {
+    cascade: true
   })
-  commodity: CommodityEntity;
+  commoditys: CommodityPlaceEntity;
 
 }

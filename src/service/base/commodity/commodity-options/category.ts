@@ -32,7 +32,6 @@ export class BaseCommodityCategoryServer {
 
 
   async BaseRelationSet(payload) {
-    console.log("BaseRelationSet", payload)
     await this.commodityCategoryEntity
       .createQueryBuilder()
       .relation(CommodityCategoryEntity, payload.name)

@@ -136,81 +136,45 @@ export class BaseSellerServer {
    * Seller
    */
   async baseSearchSeller(payload) {
-    // console.log("baseSearchSeller payload", payload)
+    console.log("baseSearchSeller payload", payload)
+
     const where: any = {};
 
-    if (payload.surname) {
-      where.firstname = Like(payload.surname);
+    if (payload.id) {
+      where.id = payload.id;
     }
-
-    if (payload.label) {
-      where.label = Like(payload.label);
-    }
-
-    if (payload.gender) {
-      where.gender = Like(payload.gender);
-    }
-
-    if (payload.country) {
-      where.country = Like(payload.country);
-    }
-
-    if (payload.state) {
-      where.state = Like(payload.state);
-    }
-
-    if (payload.type) {
-      where.type = Like(payload.type);
-    }
-
-    if (payload.email) {
-      where.email = Like(payload.email);
-    }
-
-    if (payload.phone) {
-      where.phone = Like(payload.phone);
-    }
-
     if (payload.sellerId) {
-      where.sellerId = Like(payload.sellerId);
+      where.sellerId = payload.sellerId;
+    }
+    if (payload.state) {
+      where.state = payload.state;
+    }
+    if (payload.type) {
+      where.type = payload.type;
+    }
+    if (payload.label) {
+      where.label = payload.label;
+    }
+    if (payload.gender) {
+      where.gender = payload.gender;
+    }
+    if (payload.country) {
+      where.country = payload.country;
     }
 
-    // console.log("baseSearchSeller where", where)
-    // list total
-    return await this.userSellerEntity.findAndCount({
-      // relations: ['seller'],
-      join: {
-        alias: "seller",
-        leftJoinAndSelect: {
-          user: "seller.user",
-          metadata: "seller.metadata"
-        }
-      },
-      where,
-      take: payload.pageSize,
-      skip: payload.pageSize * (payload.currentPage - 1),
-    });
+    if (payload.surname) {
+      where.firstname = Like(`%${payload.surname}%`);
+    }
 
-
-
-    // return await this.userSellerEntity
-    //   .createQueryBuilder('seller')
-    //   .leftJoinAndSelect('seller.user', 'user')
-    //   .leftJoinAndSelect('seller.metadata', 'metadata')
-    //   .addSelect('seller.createdDate')
-    //   .where("seller.firstname like :firstname", { firstname: `%${payload.surname}%` })
-    //   .orWhere("seller.lastname like :lastname", { lastname: `%${payload.lastname}%` })
-    //   .orWhere("seller.label like :label", { label: `%${payload.label}%` })
-    //   .orWhere("seller.gender like :gender", { gender: `%${payload.gender}%` })
-    //   // .orWhere("seller.country like :country", { country: `%${payload.country}%` })
-    //   .orWhere("seller.country = :country", { country: payload.country })
-    //   .orWhere("seller.state like :state", { state: `%${payload.state}%` })
-    //   .orWhere("seller.type like :type", { type: `%${+payload.type}%` })
-    //   // .andWhere("user.email like :email", { email: `%${payload.email}%` })
-    //   // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
-    //   .skip((payload.currentPage-1)*payload.pageSize)
-    //   .take(payload.pageSize)
-    //   .getManyAndCount();
+    return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      .leftJoinAndSelect('seller.user', 'user')
+      .leftJoinAndSelect('seller.metadata', 'metadata')
+      .addSelect('seller.createdDate')
+      .where(where)
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
   }
 
   /**
