@@ -32,8 +32,8 @@ export class CommodityOptionsModelService {
   /**
    * 查询
    */
-  async retrieve(payload) {
-    const data = await this.baseCommodityOptionsModelServer.BaseRetrieve(payload);
+  async retrieve(id) {
+    const data = await this.baseCommodityOptionsModelServer.BaseRetrieve(id);
     if (data) {
       return {
         data: data,

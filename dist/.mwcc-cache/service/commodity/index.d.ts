@@ -48,6 +48,15 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
+    fingCategory(id: any): Promise<{
+        data: import("../../entity/commodity/commodity").CommodityEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     search(payload: any): Promise<{
         data: {
             list: import("../../entity/commodity/commodity").CommodityEntity[];
@@ -60,14 +69,9 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
-    delete(payload: any): Promise<{
-        data: import("typeorm").DeleteResult;
+    delete(commodityId: any): Promise<{
         success: boolean;
         code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
     }>;
     update(payload: any): Promise<{
         data: import("typeorm").InsertResult;

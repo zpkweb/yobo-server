@@ -48,10 +48,10 @@ export class BaseCommodityOptionsPlaceServer {
   /**
    * 查询
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsPlaceEntity
       .createQueryBuilder('place')
-      .where('place.id = :id', { id: payload.id })
+      .where('place.id = :id', { id: id })
       .getOne();
   }
 

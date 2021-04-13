@@ -48,10 +48,10 @@ export class BaseCommodityOptionsStyleServer {
   /**
    * 查询
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsStyleEntity
       .createQueryBuilder('style')
-      .where('style.id = :id', { id: payload.id })
+      .where('style.id = :id', { id: id })
       .getOne();
   }
 

@@ -43,10 +43,10 @@ export class BaseCommodityOptionsShapeServer {
   /**
    * 查询商品形状选项Id
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsShapeEntity
       .createQueryBuilder('shape')
-      .where('shape.id = :id', { id: payload.id })
+      .where('shape.id = :id', { id: id })
       .getOne();
   }
 

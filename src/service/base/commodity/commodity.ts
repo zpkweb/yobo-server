@@ -869,11 +869,17 @@ export class BaseCommodityServer {
   /**
    * 删除商品
    */
-  async BaseDelete(commodityId) {
+  async BaseDeleteCommodityId(commodityId) {
     return await this.commodityEntity
       .createQueryBuilder()
       .delete()
       .where("commodityId = :commodityId", { commodityId: commodityId })
+      .execute();
+  }
+  async BaseDeleteAll() {
+    return await this.commodityEntity
+      .createQueryBuilder()
+      .delete()
       .execute();
   }
   /**

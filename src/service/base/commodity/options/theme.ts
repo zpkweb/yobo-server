@@ -43,10 +43,10 @@ export class BaseCommodityOptionsThemeServer {
   /**
    * 查询商品形状选项Id
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsThemeEntity
       .createQueryBuilder('theme')
-      .where('theme.id = :id', { id: payload.id })
+      .where('theme.id = :id', { id: id })
       .getOne();
   }
 

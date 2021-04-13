@@ -48,10 +48,10 @@ export class BaseCommodityOptionsTypeServer {
   /**
    * 查询
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsTypeEntity
       .createQueryBuilder('type')
-      .where('type.id = :id', { id: payload.id })
+      .where('type.id = :id', { id: id })
       .getOne();
   }
 

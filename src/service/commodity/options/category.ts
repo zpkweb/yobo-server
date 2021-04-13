@@ -51,8 +51,8 @@ export class CommodityOptionsCategoryService {
   /**
    * 查询
    */
-  async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsCategoryServer.BaseRetrieveId(payload);
+  async retrieveId(id) {
+    const data = await this.baseCommodityOptionsCategoryServer.BaseRetrieveId(id);
     if (data) {
       return {
         data: data,

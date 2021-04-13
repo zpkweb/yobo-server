@@ -51,6 +51,54 @@ export declare class BFFController {
         code: number;
         data?: undefined;
     } | {
+        data: import("../../../entity/commodity/options/classification").CommodityOptionsClassificationEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/material").CommodityOptionsMaterialEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/model").CommodityOptionsModelEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/place").CommodityOptionsPlaceEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/ruiwu").CommodityOptionsRuiwuEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/shape").CommodityOptionsShapeEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/specification").CommodityOptionsSpecificationEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/style").CommodityOptionsStyleEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/technique").CommodityOptionsTechniqueEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/type").CommodityOptionsTypeEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../../entity/commodity/options/use").CommodityOptionsUseEntity[];
+        success: boolean;
+        code: number;
+    } | {
         success: boolean;
         code: number;
         data: {

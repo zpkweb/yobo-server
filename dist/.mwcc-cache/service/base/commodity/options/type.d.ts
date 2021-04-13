@@ -4,7 +4,7 @@ export declare class BaseCommodityOptionsTypeServer {
     commodityOptionsTypeEntity: Repository<CommodityOptionsTypeEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseRetrieve(payload: any): Promise<CommodityOptionsTypeEntity>;
-    BaseRetrieveId(payload: any): Promise<CommodityOptionsTypeEntity>;
+    BaseRetrieveId(id: any): Promise<CommodityOptionsTypeEntity>;
     BaseRetrieveAll(): Promise<CommodityOptionsTypeEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
     BaseDelete(id: any): Promise<import("typeorm").DeleteResult>;

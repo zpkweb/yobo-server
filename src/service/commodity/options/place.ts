@@ -32,8 +32,8 @@ export class CommodityOptionsPlaceService {
   /**
    * 查询
    */
-  async retrieve(payload) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseRetrieve(payload);
+  async retrieve(id) {
+    const data = await this.baseCommodityOptionsPlaceServer.BaseRetrieve(id);
     if (data) {
       return {
         data: data,

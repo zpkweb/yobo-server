@@ -859,18 +859,33 @@ export class CommodityCommodityService {
   }
 
   // 删除商品
-  async delete(payload) {
-    const data = await this.baseCommodityServer.BaseDelete(payload.commodityId);
+
+  async deleteCommodityId(commodityId) {
+    const data = await this.baseCommodityServer.BaseDeleteCommodityId(commodityId);
     if (data.affected) {
       return {
-        data: data,
         success: true,
-        code: 10009
+        code: 10005
       }
     } else {
       return {
         success: false,
-        code: 10010
+        code: 10006
+      }
+    }
+  }
+  // 删除全部商品
+  async deleteAll() {
+    const data = await this.baseCommodityServer.BaseDeleteAll();
+    if (data.affected) {
+      return {
+        success: true,
+        code: 10005
+      }
+    } else {
+      return {
+        success: false,
+        code: 10006
       }
     }
   }

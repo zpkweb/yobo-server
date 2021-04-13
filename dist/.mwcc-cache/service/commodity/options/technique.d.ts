@@ -10,7 +10,7 @@ export declare class CommodityOptionsTechniqueService {
         code: number;
         data?: undefined;
     }>;
-    retrieve(payload: any): Promise<{
+    retrieve(id: any): Promise<{
         data: import("../../../entity/commodity/options/technique").CommodityOptionsTechniqueEntity;
         success: boolean;
         code: number;

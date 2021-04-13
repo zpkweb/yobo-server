@@ -20,7 +20,7 @@ export class UploadImagesService {
     console.log("uploadImages", payload, this.host.origin)
     const ctx = this.ctx;
     const stream = await ctx.getFileStream();
-    // console.log("stream", stream)
+    console.log("stream", stream)
     // 创建目录
     fs.mkdirSync(`public/images/${stream.fields.type || 'other'}`, { recursive: true });
     let filename = path.basename(stream.filename).split('.');

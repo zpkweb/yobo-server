@@ -19,7 +19,7 @@ export declare class CommodityOptionsThemeService {
         code: number;
         data?: undefined;
     }>;
-    retrieveId(payload: any): Promise<{
+    retrieveId(id: any): Promise<{
         data: import("../../../entity/commodity/options/theme").CommodityOptionsThemeEntity;
         success: boolean;
         code: number;

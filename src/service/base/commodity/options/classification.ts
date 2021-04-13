@@ -50,10 +50,10 @@ export class BaseCommodityOptionsClassificationServer {
   /**
    * 查询
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsClassificationEntity
       .createQueryBuilder('classification')
-      .where('classification.id = :id', { id: payload.id })
+      .where('classification.id = :id', { id: id })
       .getOne();
   }
 

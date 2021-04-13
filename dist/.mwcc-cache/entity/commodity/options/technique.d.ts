@@ -1,4 +1,4 @@
-import { CommodityEntity } from "../commodity";
+import { CommodityTechniqueEntity } from "../commodity-options/technique";
 export declare class CommodityOptionsTechniqueEntity {
     id: number;
     img: string;
@@ -9,5 +9,5 @@ export declare class CommodityOptionsTechniqueEntity {
     'es-es': string;
     createdDate: Date;
     updatedDate: Date;
-    commodity: CommodityEntity;
+    commoditys: CommodityTechniqueEntity;
 }

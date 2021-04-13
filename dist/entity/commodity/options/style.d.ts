@@ -1,4 +1,4 @@
-import { CommodityEntity } from "../commodity";
+import { CommodityStyleEntity } from "../commodity-options/style";
 export declare class CommodityOptionsStyleEntity {
     id: number;
     img: string;
@@ -9,5 +9,5 @@ export declare class CommodityOptionsStyleEntity {
     'es-es': string;
     createdDate: Date;
     updatedDate: Date;
-    commodity: CommodityEntity;
+    commoditys: CommodityStyleEntity;
 }

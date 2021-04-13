@@ -20,14 +20,9 @@ export declare class AdminCommodityController {
     finEdit(findParams: any): Promise<any>;
     findAll(findAllParams: any): Promise<any>;
     search(searchParams: any): Promise<any>;
-    delete(deleteBody: any): Promise<{
-        data: import("typeorm").DeleteResult;
+    delete(commodityId: any): Promise<{
         success: boolean;
         code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
     }>;
     updateCommodity(updateBody: any): Promise<{
         data: import("typeorm").InsertResult;
@@ -56,6 +51,15 @@ export declare class AdminCommodityController {
         code: number;
     }>;
     retrieveOption(type: any): Promise<any>;
+    retrieveCategory(category: any): Promise<{
+        data: import("../../../entity/commodity/commodity").CommodityEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     updateOptions(type: any, optionsBody: any): Promise<any>;
     deleteOptions(type: any, optionsBody: any): Promise<any>;
 }

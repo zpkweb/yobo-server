@@ -92,11 +92,10 @@ export class AdminCommodityController {
   }
 
   // 删除商品
+
   @Post('/delete',{summary:'删除商品'})
-  async delete(@Body(ALL) deleteBody) {
-    return await this.commodityService.delete({
-      commodityId: deleteBody.commodityId
-    });
+  async delete(@Body() commodityId) {
+    return await this.commodityService.delete(commodityId);
   }
 
   // 更新商品

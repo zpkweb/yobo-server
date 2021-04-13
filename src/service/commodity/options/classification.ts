@@ -52,8 +52,8 @@ export class CommodityOptionsClassificationService {
   /**
    * 查询
    */
-  async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsClassificationServer.BaseRetrieveId(payload);
+  async retrieveId(id) {
+    const data = await this.baseCommodityOptionsClassificationServer.BaseRetrieveId(id);
     if (data) {
       return {
         data: data,

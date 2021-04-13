@@ -43,10 +43,10 @@ export class BaseCommodityOptionsTechniqueServer {
   /**
    * 查询商品形状选项Id
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveId(id) {
     return await this.commodityOptionsTechniqueEntity
       .createQueryBuilder('technique')
-      .where('technique.id = :id', { id: payload.id })
+      .where('technique.id = :id', { id: id })
       .getOne();
   }
 

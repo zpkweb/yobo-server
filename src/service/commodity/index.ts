@@ -210,8 +210,13 @@ export class CommodityService {
   }
 
   // 删除商品
-  async delete(payload) {
-    return await this.commodityCommodityService.delete(payload);
+  async delete(commodityId) {
+    if(commodityId){
+      return await this.commodityCommodityService.deleteCommodityId(commodityId);
+    }else{
+      return await this.commodityCommodityService.deleteAll();
+    }
+
   }
 
   // 更新商品
