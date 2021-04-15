@@ -56,7 +56,7 @@ export class CommodityOptionsSpecificationEntity {
   updatedDate: Date;
 
   // // 关联商品选项
-  @ManyToMany(type => CommoditySpecificationEntity, CommoditySpecificationEntity => CommoditySpecificationEntity.specifications, {
+  @ManyToMany(type => CommoditySpecificationEntity, CommoditySpecificationEntity => CommoditySpecificationEntity.options, {
     cascade: true
   })
   commoditys: CommoditySpecificationEntity;

@@ -16,20 +16,31 @@ export class BaseCommodityRuiwuServer {
       .insert()
       .into(CommodityRuiwuEntity)
       .values({
-        commodityName: payload.commodityName,
-        ruiwuName: payload.ruiwuName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityRuiwuEntity
       .createQueryBuilder('ruiwu')
-      .where('ruiwu.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('ruiwu.ruiwuName = :ruiwuName', { ruiwuName: payload.ruiwuName })
-      .getOne();
+      .leftJoinAndSelect('ruiwu.commoditys', 'commoditys')
+      .leftJoinAndSelect('ruiwu.options', 'options')
+      .where('ruiwu.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityRuiwuEntity
+      .createQueryBuilder('ruiwu')
+      .leftJoinAndSelect('ruiwu.commoditys', 'commoditys')
+      .leftJoinAndSelect('ruiwu.options', 'options')
+      .where('ruiwu.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('ruiwu.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityRuiwuEntity

@@ -49,6 +49,7 @@ export class BaseCommodityOptionsCategoryServer {
    * 查询
    */
   async BaseRetrieveId(id) {
+    console.log("caterory BaseRetrieveId id", id)
     return await this.commodityOptionsCategoryEntity
       .createQueryBuilder('category')
       .where('category.id = :id', { id })

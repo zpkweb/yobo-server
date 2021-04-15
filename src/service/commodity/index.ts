@@ -55,7 +55,7 @@ export class CommodityService {
     }
 
     const commodityNew =  await this.commodityCommodityService.create(payload);
-    console.log("commodityNew", commodityNew)
+    // console.log("commodityNew", commodityNew)
     if(!commodityNew.success){
       return commodityNew
     }
@@ -94,7 +94,7 @@ export class CommodityService {
 
   // 搜索商品
   async search(payload) {
-    console.log("search", payload)
+    // console.log("search", payload)
     let price;
     if(payload.price){
       if(typeof payload.price == 'string') {
@@ -134,29 +134,29 @@ export class CommodityService {
         max: ''
       }
     }
-    let colors;
-    if(payload.colors){
-      if(typeof payload.colors == 'string') {
-        colors = JSON.parse(payload.colors)
-      }else{
-        colors = payload.colors
-      }
-    }else{
-      colors = {
-        start: '',
-        end: ''
-      }
-    }
-    let colorStart = colors.start.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
-    let colorEnd = colors.end.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
-    let colorsMin,colorsMax;
-    if(colorStart<=colorEnd){
-      colorsMin = colorStart;
-      colorsMax = colorEnd;
-    }else{
-      colorsMin = colorEnd;
-      colorsMax = colorStart;
-    }
+    // let colors;
+    // if(payload.colors){
+    //   if(typeof payload.colors == 'string') {
+    //     colors = JSON.parse(payload.colors)
+    //   }else{
+    //     colors = payload.colors
+    //   }
+    // }else{
+    //   colors = {
+    //     start: '',
+    //     end: ''
+    //   }
+    // }
+    // let colorStart = colors.start.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+    // let colorEnd = colors.end.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+    // let colorsMin,colorsMax;
+    // if(colorStart<=colorEnd){
+    //   colorsMin = colorStart;
+    //   colorsMax = colorEnd;
+    // }else{
+    //   colorsMin = colorEnd;
+    //   colorsMax = colorStart;
+    // }
 
     let hots = false;
     if(payload.hots && payload.hots == 'true'){
@@ -183,9 +183,9 @@ export class CommodityService {
       // height: payload.height,
       heightMin: height.min || 0,
       heightMax: height.max || 0,
-      // colors: payload.colors,
-      colorsMin: colorsMin || 0 ,
-      colorsMax: colorsMax || 0, // 16777215
+      colors: payload.colors,
+      // colorsMin: colorsMin || 0 ,
+      // colorsMax: colorsMax || 0, // 16777215
       state: payload.state || '',
       categorys: (payload.categorys && payload.categorys.length) ? JSON.parse(payload.categorys) : [],
       classifications: (payload.classifications && payload.classifications.length) ? JSON.parse(payload.classifications) : [],
@@ -347,164 +347,7 @@ export class CommodityService {
       // })
     }
 
-    // 更新 商品形状
-    // await this.commodityCommodityService.relation({
-    //   name: 'shapes',
-    //   of: { commodityId: payload.commodityId },
-    //   add: payload.shape
-    // })
-
-    // 更新 商品主题
-    // await this.commodityCommodityService.relation({
-    //   name: 'themes',
-    //   of: { commodityId: payload.commodityId },
-    //   add: payload.theme
-    // })
-
-    // 更新 商品类别
-    // await this.commodityCommodityService.relation({
-    //   name: 'categorys',
-    //   of: { commodityId: payload.commodityId },
-    //   add: payload.category
-    // })
-
-    // 更新 商品手法
-    // await this.commodityCommodityService.relation({
-    //   name: 'techniques',
-    //   of: { commodityId: payload.commodityId },
-    //   add: payload.technique
-    // })
-    await this.commodityCommodityService.relation({
-      name: 'categorys',
-      of: { commodityId: payload.commodityId },
-      remove: payload.categorys
-    })
-    await this.commodityCommodityService.relation({
-      name: 'categorys',
-      of: { commodityId: payload.commodityId },
-      add: payload.categorys
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'classifications',
-      of: { commodityId: payload.commodityId },
-      remove: payload.classifications
-    })
-    await this.commodityCommodityService.relation({
-      name: 'classifications',
-      of: { commodityId: payload.commodityId },
-      add: payload.classifications
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'materials',
-      of: { commodityId: payload.commodityId },
-      remove: payload.materials
-    })
-    await this.commodityCommodityService.relation({
-      name: 'materials',
-      of: { commodityId: payload.commodityId },
-      add: payload.materials
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'models',
-      of: { commodityId: payload.commodityId },
-      remove: payload.models
-    })
-    await this.commodityCommodityService.relation({
-      name: 'models',
-      of: { commodityId: payload.commodityId },
-      add: payload.models
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'places',
-      of: { commodityId: payload.commodityId },
-      remove: payload.places
-    })
-    await this.commodityCommodityService.relation({
-      name: 'places',
-      of: { commodityId: payload.commodityId },
-      add: payload.places
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'ruiwus',
-      of: { commodityId: payload.commodityId },
-      remove: payload.ruiwus
-    })
-    await this.commodityCommodityService.relation({
-      name: 'ruiwus',
-      of: { commodityId: payload.commodityId },
-      add: payload.ruiwus
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'shapes',
-      of: { commodityId: payload.commodityId },
-      remove: payload.shapes
-    })
-    await this.commodityCommodityService.relation({
-      name: 'shapes',
-      of: { commodityId: payload.commodityId },
-      add: payload.shapes
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'specifications',
-      of: { commodityId: payload.commodityId },
-      remove: payload.specifications
-    })
-    await this.commodityCommodityService.relation({
-      name: 'specifications',
-      of: { commodityId: payload.commodityId },
-      add: payload.specifications
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'styles',
-      of: { commodityId: payload.commodityId },
-      remove: payload.styles
-    })
-    await this.commodityCommodityService.relation({
-      name: 'styles',
-      of: { commodityId: payload.commodityId },
-      add: payload.styles
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'techniques',
-      of: { commodityId: payload.commodityId },
-      remove: payload.techniques
-    })
-    await this.commodityCommodityService.relation({
-      name: 'techniques',
-      of: { commodityId: payload.commodityId },
-      add: payload.techniques
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'themes',
-      of: { commodityId: payload.commodityId },
-      remove: payload.themes
-    })
-    await this.commodityCommodityService.relation({
-      name: 'themes',
-      of: { commodityId: payload.commodityId },
-      add: payload.themes
-    })
-
-    await this.commodityCommodityService.relation({
-      name: 'types',
-      of: { commodityId: payload.commodityId },
-      remove: payload.types
-    })
-    await this.commodityCommodityService.relation({
-      name: 'types',
-      of: { commodityId: payload.commodityId },
-      add: payload.types
-    })
+    await this.commodityCommodityService.relationUpdate(payload);
 
 
     // 更新艺术家
@@ -619,9 +462,16 @@ export class CommodityService {
     });
   }
 
+  async retrieveOptionId(payload) {
+
+    return this.commodityOptionService.commodityOptionsTypeRetrieveId({
+      type: payload.type,
+      id: payload.id,
+    });
+  }
 
   async retrieveOptionAll(payload) {
-    console.log("retrieveOptionAll", payload)
+    // console.log("retrieveOptionAll", payload)
     return this.commodityOptionService.commodityOptionsTypeRetrieveAll({
       type: payload.type,
       isLocale: payload.isLocale || false,

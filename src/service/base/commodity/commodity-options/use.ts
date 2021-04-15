@@ -16,20 +16,31 @@ export class BaseCommodityUseServer {
       .insert()
       .into(CommodityUseEntity)
       .values({
-        commodityName: payload.commodityName,
-        useName: payload.useName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityUseEntity
       .createQueryBuilder('use')
-      .where('use.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('use.useName = :useName', { useName: payload.useName })
-      .getOne();
+      .leftJoinAndSelect('use.commoditys', 'commoditys')
+      .leftJoinAndSelect('use.options', 'options')
+      .where('use.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityUseEntity
+      .createQueryBuilder('use')
+      .leftJoinAndSelect('use.commoditys', 'commoditys')
+      .leftJoinAndSelect('use.options', 'options')
+      .where('use.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('use.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityUseEntity

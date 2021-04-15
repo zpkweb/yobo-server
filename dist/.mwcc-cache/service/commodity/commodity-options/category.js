@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommodityCategoryService = void 0;
 const decorator_1 = require("@midwayjs/decorator");
 const category_1 = require("../../base/commodity/commodity-options/category");
+const category_2 = require("../options/category");
 let CommodityCategoryService = class CommodityCategoryService {
     async create(payload) {
         const data = await this.baseCommodityCategoryServer.BaseCreate(payload);
@@ -30,7 +31,39 @@ let CommodityCategoryService = class CommodityCategoryService {
         }
     }
     async retrieve(payload) {
-        const data = await this.baseCommodityCategoryServer.BaseRetrieve(payload);
+        const data = await this.baseCommodityCategoryServer.BaseRetrieveID(payload);
+        if (data) {
+            return {
+                data: data,
+                success: true,
+                code: 10009
+            };
+        }
+        else {
+            return {
+                success: false,
+                code: 10010
+            };
+        }
+    }
+    async retrieveCommodityId(commodityId) {
+        const data = await this.baseCommodityCategoryServer.BaseRetrieveCommodityId(commodityId);
+        if (data) {
+            return {
+                data: data,
+                success: true,
+                code: 10009
+            };
+        }
+        else {
+            return {
+                success: false,
+                code: 10010
+            };
+        }
+    }
+    async retrieveID(payload) {
+        const data = await this.baseCommodityCategoryServer.BaseRetrieveID(payload);
         if (data) {
             return {
                 data: data,
@@ -48,13 +81,77 @@ let CommodityCategoryService = class CommodityCategoryService {
     async relation(payload) {
         return await this.baseCommodityCategoryServer.BaseRelationSet(payload);
     }
+    async relationCreate(payload) {
+        for (let item of payload.relation) {
+            console.log("item", item);
+            const categoryOption = await this.retrieveID({
+                commodityId: payload.commodityId,
+                optionId: item
+            });
+            console.log("categoryOption", categoryOption);
+            if (categoryOption.success) {
+                await this.relation({
+                    name: 'commoditys',
+                    of: categoryOption.data.id,
+                    set: payload.commodityId
+                });
+                await this.relation({
+                    name: 'options',
+                    of: categoryOption.data.id,
+                    set: item
+                });
+            }
+            else {
+                const categorysOption = await this.commodityOptionsCategoryService.retrieveId(item);
+                console.log("categorysOption", categorysOption);
+                if (categorysOption.success) {
+                    const categorys = await this.create({
+                        commodityId: payload.commodityId,
+                        optionId: item,
+                    });
+                    console.log("categorys", categorys);
+                    if (categorys.success) {
+                        await this.relation({
+                            name: 'commoditys',
+                            of: categorys.data.identifiers[0].id,
+                            set: payload.commodityId
+                        });
+                        await this.relation({
+                            name: 'options',
+                            of: categorys.data.identifiers[0].id,
+                            set: item
+                        });
+                    }
+                }
+            }
+        }
+    }
+    async relationUpdate(payload) {
+        const commodityCategorysOptions = await this.retrieveCommodityId(payload.commodityId);
+        if (commodityCategorysOptions.success) {
+            for (let item of commodityCategorysOptions.data) {
+                if (item.options) {
+                    await this.relation({
+                        name: 'options',
+                        of: item.id,
+                        set: null
+                    });
+                }
+            }
+        }
+        await this.relationCreate(payload);
+    }
 };
 __decorate([
     decorator_1.Inject(),
     __metadata("design:type", category_1.BaseCommodityCategoryServer)
 ], CommodityCategoryService.prototype, "baseCommodityCategoryServer", void 0);
+__decorate([
+    decorator_1.Inject(),
+    __metadata("design:type", category_2.CommodityOptionsCategoryService)
+], CommodityCategoryService.prototype, "commodityOptionsCategoryService", void 0);
 CommodityCategoryService = __decorate([
     decorator_1.Provide()
 ], CommodityCategoryService);
 exports.CommodityCategoryService = CommodityCategoryService;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2F0ZWdvcnkuanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL3lhbnNodW8vRG9jdW1lbnRzL3pway9naXRodWIveW9iby1zZXJ2ZXIvc3JjLyIsInNvdXJjZXMiOlsic2VydmljZS9jb21tb2RpdHkvY29tbW9kaXR5LW9wdGlvbnMvY2F0ZWdvcnkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBQUEsbURBQXNEO0FBQ3RELDhFQUFvRztBQUdwRyxJQUFhLHdCQUF3QixHQUFyQyxNQUFhLHdCQUF3QjtJQUtuQyxLQUFLLENBQUMsTUFBTSxDQUFDLE9BQU87UUFDbEIsTUFBTSxJQUFJLEdBQUcsTUFBTSxJQUFJLENBQUMsMkJBQTJCLENBQUMsVUFBVSxDQUFDLE9BQU8sQ0FBQyxDQUFDO1FBQ3hFLElBQUksSUFBSSxDQUFDLFdBQVcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLEVBQUU7WUFDMUIsT0FBTztnQkFDTCxJQUFJLEVBQUUsSUFBSTtnQkFDVixPQUFPLEVBQUUsSUFBSTtnQkFDYixJQUFJLEVBQUUsS0FBSzthQUNaLENBQUE7U0FDRjthQUFNO1lBQ0wsT0FBTztnQkFDTCxPQUFPLEVBQUUsS0FBSztnQkFDZCxJQUFJLEVBQUUsS0FBSzthQUNaLENBQUE7U0FDRjtJQUNILENBQUM7SUFFRCxLQUFLLENBQUMsUUFBUSxDQUFDLE9BQU87UUFDcEIsTUFBTSxJQUFJLEdBQUcsTUFBTSxJQUFJLENBQUMsMkJBQTJCLENBQUMsWUFBWSxDQUFDLE9BQU8sQ0FBQyxDQUFDO1FBQzFFLElBQUksSUFBSSxFQUFFO1lBQ1IsT0FBTztnQkFDTCxJQUFJLEVBQUUsSUFBSTtnQkFDVixPQUFPLEVBQUUsSUFBSTtnQkFDYixJQUFJLEVBQUUsS0FBSzthQUNaLENBQUE7U0FDRjthQUFNO1lBQ0wsT0FBTztnQkFDTCxPQUFPLEVBQUUsS0FBSztnQkFDZCxJQUFJLEVBQUUsS0FBSzthQUNaLENBQUE7U0FDRjtJQUNILENBQUM7SUFFRCxLQUFLLENBQUMsUUFBUSxDQUFDLE9BQU87UUFDcEIsT0FBTyxNQUFNLElBQUksQ0FBQywyQkFBMkIsQ0FBQyxlQUFlLENBQUMsT0FBTyxDQUFDLENBQUE7SUFDeEUsQ0FBQztDQUVGLENBQUE7QUF0Q0M7SUFEQyxrQkFBTSxFQUFFOzhCQUNvQixzQ0FBMkI7NkVBQUM7QUFIOUMsd0JBQXdCO0lBRHBDLG1CQUFPLEVBQUU7R0FDRyx3QkFBd0IsQ0F5Q3BDO0FBekNZLDREQUF3QiJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2F0ZWdvcnkuanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL3lhbnNodW8vRG9jdW1lbnRzL3pway9naXRodWIveW9iby1zZXJ2ZXIvc3JjLyIsInNvdXJjZXMiOlsic2VydmljZS9jb21tb2RpdHkvY29tbW9kaXR5LW9wdGlvbnMvY2F0ZWdvcnkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBQUEsbURBQXNEO0FBQ3RELDhFQUFvRztBQUNwRyxrREFBc0U7QUFFdEUsSUFBYSx3QkFBd0IsR0FBckMsTUFBYSx3QkFBd0I7SUFRbkMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxPQUFPO1FBQ2xCLE1BQU0sSUFBSSxHQUFHLE1BQU0sSUFBSSxDQUFDLDJCQUEyQixDQUFDLFVBQVUsQ0FBQyxPQUFPLENBQUMsQ0FBQztRQUN4RSxJQUFJLElBQUksQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxFQUFFO1lBQzFCLE9BQU87Z0JBQ0wsSUFBSSxFQUFFLElBQUk7Z0JBQ1YsT0FBTyxFQUFFLElBQUk7Z0JBQ2IsSUFBSSxFQUFFLEtBQUs7YUFDWixDQUFBO1NBQ0Y7YUFBTTtZQUNMLE9BQU87Z0JBQ0wsT0FBTyxFQUFFLEtBQUs7Z0JBQ2QsSUFBSSxFQUFFLEtBQUs7YUFDWixDQUFBO1NBQ0Y7SUFDSCxDQUFDO0lBRUQsS0FBSyxDQUFDLFFBQVEsQ0FBQyxPQUFPO1FBQ3BCLE1BQU0sSUFBSSxHQUFHLE1BQU0sSUFBSSxDQUFDLDJCQUEyQixDQUFDLGNBQWMsQ0FBQyxPQUFPLENBQUMsQ0FBQztRQUM1RSxJQUFJLElBQUksRUFBRTtZQUNSLE9BQU87Z0JBQ0wsSUFBSSxFQUFFLElBQUk7Z0JBQ1YsT0FBTyxFQUFFLElBQUk7Z0JBQ2IsSUFBSSxFQUFFLEtBQUs7YUFDWixDQUFBO1NBQ0Y7YUFBTTtZQUNMLE9BQU87Z0JBQ0wsT0FBTyxFQUFFLEtBQUs7Z0JBQ2QsSUFBSSxFQUFFLEtBQUs7YUFDWixDQUFBO1NBQ0Y7SUFDSCxDQUFDO0lB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

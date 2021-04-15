@@ -16,20 +16,31 @@ export class BaseCommoditySpecificationServer {
       .insert()
       .into(CommoditySpecificationEntity)
       .values({
-        commodityName: payload.commodityName,
-        specificationName: payload.specificationName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommoditySpecificationEntity
       .createQueryBuilder('specification')
-      .where('specification.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('specification.specificationName = :specificationName', { specificationName: payload.specificationName })
-      .getOne();
+      .leftJoinAndSelect('specification.commoditys', 'commoditys')
+      .leftJoinAndSelect('specification.options', 'options')
+      .where('specification.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommoditySpecificationEntity
+      .createQueryBuilder('specification')
+      .leftJoinAndSelect('specification.commoditys', 'commoditys')
+      .leftJoinAndSelect('specification.options', 'options')
+      .where('specification.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('specification.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommoditySpecificationEntity

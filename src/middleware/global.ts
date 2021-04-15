@@ -15,6 +15,12 @@ export class GlobalMiddleware implements IWebMiddleware {
       // }
       const startTime = Date.now();
       await next();
+
+      ctx.body = Object.assign({}, ctx.body, {
+        status: ctx.body.success ? 200 : 500,
+        message: ctx.__(ctx.body.code)
+      })
+
       console.log("接口响应时间:", Date.now() - startTime);
     };
   }

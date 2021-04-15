@@ -3,6 +3,7 @@ import { CommodityPlaceEntity } from "../../../../entity/commodity/commodity-opt
 export declare class BaseCommodityPlaceServer {
     CommodityPlaceEntity: Repository<CommodityPlaceEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
-    BaseRetrieve(payload: any): Promise<CommodityPlaceEntity>;
+    BaseRetrieveCommodityId(commodityId: any): Promise<CommodityPlaceEntity[]>;
+    BaseRetrieveID(payload: any): Promise<CommodityPlaceEntity>;
     BaseRelationSet(payload: any): Promise<void>;
 }

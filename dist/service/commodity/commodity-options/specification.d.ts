@@ -1,6 +1,8 @@
 import { BaseCommoditySpecificationServer } from "../../base/commodity/commodity-options/specification";
+import { CommodityOptionsSpecificationService } from "../options/specification";
 export declare class CommoditySpecificationService {
     baseCommoditySpecificationServer: BaseCommoditySpecificationServer;
+    commodityOptionsSpecificationService: CommodityOptionsSpecificationService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -19,5 +21,25 @@ export declare class CommoditySpecificationService {
         code: number;
         data?: undefined;
     }>;
+    retrieveCommodityId(commodityId: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/specification").CommoditySpecificationEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrieveID(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/specification").CommoditySpecificationEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     relation(payload: any): Promise<void>;
+    relationCreate(payload: any): Promise<void>;
+    relationUpdate(payload: any): Promise<void>;
 }

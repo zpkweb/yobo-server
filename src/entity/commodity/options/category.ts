@@ -55,7 +55,7 @@ export class CommodityOptionsCategoryEntity {
   })
   updatedDate: Date;
 
-  @OneToMany(type => CommodityCategoryEntity, CommodityCategoryEntity => CommodityCategoryEntity.categorys, {
+  @OneToMany(type => CommodityCategoryEntity, CommodityCategoryEntity => CommodityCategoryEntity.options, {
     cascade: true,
   })
   commoditys: CommodityCategoryEntity[];

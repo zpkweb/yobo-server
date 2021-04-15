@@ -19,6 +19,8 @@ import { CommodityThemeService } from './commodity-options/theme';
 import { CommodityTypeService } from './commodity-options/type';
 import { CommodityUseService } from './commodity-options/use';
 
+import { CommodityOptionService } from './commodityOption';
+
 @Provide()
 export class CommodityCommodityService {
 
@@ -79,6 +81,9 @@ export class CommodityCommodityService {
   @Inject()
   commodityUseService: CommodityUseService;
 
+  @Inject()
+  commodityOptionService: CommodityOptionService;
+
   // 创建商品
   async create(payload) {
     console.log("create", payload)
@@ -95,6 +100,7 @@ export class CommodityCommodityService {
     if (!commodity.success) {
       return commodity
     }
+    payload.commodityId = commodity.data.generatedMaps[0].commodityId;
 
     // 创建商品名称
     const commodityName = await this.commodityAttributeName.create({
@@ -111,7 +117,7 @@ export class CommodityCommodityService {
     // 商品 关联 商品名称
     await this.relation({
       name: 'name',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      of: { commodityId: payload.commodityId },
       set: commodityName.data.identifiers[0].id
     })
 
@@ -130,7 +136,7 @@ export class CommodityCommodityService {
     // 商品 关联 商品详情
     await this.relation({
       name: 'desc',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      of: { commodityId: payload.commodityId },
       set: commodityDesc.data.identifiers[0].id
     })
 
@@ -149,7 +155,7 @@ export class CommodityCommodityService {
     // 商品 关联 商品价格
     await this.relation({
       name: 'price',
-      of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+      of: { commodityId: payload.commodityId },
       set: commodityPrice.data.identifiers[0].id
     })
 
@@ -166,7 +172,7 @@ export class CommodityCommodityService {
       // 商品 关联 商品图片
       await this.relation({
         name: 'photos',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        of: { commodityId: payload.commodityId },
         add: commodityPhoto.data.identifiers[0].id
       })
     }
@@ -174,349 +180,35 @@ export class CommodityCommodityService {
     // 创建商品颜色
     for(let item of payload.colors){
       const commodityColor = await this.commodityAttributeColor.create({
-        name: item.name,
-        value: item.name.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0)
+        startColor: item.startColor,
+        startColorValue: item.startColor.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0),
+        endColor: item.endColor,
+        endColorValue: item.endColor.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0),
       })
       if (!commodityColor.success) {
         return commodityColor
       }
-      // 商品 关联 商品图片
+
       await this.relation({
         name: 'colors',
-        of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        of: { commodityId: payload.commodityId },
         add: commodityColor.data.identifiers[0].id
       })
     }
 
-
-
-    console.log("commodity", commodity.data)
-
-
-    // 商品 关联 商品形状
-    // for(let item of payload.shapes){
-    //   await this.relation({
-    //     name: 'shapes',
-    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-    //     add: item.id
-    //   })
-    // }
-
-
-    // 商品 关联 商品主题
-    // for(let item of payload.themes){
-    //   await this.relation({
-    //     name: 'themes',
-    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-    //     add: item.id
-    //   })
-    // }
-
-
-    // 商品 关联 商品类别
-    // for(let item of payload.categorys){
-    //   await this.relation({
-    //     name: 'categorys',
-    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-    //     add: item.id
-    //   })
-    // }
-
-
-    // 商品 关联 商品手法
-    // for(let item of payload.techniques){
-    //   await this.relation({
-    //     name: 'techniques',
-    //     of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-    //     add: item.id
-    //   })
-    // }
-
-
-
-    for(let item of payload.categorys){
-      const categorys = await this.commodityCategoryService.create({
-        commodityName: payload.name['zh-cn'],
-        categoryName: item['zh-cn']
-      })
-      if (!categorys.success) {
-        return categorys
-      }
-      await this.commodityCategoryService.relation({
-        name: 'commoditys',
-        of: categorys.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityCategoryService.relation({
-        name: 'categorys',
-        of:  categorys.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.classifications){
-      const classifications = await this.commodityClassificationService.create({
-        commodityName: payload.name['zh-cn'],
-        classificationName: item['zh-cn']
-      })
-      if (!classifications.success) {
-        return classifications
-      }
-      await this.commodityClassificationService.relation({
-        name: 'commoditys',
-        of: classifications.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityClassificationService.relation({
-        name: 'classifications',
-        of:  classifications.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.materials){
-      const materials = await this.commodityMaterialService.create({
-        commodityName: payload.name['zh-cn'],
-        materialName: item['zh-cn']
-      })
-      if (!materials.success) {
-        return materials
-      }
-      await this.commodityMaterialService.relation({
-        name: 'commoditys',
-        of: materials.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityMaterialService.relation({
-        name: 'materials',
-        of:  materials.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.models){
-      const models = await this.commodityModelService.create({
-        commodityName: payload.name['zh-cn'],
-        modelName: item['zh-cn']
-      })
-      if (!models.success) {
-        return models
-      }
-      await this.commodityModelService.relation({
-        name: 'commoditys',
-        of: models.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityModelService.relation({
-        name: 'models',
-        of:  models.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    console.log("payload.places", payload.places)
-    for(let item of payload.places){
-      const places = await this.commodityPlaceService.create({
-        commodityName: payload.name['zh-cn'],
-        placeName: item['zh-cn']
-      })
-      console.log("places", places)
-      if (!places.success) {
-        return places
-      }
-      await this.commodityPlaceService.relation({
-        name: 'commoditys',
-        of: places.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityPlaceService.relation({
-        name: 'places',
-        of:  places.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.ruiwus){
-      const ruiwus = await this.commodityRuiwuService.create({
-        commodityName: payload.name['zh-cn'],
-        ruiwuName: item['zh-cn']
-      })
-      if (!ruiwus.success) {
-        return ruiwus
-      }
-      await this.commodityRuiwuService.relation({
-        name: 'commoditys',
-        of: ruiwus.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityRuiwuService.relation({
-        name: 'ruiwus',
-        of:  ruiwus.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.shapes){
-      const shapes = await this.commodityShapeService.create({
-        commodityName: payload.name['zh-cn'],
-        shapeName: item['zh-cn']
-      })
-      if (!shapes.success) {
-        return shapes
-      }
-      await this.commodityShapeService.relation({
-        name: 'commoditys',
-        of: shapes.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityShapeService.relation({
-        name: 'shapes',
-        of:  shapes.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.specifications){
-      const specifications = await this.commoditySpecificationService.create({
-        commodityName: payload.name['zh-cn'],
-        specificationName: item['zh-cn']
-      })
-      if (!specifications.success) {
-        return specifications
-      }
-      await this.commoditySpecificationService.relation({
-        name: 'commoditys',
-        of: specifications.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commoditySpecificationService.relation({
-        name: 'specifications',
-        of:  specifications.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.styles){
-      const styles = await this.commodityStyleService.create({
-        commodityName: payload.name['zh-cn'],
-        styleName: item['zh-cn']
-      })
-      if (!styles.success) {
-        return styles
-      }
-      await this.commodityStyleService.relation({
-        name: 'commoditys',
-        of: styles.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityStyleService.relation({
-        name: 'styles',
-        of:  styles.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.techniques){
-      const techniques = await this.commodityTechniqueService.create({
-        commodityName: payload.name['zh-cn'],
-        techniqueName: item['zh-cn']
-      })
-      if (!techniques.success) {
-        return techniques
-      }
-      await this.commodityTechniqueService.relation({
-        name: 'commoditys',
-        of: techniques.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityTechniqueService.relation({
-        name: 'techniques',
-        of:  techniques.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.themes){
-      const themes = await this.commodityThemeService.create({
-        commodityName: payload.name['zh-cn'],
-        themeName: item['zh-cn']
-      })
-      if (!themes.success) {
-        return themes
-      }
-      await this.commodityThemeService.relation({
-        name: 'commoditys',
-        of: themes.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityThemeService.relation({
-        name: 'themes',
-        of:  themes.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.types){
-      const types = await this.commodityTypeService.create({
-        commodityName: payload.name['zh-cn'],
-        typeName: item['zh-cn']
-      })
-      if (!types.success) {
-        return types
-      }
-      await this.commodityTypeService.relation({
-        name: 'commoditys',
-        of: types.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityTypeService.relation({
-        name: 'types',
-        of:  types.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-    for(let item of payload.uses){
-      const uses = await this.commodityUseService.create({
-        commodityName: payload.name['zh-cn'],
-        useName: item['zh-cn']
-      })
-      if (!uses.success) {
-        return uses
-      }
-      await this.commodityUseService.relation({
-        name: 'commoditys',
-        of: uses.data.identifiers[0].id,
-        set: { commodityId: commodity.data.generatedMaps[0].commodityId }
-      })
-      await this.commodityUseService.relation({
-        name: 'uses',
-        of:  uses.data.identifiers[0].id,
-        set: item.id
-      })
-    }
-
-
-
-    console.log("商品 关联 商家", { commodityId: commodity.data.generatedMaps[0].commodityId, sellerId: payload.sellerId })
+    await this.relationCreate(payload);
+    // console.log("商品 关联 商家", { commodityId: payload.commodityId, sellerId: payload.sellerId })
     // 商品 关联 商家
     if(payload.sellerId){
       await this.relation({
         name: 'seller',
         of: commodity.data.identifiers[0].id,
-        // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        // of: { commodityId: payload.commodityId },
         set: { sellerId: payload.sellerId }
       })
     }
-
-
-
     return commodity
 
-
-    // const data = await this.baseCommodityServer.BaseRetrieveCommodityId({
-    //   commodityId: commodity.data.generatedMaps[0].commodityId
-    // })
-    // if (data) {
-    //   return {
-    //     data: data,
-    //     success: true,
-    //     code: 10009
-    //   }
-    // } else {
-    //   return {
-    //     success: false,
-    //     code: 10010
-    //   }
-    // }
   }
 
   // 创建
@@ -558,6 +250,186 @@ export class CommodityCommodityService {
         remove: payload.remove
       })
     }
+
+  }
+
+  async relationCreate(payload) {
+    if(payload.categorys && payload.categorys.length){
+      await this.commodityCategoryService.relationCreate({
+        relation: payload.categorys,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.classifications && payload.classifications.length){
+      await this.commodityClassificationService.relationCreate({
+        relation: payload.classifications,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.materials && payload.materials.length){
+      await this.commodityMaterialService.relationCreate({
+        relation: payload.materials,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.models && payload.models.length){
+      await this.commodityModelService.relationCreate({
+        relation: payload.models,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.places && payload.places.length){
+      await this.commodityPlaceService.relationCreate({
+        relation: payload.places,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.ruiwus && payload.ruiwus.length){
+      await this.commodityRuiwuService.relationCreate({
+        relation: payload.ruiwus,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.shapes && payload.shapes.length){
+      await this.commodityShapeService.relationCreate({
+        relation: payload.shapes,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.specifications && payload.specifications.length){
+      await this.commoditySpecificationService.relationCreate({
+        relation: payload.specifications,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.styles && payload.styles.length){
+      await this.commodityStyleService.relationCreate({
+        relation: payload.styles,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.techniques && payload.techniques.length){
+      await this.commodityTechniqueService.relationCreate({
+        relation: payload.techniques,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.themes && payload.themes.length){
+      await this.commodityThemeService.relationCreate({
+        relation: payload.themes,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.types && payload.types.length){
+      await this.commodityTypeService.relationCreate({
+        relation: payload.types,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.uses && payload.uses.length){
+      await this.commodityUseService.relationCreate({
+        relation: payload.uses,
+        commodityId: payload.commodityId
+      })
+    }
+
+  }
+
+
+
+
+
+
+  async relationUpdate(payload) {
+
+    if(payload.categorys && payload.categorys.length){
+      await this.commodityCategoryService.relationUpdate({
+        relation: payload.categorys,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.classifications && payload.classifications.length){
+      await this.commodityClassificationService.relationUpdate({
+        relation: payload.classifications,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.materials && payload.materials.length){
+      await this.commodityMaterialService.relationUpdate({
+        relation: payload.materials,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.models && payload.models.length){
+      await this.commodityModelService.relationUpdate({
+        relation: payload.models,
+        commodityId: payload.commodityId
+      })
+    }
+
+    if(payload.places && payload.places.length){
+      await this.commodityPlaceService.relationUpdate({
+        relation: payload.places,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.ruiwus && payload.ruiwus.length){
+      await this.commodityRuiwuService.relationUpdate({
+        relation: payload.ruiwus,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.shapes && payload.shapes.length){
+      await this.commodityShapeService.relationUpdate({
+        relation: payload.shapes,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.specifications && payload.specifications.length){
+      await this.commoditySpecificationService.relationUpdate({
+        relation: payload.specifications,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.styles && payload.styles.length){
+      await this.commodityStyleService.relationUpdate({
+        relation: payload.styles,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.techniques && payload.techniques.length){
+      await this.commodityTechniqueService.relationUpdate({
+        relation: payload.techniques,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.themes && payload.themes.length){
+      await this.commodityThemeService.relationUpdate({
+        relation: payload.themes,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.types && payload.types.length){
+      await this.commodityTypeService.relationUpdate({
+        relation: payload.types,
+        commodityId: payload.commodityId
+      })
+    }
+    if(payload.uses && payload.uses.length){
+      await this.commodityUseService.relationUpdate({
+        relation: payload.uses,
+        commodityId: payload.commodityId
+      })
+    }
+
+
 
   }
 
@@ -722,14 +594,14 @@ export class CommodityCommodityService {
    * 通过商品id
    */
   async retrieve(payload) {
-    console.log("retrieve", payload)
+    console.log("commodity retrieve", payload)
     let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
-    console.log("data", data)
+    console.log("commodity retrieve data", data)
     if(payload.isLocale) {
       const filterData = this.filter(payload.locale || 'zh-cn', [data]);
       data = filterData[0];
     }
-    console.log("data", data)
+    // console.log("data", data)
     if (data) {
       return {
         data: data,
@@ -778,7 +650,7 @@ export class CommodityCommodityService {
     async retrieveCategory(id) {
       let data = await this.baseCommodityServer.BaseRetrieveCategory(id);
 
-      console.log("data", data)
+      // console.log("data", data)
       if (data) {
         return {
           data: data,
@@ -835,7 +707,7 @@ export class CommodityCommodityService {
   // 搜索商品
   async search(payload) {
     let result = await this.baseCommodityServer.BaseSearch(payload);
-    console.log("search", result)
+    // console.log("search", result)
     let data = result[0];
     let total = result[1];
     if(payload.isLocale){

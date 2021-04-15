@@ -3,6 +3,7 @@ import { CommodityShapeEntity } from "../../../../entity/commodity/commodity-opt
 export declare class BaseCommodityShapeServer {
     CommodityShapeEntity: Repository<CommodityShapeEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
-    BaseRetrieve(payload: any): Promise<CommodityShapeEntity>;
+    BaseRetrieveCommodityId(commodityId: any): Promise<CommodityShapeEntity[]>;
+    BaseRetrieveID(payload: any): Promise<CommodityShapeEntity>;
     BaseRelationSet(payload: any): Promise<void>;
 }

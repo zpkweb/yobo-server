@@ -14,11 +14,17 @@ export class CommodityColorEntity {
 
   // 色值 16进制
   @Column()
-  name: string;
+  startColor: string;
 
   // 色值 10进制
   @Column()
-  value: number;
+  startColorValue: number;
+
+  @Column()
+  endColor: string;
+
+  @Column()
+  endColorValue: number;
 
   //  创建日期
   @CreateDateColumn({

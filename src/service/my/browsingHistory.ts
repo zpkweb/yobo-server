@@ -164,7 +164,7 @@ export class MyBrowsingHistoryService {
     if(payload.isLocale) {
       data = this.filter(payload.locale, data);
     }
-    console.log("data", data)
+    // console.log("data", data)
     if(data){
       return {
         data: {

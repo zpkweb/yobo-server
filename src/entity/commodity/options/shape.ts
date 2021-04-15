@@ -56,7 +56,7 @@ export class CommodityOptionsShapeEntity {
   updatedDate: Date;
 
   // 关联商品
-  @ManyToMany(type => CommodityShapeEntity, CommodityShapeEntity => CommodityShapeEntity.shapes, {
+  @ManyToMany(type => CommodityShapeEntity, CommodityShapeEntity => CommodityShapeEntity.options, {
     cascade: true
   })
 

@@ -245,7 +245,7 @@ export class CommodityOptionService {
     locale = 'zh-cn'
   } = {}) {
     let data: any;
-    console.log("commodityOptionsTypeRetrieveAll", type, isLocale, locale)
+    // console.log("commodityOptionsTypeRetrieveAll", type, isLocale, locale)
 
     switch (type) {
       case 'category':

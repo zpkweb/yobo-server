@@ -1,6 +1,8 @@
 import { BaseCommodityStyleServer } from "../../base/commodity/commodity-options/style";
+import { CommodityOptionsStyleService } from "../options/style";
 export declare class CommodityStyleService {
     baseCommodityStyleServer: BaseCommodityStyleServer;
+    commodityOptionsStyleService: CommodityOptionsStyleService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -19,5 +21,25 @@ export declare class CommodityStyleService {
         code: number;
         data?: undefined;
     }>;
+    retrieveCommodityId(commodityId: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/style").CommodityStyleEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrieveID(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/style").CommodityStyleEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     relation(payload: any): Promise<void>;
+    relationCreate(payload: any): Promise<void>;
+    relationUpdate(payload: any): Promise<void>;
 }

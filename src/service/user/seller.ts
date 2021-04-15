@@ -289,7 +289,7 @@ export class SellerService {
 
   async searchSeller(payload) {
     let result = await this.baseSellerServer.baseSearchSeller(payload);
-      console.log("searchSeller result", result)
+      // console.log("searchSeller result", result)
       let data = result[0];
       let total = result[1];
       if (data) {
@@ -312,14 +312,14 @@ export class SellerService {
 
   async retrieveSellerAll(payload) {
     let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
-      console.log("searchSeller", result)
+      // console.log("searchSeller", result)
       let data = result[0];
       let total = result[1];
 
       if(payload.isLocale){
         data = this.retrieveSellerAllFilter(payload.locale, data)
       }
-      console.log("searchSellerFilter", data)
+      // console.log("searchSellerFilter", data)
       if (data) {
         return {
           data: {

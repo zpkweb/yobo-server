@@ -102,6 +102,7 @@ export declare class CommodityService {
     retrieveOption({ type, }?: {
         type?: string;
     }): Promise<any>;
+    retrieveOptionId(payload: any): Promise<any>;
     retrieveOptionAll(payload: any): Promise<any>;
     updateOptions({ type, id, img, zhcn, enus, jajp, eses }?: {
         type?: string;

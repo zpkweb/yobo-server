@@ -70,7 +70,6 @@ export default (appInfo: EggAppInfo) => {
 
 
   // add your config here
-  config.middleware = [];
 
   config.security = {
     // 关闭 csrf

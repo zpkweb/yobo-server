@@ -56,7 +56,7 @@
    updatedDate: Date;
 
    // // 关联商品选项
-   @ManyToMany(type => CommodityRuiwuEntity, CommodityRuiwuEntity => CommodityRuiwuEntity.ruiwus, {
+   @ManyToMany(type => CommodityRuiwuEntity, CommodityRuiwuEntity => CommodityRuiwuEntity.options, {
      cascade: true
    })
    commoditys: CommodityRuiwuEntity;

@@ -16,20 +16,31 @@ export class BaseCommodityPlaceServer {
       .insert()
       .into(CommodityPlaceEntity)
       .values({
-        commodityName: payload.commodityName,
-        placeName: payload.placeName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityPlaceEntity
       .createQueryBuilder('place')
-      .where('place.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('place.placeName = :placeName', { placeName: payload.placeName })
-      .getOne();
+      .leftJoinAndSelect('place.commoditys', 'commoditys')
+      .leftJoinAndSelect('place.options', 'options')
+      .where('place.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityPlaceEntity
+      .createQueryBuilder('place')
+      .leftJoinAndSelect('place.commoditys', 'commoditys')
+      .leftJoinAndSelect('place.options', 'options')
+      .where('place.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('place.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityPlaceEntity

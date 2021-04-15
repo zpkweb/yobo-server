@@ -16,20 +16,31 @@ export class BaseCommodityTypeServer {
       .insert()
       .into(CommodityTypeEntity)
       .values({
-        commodityName: payload.commodityName,
-        typeName: payload.typeName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityTypeEntity
       .createQueryBuilder('type')
-      .where('type.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('type.typeName = :typeName', { typeName: payload.typeName })
-      .getOne();
+      .leftJoinAndSelect('type.commoditys', 'commoditys')
+      .leftJoinAndSelect('type.options', 'options')
+      .where('type.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityTypeEntity
+      .createQueryBuilder('type')
+      .leftJoinAndSelect('type.commoditys', 'commoditys')
+      .leftJoinAndSelect('type.options', 'options')
+      .where('type.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('type.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityTypeEntity

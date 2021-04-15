@@ -16,20 +16,31 @@ export class BaseCommodityThemeServer {
       .insert()
       .into(CommodityThemeEntity)
       .values({
-        commodityName: payload.commodityName,
-        themeName: payload.themeName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityThemeEntity
       .createQueryBuilder('theme')
-      .where('theme.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('theme.themeName = :themeName', { themeName: payload.themeName })
-      .getOne();
+      .leftJoinAndSelect('theme.commoditys', 'commoditys')
+      .leftJoinAndSelect('theme.options', 'options')
+      .where('theme.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityThemeEntity
+      .createQueryBuilder('theme')
+      .leftJoinAndSelect('theme.commoditys', 'commoditys')
+      .leftJoinAndSelect('theme.options', 'options')
+      .where('theme.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('theme.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityThemeEntity

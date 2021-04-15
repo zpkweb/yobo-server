@@ -16,17 +16,29 @@ export class BaseCommodityMaterialServer {
       .insert()
       .into(CommodityMaterialEntity)
       .values({
-        commodityName: payload.commodityName,
-        materialName: payload.materialName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityMaterialEntity
       .createQueryBuilder('material')
-      .where('material.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('material.materialName = :materialName', { materialName: payload.materialName })
+      .leftJoinAndSelect('material.commoditys', 'commoditys')
+      .leftJoinAndSelect('material.options', 'options')
+      .where('material.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
+  }
+
+  async BaseRetrieveID(payload) {
+    return await this.CommodityMaterialEntity
+      .createQueryBuilder('material')
+      .leftJoinAndSelect('material.commoditys', 'commoditys')
+      .leftJoinAndSelect('material.options', 'options')
+      .where('material.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('material.optionId = :optionId', { optionId: payload.optionId })
       .getOne();
   }
 

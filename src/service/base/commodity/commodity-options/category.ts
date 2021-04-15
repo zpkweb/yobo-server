@@ -16,19 +16,31 @@ export class BaseCommodityCategoryServer {
       .insert()
       .into(CommodityCategoryEntity)
       .values({
-        commodityName: payload.commodityName,
-        categoryName: payload.categoryName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityCategoryEntity
       .createQueryBuilder('category')
-      .where('category.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('category.categoryName = :categoryName', { categoryName: payload.categoryName })
+      .leftJoinAndSelect('category.commoditys', 'commoditys')
+      .leftJoinAndSelect('category.options', 'options')
+      .where('category.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
+  }
+
+  async BaseRetrieveID(payload) {
+    return await this.commodityCategoryEntity
+      .createQueryBuilder('category')
+      .leftJoinAndSelect('category.commoditys', 'commoditys')
+      .leftJoinAndSelect('category.options', 'options')
+      .where('category.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('category.optionId = :optionId', { optionId: payload.optionId })
       .getOne();
   }
+
 
 
   async BaseRelationSet(payload) {
@@ -38,6 +50,4 @@ export class BaseCommodityCategoryServer {
       .of(payload.of)
       .set(payload.set);
   }
-
-
 }

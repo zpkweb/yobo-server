@@ -63,7 +63,7 @@ export class ServerSellerController {
   // 艺术家搜索
   @Get('/search',{summary:'艺术家搜索'})
   async search(@Query(ALL) searchParams) {
-    console.log('search', searchParams)
+    // console.log('search', searchParams)
     // return await this.sellerService.searchSeller(searchQuery);
     const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;

@@ -3,6 +3,7 @@ import { CommodityThemeEntity } from "../../../../entity/commodity/commodity-opt
 export declare class BaseCommodityThemeServer {
     CommodityThemeEntity: Repository<CommodityThemeEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
-    BaseRetrieve(payload: any): Promise<CommodityThemeEntity>;
+    BaseRetrieveCommodityId(commodityId: any): Promise<CommodityThemeEntity[]>;
+    BaseRetrieveID(payload: any): Promise<CommodityThemeEntity>;
     BaseRelationSet(payload: any): Promise<void>;
 }

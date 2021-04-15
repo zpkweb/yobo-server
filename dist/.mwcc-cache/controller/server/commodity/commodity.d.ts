@@ -51,6 +51,7 @@ export declare class AdminCommodityController {
         code: number;
     }>;
     retrieveOption(type: any): Promise<any>;
+    retrieveOptionId(param: any): Promise<any>;
     retrieveCategory(category: any): Promise<{
         data: import("../../../entity/commodity/commodity").CommodityEntity[];
         success: boolean;

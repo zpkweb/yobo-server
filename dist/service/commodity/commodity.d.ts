@@ -17,6 +17,7 @@ import { CommodityTechniqueService } from "./commodity-options/technique";
 import { CommodityThemeService } from "./commodity-options/theme";
 import { CommodityTypeService } from "./commodity-options/type";
 import { CommodityUseService } from "./commodity-options/use";
+import { CommodityOptionService } from "./commodityOption";
 export declare class CommodityCommodityService {
     baseCommodityServer: BaseCommodityServer;
     commodityAttributeName: CommodityAttributeName;
@@ -37,6 +38,7 @@ export declare class CommodityCommodityService {
     commodityThemeService: CommodityThemeService;
     commodityTypeService: CommodityTypeService;
     commodityUseService: CommodityUseService;
+    commodityOptionService: CommodityOptionService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -56,6 +58,8 @@ export declare class CommodityCommodityService {
         data?: undefined;
     }>;
     relation(payload: any): Promise<void>;
+    relationCreate(payload: any): Promise<void>;
+    relationUpdate(payload: any): Promise<void>;
     hasCommodityPhoto(payload: any): Promise<{
         data: import("../../entity/commodity/commodity").CommodityEntity;
         success: boolean;

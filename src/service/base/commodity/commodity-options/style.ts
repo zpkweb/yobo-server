@@ -16,20 +16,31 @@ export class BaseCommodityStyleServer {
       .insert()
       .into(CommodityStyleEntity)
       .values({
-        commodityName: payload.commodityName,
-        styleName: payload.styleName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityStyleEntity
       .createQueryBuilder('style')
-      .where('style.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('style.styleName = :styleName', { styleName: payload.styleName })
-      .getOne();
+      .leftJoinAndSelect('style.commoditys', 'commoditys')
+      .leftJoinAndSelect('style.options', 'options')
+      .where('style.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityStyleEntity
+      .createQueryBuilder('style')
+      .leftJoinAndSelect('style.commoditys', 'commoditys')
+      .leftJoinAndSelect('style.options', 'options')
+      .where('style.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('style.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityStyleEntity

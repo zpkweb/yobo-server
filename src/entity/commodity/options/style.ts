@@ -56,7 +56,7 @@ export class CommodityOptionsStyleEntity {
   updatedDate: Date;
 
   // // 关联商品选项
-  @ManyToMany(type => CommodityStyleEntity, CommodityStyleEntity => CommodityStyleEntity.styles, {
+  @ManyToMany(type => CommodityStyleEntity, CommodityStyleEntity => CommodityStyleEntity.options, {
     cascade: true
   })
   commoditys: CommodityStyleEntity;

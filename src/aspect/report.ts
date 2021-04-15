@@ -32,15 +32,15 @@ export class ReportInfo implements IMethodAspect {
 
   async afterReturn(point: JoinPoint, result) {
     // console.log("point", point)
-    const resultData = await result;
+    // const resultData = await result;
     // console.log("afterReturn result", resultData)
-    return {
-      code: resultData.code,
-      success: resultData.success,
-      status: resultData.success ? 200 : 500,
-      message: point.target.ctx.__(resultData.code),
-      data: resultData.data
-    }
+    // return {
+    //   code: resultData.code,
+    //   success: resultData.success,
+    //   status: resultData.success ? 200 : 500,
+    //   message: point.target.ctx.__(resultData.code),
+    //   data: resultData.data
+    // }
 
 
   }

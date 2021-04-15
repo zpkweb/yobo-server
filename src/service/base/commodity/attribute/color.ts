@@ -18,8 +18,10 @@ export class BaseCommodityColorServer {
       .insert()
       .into(CommodityColorEntity)
       .values({
-        'value': payload.value,
-        'name': payload.name
+        'startColor': payload.startColor,
+        'startColorValue': payload.startColorValue,
+        'endColor': payload.endColor,
+        'endColorValue': payload.endColorValue,
       })
       .execute();
   }
@@ -53,8 +55,6 @@ export class BaseCommodityColorServer {
     return await this.commodityColorEntity
       .createQueryBuilder('color')
       .where('color.commodityId = :commodityId', { commodityId: payload.commodityId })
-      .orWhere('color.name = :name', { name: payload.name })
-      .orWhere('color.value = :value', { value: payload.value })
       .getMany();
   }
 

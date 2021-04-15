@@ -16,20 +16,31 @@ export class BaseCommodityShapeServer {
       .insert()
       .into(CommodityShapeEntity)
       .values({
-        commodityName: payload.commodityName,
-        shapeName: payload.shapeName,
+        commodityId: payload.commodityId,
+        optionId: payload.optionId,
       })
       .execute();
   }
 
-  async BaseRetrieve(payload) {
+
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityShapeEntity
       .createQueryBuilder('shape')
-      .where('shape.commodityName = :commodityName', { commodityName: payload.commodityName })
-      .orWhere('shape.shapeName = :shapeName', { shapeName: payload.shapeName })
-      .getOne();
+      .leftJoinAndSelect('shape.commoditys', 'commoditys')
+      .leftJoinAndSelect('shape.options', 'options')
+      .where('shape.commodityId = :commodityId', { commodityId: commodityId })
+      .getMany();
   }
 
+  async BaseRetrieveID(payload) {
+    return await this.CommodityShapeEntity
+      .createQueryBuilder('shape')
+      .leftJoinAndSelect('shape.commoditys', 'commoditys')
+      .leftJoinAndSelect('shape.options', 'options')
+      .where('shape.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .andWhere('shape.optionId = :optionId', { optionId: payload.optionId })
+      .getOne();
+  }
 
   async BaseRelationSet(payload) {
     await this.CommodityShapeEntity

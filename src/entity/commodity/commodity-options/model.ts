@@ -14,10 +14,13 @@
    id: number;
 
    @Column()
-   commodityName: string;
+   commodityId: string;
+
+
 
    @Column()
-   modelName: string;
+   optionId: string;
+
 
    //  创建日期
    @CreateDateColumn({
@@ -36,7 +39,6 @@
       onDelete: "CASCADE"
    })
    @JoinColumn({
-    name: 'commodityId',
     referencedColumnName: 'commodityId'
   })
    commoditys: CommodityEntity;
@@ -45,9 +47,8 @@
     onDelete: "CASCADE"
    })
    @JoinColumn({
-    name: 'modelId',
     referencedColumnName: 'id'
   })
-   models: CommodityOptionsModelEntity;
+  options: CommodityOptionsModelEntity;
 
  }

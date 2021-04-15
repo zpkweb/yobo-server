@@ -2,10 +2,10 @@ import { CommodityOptionsModelEntity } from "../options/model";
 import { CommodityEntity } from "../commodity";
 export declare class CommodityModelEntity {
     id: number;
-    commodityName: string;
-    modelName: string;
+    commodityId: string;
+    optionId: string;
     createdDate: Date;
     updatedDate: Date;
     commoditys: CommodityEntity;
-    models: CommodityOptionsModelEntity;
+    options: CommodityOptionsModelEntity;
 }
