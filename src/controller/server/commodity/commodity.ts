@@ -112,7 +112,14 @@ export class AdminCommodityController {
     return await this.commodityService.createOptions({type, options: optionsBody});
   }
 
-
+  // 查询所有商品选项
+  @Get('/options',{summary:'查询所有商品选项'})
+  async retrieveOptions(@Query(ALL) param) {
+    return await this.commodityService.retrieveOptions({
+      ...param,
+      isLocale: true
+    });
+  }
 
   // 查找商品选项
   @Get('/retrieve/:type',{summary:'查找商品选项'})
@@ -129,10 +136,7 @@ export class AdminCommodityController {
     });
   }
 
-  @Get('/category/retrieve')
-  async retrieveCategory(@Query('category') category) {
-    return await this.commodityService.fingCategory(category)
-  }
+
 
   // 更新商品选项
   @Post('/update/:type',{summary:'更新商品选项'})

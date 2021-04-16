@@ -36,7 +36,6 @@
     * 查询
     */
    async BaseRetrieve(payload) {
-     console.log("BaseRetrieve", payload)
      return await this.commodityOptionsRuiwuEntity
        .createQueryBuilder('Ruiwu')
        .where('Ruiwu.zh-cn = :zhcn', { zhcn: payload.zhcn })

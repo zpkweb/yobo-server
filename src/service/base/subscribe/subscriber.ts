@@ -39,7 +39,6 @@ export class BaseSubscriberServer {
   }
 
   async BaseRetrieveEmail(email) {
-    console.log("BaseRetrieveEmail", email)
     return await this.subscriberEntity
       .createQueryBuilder('subscriber')
       .where("subscriber.email = :email", { email })

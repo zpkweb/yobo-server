@@ -58,7 +58,6 @@ export class LoginService {
         code: 10202
       }
     }
-    console.log("login", user)
     // 判断用户密码是否正确
     const userPassword = await this.validatePassword({
       userId: user.userId,
@@ -94,7 +93,6 @@ export class LoginService {
     // 后台管理登录
 
     const user:any = await this.baseUserServer.baseLoginAdmin(payload)
-    console.log("user", user)
 
     if(!user){
       // 用户不存在
@@ -134,7 +132,6 @@ export class LoginService {
     }
     if(loginAuth){
       // 获取当前用户身份的权限菜单
-      console.log("user.identitys", user.identitys)
       const menu:any = await this.identityListService.retrieveIdentityList({
         index: authMax
       })

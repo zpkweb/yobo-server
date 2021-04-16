@@ -36,16 +36,13 @@ export class UserLoginController {
   // 注册成为普通用户
   @Post('/register',{summary: '注册成为普通用户'})
   async register(@Body(ALL) registerBody) {
-    console.log("register", registerBody)
     let data:any =  await this.userRegisterService.registerUser(registerBody);
-    console.log("register data", data)
     if(data.success){
       data.data.token = await this.jwt.sign({
         ...data,
         identitys: data.identitys
     }, this.jwtConfig.secret);
     }
-    console.log("register data", data)
     return data;
 
   }
@@ -54,7 +51,6 @@ export class UserLoginController {
   @Post('/seller/apply',{summary:'申请成为艺术家'})
   async apply(@Body(ALL) applySellerBody) {
     const data =  await this.userRegisterService.applySeller(applySellerBody);
-    console.log("申请成为艺术家", data)
     return data;
 
   }
@@ -69,7 +65,6 @@ export class UserLoginController {
         identitys: data.identitys
       }, this.jwtConfig.secret);
     }
-    console.log("login data", data)
     return data;
 
   }

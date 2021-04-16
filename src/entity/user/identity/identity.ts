@@ -80,7 +80,7 @@ export class UserIdentityEntity {
   seller: UserSellerEntity;
 
   // 关联 身份列表
-  @ManyToOne(type => UserIdentityListEntity, UserIdentityListEntity => UserIdentityListEntity.identitys, {
+  @ManyToOne(type => UserIdentityListEntity, userIdentityListEntity => userIdentityListEntity.identitys, {
     cascade: true,
     onDelete: 'SET NULL'
   })

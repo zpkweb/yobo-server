@@ -38,7 +38,6 @@ export class UserEntity {
 
   // @AfterInsert()
   // repealtUUID() {
-  //   console.log("repealtUUID", this.userId, this.userId.replace('-', ''))
   //   // this.userId = this.userId.replace('-', '')
   // }
 

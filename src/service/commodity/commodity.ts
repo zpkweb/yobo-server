@@ -86,7 +86,6 @@ export class CommodityCommodityService {
 
   // 创建商品
   async create(payload) {
-    console.log("create", payload)
 
     // 状态 state
     // 宽度 width
@@ -197,7 +196,6 @@ export class CommodityCommodityService {
     }
 
     await this.relationCreate(payload);
-    // console.log("商品 关联 商家", { commodityId: payload.commodityId, sellerId: payload.sellerId })
     // 商品 关联 商家
     if(payload.sellerId){
       await this.relation({
@@ -594,14 +592,11 @@ export class CommodityCommodityService {
    * 通过商品id
    */
   async retrieve(payload) {
-    console.log("commodity retrieve", payload)
     let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
-    console.log("commodity retrieve data", data)
     if(payload.isLocale) {
       const filterData = this.filter(payload.locale || 'zh-cn', [data]);
       data = filterData[0];
     }
-    // console.log("data", data)
     if (data) {
       return {
         data: data,
@@ -624,7 +619,6 @@ export class CommodityCommodityService {
     async retrieveAll(payload) {
       // 商品Id查找商品
       let result = await this.baseCommodityServer.BaseRetrieveAll(payload);
-      console.log("retrieveAll", result)
       let data = result[0];
       let total = result[1];
       if(payload.isLocale){
@@ -650,7 +644,6 @@ export class CommodityCommodityService {
     async retrieveCategory(id) {
       let data = await this.baseCommodityServer.BaseRetrieveCategory(id);
 
-      // console.log("data", data)
       if (data) {
         return {
           data: data,
@@ -707,7 +700,6 @@ export class CommodityCommodityService {
   // 搜索商品
   async search(payload) {
     let result = await this.baseCommodityServer.BaseSearch(payload);
-    // console.log("search", result)
     let data = result[0];
     let total = result[1];
     if(payload.isLocale){

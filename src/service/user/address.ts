@@ -19,7 +19,6 @@ export default class UserAddressService {
    */
   async create(payload) {
     let address = await this.baseUserServer.baseCreateUserAddress(payload);
-    console.log("create address", address)
     if(address.identifiers[0].id){
 
       await this.userAddressEntity
@@ -73,7 +72,6 @@ export default class UserAddressService {
   }
 
   async update(payload) {
-    console.log("update", payload)
     const address = await this.baseUserServer.baseUpdateUserAddress({
       name: payload.name || '',
       phone: payload.phone || '',
@@ -133,11 +131,9 @@ export default class UserAddressService {
    * @param payload
    */
   async updateAddress(payload) {
-    console.log("addressUpdate", payload)
     let updateAddress:any;
     // 获取用户地址
     const userAddress = await this.retrieve(payload.userId);
-    console.log("userAddress", userAddress)
     if(userAddress.success){
       // 更新
       updateAddress = await this.update({
@@ -148,7 +144,6 @@ export default class UserAddressService {
         address: payload.detail || '',
         userId: payload.userId || ''
       })
-      console.log("updateAddress", updateAddress)
       if(!updateAddress.success) {
         return updateAddress;
       }
@@ -162,7 +157,6 @@ export default class UserAddressService {
         address: payload.detail || '',
         userId: payload.userId || ''
       });
-      console.log("createAddress", updateAddress)
       if(!updateAddress.success) {
         return updateAddress;
       }

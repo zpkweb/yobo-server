@@ -27,16 +27,6 @@ export default (appInfo: EggAppInfo) => {
     "logging": false
   }
 
-  // config.orm = {
-  //   "type": "mysql",
-  //   "host": "localhost",
-  //   "port": 3306,
-  //   "username": "root",
-  //   "password": "Test123!@#",
-  //   "database": "yobo",
-  //   "synchronize": true,
-  //   "logging": false
-  // }
 
   // config.host = {
   //   origin: 'http://localhost:7001'
@@ -51,6 +41,9 @@ export default (appInfo: EggAppInfo) => {
   //   "synchronize": true,
   //   "logging": false
   // }
+
+
+
 
   config.security = {
     // 关闭 csrf

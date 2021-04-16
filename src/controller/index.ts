@@ -37,7 +37,6 @@ export class apiController {
   @Get()
   @Get('/api')
   async api(ctx) {
-    console.log("NODE_ENV", this.app.getEnv());
     await ctx.render('api.nj');
   }
 }

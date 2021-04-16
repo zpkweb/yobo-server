@@ -50,17 +50,13 @@ export declare class AdminCommodityController {
         success: boolean;
         code: number;
     }>;
+    retrieveOptions(param: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    }>;
     retrieveOption(type: any): Promise<any>;
     retrieveOptionId(param: any): Promise<any>;
-    retrieveCategory(category: any): Promise<{
-        data: import("../../../entity/commodity/commodity").CommodityEntity[];
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
     updateOptions(type: any, optionsBody: any): Promise<any>;
     deleteOptions(type: any, optionsBody: any): Promise<any>;
 }

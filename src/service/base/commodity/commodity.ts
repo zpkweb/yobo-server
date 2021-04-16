@@ -113,7 +113,6 @@ export class BaseCommodityServer {
    * 选项：shape theme category technique
    */
     async BaseRelationSet(payload) {
-      console.log("BaseRelationSet", payload)
 
       await this.commodityEntity
         .createQueryBuilder()
@@ -142,7 +141,6 @@ export class BaseCommodityServer {
    * @param commodityId
    */
     async BaseHas(commodityId) {
-      console.log("BaseHas commodityId", commodityId)
       return await this.commodityEntity
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.name', 'name')
@@ -167,7 +165,6 @@ export class BaseCommodityServer {
    * 查询商品
    */
   async BaseRetrieve(commodityId) {
-    console.log("commodityId", commodityId)
     const data =  await this.commodityEntity
       .createQueryBuilder('commodity')
       .leftJoinAndSelect('commodity.name', 'name')
@@ -218,7 +215,6 @@ export class BaseCommodityServer {
       .addSelect('commodity.createdDate')
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
-    console.log("commodity BaseRetrieve data", data)
     return data
   }
   /**
@@ -263,7 +259,6 @@ export class BaseCommodityServer {
       .leftJoinAndSelect('commodity.categorys', 'category')
       .where("category.categoryId IN (:...categorys)", { categorys : categorys})
       .getMany();
-    console.log("category ", category)
 
     return category;
   }
@@ -516,7 +511,6 @@ export class BaseCommodityServer {
       .take(payload.pageSize)
       .getManyAndCount();
       // .getSql()
-    console.log("search data", data)
     return data;
   }
   // 交集
@@ -953,12 +947,10 @@ export class BaseCommodityServer {
       .take(payload.pageSize)
       .getManyAndCount();
       // .getSql()
-    console.log("search data", data)
     return data;
 
   }
   async BaseSearch(payload) {
-    console.log("BaseSearch", payload)
 
     const where: any = {};
 
@@ -998,7 +990,6 @@ export class BaseCommodityServer {
     }
 
 
-    console.log("where", where)
 
     return this.BaseSearchUnion(payload, where)
 
@@ -1026,7 +1017,6 @@ export class BaseCommodityServer {
    * @param payload
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { commodityId, ...setData } = payload;
     return await this.commodityEntity
       .createQueryBuilder()

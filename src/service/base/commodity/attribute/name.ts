@@ -76,7 +76,6 @@ export class BaseCommodityNameServer {
    * 修改商品名称
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { commodityId, ...setData } = payload;
     return await this.commodityNameEntity
       .createQueryBuilder()

@@ -12,10 +12,8 @@ export class SubscriberServer {
   userService: UserService;
 
   async create(payload) {
-    console.log("SubscriberServer create", payload)
     // 查询邮箱是否订阅
     const hasEmail = await this.retrieveEmail(payload.email);
-    console.log("查询邮箱是否订阅", JSON.stringify(hasEmail))
 
     // 已订阅
     if(hasEmail.success){
@@ -43,7 +41,6 @@ export class SubscriberServer {
       userEmail: user.data.email,
       userPhone: user.data.phone
     })
-    console.log("创建订阅", subscriber)
     if(subscriber.identifiers[0].id){
       // return await this.retrieveEmail(payload.email)
       // 关联用户

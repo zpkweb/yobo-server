@@ -48,15 +48,6 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
-    fingCategory(id: any): Promise<{
-        data: import("../../entity/commodity/commodity").CommodityEntity[];
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
     search(payload: any): Promise<{
         data: {
             list: import("../../entity/commodity/commodity").CommodityEntity[];
@@ -95,6 +86,14 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     } | {
+        data: any;
+        success: boolean;
+        code: number;
+    }>;
+    retrieveOptions({ isLocale, locale }: {
+        isLocale?: boolean;
+        locale?: string;
+    }): Promise<{
         data: any;
         success: boolean;
         code: number;

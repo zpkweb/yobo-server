@@ -37,7 +37,6 @@ export class CommodityService {
 
   // 创建
   async create(payload) {
-    console.log("commodity index create", payload)
     // 查询商品是否存在
     const commodity = await this.commodityAttributeName.hasName({
       'zh-cn': payload['zh-cn'],
@@ -46,7 +45,6 @@ export class CommodityService {
       'fr-fr': payload['fr-fr'],
       'es-es': payload['es-es']
     });
-    console.log("create commodity", commodity)
     if(commodity.success){
       return {
         success: false,
@@ -55,7 +53,6 @@ export class CommodityService {
     }
 
     const commodityNew =  await this.commodityCommodityService.create(payload);
-    // console.log("commodityNew", commodityNew)
     if(!commodityNew.success){
       return commodityNew
     }
@@ -87,14 +84,11 @@ export class CommodityService {
     });
   }
 
-  async fingCategory(id) {
-    return await this.commodityCommodityService.retrieveCategory(id);
-  }
+
 
 
   // 搜索商品
   async search(payload) {
-    // console.log("search", payload)
     let price;
     if(payload.price){
       if(typeof payload.price == 'string') {
@@ -221,10 +215,8 @@ export class CommodityService {
 
   // 更新商品
   async update(payload) {
-    console.log("commodity payload", payload)
     // 查询商品是否存在
     const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
-    console.log("commodity", commodity)
     //  商品不存在
     if(!commodity.success){
       return {
@@ -239,7 +231,6 @@ export class CommodityService {
       width: payload.width,
       height: payload.height
     })
-    console.log("commodityUpdate", commodityUpdate)
     // 更新失败
     if (!commodityUpdate.success) {
       return commodityUpdate
@@ -255,7 +246,6 @@ export class CommodityService {
       'fr-fr': payload.name['fr-fr'] || '',
       'es-es': payload.name['es-es'] || ''
     })
-    console.log("commodityName", commodityName)
     if(!commodityName.success) {
       return commodityName;
     }
@@ -269,7 +259,6 @@ export class CommodityService {
       'fr-fr': payload.desc['fr-fr'] || '',
       'es-es': payload.desc['es-es'] || ''
     });
-    console.log("commodityDesc", commodityDesc)
     if(!commodityDesc.success) {
       return commodityDesc;
     }
@@ -283,7 +272,6 @@ export class CommodityService {
       'fr-fr': payload.price['fr-fr'] || 0,
       'es-es': payload.price['es-es'] || 0
     });
-    console.log("commodityPrice", commodityPrice)
     if(!commodityPrice.success) {
       return commodityPrice;
     }
@@ -299,7 +287,6 @@ export class CommodityService {
           name: item.name,
           commodityId: payload.commodityId,
         });
-        console.log("commodityPhotoUpdate", commodityPhotoUpdate)
         if (!commodityPhotoUpdate.success) {
           return commodityPhotoUpdate
         }
@@ -335,7 +322,6 @@ export class CommodityService {
       ...item,
       commodityId: payload.commodityId,
       });
-      console.log("commodityColor", commodityColor)
       if (!commodityColor.success) {
         return commodityColor
       }
@@ -381,7 +367,6 @@ export class CommodityService {
    * type
    */
   async createOptions(payload) {
-    console.log("createOptions", payload)
     let data: any = [];
     if (payload.options && payload.options.length) {
       for (let item of payload.options) {
@@ -395,7 +380,6 @@ export class CommodityService {
           eses: item['es-es'],
           frfr: item['fr-fr'],
         });
-        console.log("commodityOptions", commodityOptions)
         if (commodityOptions.success) {
           return {
             success: false,
@@ -452,6 +436,12 @@ export class CommodityService {
    * type
    */
 
+  async retrieveOptions({
+    isLocale = false,
+    locale = 'zh-cn'
+  }) {
+    return this.commodityOptionService.commodityOptionsRetrieve({isLocale, locale});
+  }
 
   async retrieveOption({
     type = '',
@@ -471,7 +461,6 @@ export class CommodityService {
   }
 
   async retrieveOptionAll(payload) {
-    // console.log("retrieveOptionAll", payload)
     return this.commodityOptionService.commodityOptionsTypeRetrieveAll({
       type: payload.type,
       isLocale: payload.isLocale || false,
@@ -494,10 +483,8 @@ export class CommodityService {
     jajp = '',
     eses = ''
   } = {}) {
-    console.log("updateOptions", type, id, img, zhcn, enus, jajp, eses)
     // 查询商品选项
     const commodityOptions = await this.commodityOptionService.commodityOptionsTypeRetrieveId({type, id});
-    console.log("commodityOptions", commodityOptions )
     if (!commodityOptions.success) {
       return {
         success: false,

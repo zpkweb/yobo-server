@@ -74,7 +74,6 @@ export class CommodityOptionsThemeService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    console.log("查询所有", isLocale)
     let data = await this.baseCommodityOptionsThemeServer.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)

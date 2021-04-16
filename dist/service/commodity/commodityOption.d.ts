@@ -34,6 +34,14 @@ export declare class CommodityOptionService {
         frfr?: string;
         eses?: string;
     }): Promise<any>;
+    commodityOptionsRetrieve({ isLocale, locale }: {
+        isLocale?: boolean;
+        locale?: string;
+    }): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    }>;
     commodityOptionsTypeRetrieve({ type, img, zhcn, enus, jajp, frfr, eses }?: {
         type?: string;
         img?: string;

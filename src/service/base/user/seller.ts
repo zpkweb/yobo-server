@@ -21,7 +21,6 @@ export class BaseSellerServer {
    * @param payload
    */
   async baseCreateSeller(payload) {
-    console.log("baseCreateSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder()
       .insert()
@@ -45,7 +44,6 @@ export class BaseSellerServer {
    * @param payload
    */
   async baseCreateSellerMetadata(payload) {
-    console.log("baseCreateSellerMetadata", payload)
     return await this.userSellerMetadataEntity
       .createQueryBuilder()
       .insert()
@@ -136,7 +134,6 @@ export class BaseSellerServer {
    * Seller
    */
   async baseSearchSeller(payload) {
-    console.log("baseSearchSeller payload", payload)
 
     const where: any = {};
 
@@ -185,7 +182,6 @@ export class BaseSellerServer {
    * metadata
    */
   async baseUpdateSeller(payload) {
-    console.log("baseUpdateSeller", payload)
     const { sellerId, ...setData } = payload;
     return await this.userSellerEntity
       .createQueryBuilder()
@@ -210,7 +206,6 @@ export class BaseSellerServer {
    * metadata
    */
   async baseUpdateSellerMetadata(payload) {
-    console.log("baseUpdateSellerMetadata", payload)
     const { sellerId, ...setData } = payload;
     return await this.userSellerMetadataEntity
       .createQueryBuilder()
@@ -241,7 +236,6 @@ export class BaseSellerServer {
    * sellerId
    */
   async baseDeleteSeller(sellerId) {
-    console.log("baseDeleteSeller", sellerId)
     return await this.userSellerEntity
       .createQueryBuilder()
       .delete()

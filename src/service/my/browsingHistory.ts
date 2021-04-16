@@ -13,7 +13,6 @@ export class MyBrowsingHistoryService {
 
   // 添加我的商品浏览记录
   async addBrowsingHistory(payload) {
-    console.log("set", payload)
 
     // 查找商品浏览记录
     let browsingHistory:any = await this.hasBrowsingHistory({
@@ -28,7 +27,6 @@ export class MyBrowsingHistoryService {
         commodityId: payload.commodityId,
         count: browsingHistory.data.count+1
       })
-      console.log("browsingHistoryCountUpdate", browsingHistoryCountUpdate)
       if(!browsingHistoryCountUpdate.success){
         return browsingHistoryCountUpdate;
       }
@@ -37,7 +35,6 @@ export class MyBrowsingHistoryService {
       browsingHistory = await this.createBrowsingHistory({
         count: 1,
       });
-      console.log("createBrowsingHistory", browsingHistory)
       if(!browsingHistory.success) {
         return browsingHistory
       }
@@ -55,21 +52,18 @@ export class MyBrowsingHistoryService {
 
     // 查找商品浏览数是否存在
     const browsingCount = await this.retrieveBrowsingCount(payload.commodityId);
-    console.log("browsingCount", browsingCount)
     if(browsingCount.success){
       // 更新商品浏览数
       const browsingCountUpdate = await this.updateBrowsingCount({
         commodityId: payload.commodityId,
         count: browsingCount.data.count+1
       })
-      console.log("browsingCountUpdate", browsingCountUpdate)
       if(!browsingCountUpdate.success){
         return browsingCountUpdate;
       }
     }else{
       // 创建商品浏览数
       const browsingCountCreate = await this.createBrowsingCount();
-      console.log("browsingCountCreate", browsingCountCreate)
       if(!browsingCountCreate.success){
         return browsingCountCreate;
       }
@@ -164,7 +158,6 @@ export class MyBrowsingHistoryService {
     if(payload.isLocale) {
       data = this.filter(payload.locale, data);
     }
-    // console.log("data", data)
     if(data){
       return {
         data: {
@@ -259,7 +252,6 @@ export class MyBrowsingHistoryService {
    */
   async retrieveBrowsingCount(commodityId) {
     const data = await this.baseCommodityBrowsingCountServer.BaseRetrieve(commodityId)
-    console.log("retrieveBrowsingCount", data)
     if(data){
       return {
         data: data,

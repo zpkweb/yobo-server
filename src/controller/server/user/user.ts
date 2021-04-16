@@ -46,7 +46,6 @@ export class AdminUserController {
   // 搜索用户
   @Get('/search',{summary:'搜索用户'})
   async searchUser(@Query(ALL) searchParams) {
-    console.log("ctx", searchParams)
 
     // return await this.userService.search(searchParams);
 

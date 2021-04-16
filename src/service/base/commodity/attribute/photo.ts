@@ -71,7 +71,6 @@ export class BaseCommodityPhotoServer {
    * 修改图片
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { commodityId, ...setData } = payload;
     return await this.commodityPhotoEntity
       .createQueryBuilder()

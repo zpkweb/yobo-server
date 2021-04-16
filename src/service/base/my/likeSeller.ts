@@ -32,7 +32,6 @@ export class BaseMyLikeSellerServer {
    * 查找我喜欢的艺术家是否存在
    */
   async BaseHas(payload) {
-    console.log("basehas", payload)
     return await this.myLikeSellerEntity
       .createQueryBuilder('myLikeSeller')
       .where("myLikeSeller.userId = :userId", { userId: payload.userId })
@@ -45,7 +44,6 @@ export class BaseMyLikeSellerServer {
    * @param payload
    */
     async BaseRetrieve(userId) {
-      console.log("BaseRetrieve", userId)
       return await this.myLikeSellerEntity
         .createQueryBuilder('myLikeSeller')
         .leftJoinAndSelect('myLikeSeller.seller', 'seller')

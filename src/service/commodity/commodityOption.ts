@@ -73,7 +73,6 @@ export class CommodityOptionService {
   } = {}) {
     let data: any;
     let createData = { img, zhcn, enus, jajp, frfr, eses };
-    console.log("commodityOptionsTypeCreate createData", createData)
     switch (type) {
       case 'category':
         data = await this.commodityOptionsCategoryService.create(createData);
@@ -120,6 +119,86 @@ export class CommodityOptionService {
     return data;
   }
 
+  async commodityOptionsRetrieve({
+    isLocale = false,
+    locale = 'zh-cn'
+  }){
+    const options:any = {};
+
+
+    const categorys = await this.commodityOptionsCategoryService.retrieveAll({ isLocale, locale });
+    if(categorys.success){
+      options.categorys = categorys.data;
+    }
+
+    const classifications = await this.commodityOptionsClassificationService.retrieveAll({ isLocale, locale });
+    if(classifications.success){
+      options.classifications = classifications.data;
+    }
+
+    const materials = await this.commodityOptionsMaterialService.retrieveAll({ isLocale, locale });
+    if(materials.success){
+      options.materials = materials.data;
+    }
+
+    const models = await this.commodityOptionsModelService.retrieveAll({ isLocale, locale });
+    if(models.success){
+      options.models = models.data;
+    }
+
+    const places = await this.commodityOptionsPlaceService.retrieveAll({ isLocale, locale });
+    if(places.success){
+      options.places = places.data;
+    }
+
+    const ruiwus = await this.commodityOptionsRuiwuService.retrieveAll({ isLocale, locale });
+    if(ruiwus.success){
+      options.ruiwus = ruiwus.data;
+    }
+
+    const shapes = await this.commodityOptionsShapeService.retrieveAll({ isLocale, locale });
+    if(shapes.success){
+      options.shapes = shapes.data;
+    }
+
+    const specifications = await this.commodityOptionsSpecificationService.retrieveAll({ isLocale, locale });
+    if(specifications.success){
+      options.specifications = specifications.data;
+    }
+
+    const styles = await this.commodityOptionsStyleService.retrieveAll({ isLocale, locale });
+    if(styles.success){
+      options.styles = styles.data;
+    }
+
+    const techniques = await this.commodityOptionsTechniqueService.retrieveAll({ isLocale, locale });
+    if(techniques.success){
+      options.techniques = techniques.data;
+    }
+
+    const themes = await this.commodityOptionsThemeService.retrieveAll({ isLocale, locale });
+    if(themes.success){
+      options.themes = themes.data;
+    }
+
+    const types = await this.commodityOptionsTypeService.retrieveAll({ isLocale, locale });
+    if(types.success){
+      options.types = types.data;
+    }
+
+    const uses = await this.commodityOptionsUseService.retrieveAll({ isLocale, locale });
+    if(uses.success){
+      options.uses = uses.data;
+    }
+
+
+    return {
+      data: options,
+      success: true,
+      code: 10009
+    }
+  }
+
   /**
    * 查询商品类型选项
    */
@@ -134,7 +213,6 @@ export class CommodityOptionService {
   } = {}) {
     let data: any;
     let retrieveData = { img, zhcn, enus, jajp, eses };
-    console.log("commodityOptionsTypeRetrieve retrieveData", retrieveData)
     switch (type) {
       case 'category':
         data = await this.commodityOptionsCategoryService.retrieve(retrieveData);
@@ -245,7 +323,6 @@ export class CommodityOptionService {
     locale = 'zh-cn'
   } = {}) {
     let data: any;
-    // console.log("commodityOptionsTypeRetrieveAll", type, isLocale, locale)
 
     switch (type) {
       case 'category':
@@ -310,7 +387,6 @@ export class CommodityOptionService {
   } = {}) {
     let data: any;
     let updateData = { id, img, zhcn, enus, jajp, frfr, eses };
-    console.log("commodityOptionsTypeUpdate", updateData)
     switch (type) {
       case 'category':
         data = await this.commodityOptionsCategoryService.update(updateData);

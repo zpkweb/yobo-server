@@ -12,17 +12,13 @@ export declare class BFFService {
     host: any;
     home(payload: any): Promise<any>;
     buy(payload: any): Promise<{
-        data: import("../../entity/user/seller/seller").UserSellerEntity;
+        data: import("../../entity/commodity/commodity").CommodityEntity;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
-    } | {
-        data: import("../../entity/commodity/commodity").CommodityEntity;
-        success: boolean;
-        code: number;
     } | {
         data: {
             list: import("../../entity/commodity/commodity").CommodityEntity[];
@@ -35,6 +31,10 @@ export declare class BFFService {
             list: import("../../entity/my/browsingHistory").MyBrowsingHistoryEntity[];
             total: number;
         };
+        success: boolean;
+        code: number;
+    } | {
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
         success: boolean;
         code: number;
     } | {

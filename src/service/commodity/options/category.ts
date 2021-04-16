@@ -52,9 +52,7 @@ export class CommodityOptionsCategoryService {
    * 查询
    */
   async retrieveId(id) {
-    console.log("category retrieveId id", id)
     const data = await this.baseCommodityOptionsCategoryServer.BaseRetrieveId(id);
-    console.log("category retrieveId data", data)
     if (data) {
       return {
         data: data,

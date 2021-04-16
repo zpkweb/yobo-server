@@ -71,7 +71,6 @@ export class BaseCommodityColorServer {
    * 修改颜色
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { commodityId, ...setData } = payload;
     return await this.commodityColorEntity
       .createQueryBuilder()

@@ -15,17 +15,14 @@ export class MyLikeCommodityService {
   commodityCommodityService: CommodityCommodityService;
 
   async addMyLikeCommodity(payload) {
-    console.log("addMyLikeCommodity", payload)
     // 查找用户
     const user = await this.userService.hasUser(payload.userId);
-    console.log('user', user)
     if (!user.success) {
       return user;
     }
 
     // 查找艺术家
     const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
-    console.log('commodity', commodity)
     if (!commodity.success) {
       return commodity;
     }
@@ -35,9 +32,7 @@ export class MyLikeCommodityService {
       userId: payload.userId,
       commodityId: payload.commodityId
     })
-    console.log('likeCommodity', likeCommodity)
     if (likeCommodity.success) {
-      // return likeCommodity;
       return {
         success: false,
         code: 10010
@@ -55,7 +50,6 @@ export class MyLikeCommodityService {
       'es-es': payload['es-es'] || commodity.data.name['es-es'],
       commodityId: payload.commodityId
     });
-    console.log('creatLikeCommodity', creatLikeCommodity)
     if(!creatLikeCommodity.success) {
       return creatLikeCommodity;
     }
@@ -138,12 +132,10 @@ export class MyLikeCommodityService {
    * @param payload
    */
   async hasMyLikeCommodity(payload) {
-    console.log("hasMyLikeCommodity", payload)
     const likeCommodity =  await this.baseMyLikeCommodityServer.BaseHas({
       userId: payload.userId,
       commodityId: payload.commodityId
     })
-    console.log("likeCommodity", likeCommodity)
       if(likeCommodity){
         return {
           data: likeCommodity,
@@ -210,7 +202,6 @@ export class MyLikeCommodityService {
       userId: payload.userId,
       commodityId: payload.commodityId
     })
-    console.log('likeCommodity', likeCommodity)
     if (!likeCommodity.success) {
       return likeCommodity;
     }

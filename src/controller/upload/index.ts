@@ -12,7 +12,6 @@ export class UploadController {
 
   @Post('/images', {summary: '上传图片'})
   async uploadImages(@Body(ALL) uploadBody) {
-    console.log("/api/upload/images", uploadBody)
     return await this.uploadService.images(uploadBody);
   }
 }

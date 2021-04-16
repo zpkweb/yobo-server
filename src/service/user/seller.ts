@@ -105,7 +105,6 @@ export class SellerService {
       // 更新状态
       let sellerState = await this.baseSellerServer.basseSetSellerState(payload)
 
-      console.log("seller", sellerState)
 
       if(!sellerState.affected){
         return {
@@ -188,7 +187,6 @@ export class SellerService {
         code: 10202
       }
     }
-    console.log("update seller ", seller)
     // 更新用户
     const user = await this.baseUserServer.baseUpdateUser({
       userId: seller.user.userId,
@@ -289,7 +287,6 @@ export class SellerService {
 
   async searchSeller(payload) {
     let result = await this.baseSellerServer.baseSearchSeller(payload);
-      // console.log("searchSeller result", result)
       let data = result[0];
       let total = result[1];
       if (data) {
@@ -312,14 +309,12 @@ export class SellerService {
 
   async retrieveSellerAll(payload) {
     let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
-      // console.log("searchSeller", result)
       let data = result[0];
       let total = result[1];
 
       if(payload.isLocale){
         data = this.retrieveSellerAllFilter(payload.locale, data)
       }
-      // console.log("searchSellerFilter", data)
       if (data) {
         return {
           data: {
@@ -399,7 +394,6 @@ export class SellerService {
    * @param payload
    */
   async deleteSeller(sellerId) {
-    console.log("deleteSeller", sellerId)
     const seller = await this.baseSellerServer.baseDeleteSeller(sellerId);
     if(seller.affected){
 

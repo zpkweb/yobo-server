@@ -15,17 +15,14 @@ export class MyLikeSellerService {
   sellerService: SellerService;
 
   async addMyLikeSeller(payload) {
-    console.log("addMyLikeSeller", payload)
     // 查找用户
     const user = await this.userService.hasUser(payload.userId);
-    console.log('user', user)
     if (!user.success) {
       return user;
     }
 
     // 查找艺术家
     const seller = await this.sellerService.hasSeller(payload.sellerId);
-    console.log('seller', seller)
     if (!seller.success) {
       return seller;
     }
@@ -35,7 +32,6 @@ export class MyLikeSellerService {
       userId: payload.userId,
       sellerId: payload.sellerId
     })
-    console.log('likeSeller', likeSeller)
     if (likeSeller.success) {
       // return likeSeller;
       return {
@@ -51,7 +47,6 @@ export class MyLikeSellerService {
       sellerName: payload.sellerName || seller.data.firstname + seller.data.lastname,
       sellerId: payload.sellerId
     });
-    console.log('creatLikeSeller', creatLikeSeller)
     if(!creatLikeSeller.success) {
       return creatLikeSeller;
     }
@@ -79,7 +74,6 @@ export class MyLikeSellerService {
    */
   async myLikeSeller(userId) {
     const data =await this.baseMyLikeSellerServer.BaseRetrieve(userId);
-    console.log("likeSeller", data)
     if (data) {
       return {
         data: data,
@@ -99,12 +93,10 @@ export class MyLikeSellerService {
    * @param payload
    */
   async hasMyLikeSeller(payload) {
-    console.log("hasMyLikeSeller", payload)
     const hasLikeSeller =  await this.baseMyLikeSellerServer.BaseHas({
       userId: payload.userId,
       sellerId: payload.sellerId
     })
-    console.log("hasLikeSeller", hasLikeSeller)
       if(hasLikeSeller){
         return {
           data: hasLikeSeller,
@@ -171,7 +163,6 @@ export class MyLikeSellerService {
       userId: payload.userId,
       sellerId: payload.sellerId
     })
-    console.log('likeSeller', likeSeller)
     if (!likeSeller.success) {
       return likeSeller;
     }

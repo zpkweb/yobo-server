@@ -89,7 +89,7 @@ __decorate([
     __metadata("design:type", seller_1.UserSellerEntity)
 ], UserIdentityEntity.prototype, "seller", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => list_1.UserIdentityListEntity, UserIdentityListEntity => UserIdentityListEntity.identitys, {
+    typeorm_1.ManyToOne(type => list_1.UserIdentityListEntity, userIdentityListEntity => userIdentityListEntity.identitys, {
         cascade: true,
         onDelete: 'SET NULL'
     }),

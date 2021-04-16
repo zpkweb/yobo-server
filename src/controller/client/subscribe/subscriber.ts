@@ -19,7 +19,6 @@ export class SubscriberController {
       email: createBody.email,
       userId: createBody.userId
     })
-    console.log("创建订阅用户", result)
     return result;
   }
 

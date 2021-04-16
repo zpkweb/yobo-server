@@ -16,7 +16,6 @@ export class BaseCommodityOptionsClassificationServer {
    * 创建
    */
   async BaseCreate(payload) {
-    console.log("BaseCommodityOptionsClassificationServer payload", payload)
     return await this.commodityOptionsClassificationEntity
       .createQueryBuilder()
       .insert()
@@ -37,7 +36,6 @@ export class BaseCommodityOptionsClassificationServer {
    * 查询
    */
   async BaseRetrieve(payload) {
-    console.log("BaseCommodityOptionsClassificationServer BaseRetrieve", payload)
     return await this.commodityOptionsClassificationEntity
       .createQueryBuilder('classification')
       .where('classification.zh-cn = :zhcn', { zhcn: payload.zhcn })

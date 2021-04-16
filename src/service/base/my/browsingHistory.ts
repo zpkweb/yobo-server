@@ -40,7 +40,6 @@ export class BaseBrowsingHistoryServer {
    * @param payload
    */
   async BaseRetrieve(payload) {
-    console.log("BaseRetrieve", payload.userId)
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
       .leftJoinAndSelect("myBrowsingHistory.user", "user")
@@ -68,7 +67,6 @@ export class BaseBrowsingHistoryServer {
    * 是否存在
    */
   async BaseHas(payload) {
-    console.log("basehas", payload)
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
       .leftJoinAndSelect("myBrowsingHistory.user", "user")
@@ -83,7 +81,6 @@ export class BaseBrowsingHistoryServer {
    * @param payload
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { userId, commodityId, ...setData } = payload;
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder()

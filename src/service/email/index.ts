@@ -8,7 +8,6 @@ export default class EmailService {
   email;
 
   async send(payload) {
-    console.log("send", payload)
 
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",
@@ -48,7 +47,6 @@ export default class EmailService {
    * @param payload
    */
   async bid(payload) {
-    console.log("bid", payload)
 
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",

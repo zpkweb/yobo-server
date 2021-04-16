@@ -129,7 +129,6 @@ export class UserService{
 
   // 删除用户
   async remove(userId) {
-    console.log("remove", userId)
     const user = await this.baseUserServer.baseDeleteUser(userId)
     // let user;
     // if(payload && Object.keys(payload).length){
@@ -260,10 +259,8 @@ export class UserService{
    * @param payload
    */
   async passwordRetrieveCodeSend(payload) {
-    console.log("passwordRetrieveCodeSend", payload)
     // 通过邮箱查找用户
     const user = await this.baseUserServer.baseRetrieveUser(payload);
-    console.log("email user", user)
     if(!user) {
       return {
         success: false,
@@ -292,12 +289,10 @@ export class UserService{
     });
 
     if(data.messageId){
-      console.log("payload.sendMail.code", payload.sendMail.code)
       // await this.redis.set(`emailCode-${payload.userId}`, payload.code)
       global[`emailCode-${user.userId}`] = payload.sendMail.code
       // setTimeout(() => {
       //   // this.redis.del(`emailCode-${payload.userId}`).then((results) => {
-      //   //   console.log("del", results)
       //   // });
       //   global[`emailCode-${user.userId}-${payload.sendMail.code}`] = null;
       // }, payload.codeTime)
@@ -319,8 +314,6 @@ export class UserService{
    * @param payload
    */
   async passwordRetrieveCodeVerify(payload) {
-    console.log("passwordRetrieveCodeVerify", payload)
-    console.log("global", global[`emailCode-${payload.userId}`])
     // const emailCode = await this.redis.get(`emailCode-${payload.userId}`);
     const emailCode = global[`emailCode-${payload.userId}`];
     if(emailCode && emailCode === payload.code){
@@ -344,7 +337,6 @@ export class UserService{
    * @param payload
    */
   async update(payload) {
-    console.log("update", payload)
     // 查找用户
     const user = await this.baseUserServer.baseRetrieveUserPass(payload);
     if(!user){
@@ -353,7 +345,6 @@ export class UserService{
         code: 10202
       }
     }
-    console.log("update user", user)
     let password = '';
     if(payload.password){
       password = crypto.createHash('md5').update(payload.password).digest('hex')
@@ -397,9 +388,7 @@ export class UserService{
    * userId
    */
   async deleteUserIdentity(payload) {
-    console.log("deleteUserIdentity", payload)
     const userIdentity = await this.baseUserServer.baseDeleteUserIdentity(payload);
-    console.log("userIdentity", userIdentity)
     if(userIdentity.affected){
       return {
         success: true,

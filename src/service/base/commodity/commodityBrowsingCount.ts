@@ -32,7 +32,6 @@ export class BaseCommodityBrowsingCountServer {
    * @param payload
    */
   async BaseRetrieve(commodityId) {
-    console.log("BaseRetrieve", commodityId)
     return await this.commodityBrowsingCountEntity
       .createQueryBuilder('browsingCount')
       .leftJoinAndSelect("browsingCount.commodity", "commodity")
@@ -45,7 +44,6 @@ export class BaseCommodityBrowsingCountServer {
    * @param payload
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { commodityId, ...setData } = payload;
     return await this.commodityBrowsingCountEntity
       .createQueryBuilder()

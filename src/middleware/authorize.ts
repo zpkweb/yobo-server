@@ -12,21 +12,16 @@ export class AuthorizeMiddleware implements IWebMiddleware {
 
   resolve() {
     return async (ctx: Context, next: IMidwayWebNext) => {
-      // console.log("middleware", ctx.request.body)
       const bearerHeader = ctx.req.headers['authorization'];
       if(typeof bearerHeader !== 'undefined') {
         const bearer = bearerHeader.split(' ');
         const bearerToken = bearer[1];
         try{
           const decoded = await this.jwt.verify(bearerToken, this.jwtConfig.secret)
-          // console.log("decoded", decoded)
-          // console.log("ctx.request.body",ctx.request.body)
-          // console.log("ctx.request.query",ctx.request.query)
 
           if((ctx.request.body && ctx.request.body.userId) || (ctx.request.query && ctx.request.query.userId)){
             if(ctx.request.body.userId === decoded.userId || ctx.request.query.userId === decoded.userId){
               ctx.state.user = decoded.data;
-              // console.log("ctx.state.user", ctx.state.user)
 
             }else{
               const invalidToken = () => {
@@ -55,7 +50,6 @@ export class AuthorizeMiddleware implements IWebMiddleware {
           }
           return await next();
         }catch(err){
-          console.log("err", err)
           const noAccess = () => {
             ctx.body = {
               code: '10104',

@@ -24,7 +24,8 @@ export default (appInfo: EggAppInfo) => {
     "password": "root1234",
     "database": "yobo",
     "synchronize": true,
-    "logging": false
+    "logging": false,
+    // "entities": ["src/entity/**/*.ts"]
   }
   // config.orm = {
   //   "type": "mysql",

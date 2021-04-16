@@ -47,7 +47,6 @@ export class BFFService {
       isLocale: true,
       locale: payload.locale || 'zh-cn'
     });
-    console.log("gallerySeller", JSON.stringify(gallerySeller))
     if(!gallerySeller.success) {
       return gallerySeller;
     }
@@ -124,7 +123,6 @@ export class BFFService {
       isLocale: true,
       commodityId: payload.commodityId
     });
-    console.log("商品 简介", commodity)
     if(!commodity.success) {
       return commodity;
     }
@@ -144,7 +142,6 @@ export class BFFService {
       const findseller = await this.sellerService.find({
         sellerId: commodity.data.seller.sellerId
       })
-      console.log("商家 其他作品", seller)
       if(!findseller.success) {
         return findseller;
       }
@@ -160,7 +157,6 @@ export class BFFService {
       isLocale: true,
       pageSize: 4
     })
-    console.log("类似作品", commoditySimilar)
     if(!commoditySimilar.success) {
       return commoditySimilar;
     }
@@ -171,7 +167,6 @@ export class BFFService {
     };
     if(payload.userId) {
       const findBrowsingHistory = await this.myService.findBrowsingHistory(payload.userId);
-      console.log("最近浏览的作品", browsingHistory)
       if(!findBrowsingHistory.success) {
         return findBrowsingHistory;
       }

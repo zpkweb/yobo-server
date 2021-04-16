@@ -15,7 +15,6 @@ export class CommodityOptionsClassificationService {
    */
   async create(payload) {
     const data = await this.baseCommodityOptionsClassificationServer.BaseCreate(payload);
-    console.log("CommodityOptionsClassificationService", data)
     if (data.identifiers[0].id) {
       return {
         data: data,

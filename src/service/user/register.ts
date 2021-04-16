@@ -127,7 +127,6 @@ export class UserRegisterService {
 
       // 用户是否关联艺术家信息
       const applySeller = await this.baseSellerServer.baseApplySeller(userId);
-      console.log("applySeller", applySeller)
       if(applySeller){
         return {
           success: false,
@@ -207,7 +206,6 @@ export class UserRegisterService {
    * @param payload
    */
   async registerSeller(payload) {
-    console.log("registerSeller", payload)
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 5,
@@ -279,7 +277,6 @@ export class UserRegisterService {
    * @param payload
    */
   async register(payload) {
-    console.log("register", payload)
     let user:any;
     let userName:any;
     let userEmail:any;
@@ -297,7 +294,6 @@ export class UserRegisterService {
       user = await this.hasUser(payload);
       userName = await this.hasUserName(payload.name);
       userEmail = await this.hasUserEmail(payload.email);
-      console.log("user", user)
 
       if(userName.success && payload.identityIndex !== 5) {
         return Object.assign({}, userName, {success:false})
@@ -309,7 +305,6 @@ export class UserRegisterService {
 
       // 添加用户
       newUser = await this.addUser(payload, userEmail);
-      console.log("newUser", newUser)
       if(!newUser.success){
         return newUser;
       }
@@ -332,7 +327,6 @@ export class UserRegisterService {
         break;
 
     }
-    console.log("identityIndexs", identityIndexs)
     // 添加身份
     const userIdentity:any = await this.addUserIdentitys({
       identityIndexs: identityIndexs,
@@ -341,7 +335,6 @@ export class UserRegisterService {
       userEmail: payload.email,
       userPhone: payload.phone
     });
-    console.log("userIdentity", userIdentity)
     if(!userIdentity.success) {
       return userIdentity;
     }
@@ -363,7 +356,6 @@ export class UserRegisterService {
       // 获取用户
       user = await this.baseUserServer.baseRetrieveUserId(newUser.userId)
 
-      console.log("register user", user)
       return {
         data: user,
         success: true,
@@ -383,7 +375,6 @@ export class UserRegisterService {
    */
     async hasUser(payload) {
       const user:any = await this.baseUserServer.baseRetrieveUser(payload);
-      console.log("user", user)
       if(user){
         return {
           data: user,
@@ -403,7 +394,6 @@ export class UserRegisterService {
    */
    async hasUserName(name) {
     const user:any = await this.baseUserServer.baseRetrieveUserName(name);
-    console.log("user", user)
     if(user){
       return {
         data: user,
@@ -423,7 +413,6 @@ export class UserRegisterService {
    */
    async hasUserEmail(email) {
     const user:any = await this.baseUserServer.baseRetrieveUserEmail(email);
-    console.log("user", user)
     if(user){
       return {
         data: user,
@@ -442,7 +431,6 @@ export class UserRegisterService {
    * @param payload
    */
     async addUser(payload, user) {
-      console.log("addUser",payload,user)
       if(user.success){
         if(payload.identityIndex == '5'){
           return {
@@ -481,7 +469,6 @@ export class UserRegisterService {
 
    async addUserIdentitys(payload) {
     for(let item of payload.identityIndexs) {
-      console.log(item)
       let userIdentity = await this.addUserIdentity({
         identityIndex: item,
         userId: payload.userId,
@@ -505,12 +492,10 @@ export class UserRegisterService {
    * @param payload
    */
     async addUserIdentity(payload) {
-      console.log("addUserIdentity", payload)
       // 通过用户身份列表获取 用户身份
       let identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
         index: payload.identityIndex
       });
-      console.log("identityList", identityList)
       if(!identityList){
         return {
           success: false,
@@ -523,7 +508,6 @@ export class UserRegisterService {
         userId: payload.userId,
         zhcn: identityList['zh-cn']
       });
-      console.log("查询用户身份", identity)
       if(identity){
 
       }else{
@@ -534,7 +518,6 @@ export class UserRegisterService {
           userEmail: payload.userEmail,
           userPhone: payload.userPhone
         });
-        console.log("identity", identity)
         if(!identity){
           return {
             success: false,
@@ -543,10 +526,7 @@ export class UserRegisterService {
         }
 
         // 用户身份 关联 用户身份列表
-        console.log("用户身份 关联 用户身份列表", {
-          of: identity.identifiers[0].id,
-          set: identityList.id
-        })
+
         await this.userIdentityEntity
           .createQueryBuilder()
           .relation(UserIdentityEntity, "identityList")
@@ -555,10 +535,7 @@ export class UserRegisterService {
 
 
         // 用户身份 关联 用户
-        console.log("用户身份 关联 用户", {
-          id: identity.identifiers[0].id,
-          userId: payload.userId
-        })
+
         await this.userIdentityEntity
           .createQueryBuilder()
           .relation(UserIdentityEntity, "user")
@@ -578,7 +555,6 @@ export class UserRegisterService {
    * @param payload
    */
     async addSeller(payload){
-      console.log("addSeller", payload)
       // 添加商家信息
       const seller = await this.baseSellerServer.baseCreateSeller({
         state: payload.state,
@@ -591,7 +567,6 @@ export class UserRegisterService {
         gender: payload.gender || '',
         country: payload.country || '',
       });
-      console.log("add seller", seller)
       if(!seller.identifiers[0].id){
         return {
           success: false,
@@ -614,7 +589,6 @@ export class UserRegisterService {
         website: payload.website || '',
         profile: payload.profile || '',
       });
-      console.log("add sellerMetadata", sellerMetadata)
       if(!sellerMetadata.identifiers[0].id){
         return {
           success: false,

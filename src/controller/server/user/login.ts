@@ -23,14 +23,12 @@ export class AdminUserLoginController {
   @Post('/login',{summary:'登录'})
   @Validate()
   async login(@Body(ALL) loginBody: AdminUserLoginDTO) {
-    console.log("admin login", loginBody)
     let data:any =  await this.loginService.adminLogin(loginBody);
     if(data.success){
       data.data.token = await this.jwt.sign({
         ...data
       }, this.jwtConfig.secret);
     }
-    console.log("login data", data)
     return data;
 
   }

@@ -1,7 +1,7 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository } from "typeorm";
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
+import { Repository } from "typeorm";
 @Provide()
 export class BaseIdentityListServer {
 
@@ -41,7 +41,6 @@ export class BaseIdentityListServer {
    * id
    */
   async baseRetrieveIdentityList(payload) {
-    console.log("baseRetrieveIdentityList", payload)
     return await this.userIdentityListEntity
     .createQueryBuilder('identityList')
     .where("identityList.zh-cn = :zhcn", { zhcn: payload['zh-cn'] })

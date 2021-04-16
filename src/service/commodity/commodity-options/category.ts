@@ -80,12 +80,10 @@ export class CommodityCategoryService {
 
   async relationCreate(payload) {
     for(let item of payload.relation){
-      console.log("item", item)
       const categoryOption = await this.retrieveID({
         commodityId: payload.commodityId,
         optionId: item
       })
-      console.log("categoryOption", categoryOption)
       if(categoryOption.success){
         await this.relation({
           name: 'commoditys',
@@ -99,13 +97,11 @@ export class CommodityCategoryService {
         })
       }else{
         const categorysOption = await this.commodityOptionsCategoryService.retrieveId(item)
-        console.log("categorysOption", categorysOption)
         if(categorysOption.success){
           const categorys = await this.create({
             commodityId: payload.commodityId,
             optionId: item,
           })
-          console.log("categorys", categorys)
           if (categorys.success) {
 
             await this.relation({

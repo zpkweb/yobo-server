@@ -1,9 +1,9 @@
 import { Provide } from '@midwayjs/decorator';
 import { IWebMiddleware, IMidwayWebNext } from '@midwayjs/web';
 import { Context } from 'egg';
-
 @Provide()
 export class GlobalMiddleware implements IWebMiddleware {
+
 
   resolve() {
     return async (ctx: Context, next: IMidwayWebNext) => {
@@ -16,12 +16,19 @@ export class GlobalMiddleware implements IWebMiddleware {
       const startTime = Date.now();
       await next();
 
-      ctx.body = Object.assign({}, ctx.body, {
-        status: ctx.body.success ? 200 : 500,
-        message: ctx.__(ctx.body.code)
-      })
+      // ctx.body = Object.assign({}, {...ctx.body}, {
+      //   status: ctx.body.success ? 200 : 500,
+      //   message: ctx.__(ctx.body.code)
+      // })
+      if(ctx.body && ctx.body.code){
+        ctx.body = {
+          ...ctx.body,
+          status: ctx.body.success ? 200 : 500,
+          message: ctx.__(ctx.body.code)
+        }
+      }
 
-      console.log("接口响应时间:", Date.now() - startTime);
+      ctx.logger.info('响应时间 %d ms', Date.now() - startTime);
     };
   }
 

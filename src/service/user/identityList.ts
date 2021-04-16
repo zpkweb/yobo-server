@@ -96,7 +96,6 @@ export class IdentityListService {
    * @param payload
    */
   async updateIdentityList(payload) {
-    console.log("updateIdentityList", payload)
     const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
       "zh-cn": payload['zh-cn'] || '',
       "en-us": payload['en-us'] || '',
@@ -106,7 +105,6 @@ export class IdentityListService {
       index: payload.index || '',
       id: payload.id || ''
     });
-    console.log("identityList", identityList)
     if (!identityList) {
       return {
         success: false,
@@ -124,7 +122,6 @@ export class IdentityListService {
       menu: identityList.menu,
       id: identityList.id
     }, payload))
-    console.log("newIdentityList", newIdentityList)
     if(newIdentityList.affected){
       const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
         "zh-cn": payload['zh-cn'] || '',

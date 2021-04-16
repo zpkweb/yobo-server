@@ -73,7 +73,6 @@ export class BasePageBannerServer {
    * 修改图片
    */
   async BaseUpdate(payload) {
-    console.log("BaseUpdate", payload)
     const { bannerId, ...setData } = payload;
     return await this.pageBannerEntity
       .createQueryBuilder()

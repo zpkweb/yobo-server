@@ -28,7 +28,6 @@ export class BaseUserServer {
    * password
    */
   async baseCreateUser(payload) {
-    console.log("baseCreateUser", payload)
     return await this.userEntity
       .createQueryBuilder()
       .insert()
@@ -47,7 +46,6 @@ export class BaseUserServer {
    * @param payload
    */
   async baseCreateUserIdentity(payload) {
-    console.log("baseCreateUserIdentity", payload)
     return await this.userIdentityEntity
       .createQueryBuilder()
       .insert()
@@ -143,7 +141,6 @@ export class BaseUserServer {
    * @param payload
    */
   async BaseHas(userId) {
-    console.log("BaseHas", userId)
     return await this.userEntity
     .createQueryBuilder('user')
     .where('user.userId = :userId', { userId: userId })
@@ -346,7 +343,6 @@ export class BaseUserServer {
    *  更新用户地址
    */
     async baseUpdateUserAddress(payload) {
-      console.log("baseUpdateUserAddress", payload)
       const { userId, ...setData } = payload;
       return await this.userAddressEntity
         .createQueryBuilder('address')
