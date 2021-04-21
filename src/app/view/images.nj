@@ -1,0 +1,95 @@
+{% extends "./base.nj" %}
+
+{% block title %}yobo上传图片管理{% endblock %}
+
+{# {% set navActive = "about" %} #}
+
+{% block head %}
+  {# <link rel="stylesheet" href="../public/css/swiper.min.css"> #}
+{% endblock %}
+
+{% block content %}
+  <div class="page-wrapper">
+    <!-- 导入公共的nav模板 -->
+    {# {% include './base/nav.nj' %} #}
+
+    <!-- 背景图 -->
+    {# <section class="banner-wrapper">
+      <img src="images/user-success.jpg" alt="背景LOGO">
+      <img src="images/artists-success.jpg" alt="背景LOGO">
+    </section> #}
+
+    <!-- 渲染html模板演示 -->
+    根路径：{{data.dir}}{{data.path}}
+
+    {% if data.images.length %}
+    <ul class="images-ul">
+      {% for dataImages in data.images %}
+      <li class="images-li">
+        <img class="images-img" src="{{data.path}}{{dataImages.path}}" />
+        <p>{{dataImages.path}}<p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if data.children.length %}
+    <ul id="images" class="images-ul">
+      {% for dataChildren in data.children %}
+      <p class="images-title">{{ dataChildren.path }}</p>
+        {% if dataChildren.images.length %}
+        <ul class="images-ul">
+          {% for dataChildrenImages in dataChildren.images %}
+          <li class="images-li" id="{{dataChildrenImages.path}}">
+            <img class="images-img" src="{{data.path}}{{dataChildren.path}}{{dataChildrenImages.path}}"  />
+
+            <p class="images-img-title">{{dataChildrenImages.path}}</p>
+            <p class="images-img-size">大小：{{dataChildrenImages.size}}</p>
+            <p class="images-img-date">日期：{{ dataChildrenImages.date }}</p>
+
+            <a class="images-a" href="javascript:;" onclick="deleteImage('{{data.path}}{{dataChildren.path}}', '{{dataChildrenImages.path}}')">X</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if dataChildren.children.length %}
+        <ul class="images-ul">
+          {% for dataChildrenChildren in dataChildren.children %}
+          <li class="images-li">{{ dataChildrenChildren.path }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <!-- 导入公共的底部模板 -->
+    {# {% include './base/foot.nj' %} #}
+  </div>
+{% endblock %}
+
+{% block script %}
+  {# <script src="../public/js/swiper.min.js"></script> #}
+  {# <script src="../public/js/about.js"></script> #}
+  <script>
+    async function deleteImage(dir, path){
+      var data = { path: `${dir}${path}` };
+      const imagesDelete = await fetch('/api/upload/images/delete', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(myJson) {
+        return myJson;
+      });
+
+      if(imagesDelete.success) {
+        document.getElementById(path).parentNode.removeChild(document.getElementById(path))
+      }
+    }
+  </script>
+{% endblock %}

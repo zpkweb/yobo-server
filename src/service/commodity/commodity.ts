@@ -593,11 +593,12 @@ export class CommodityCommodityService {
    */
   async retrieve(payload) {
     let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
-    if(payload.isLocale) {
-      const filterData = this.filter(payload.locale || 'zh-cn', [data]);
-      data = filterData[0];
-    }
+
     if (data) {
+      if(payload.isLocale) {
+        const filterData = this.filter(payload.locale || 'zh-cn', [data]);
+        data = filterData[0];
+      }
       return {
         data: data,
         success: true,
@@ -621,10 +622,11 @@ export class CommodityCommodityService {
       let result = await this.baseCommodityServer.BaseRetrieveAll(payload);
       let data = result[0];
       let total = result[1];
-      if(payload.isLocale){
-        data = this.filter(payload.locale, data)
-      }
+
       if (data) {
+        if(payload.isLocale){
+          data = this.filter(payload.locale, data)
+        }
         return {
           data: {
             list: data,
@@ -665,6 +667,7 @@ export class CommodityCommodityService {
    * @param type
    */
     filter(type, payload) {
+
       return payload.map(item => {
         let name = item.name ? item.name[type] : '';
 
@@ -702,10 +705,11 @@ export class CommodityCommodityService {
     let result = await this.baseCommodityServer.BaseSearch(payload);
     let data = result[0];
     let total = result[1];
-    if(payload.isLocale){
-      data = this.filter(payload.locale, data)
-    }
+
     if (data) {
+      if(payload.isLocale){
+        data = this.filter(payload.locale, data)
+      }
       return {
         data: {
           list: data,
@@ -720,6 +724,211 @@ export class CommodityCommodityService {
         code: 10010
       }
     }
+  }
+
+  async searchs(payload) {
+    // console.log("searchs payload", payload)
+    let searchAll = true;
+
+    if (payload.id) {
+      searchAll = false;
+    }
+
+    if (payload.commodityId) {
+      searchAll = false;
+    }
+
+    if (payload.sellerId) {
+      searchAll = false;
+    }
+
+    if (payload.state) {
+      searchAll = false;
+    }
+
+    if(payload.name){
+      searchAll = false;
+    }
+    if(payload.desc){
+      searchAll = false;
+    }
+    if(payload.price) {
+      searchAll = false;
+
+      let price = payload.price.split(',')
+
+      if(price.length === 1) {
+        payload.price = {
+          min: 0,
+          max: price[0]
+        }
+      }else if(price.length === 2) {
+        payload.price = {
+          min: price[0],
+          max: price[1]
+        }
+      }
+
+    }else{
+      payload.price = ''
+    }
+    if(payload.categorys){
+      searchAll = false;
+      if(typeof payload.categorys == 'string'){
+        payload.categorys = payload.categorys.split(',');
+      }
+    }else{
+      payload.categorys = []
+    }
+
+    if(payload.classifications){
+      searchAll = false;
+      if(typeof payload.classifications == 'string'){
+        payload.classifications = payload.classifications.split(',');
+      }
+    }else{
+      payload.classifications = []
+    }
+
+    if(payload.materials){
+      searchAll = false;
+      if(typeof payload.materials == 'string'){
+        payload.materials = payload.materials.split(',');
+      }
+    }else{
+      payload.materials = []
+    }
+
+    if(payload.models){
+      searchAll = false;
+      if(typeof payload.models == 'string'){
+        payload.models = payload.models.split(',');
+      }
+    }else{
+      payload.models = []
+    }
+
+    if(payload.places){
+      searchAll = false;
+      if(typeof payload.places == 'string'){
+        payload.places = payload.places.split(',');
+      }
+    }else{
+      payload.places = []
+    }
+
+    if(payload.ruiwus){
+      searchAll = false;
+      if(typeof payload.ruiwus == 'string'){
+        payload.ruiwus = payload.ruiwus.split(',');
+      }
+    }else{
+      payload.ruiwus = []
+    }
+
+    if(payload.shapes){
+      searchAll = false;
+      if(typeof payload.shapes == 'string'){
+        payload.shapes = payload.shapes.split(',');
+      }
+    }else{
+      payload.shapes = []
+    }
+
+    if(payload.specifications){
+      searchAll = false;
+      if(typeof payload.specifications == 'string'){
+        payload.specifications = payload.specifications.split(',');
+      }
+    }else{
+      payload.specifications = []
+    }
+
+    if(payload.techniques){
+      searchAll = false;
+      if(typeof payload.techniques == 'string'){
+        payload.techniques = payload.techniques.split(',');
+      }
+    }else{
+      payload.techniques = []
+    }
+
+    if(payload.themes){
+      searchAll = false;
+      if(typeof payload.themes == 'string'){
+        payload.themes = payload.themes.split(',');
+      }
+    }else{
+      payload.themes = []
+    }
+
+    if(payload.types){
+      searchAll = false;
+      if(typeof payload.types == 'string'){
+        payload.types = payload.types.split(',');
+      }
+    }else{
+      payload.types = []
+    }
+
+    if(payload.uses){
+      searchAll = false;
+      if(typeof payload.uses == 'string'){
+        payload.uses = payload.uses.split(',');
+      }
+    }else{
+      payload.uses = []
+    }
+
+    let result;
+    if(searchAll){
+      result = await this.baseCommodityServer.BaseRetrieveAll(payload);
+    }else{
+      result = await this.baseCommodityServer.BaseSearchs(payload);
+    }
+    console.log("searchs result", result)
+    let data = result[0];
+    let total = result[1];
+
+    if (data) {
+      if(payload.isLocale){
+        data = this.searchFilter(payload.locale, data)
+      }
+      return {
+        data: {
+          list: data,
+          total
+        },
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  searchFilter(locale, data) {
+    return data.map((item) => {
+      if(item.name){
+        item.name = item.name[locale]
+      }
+
+      if(item.desc){
+        item.desc = item.desc[locale]
+      }
+
+      if(item.price){
+        item.price = item.price[locale]
+      }
+
+      if(item.photos) {
+        item.photos = item.photos.map(item => item.src)
+      }
+      return item;
+    });
   }
 
   // 删除商品

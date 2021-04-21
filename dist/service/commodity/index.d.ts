@@ -60,6 +60,18 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
+    searchs(payload: any): Promise<{
+        data: {
+            list: any;
+            total: any;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     delete(commodityId: any): Promise<{
         success: boolean;
         code: number;

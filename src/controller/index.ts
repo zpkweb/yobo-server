@@ -3,6 +3,7 @@ import { Context } from 'egg';
 import { LoginService } from 'src/service/user/login';
 import { CreateApiDoc } from '@midwayjs/swagger';
 import { Application } from 'egg';
+import { UploadService } from 'src/service/upload';
 
 @Provide()
 @Controller('/', { tagName: '文档', description: 'api'})
@@ -13,6 +14,9 @@ export class apiController {
 
   @Inject()
   loginService: LoginService;
+
+  @Inject()
+  uploadService: UploadService;
 
   @Inject()
   ctx: Context;
@@ -38,5 +42,12 @@ export class apiController {
   @Get('/api')
   async api(ctx) {
     await ctx.render('api.nj');
+  }
+
+  @Get('/images')
+  async test(ctx) {
+    const images = await this.uploadService.getImages(`${process.cwd()}/public/`, `images/`);
+
+    await ctx.render('images', {data : images});
   }
 }

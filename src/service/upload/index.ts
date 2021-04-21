@@ -13,4 +13,13 @@ export class UploadService {
   async images(payload) {
     return await this.uploadImagesService.uploadImages(payload);
   }
+
+
+  async getImages(dir, path) {
+    return await this.uploadImagesService.getUploadImages(dir, path);
+  }
+
+  async imagesDelete(path) {
+    return await this.uploadImagesService.uploadImagesDelete(path);
+  }
 }

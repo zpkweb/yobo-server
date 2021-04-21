@@ -153,24 +153,29 @@ export class MyBrowsingHistoryService {
       currentPage: payload.currentPage,
       pageSize: payload.pageSize
     });
-    let data = result[0];
-      let total = result[1];
-    if(payload.isLocale) {
-      data = this.filter(payload.locale, data);
-    }
-    if(data){
-      return {
-        data: {
-          list: data,
-          total
-        },
-        success: true,
-        code: 10009
-      }
-    }else{
-      return {
-        success: false,
-        code: 10010
+    if(result){
+
+
+      let data = result[0];
+        let total = result[1];
+
+      if(data){
+        if(payload.isLocale) {
+          data = this.filter(payload.locale, data);
+        }
+        return {
+          data: {
+            list: data,
+            total
+          },
+          success: true,
+          code: 10009
+        }
+      }else{
+        return {
+          success: false,
+          code: 10010
+        }
       }
     }
   }

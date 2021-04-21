@@ -127,6 +127,7 @@ export class CommodityOptionService {
 
 
     const categorys = await this.commodityOptionsCategoryService.retrieveAll({ isLocale, locale });
+    // console.log("categorys", categorys)
     if(categorys.success){
       options.categorys = categorys.data;
     }

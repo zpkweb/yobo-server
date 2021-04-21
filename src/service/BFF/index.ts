@@ -118,6 +118,7 @@ export class BFFService {
    */
   async buy(payload) {
     // 商品 简介
+
     const commodity = await this.commodityService.find({
       locale: payload.locale,
       isLocale: true,

@@ -81,10 +81,11 @@ export class MyLikeCommodityService {
    */
   async myLikeCommodity(payload) {
     let data = await this.baseMyLikeCommodityServer.BaseRetrieve(payload.userId);
-    if(payload.isLocale) {
-      data = this.filter(payload.locale, data);
-    }
+
     if (data) {
+      if(payload.isLocale) {
+        data = this.filter(payload.locale, data);
+      }
       return {
         data: data,
         success: true,

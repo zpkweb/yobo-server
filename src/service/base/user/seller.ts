@@ -152,6 +152,15 @@ export class BaseSellerServer {
     if (payload.label) {
       where.label = payload.label;
     }
+    if(payload.other){
+      if(payload.other == '男'){
+        where.gender = '男'
+      }else if(payload.other == '女') {
+        where.gender = '女'
+      }else{
+        where.label = payload.other
+      }
+    }
     if (payload.gender) {
       where.gender = payload.gender;
     }
@@ -159,8 +168,16 @@ export class BaseSellerServer {
       where.country = payload.country;
     }
 
+    if (payload.firstname) {
+      where.firstname = Like(`%${payload.firstname}%`);
+    }
+
     if (payload.surname) {
       where.firstname = Like(`%${payload.surname}%`);
+    }
+
+    if (payload.lastname) {
+      where.lastname = Like(`%${payload.lastname}%`);
     }
 
     return await this.userSellerEntity

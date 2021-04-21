@@ -157,6 +157,19 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
+    searchs(payload: any): Promise<{
+        data: {
+            list: any;
+            total: any;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    searchFilter(locale: any, data: any): any;
     deleteCommodityId(commodityId: any): Promise<{
         success: boolean;
         code: number;

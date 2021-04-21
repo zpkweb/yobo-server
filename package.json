@@ -1,6 +1,6 @@
 {
   "name": "yobo",
-  "version": "0.36",
+  "version": "0.38",
   "description": "{{description}}",
   "private": true,
   "dependencies": {

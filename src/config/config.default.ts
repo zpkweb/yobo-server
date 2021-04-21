@@ -5,28 +5,26 @@ import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
 export type DefaultConfig = PowerPartial<EggAppConfig>;
 
 export default (appInfo: EggAppInfo) => {
-
-
   const config = {} as DefaultConfig;
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1605490437736_6554';
 
   config.host = {
-    origin: 'http://localhost:7001'
-  }
+    origin: 'http://localhost:7001',
+  };
 
   config.orm = {
-    "type": "mysql",
-    "host": "localhost",
-    "port": 3306,
-    "username": "root",
-    "password": "root1234",
-    "database": "yobo",
-    "synchronize": true,
-    "logging": false,
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: 'root1234',
+    database: 'yobo-online',
+    synchronize: true,
+    logging: false,
     // "entities": ["src/entity/**/*.ts"]
-  }
+  };
   // config.orm = {
   //   "type": "mysql",
   //   "host": "127.0.0.1",
@@ -40,35 +38,29 @@ export default (appInfo: EggAppInfo) => {
 
   config.root = {
     name: 'root',
-    password: '123456'
-  }
+    password: '123456',
+  };
 
   config.email = {
     service: 'qq',
     user: '547790132@qq.com',
-    pass: 'vgmowhcgqcpobcaf'
-  }
+    pass: 'vgmowhcgqcpobcaf',
+  };
 
   // config.email = {
   //   service: 'qq',
   //   user: '41728127@qq.com',
   //   pass: 'cblmwxiolsxycada'
-  // }
-
+  // };
 
   config.jwt = {
-    secret: "yobo"
+    secret: 'yobo',
   };
 
   config.pagination = {
     pageSize: 10,
     currentPage: 1,
-  }
-
-
-
-
-
+  };
 
   // add your config here
 
@@ -79,33 +71,34 @@ export default (appInfo: EggAppInfo) => {
     },
     // 跨域白名单
     // domainWhiteList: [ 'http://localhost:7001', 'http://localhost:3000' ],
+    domainWhiteList: ['*'],
   };
 
-config.cors = {
-  origin: '*', //允许所有跨域访问，注释掉则允许上面 白名单 访问
-  credentials: true, // 允许跨域请求携带cookies
-  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS'
-}
-
-
+  config.cors = {
+    origin: '*', //允许所有跨域访问，注释掉则允许上面 白名单 访问
+    credentials: true, // 允许跨域请求携带cookies
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+  };
 
   config.view = {
     // root: path.join(appInfo.baseDir, 'src/assets'),
+    defaultExtension: '.nj',
     mapping: {
       '.nj': 'nunjucks',
       '.njk': 'nunjucks',
     },
   };
+
   config.static = {
     prefix: '/',
-    dir: 'public'
+    dir: 'public',
   };
   // 上传
   config.multipart = {
     fields: 50,
     fileSize: '10mb',
     mode: 'stream',
-  }
+  };
 
   // exports.static = {
   //   prefix: '/public/',
@@ -119,18 +112,11 @@ config.cors = {
   //   },
   // };
 
-  config.middleware = [
-    'globalMiddleware'
-  ];
+  config.middleware = ['globalMiddleware'];
 
   config.i18n = {
     defaultLocale: 'zh-CN',
   };
-
-
-
-
-
 
   config.io = {
     // init: { }, // passed to engine.io
@@ -141,7 +127,7 @@ config.cors = {
     //   },
     // },
 
-    init: { }, // passed to engine.io
+    init: {}, // passed to engine.io
     namespace: {
       '/': {
         connectionMiddleware: [],

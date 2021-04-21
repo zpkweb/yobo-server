@@ -50,8 +50,9 @@ export declare class BaseCommodityServer {
     BaseRetrieveAll(payload: any): Promise<[CommodityEntity[], number]>;
     BaseRetrieveCategory(categorys: any): Promise<CommodityEntity[]>;
     BaseSearchUnion(payload: any, where: any): Promise<[CommodityEntity[], number]>;
-    BaseSearchIntersection(payload: any, where: any): Promise<[CommodityEntity[], number]>;
+    BaseSearchIntersection(payload: any, where: any): Promise<string>;
     BaseSearch(payload: any): Promise<[CommodityEntity[], number]>;
+    BaseSearchs(payload: any): Promise<[CommodityEntity[], number]>;
     BaseDeleteCommodityId(commodityId: any): Promise<import("typeorm").DeleteResult>;
     BaseDeleteAll(): Promise<import("typeorm").DeleteResult>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;

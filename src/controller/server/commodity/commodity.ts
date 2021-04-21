@@ -91,6 +91,26 @@ export class AdminCommodityController {
     return data;
   }
 
+  @Get('/searchs',{summary:'搜索'})
+  async searchs(@Query(ALL) searchParams) {
+    const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const data:any = await this.commodityService.searchs({
+      ...searchParams,
+      isLocale: true,
+      locale: searchParams.locale || 'zh-cn',
+      pageSize: pageSize,
+      currentPage: currentPage,
+    });
+    if(data.success){
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
+    }
+    return data;
+  }
+
+
+
   // 删除商品
 
   @Post('/delete',{summary:'删除商品'})

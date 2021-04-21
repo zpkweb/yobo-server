@@ -22,10 +22,27 @@ export default (appInfo: EggAppInfo) => {
     "port": 3306,
     "username": "root",
     "password": "Test123!@#",
-    "database": "yobo",
+    "database": "yobo-online",
     "synchronize": true,
     "logging": false
   }
+
+
+  // config.host = {
+  //   origin: 'http://82.156.250.70:7001'
+  // }
+  // config.orm = {
+  //   "type": "mysql",
+  //   "host": "172.21.0.8",
+  //   "port": 3306,
+  //   "username": "root",
+  //   "password": "root1234",
+  //   "database": "yobo",
+  //   "synchronize": true,
+  //   "logging": false
+  // }
+
+
 
 
   // config.host = {
@@ -41,19 +58,6 @@ export default (appInfo: EggAppInfo) => {
   //   "synchronize": true,
   //   "logging": false
   // }
-
-
-
-
-  config.security = {
-    // 关闭 csrf
-    csrf: {
-      enable: false,
-    },
-    // 跨域白名单
-    // domainWhiteList: [ 'http://localhost:7001', 'http://localhost:3000' ],
-  };
-
 
 
 

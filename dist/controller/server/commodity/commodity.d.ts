@@ -20,6 +20,7 @@ export declare class AdminCommodityController {
     finEdit(findParams: any): Promise<any>;
     findAll(findAllParams: any): Promise<any>;
     search(searchParams: any): Promise<any>;
+    searchs(searchParams: any): Promise<any>;
     delete(commodityId: any): Promise<{
         success: boolean;
         code: number;

@@ -10,4 +10,14 @@ export declare class UploadService {
         code: number;
         data?: undefined;
     }>;
+    getImages(dir: any, path: any): Promise<{
+        path: any;
+        children: any[];
+        images: any[];
+        dir: any;
+    }>;
+    imagesDelete(path: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
 }

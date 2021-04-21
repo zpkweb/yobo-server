@@ -1,4 +1,4 @@
-import { Inject, Controller, Post, Provide, Config, Plugin, Body, ALL, Validate } from '@midwayjs/decorator';
+import { Inject, Controller, Post, Provide, Config, Plugin, Body, ALL } from '@midwayjs/decorator';
 import { Context } from 'egg';
 import { LoginService } from 'src/service/user/login';
 import { AdminUserLoginDTO } from 'src/dto/user/login';
@@ -21,7 +21,7 @@ export class AdminUserLoginController {
 
   // 后台登录
   @Post('/login',{summary:'登录'})
-  @Validate()
+  // @Validate()
   async login(@Body(ALL) loginBody: AdminUserLoginDTO) {
     let data:any =  await this.loginService.adminLogin(loginBody);
     if(data.success){

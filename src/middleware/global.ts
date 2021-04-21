@@ -4,7 +4,6 @@ import { Context } from 'egg';
 @Provide()
 export class GlobalMiddleware implements IWebMiddleware {
 
-
   resolve() {
     return async (ctx: Context, next: IMidwayWebNext) => {
       // if(ctx.request.method === 'OPTIONS'){
@@ -20,6 +19,8 @@ export class GlobalMiddleware implements IWebMiddleware {
       //   status: ctx.body.success ? 200 : 500,
       //   message: ctx.__(ctx.body.code)
       // })
+
+
       if(ctx.body && ctx.body.code){
         ctx.body = {
           ...ctx.body,
@@ -27,7 +28,9 @@ export class GlobalMiddleware implements IWebMiddleware {
           message: ctx.__(ctx.body.code)
         }
       }
-
+      // console.log('响应数据', ctx.body)
+      // console.log('响应时间 %d ms', Date.now() - startTime)
+      // ctx.logger.info("响应数据", ctx.body)
       ctx.logger.info('响应时间 %d ms', Date.now() - startTime);
     };
   }

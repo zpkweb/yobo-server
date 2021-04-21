@@ -309,13 +309,17 @@ export class SellerService {
 
   async retrieveSellerAll(payload) {
     let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
+    if(result){
+
+
       let data = result[0];
       let total = result[1];
 
-      if(payload.isLocale){
-        data = this.retrieveSellerAllFilter(payload.locale, data)
-      }
+
       if (data) {
+        if(payload.isLocale){
+          data = this.retrieveSellerAllFilter(payload.locale, data)
+        }
         return {
           data: {
             list: data,
@@ -330,6 +334,7 @@ export class SellerService {
           code: 10010
         }
       }
+    }
   }
 
   retrieveSellerAllFilter(type, payload) {

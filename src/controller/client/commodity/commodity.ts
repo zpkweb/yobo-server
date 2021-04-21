@@ -60,6 +60,23 @@ export class CommodityController {
     return data;
   }
 
+  @Get('/searchs', { summary: '搜索商品'})
+  async searchs(@Query(ALL) searchQuery) {
+    const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
+    const data:any = await this.commodityService.searchs({
+      ...searchQuery,
+      pageSize: pageSize,
+      currentPage: currentPage,
+      isLocale: true
+    });
+    if(data.success){
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
+    }
+    return data;
+  }
+
 
   // 查找商品选项-形状
   @Get('/options/:type', { summary: '查找商品选项'})

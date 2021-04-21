@@ -203,6 +203,10 @@ export class CommodityService {
     });
   }
 
+  async searchs(payload) {
+    return await this.commodityCommodityService.searchs(payload);
+  }
+
   // 删除商品
   async delete(commodityId) {
     if(commodityId){
