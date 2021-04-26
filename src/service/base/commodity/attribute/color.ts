@@ -41,10 +41,10 @@ export class BaseCommodityColorServer {
   /**
    * 查询颜色
    */
-  async BaseRetrieveCommodityId(payload) {
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityColorEntity
       .createQueryBuilder('color')
-      .where('color.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .where('color.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
 

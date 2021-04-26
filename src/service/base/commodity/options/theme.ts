@@ -59,6 +59,14 @@ export class BaseCommodityOptionsThemeServer {
       .getMany();
   }
 
+  async BaseRetrieveSize(payload) {
+    return await this.commodityOptionsThemeEntity
+      .createQueryBuilder()
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getMany();
+  }
+
   /**
    * 修改商品形状选项
    */

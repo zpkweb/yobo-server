@@ -26,7 +26,7 @@ export class BaseCommodityTechniqueServer {
   async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityTechniqueEntity
       .createQueryBuilder('technique')
-      .leftJoinAndSelect('technique.commoditys', 'commoditys')
+      // .leftJoinAndSelect('technique.commoditys', 'commoditys')
       .leftJoinAndSelect('technique.options', 'options')
       .where('technique.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();

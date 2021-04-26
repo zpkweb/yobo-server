@@ -41,18 +41,10 @@ export class AdminCommodityController {
 
   // 编辑商品
   @Get('/edit',{summary:'编辑商品'})
-  async finEdit(@Query(ALL) findParams) {
-    const pageSize = Number(findParams.pageSize) || this.pagination.pageSize;
-    const currentPage = Number(findParams.currentPage) || this.pagination.currentPage;
-    const data: any = await this.commodityService.find({
-      ...findParams,
-      pageSize: pageSize,
-      currentPage: currentPage,
-    });
-    if(data.success){
-      data.data.pageSize = pageSize;
-      data.data.currentPage = currentPage;
-    }
+  async edit(@Query() commodityId) {
+
+    const data: any = await this.commodityService.edit(commodityId);
+
     return data;
   }
 

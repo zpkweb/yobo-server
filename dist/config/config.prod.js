@@ -16,7 +16,7 @@ exports.default = (appInfo) => {
         "port": 3306,
         "username": "root",
         "password": "Test123!@#",
-        "database": "yobo-online",
+        "database": "yobo_online",
         "synchronize": true,
         "logging": false
     };

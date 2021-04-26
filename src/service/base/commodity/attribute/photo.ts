@@ -39,10 +39,10 @@ export class BaseCommodityPhotoServer {
   /**
    * 查询图片
    */
-  async BaseRetrieveCommodityId(payload) {
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityPhotoEntity
       .createQueryBuilder('photo')
-      .where('photo.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .where('photo.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
 

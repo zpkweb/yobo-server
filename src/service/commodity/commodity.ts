@@ -21,6 +21,7 @@ import { CommodityUseService } from './commodity-options/use';
 
 import { CommodityOptionService } from './commodityOption';
 
+
 @Provide()
 export class CommodityCommodityService {
 
@@ -83,6 +84,280 @@ export class CommodityCommodityService {
 
   @Inject()
   commodityOptionService: CommodityOptionService;
+
+
+  // 编辑商品
+  async edit(commodityId) {
+    let commodity:any = {};
+    const baseCommodityServer = await this.baseCommodityServer.BaseRetrieveCommodityId(commodityId);
+    // console.log("edit baseCommodityServer", baseCommodityServer)
+    if(baseCommodityServer) {
+      commodity = baseCommodityServer
+    }
+
+    const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(commodityId);
+    // console.log("edit commodityAttributeColor", commodityAttributeColor)
+    if(commodityAttributeColor) {
+      commodity.colors = commodityAttributeColor.data;
+    }
+
+    const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(commodityId);
+    // console.log("edit commodityAttributeDesc", commodityAttributeDesc)
+    if(commodityAttributeDesc) {
+      commodity.desc = commodityAttributeDesc.data;
+    }
+
+    const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(commodityId);
+    // console.log("edit commodityAttributeName", commodityAttributeName)
+    if(commodityAttributeName) {
+      commodity.name = commodityAttributeName.data;
+    }
+
+    const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(commodityId);
+    // console.log("edit commodityAttributePhoto", commodityAttributePhoto)
+    if(commodityAttributePhoto) {
+      commodity.photos = commodityAttributePhoto.data;
+    }
+
+    const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(commodityId);
+    // console.log("edit commodityAttributePrice", commodityAttributePrice)
+    if(commodityAttributePrice) {
+      commodity.price = commodityAttributePrice.data;
+    }
+
+
+    const commodityCategoryService =  await this.commodityCategoryService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityCategoryService", commodityCategoryService)
+    if(commodityCategoryService) {
+      commodity.categorys = commodityCategoryService.data;
+    }
+
+    const commodityClassificationService =  await this.commodityClassificationService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityClassificationService", commodityClassificationService)
+    if(commodityClassificationService) {
+      commodity.classifications = commodityClassificationService.data;
+    }
+
+    const commodityMaterialService =  await this.commodityMaterialService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityMaterialService", commodityMaterialService)
+    if(commodityMaterialService) {
+      commodity.materials = commodityMaterialService.data;
+    }
+
+    const commodityModelService =  await this.commodityModelService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityModelService", commodityModelService)
+    if(commodityModelService) {
+      commodity.models = commodityModelService.data;
+    }
+
+    const commodityPlaceService =  await this.commodityPlaceService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityPlaceService", commodityPlaceService)
+    if(commodityPlaceService) {
+      commodity.places = commodityPlaceService.data;
+    }
+
+    const commodityRuiwuService =  await this.commodityRuiwuService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityRuiwuService", commodityRuiwuService)
+    if(commodityRuiwuService) {
+      commodity.ruiwus = commodityRuiwuService.data;
+    }
+
+    const commodityShapeService =  await this.commodityShapeService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityShapeService", commodityShapeService)
+    if(commodityShapeService) {
+      commodity.shapes = commodityShapeService.data;
+    }
+
+    const commoditySpecificationService =  await this.commoditySpecificationService.retrieveCommodityId(commodityId);
+    // console.log("edit commoditySpecificationService", commoditySpecificationService)
+    if(commoditySpecificationService) {
+      commodity.specifications = commoditySpecificationService.data;
+    }
+
+    const commodityStyleService =  await this.commodityStyleService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityStyleService", commodityStyleService)
+    if(commodityStyleService) {
+      commodity.styles = commodityStyleService.data;
+    }
+
+    const commodityTechniqueService =  await this.commodityTechniqueService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityTechniqueService", commodityTechniqueService)
+    if(commodityTechniqueService) {
+      commodity.techniques = commodityTechniqueService.data;
+    }
+
+    const commodityThemeService =  await this.commodityThemeService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityThemeService", commodityThemeService)
+    if(commodityThemeService) {
+      commodity.themes = commodityThemeService.data;
+    }
+
+    const commodityTypeService =  await this.commodityTypeService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityTypeService", commodityTypeService)
+    if(commodityTypeService) {
+      commodity.types = commodityTypeService.data;
+    }
+
+    const commodityUseService =  await this.commodityUseService.retrieveCommodityId(commodityId);
+    // console.log("edit commodityUseService", commodityUseService)
+    if(commodityUseService) {
+      commodity.uses = commodityUseService.data;
+    }
+
+
+
+
+    if (commodity) {
+      return {
+        data: commodity,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async buy(payload) {
+    let commodity:any = {};
+    const baseCommodityServer = await this.baseCommodityServer.BaseRetrieveCommodityId(payload.commodityId);
+    // console.log("edit baseCommodityServer", baseCommodityServer)
+    if(baseCommodityServer) {
+      commodity = baseCommodityServer
+    }
+
+    // const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(commodityId);
+    // // console.log("edit commodityAttributeColor", commodityAttributeColor)
+    // if(commodityAttributeColor) {
+    //   commodity.colors = commodityAttributeColor.data;
+    // }
+
+    const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityAttributeDesc", commodityAttributeDesc)
+    if(commodityAttributeDesc) {
+      commodity.desc = payload.isLocale ? commodityAttributeDesc.data[payload.locale] : commodityAttributeDesc.data;
+    }
+
+    const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityAttributeName", commodityAttributeName)
+    if(commodityAttributeName) {
+      commodity.name = payload.isLocale ? commodityAttributeName.data[payload.locale] : commodityAttributeName.data;
+    }
+
+    const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityAttributePhoto", commodityAttributePhoto)
+    if(commodityAttributePhoto) {
+      commodity.photos = commodityAttributePhoto.data;
+    }
+
+    const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityAttributePrice", commodityAttributePrice)
+    if(commodityAttributePrice) {
+      commodity.price = payload.isLocale ? commodityAttributePrice.data[payload.locale] : commodityAttributePrice.data;
+    }
+
+
+    const commodityCategoryService =  await this.commodityCategoryService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityCategoryService", commodityCategoryService)
+    if(commodityCategoryService) {
+      commodity.categorys = payload.isLocale ? commodityCategoryService.data.map(item => item.options[payload.locale]) : commodityCategoryService.data;
+    }
+
+    const commodityClassificationService =  await this.commodityClassificationService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityClassificationService", commodityClassificationService)
+    if(commodityClassificationService) {
+      commodity.classifications = payload.isLocale ? commodityClassificationService.data.map(item => item.options[payload.locale]) : commodityClassificationService.data;
+    }
+
+    const commodityMaterialService =  await this.commodityMaterialService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityMaterialService", commodityMaterialService)
+    if(commodityMaterialService) {
+      commodity.materials = payload.isLocale ? commodityMaterialService.data.map(item => item.options[payload.locale]) : commodityMaterialService.data;
+    }
+
+    const commodityModelService =  await this.commodityModelService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityModelService", commodityModelService)
+    if(commodityModelService) {
+      commodity.models = payload.isLocale ? commodityModelService.data.map(item => item.options[payload.locale]) : commodityModelService.data;
+    }
+
+    const commodityPlaceService =  await this.commodityPlaceService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityPlaceService", commodityPlaceService)
+    if(commodityPlaceService) {
+      commodity.places = payload.isLocale ? commodityPlaceService.data.map(item => item.options[payload.locale]) : commodityPlaceService.data;
+    }
+
+    const commodityRuiwuService =  await this.commodityRuiwuService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityRuiwuService", commodityRuiwuService)
+    if(commodityRuiwuService) {
+      commodity.ruiwus = payload.isLocale ? commodityRuiwuService.data.map(item => item.options[payload.locale]) : commodityRuiwuService.data;
+    }
+
+    const commodityShapeService =  await this.commodityShapeService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityShapeService", commodityShapeService)
+    if(commodityShapeService) {
+      commodity.shapes = payload.isLocale ? commodityShapeService.data.map(item => item.options[payload.locale]) : commodityShapeService.data;
+    }
+
+    const commoditySpecificationService =  await this.commoditySpecificationService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commoditySpecificationService", commoditySpecificationService)
+    if(commoditySpecificationService) {
+      commodity.specifications = payload.isLocale ? commoditySpecificationService.data.map(item => item.options[payload.locale]) : commoditySpecificationService.data;
+    }
+
+    const commodityStyleService =  await this.commodityStyleService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityStyleService", commodityStyleService)
+    if(commodityStyleService) {
+      commodity.styles = payload.isLocale ? commodityStyleService.data.map(item => item.options[payload.locale]) : commodityStyleService.data;
+    }
+
+    const commodityTechniqueService =  await this.commodityTechniqueService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityTechniqueService", commodityTechniqueService)
+    if(commodityTechniqueService) {
+      commodity.techniques = payload.isLocale ? commodityTechniqueService.data.map(item => item.options[payload.locale]) : commodityTechniqueService.data;
+    }
+
+    const commodityThemeService =  await this.commodityThemeService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityThemeService", commodityThemeService)
+    if(commodityThemeService) {
+      commodity.themes = payload.isLocale ? commodityThemeService.data.map(item => item.options[payload.locale]) : commodityThemeService.data;
+    }
+
+    const commodityTypeService =  await this.commodityTypeService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityTypeService", commodityTypeService)
+    if(commodityTypeService) {
+      commodity.types = payload.isLocale ? commodityTypeService.data.map(item => item.options[payload.locale]) : commodityTypeService.data;
+    }
+
+    const commodityUseService =  await this.commodityUseService.retrieveCommodityId(payload.commodityId);
+    // console.log("edit commodityUseService", commodityUseService)
+    if(commodityUseService) {
+      commodity.uses = payload.isLocale ? commodityUseService.data.map(item => item.options[payload.locale]) : commodityUseService.data;
+    }
+
+
+
+
+    if (commodity) {
+      return {
+        data: commodity,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+
+
+
 
   // 创建商品
   async create(payload) {
@@ -205,7 +480,19 @@ export class CommodityCommodityService {
         set: { sellerId: payload.sellerId }
       })
     }
-    return commodity
+
+    // return commodity
+    if (commodity.data.identifiers[0].id) {
+      return {
+        success: true,
+        code: 10003
+      }
+    } else {
+      return {
+        success: false,
+        code: 10004
+      }
+    }
 
   }
 
@@ -613,6 +900,8 @@ export class CommodityCommodityService {
   }
 
 
+
+
   /**
    * 查找商品-所有商品
    * @param payload
@@ -625,7 +914,7 @@ export class CommodityCommodityService {
 
       if (data) {
         if(payload.isLocale){
-          data = this.filter(payload.locale, data)
+          data = this.searchFilter(payload.locale, data)
         }
         return {
           data: {
@@ -643,6 +932,30 @@ export class CommodityCommodityService {
       }
     }
 
+    async retrievePhoto(payload) {
+      let result = await this.baseCommodityServer.BaseRetrievePhoto(payload);
+      let data = result[0];
+      let total = result[1];
+
+      if (data) {
+        if(payload.isLocale){
+          data = this.searchFilter(payload.locale, data)
+        }
+        return {
+          data: {
+            list: data,
+            total
+          },
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
+    }
     async retrieveCategory(id) {
       let data = await this.baseCommodityServer.BaseRetrieveCategory(id);
 
@@ -772,6 +1085,14 @@ export class CommodityCommodityService {
     }else{
       payload.price = ''
     }
+
+    if(payload.colors){
+      searchAll = false;
+      payload.colors = payload.colors.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+
+    }
+
+
     if(payload.categorys){
       searchAll = false;
       if(typeof payload.categorys == 'string'){
@@ -886,7 +1207,7 @@ export class CommodityCommodityService {
     }else{
       result = await this.baseCommodityServer.BaseSearchs(payload);
     }
-    console.log("searchs result", result)
+    // console.log("searchs result", result)
     let data = result[0];
     let total = result[1];
 
@@ -978,6 +1299,8 @@ export class CommodityCommodityService {
       }
     }
   }
+
+
 
   async update(payload) {
     const data = await this.baseCommodityServer.BaseUpdate(payload);

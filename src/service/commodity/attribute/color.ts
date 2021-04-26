@@ -54,7 +54,23 @@ export class CommodityAttributeColor {
    * 通过commodityId获取商品
    * @param payload
    */
-    async getCommodity(commodityId) {
+    async getCommodityId(commodityId) {
+      const data = await this.baseCommodityColorServer.BaseRetrieveCommodityId(commodityId);
+      if (data) {
+        return {
+          data: data,
+          success: true,
+          code: 10501
+        }
+      } else {
+        return {
+          success: false,
+          code: 10502
+        }
+      }
+    }
+
+    async retrieveCommodityId(commodityId) {
       const data = await this.baseCommodityColorServer.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {

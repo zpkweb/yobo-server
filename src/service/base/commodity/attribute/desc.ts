@@ -56,10 +56,10 @@ export class BaseCommodityDescServer {
   /**
    * 查询详情Id
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityDescEntity
       .createQueryBuilder('desc')
-      .where('desc.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .where('desc.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
   }
 

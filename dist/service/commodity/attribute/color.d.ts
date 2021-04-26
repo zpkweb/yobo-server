@@ -19,7 +19,16 @@ export declare class CommodityAttributeColor {
         code: number;
         data?: undefined;
     }>;
-    getCommodity(commodityId: any): Promise<{
+    getCommodityId(commodityId: any): Promise<{
+        data: import("../../../entity/commodity/attribute/color").CommodityColorEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrieveCommodityId(commodityId: any): Promise<{
         data: import("../../../entity/commodity/attribute/color").CommodityColorEntity[];
         success: boolean;
         code: number;

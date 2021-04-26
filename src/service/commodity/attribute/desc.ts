@@ -45,6 +45,22 @@ export class CommodityAttributeDesc {
     }
   }
 
+  async retrieveCommodityId(commodityId) {
+    const data = await this.baseCommodityDescServer.BaseRetrieveCommodityId(commodityId);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
   // 更新商品详情
   async update(payload) {
     const data = await this.baseCommodityDescServer.BaseUpdate(payload);

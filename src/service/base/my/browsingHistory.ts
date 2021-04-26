@@ -3,11 +3,11 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { MyBrowsingHistoryEntity } from 'src/entity/my/browsingHistory';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
-import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
-import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
-import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
-import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
-import { UserSellerEntity } from 'src/entity/user/seller/seller';
+// import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
+// import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
+// import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
+// import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
+// import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @Provide()
 export class BaseBrowsingHistoryServer {
@@ -43,12 +43,12 @@ export class BaseBrowsingHistoryServer {
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
       .leftJoinAndSelect("myBrowsingHistory.user", "user")
-      .leftJoinAndSelect('myBrowsingHistory.commodity', 'commodity')
-      .leftJoinAndMapOne('myBrowsingHistory.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
-      .leftJoinAndMapOne('myBrowsingHistory.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
-      .leftJoinAndMapOne('myBrowsingHistory.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
-      .leftJoinAndMapMany('myBrowsingHistory.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
-      .leftJoinAndMapOne('myBrowsingHistory.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
+      // .leftJoinAndSelect('myBrowsingHistory.commodity', 'commodity')
+      // .leftJoinAndMapOne('myBrowsingHistory.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
+      // .leftJoinAndMapOne('myBrowsingHistory.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
+      // .leftJoinAndMapOne('myBrowsingHistory.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
+      // .leftJoinAndMapMany('myBrowsingHistory.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
+      // .leftJoinAndMapOne('myBrowsingHistory.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
       .where("user.userId = :userId", { userId: payload.userId })
       // .andWhere(qb => {
       //   const subQuery = qb

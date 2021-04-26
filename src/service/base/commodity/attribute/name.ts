@@ -56,10 +56,10 @@ export class BaseCommodityNameServer {
   /**
    * 查询商品名称Id
    */
-  async BaseRetrieveId(payload) {
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityNameEntity
       .createQueryBuilder('name')
-      .where('name.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .where('name.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
   }
 

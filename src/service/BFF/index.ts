@@ -4,6 +4,8 @@ import { SellerService } from '../user/seller';
 import { CommodityService } from '../commodity';
 import { MyService } from 'src/service/my';
 import { ArtworkOptionsService } from './artworkOptions';
+import { CommodityOptionsThemeService } from 'src/service/commodity/options/theme'
+
 
 @Provide()
 export class BFFService {
@@ -23,6 +25,9 @@ export class BFFService {
   @Inject()
   myService: MyService;
 
+  @Inject()
+  commodityOptionsThemeService: CommodityOptionsThemeService;
+
   @Config('host')
   host;
 
@@ -41,7 +46,7 @@ export class BFFService {
     }
 
     // 您的线上画廊:搜索艺术家-画廊
-    const gallerySeller = await this.sellerService.retrieveSellerAll({
+    const gallerySeller = await this.sellerService.retrieveSellerHome({
       pageSize: payload.pageSize || 4,
       currentPage: payload.currentPage || 1,
       isLocale: true,
@@ -52,20 +57,21 @@ export class BFFService {
     }
 
     // 最新上线的艺术作品:搜索艺术品
-    const searchCommodity = await this.commodityService.search({
-      news: 'true',
+    const latestCommodity = await this.commodityService.findPhoto({
+      news: true,
       pageSize: payload.pageSize || 4,
       currentPage: payload.currentPage || 1,
       isLocale: true,
       locale: payload.locale || 'zh-cn'
     });
-    if(!searchCommodity.success) {
-      return searchCommodity;
+    if(!latestCommodity.success) {
+      return latestCommodity;
     }
 
     // 通过画作看世界:艺术品分类
-    const commodityOption = await this.commodityService.retrieveOptionAll({
-      type: 'theme',
+    const commodityOption = await this.commodityOptionsThemeService.retrieveSize({
+      pageSize: payload.pageSize || 6,
+      currentPage: payload.currentPage || 1,
       isLocale: true,
       locale: payload.locale || 'zh-cn'
     })
@@ -101,11 +107,11 @@ export class BFFService {
       code: 10009,
       data: {
         banner: banner.data,
-        gallerySeller: gallerySeller.data,
-        latestCommodity: searchCommodity.data,
+        gallerySeller: gallerySeller.data.list,
+        latestCommodity: latestCommodity.data.list,
         lookWorld: commodityOption.data,
         commentCommodity: commodityComment.data,
-        hotSaleSeller: hotSaleSeller.data
+        hotSaleSeller: hotSaleSeller.data.list
       }
     }
   }
@@ -118,8 +124,7 @@ export class BFFService {
    */
   async buy(payload) {
     // 商品 简介
-
-    const commodity = await this.commodityService.find({
+    const commodity = await this.commodityService.buy({
       locale: payload.locale,
       isLocale: true,
       commodityId: payload.commodityId
@@ -154,20 +159,20 @@ export class BFFService {
 
 
     // 类似作品
-    const commoditySimilar = await this.commodityService.search({
-      isLocale: true,
-      pageSize: 4
-    })
-    if(!commoditySimilar.success) {
-      return commoditySimilar;
-    }
+    // const commoditySimilar = await this.commodityService.search({
+    //   isLocale: true,
+    //   pageSize: 4
+    // })
+    // if(!commoditySimilar.success) {
+    //   return commoditySimilar;
+    // }
 
     // 最近浏览的作品
     let browsingHistory:any = {
       data: []
     };
     if(payload.userId) {
-      const findBrowsingHistory = await this.myService.findBrowsingHistory(payload.userId);
+      const findBrowsingHistory = await this.myService.findBrowsingHistory(payload);
       if(!findBrowsingHistory.success) {
         return findBrowsingHistory;
       }
@@ -180,7 +185,7 @@ export class BFFService {
       code: 10009,
       data: {
         commodity: commodity.data,
-        commoditySimilar: commoditySimilar.data.list,
+        // commoditySimilar: commoditySimilar.data.list,
         seller: seller.data,
         browsingHistory: browsingHistory.data
       }

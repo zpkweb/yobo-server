@@ -10,6 +10,7 @@ export declare class BaseSellerServer {
     baseApplySeller(userId: any): Promise<UserSellerEntity>;
     baseRetrieveSeller(payload: any): Promise<UserSellerEntity>;
     baseRetrieveSellerAll(payload: any): Promise<[UserSellerEntity[], number]>;
+    baseRetrieveSellerHome(payload: any): Promise<[UserSellerEntity[], number]>;
     baseSearchSeller(payload: any): Promise<[UserSellerEntity[], number]>;
     baseUpdateSeller(payload: any): Promise<import("typeorm").UpdateResult>;
     baseUpdateSellerMetadata(payload: any): Promise<import("typeorm").UpdateResult>;

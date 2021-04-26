@@ -5,16 +5,7 @@ export declare class BFFController {
     commodityService: CommodityService;
     bffService: BFFService;
     ctx: Context;
-    home(query: any): Promise<any>;
-    buy(query: any): Promise<{
-        data: import("../../../entity/commodity/commodity").CommodityEntity;
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    } | {
+    home(query: any): Promise<{
         data: {
             list: import("../../../entity/commodity/commodity").CommodityEntity[];
             total: number;
@@ -22,25 +13,60 @@ export declare class BFFController {
         success: boolean;
         code: number;
     } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        success: boolean;
+        code: number;
         data: {
-            list: import("../../../entity/my/browsingHistory").MyBrowsingHistoryEntity[];
+            id: number;
+            src: string;
+            star: number;
+            title: string;
+            desc: string;
+        }[];
+    } | {
+        data: import("../../../entity/page/banner").PageBannerEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        data: {
+            list: import("../../../entity/user/seller/seller").UserSellerEntity[];
             total: number;
         };
         success: boolean;
         code: number;
     } | {
-        data: import("../../../entity/user/seller/seller").UserSellerEntity;
+        data: import("../../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data: {
-            commodity: import("../../../entity/commodity/commodity").CommodityEntity;
-            commoditySimilar: import("../../../entity/commodity/commodity").CommodityEntity[];
-            seller: any;
-            browsingHistory: any;
+            banner: import("../../../entity/page/banner").PageBannerEntity[];
+            gallerySeller: import("../../../entity/user/seller/seller").UserSellerEntity[];
+            latestCommodity: import("../../../entity/commodity/commodity").CommodityEntity[];
+            lookWorld: import("../../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
+            commentCommodity: {
+                id: number;
+                src: string;
+                star: number;
+                title: string;
+                desc: string;
+            }[];
+            hotSaleSeller: import("../../../entity/user/seller/seller").UserSellerEntity[];
         };
+    }>;
+    buy(query: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
     }>;
     artworkOptions(locale: any): Promise<{
         data: import("../../../entity/commodity/options/category").CommodityOptionsCategoryEntity[];

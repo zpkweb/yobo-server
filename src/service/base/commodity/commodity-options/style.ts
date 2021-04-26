@@ -26,7 +26,7 @@ export class BaseCommodityStyleServer {
   async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityStyleEntity
       .createQueryBuilder('style')
-      .leftJoinAndSelect('style.commoditys', 'commoditys')
+      // .leftJoinAndSelect('style.commoditys', 'commoditys')
       .leftJoinAndSelect('style.options', 'options')
       .where('style.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();

@@ -52,17 +52,17 @@ export class CommodityService {
       }
     }
 
-    const commodityNew =  await this.commodityCommodityService.create(payload);
-    if(!commodityNew.success){
-      return commodityNew
-    }
+    // const commodityNew =  await this.commodityCommodityService.create(payload);
+    // if(!commodityNew.success){
+    //   return commodityNew
+    // }
 
-    // 通过商品Id查找商品
+    // // 通过商品Id查找商品
 
-    return await this.commodityCommodityService.retrieve({
-      commodityId: commodityNew.data.generatedMaps[0].commodityId
-    })
-
+    // return await this.commodityCommodityService.retrieve({
+    //   commodityId: commodityNew.data.generatedMaps[0].commodityId
+    // })
+    return await this.commodityCommodityService.create(payload);
 
   }
 
@@ -73,17 +73,27 @@ export class CommodityService {
     return await this.commodityCommodityService.retrieve(payload);
   }
 
+  // 编辑商品
+  async edit(commodityId) {
+    return await this.commodityCommodityService.edit(commodityId);
+
+  }
+
+  async buy(payload) {
+    return await this.commodityCommodityService.buy(payload);
+
+  }
+
 
   // 查找所有商品
   async findAll(payload) {
-    return await this.commodityCommodityService.retrieveAll({
-      isLocale: payload.isLocale || false,
-      locale: payload.locale || 'zh-cn',
-      currentPage: +payload.currentPage || 1,
-      pageSize: +payload.pageSize || 10
-    });
+    return await this.commodityCommodityService.retrieveAll(payload);
   }
 
+
+  async findPhoto(payload) {
+    return await this.commodityCommodityService.retrievePhoto(payload);
+  }
 
 
 
@@ -207,6 +217,9 @@ export class CommodityService {
     return await this.commodityCommodityService.searchs(payload);
   }
 
+
+
+
   // 删除商品
   async delete(commodityId) {
     if(commodityId){
@@ -216,6 +229,8 @@ export class CommodityService {
     }
 
   }
+
+
 
   // 更新商品
   async update(payload) {

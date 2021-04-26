@@ -51,6 +51,8 @@ export class CommodityAttributeName {
     }
   }
 
+
+
   /**
    * 通过commodityId判断商品是否存在
    * @param payload
@@ -58,6 +60,22 @@ export class CommodityAttributeName {
    */
   async hasId(commodityId) {
     const data = await this.baseCommodityNameServer.BaseHas(commodityId);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10501
+      }
+    } else {
+      return {
+        success: false,
+        code: 10502
+      }
+    }
+  }
+
+  async retrieveCommodityId(commodityId) {
+    const data = await this.baseCommodityNameServer.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,

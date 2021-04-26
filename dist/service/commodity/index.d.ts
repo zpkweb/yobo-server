@@ -20,10 +20,6 @@ export declare class CommodityService {
         success: boolean;
         code: number;
     } | {
-        data: import("../../entity/commodity/commodity").CommodityEntity;
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
     }>;
@@ -36,7 +32,37 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
+    edit(commodityId: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    buy(payload: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     findAll(payload: any): Promise<{
+        data: {
+            list: import("../../entity/commodity/commodity").CommodityEntity[];
+            total: number;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    findPhoto(payload: any): Promise<{
         data: {
             list: import("../../entity/commodity/commodity").CommodityEntity[];
             total: number;

@@ -92,6 +92,32 @@ export class CommodityOptionsThemeService {
     }
   }
 
+  async retrieveSize({
+    isLocale = false,
+    locale = 'zh-cn',
+    currentPage = 10,
+    pageSize = 1
+  } = {}) {
+    let data = await this.baseCommodityOptionsThemeServer.BaseRetrieveSize({
+      currentPage,
+      pageSize
+    });
+    if(isLocale){
+      data = this.filter(locale, data)
+    }
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 
   /**
    * 修改

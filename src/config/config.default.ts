@@ -20,7 +20,7 @@ export default (appInfo: EggAppInfo) => {
     port: 3306,
     username: 'root',
     password: 'root1234',
-    database: 'yobo-online',
+    database: 'yobo_online',
     synchronize: true,
     logging: false,
     // "entities": ["src/entity/**/*.ts"]

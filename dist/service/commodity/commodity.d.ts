@@ -39,6 +39,24 @@ export declare class CommodityCommodityService {
     commodityTypeService: CommodityTypeService;
     commodityUseService: CommodityUseService;
     commodityOptionService: CommodityOptionService;
+    edit(commodityId: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    buy(payload: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -124,6 +142,18 @@ export declare class CommodityCommodityService {
         data?: undefined;
     }>;
     retrieveAll(payload: any): Promise<{
+        data: {
+            list: import("../../entity/commodity/commodity").CommodityEntity[];
+            total: number;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrievePhoto(payload: any): Promise<{
         data: {
             list: import("../../entity/commodity/commodity").CommodityEntity[];
             total: number;

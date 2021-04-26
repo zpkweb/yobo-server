@@ -117,12 +117,27 @@ export class BaseSellerServer {
     return await this.userSellerEntity
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
-      .leftJoinAndSelect('seller.metadata', 'metadata')
-      .leftJoinAndSelect('seller.commoditys', 'commoditys')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
+      // .leftJoinAndSelect('seller.commoditys', 'commoditys')
+      // .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
+      // .leftJoinAndMapOne('seller.commodityName', CommodityNameEntity, "commodityName", "commodityName.commodityId = commoditys.commodityId")
+      // .leftJoinAndMapMany('seller.commodityPhotos', '')
+      // .addSelect('seller.createdDate')
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
+  }
+
+  async baseRetrieveSellerHome(payload) {
+    return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      // .leftJoinAndSelect('seller.user', 'user')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
+      .innerJoinAndSelect('seller.commoditys', 'commoditys')
       .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
       .leftJoinAndMapOne('seller.commodityName', CommodityNameEntity, "commodityName", "commodityName.commodityId = commoditys.commodityId")
       // .leftJoinAndMapMany('seller.commodityPhotos', '')
-      .addSelect('seller.createdDate')
+      // .addSelect('seller.createdDate')
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();

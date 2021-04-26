@@ -22,7 +22,7 @@ export default (appInfo: EggAppInfo) => {
     "port": 3306,
     "username": "root",
     "password": "Test123!@#",
-    "database": "yobo-online",
+    "database": "yobo_online",
     "synchronize": true,
     "logging": false
   }
@@ -37,7 +37,7 @@ export default (appInfo: EggAppInfo) => {
   //   "port": 3306,
   //   "username": "root",
   //   "password": "root1234",
-  //   "database": "yobo",
+  //   "database": "yobo_online",
   //   "synchronize": true,
   //   "logging": false
   // }

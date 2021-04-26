@@ -47,7 +47,9 @@ export declare class BaseCommodityServer {
     BaseHas(commodityId: any): Promise<CommodityEntity>;
     BaseHasRelation(payload: any): Promise<CommodityEntity>;
     BaseRetrieve(commodityId: any): Promise<CommodityEntity>;
+    BaseRetrieveCommodityId(commodityId: any): Promise<CommodityEntity>;
     BaseRetrieveAll(payload: any): Promise<[CommodityEntity[], number]>;
+    BaseRetrievePhoto(payload: any): Promise<[CommodityEntity[], number]>;
     BaseRetrieveCategory(categorys: any): Promise<CommodityEntity[]>;
     BaseSearchUnion(payload: any, where: any): Promise<[CommodityEntity[], number]>;
     BaseSearchIntersection(payload: any, where: any): Promise<string>;

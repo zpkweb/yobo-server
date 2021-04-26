@@ -96,7 +96,7 @@ export declare class MyService {
         data?: undefined;
     }>;
     addBrowsingHistory(payload: any): Promise<any>;
-    findBrowsingHistory(userId: any): Promise<{
+    findBrowsingHistory(payload: any): Promise<{
         data: {
             list: import("../../entity/my/browsingHistory").MyBrowsingHistoryEntity[];
             total: number;

@@ -337,10 +337,51 @@ export class SellerService {
     }
   }
 
+  async retrieveSellerHome(payload) {
+    let result = await this.baseSellerServer.baseRetrieveSellerHome(payload);
+    if(result){
+
+
+      let data = result[0];
+      let total = result[1];
+
+
+      if (data) {
+        if(payload.isLocale){
+          data = this.retrieveSellerAllFilter(payload.locale, data)
+        }
+        return {
+          data: {
+            list: data,
+            total
+          },
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
+    }
+  }
+
   retrieveSellerAllFilter(type, payload) {
     return payload.map(item => {
-        return Object.assign(item, {commodityName: item.commodityName && item.commodityName[type] ? item.commodityName[type] : ''})
-
+      if(item.commodityName) {
+        item.commodityName = item.commodityName[type]
+      }
+      if(item.commodityPhotos) {
+        item.commodityPhotos = item.commodityPhotos.map(item => item.src)
+      }
+        // return Object.assign(
+        //   item,
+        //   {
+        //     commodityName: item.commodityName && item.commodityName[type] ? item.commodityName[type] : '',
+        //   }
+        // )
+      return item;
 
     })
   }

@@ -40,6 +40,20 @@ export declare class CommodityOptionsThemeService {
         code: number;
         data?: undefined;
     }>;
+    retrieveSize({ isLocale, locale, currentPage, pageSize }?: {
+        isLocale?: boolean;
+        locale?: string;
+        currentPage?: number;
+        pageSize?: number;
+    }): Promise<{
+        data: import("../../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     update(payload: any): Promise<{
         success: boolean;
         code: number;

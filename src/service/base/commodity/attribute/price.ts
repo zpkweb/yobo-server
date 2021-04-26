@@ -47,7 +47,6 @@ export class BaseCommodityPriceServer {
       .where('price.zh-cn = :zhcn', { zhcn: payload['zh-cn'] })
       .orWhere('price.en-us = :enus', { enus: payload['en-us'] })
       .orWhere('price.ja-jp = :jajp', { jajp: payload['ja-jp'] })
-      // .orWhere('price.fr-fr = :frfr', { frfr: payload['fr-fr'] })
       .orWhere('price.es-es = :eses', { eses: payload['es-es'] })
       .getOne();
   }
@@ -55,7 +54,7 @@ export class BaseCommodityPriceServer {
   /**
    * 查询价格Id
    */
-  async BaseRetrieveId(commodityId) {
+  async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityPriceEntity
       .createQueryBuilder('price')
       .where('price.commodityId = :commodityId', { commodityId: commodityId })

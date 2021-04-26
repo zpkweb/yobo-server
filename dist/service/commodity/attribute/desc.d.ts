@@ -19,6 +19,15 @@ export declare class CommodityAttributeDesc {
         code: number;
         data?: undefined;
     }>;
+    retrieveCommodityId(commodityId: any): Promise<{
+        data: import("../../../entity/commodity/attribute/desc").CommodityDescEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     update(payload: any): Promise<{
         data: import("typeorm").UpdateResult;
         success: boolean;

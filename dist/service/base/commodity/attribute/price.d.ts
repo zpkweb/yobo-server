@@ -5,7 +5,7 @@ export declare class BaseCommodityPriceServer {
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseHas(commodityId: any): Promise<CommodityPriceEntity>;
     BaseRetrieve(payload: any): Promise<CommodityPriceEntity>;
-    BaseRetrieveId(commodityId: any): Promise<CommodityPriceEntity>;
+    BaseRetrieveCommodityId(commodityId: any): Promise<CommodityPriceEntity>;
     BaseRetrieveAll(): Promise<CommodityPriceEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
     BaseDelete(commodityId: any): Promise<import("typeorm").DeleteResult>;

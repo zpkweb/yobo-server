@@ -26,7 +26,7 @@ export class BaseCommodityShapeServer {
   async BaseRetrieveCommodityId(commodityId) {
     return await this.CommodityShapeEntity
       .createQueryBuilder('shape')
-      .leftJoinAndSelect('shape.commoditys', 'commoditys')
+      // .leftJoinAndSelect('shape.commoditys', 'commoditys')
       .leftJoinAndSelect('shape.options', 'options')
       .where('shape.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();

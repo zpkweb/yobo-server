@@ -92,6 +92,18 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     }>;
+    retrieveSellerHome(payload: any): Promise<{
+        data: {
+            list: UserSellerEntity[];
+            total: number;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     retrieveSellerAllFilter(type: any, payload: any): any;
     hasSeller(sellerId: any): Promise<{
         data: UserSellerEntity;

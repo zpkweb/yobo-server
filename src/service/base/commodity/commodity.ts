@@ -147,6 +147,8 @@ export class BaseCommodityServer {
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
     }
+
+
   /**
    * 查询商品关联属性是否存在
    * @param payload
@@ -167,49 +169,50 @@ export class BaseCommodityServer {
   async BaseRetrieve(commodityId) {
     const data =  await this.commodityEntity
       .createQueryBuilder('commodity')
-      .leftJoinAndSelect('commodity.name', 'name')
-      .leftJoinAndSelect('commodity.desc', 'desc')
-      .leftJoinAndSelect('commodity.price', 'price')
-      .leftJoinAndSelect('commodity.photos', 'photos')
-      .leftJoinAndSelect('commodity.colors', 'colors')
-      .leftJoinAndSelect('commodity.categorys', 'categorys')
-      .innerJoinAndSelect('categorys.options', 'categorysOption')
+      // .leftJoinAndSelect('commodity.name', 'name')
+      // .leftJoinAndSelect('commodity.desc', 'desc')
+      // .leftJoinAndSelect('commodity.price', 'price')
+      // .leftJoinAndSelect('commodity.photos', 'photos')
+      // .leftJoinAndSelect('commodity.colors', 'colors')
 
-      .leftJoinAndSelect('commodity.classifications', 'classifications')
-      .innerJoinAndSelect('classifications.options', 'classificationsOption')
+      // .leftJoinAndSelect('commodity.categorys', 'categorys')
+      // .innerJoinAndSelect('categorys.options', 'categorysOption')
 
-      .leftJoinAndSelect('commodity.materials', 'materials')
-      .innerJoinAndSelect('materials.options', 'materialsOption')
+      // .leftJoinAndSelect('commodity.classifications', 'classifications')
+      // .innerJoinAndSelect('classifications.options', 'classificationsOption')
 
-      .leftJoinAndSelect('commodity.models', 'models')
-      .innerJoinAndSelect('models.options', 'modelsOption')
+      // .leftJoinAndSelect('commodity.materials', 'materials')
+      // .innerJoinAndSelect('materials.options', 'materialsOption')
 
-      .leftJoinAndSelect('commodity.places', 'places')
-      .innerJoinAndSelect('places.options', 'placesOption')
+      // .leftJoinAndSelect('commodity.models', 'models')
+      // .innerJoinAndSelect('models.options', 'modelsOption')
 
-      .leftJoinAndSelect('commodity.ruiwus', 'ruiwus')
-      .innerJoinAndSelect('ruiwus.options', 'ruiwusOption')
+      // .leftJoinAndSelect('commodity.places', 'places')
+      // .innerJoinAndSelect('places.options', 'placesOption')
 
-      .leftJoinAndSelect('commodity.shapes', 'shapes')
-      .innerJoinAndSelect('shapes.options', 'shapesOption')
+      // .leftJoinAndSelect('commodity.ruiwus', 'ruiwus')
+      // .innerJoinAndSelect('ruiwus.options', 'ruiwusOption')
 
-      .leftJoinAndSelect('commodity.specifications', 'specification')
-      .innerJoinAndSelect('specification.options', 'specificationsOption')
+      // .leftJoinAndSelect('commodity.shapes', 'shapes')
+      // .innerJoinAndSelect('shapes.options', 'shapesOption')
 
-      .leftJoinAndSelect('commodity.styles', 'styles')
-      .innerJoinAndSelect('styles.options', 'stylesOption')
+      // .leftJoinAndSelect('commodity.specifications', 'specification')
+      // .innerJoinAndSelect('specification.options', 'specificationsOption')
 
-      .leftJoinAndSelect('commodity.techniques', 'techniques')
-      .innerJoinAndSelect('techniques.options', 'techniquesOption')
+      // .leftJoinAndSelect('commodity.styles', 'styles')
+      // .innerJoinAndSelect('styles.options', 'stylesOption')
 
-      .leftJoinAndSelect('commodity.themes', 'themes')
-      .innerJoinAndSelect('themes.options', 'themesOption')
+      // .leftJoinAndSelect('commodity.techniques', 'techniques')
+      // .innerJoinAndSelect('techniques.options', 'techniquesOption')
 
-      .leftJoinAndSelect('commodity.types', 'types')
-      .innerJoinAndSelect('types.options', 'typesOption')
+      // .leftJoinAndSelect('commodity.themes', 'themes')
+      // .innerJoinAndSelect('themes.options', 'themesOption')
 
-      .leftJoinAndSelect('commodity.uses', 'uses')
-      .innerJoinAndSelect('uses.options', 'usesOption')
+      // .leftJoinAndSelect('commodity.types', 'types')
+      // .innerJoinAndSelect('types.options', 'typesOption')
+
+      // .leftJoinAndSelect('commodity.uses', 'uses')
+      // .innerJoinAndSelect('uses.options', 'usesOption')
 
       .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
@@ -217,6 +220,17 @@ export class BaseCommodityServer {
       .getOne();
     return data
   }
+
+  async BaseRetrieveCommodityId(commodityId) {
+    const data =  await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .innerJoinAndSelect('commodity.seller', 'seller')
+      .addSelect('commodity.createdDate')
+      .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+      .getOne();
+    return data
+  }
+
   /**
    * 查询所有商品
    */
@@ -227,7 +241,7 @@ export class BaseCommodityServer {
       .leftJoinAndSelect('commodity.desc', 'desc')
       .leftJoinAndSelect('commodity.price', 'price')
       .leftJoinAndSelect('commodity.photos', 'photos')
-      // .leftJoinAndSelect('commodity.colors', 'colors')
+      .leftJoinAndSelect('commodity.colors', 'colors')
       // .leftJoinAndSelect('commodity.categorys', 'categorys')
       // .innerJoinAndSelect('categorys.options', 'categorysOption')
 
@@ -269,6 +283,34 @@ export class BaseCommodityServer {
 
       // .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
+      .orderBy({
+        "commodity.id": Boolean(payload.news) ? "DESC"  :  "ASC",
+        // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
+      })
+      // .printSql()
+      // .getSql();
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
+      // .getSql();
+      // console.log(data)
+    return data;
+  }
+
+  async BaseRetrievePhoto(payload) {
+    const data = await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .leftJoinAndSelect('commodity.name', 'name')
+      // .leftJoinAndSelect('commodity.desc', 'desc')
+      // .leftJoinAndSelect('commodity.price', 'price')
+      .innerJoinAndSelect('commodity.photos', 'photos')
+      .leftJoin('commodity.categorys', 'categorys')
+      // .leftJoinAndMapOne('commodity.category', CommodityCategoryEntity, "commodityCategorys", "commodityCategorys.id = categorys.optionId")
+      .addSelect('commodity.createdDate')
+      .orderBy({
+        "commodity.id": Boolean(payload.news) ? "DESC"  :  "ASC",
+        // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
+      })
       // .printSql()
       // .getSql();
       .skip((payload.currentPage-1)*payload.pageSize)
@@ -1108,6 +1150,11 @@ export class BaseCommodityServer {
       isAND = true;
     }
 
+    if(payload.colors){
+      where += `${isAND ? ' AND ' : ''} colors.startColorValue >= :colors AND colors.endColorValue <= :colors `
+      isAND = true;
+    }
+
     if(payload.categorys.length){
       where += `${isAND ? ' AND ' : ''} categorys.optionId IN (:...categorys) `
       isAND = true;
@@ -1179,7 +1226,7 @@ export class BaseCommodityServer {
       .innerJoinAndSelect('commodity.name', 'name')
       .innerJoinAndSelect('commodity.desc', 'desc')
       .innerJoinAndSelect('commodity.price', 'price')
-
+      .innerJoinAndSelect('commodity.colors', 'colors')
 
       // .innerJoinAndSelect('commodity.colors', 'colors', "colors.startColorValue > :color AND colors.endColorValue < :color", { color : payload.colors.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0) })
 
@@ -1211,9 +1258,9 @@ export class BaseCommodityServer {
       .innerJoin('commodity.themes', 'themes')
       .innerJoin('commodity.types', 'types')
       .innerJoin('commodity.uses', 'uses')
-
-
       .leftJoinAndSelect('commodity.photos', 'photos')
+      .leftJoinAndSelect('commodity.browsingCount', 'browsingCount')
+
       .addSelect('commodity.createdDate')
       .where(where)
       .setParameter("id", payload.id)
@@ -1222,6 +1269,7 @@ export class BaseCommodityServer {
       .setParameter("sellerId", payload.sellerId)
       .setParameter("name", `%${payload.name}%`)
       .setParameter("desc", `%${payload.desc}%`)
+      .setParameter("colors", payload.colors)
       .setParameter("priceMin", payload.price.min)
       .setParameter("priceMax", payload.price.max)
       .setParameter("categorys", payload.categorys)
@@ -1239,7 +1287,7 @@ export class BaseCommodityServer {
       .setParameter("uses", payload.uses)
       .orderBy({
         "commodity.id": Boolean(payload.news) ? "DESC"  :  "ASC",
-        // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
+        "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
       })
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)

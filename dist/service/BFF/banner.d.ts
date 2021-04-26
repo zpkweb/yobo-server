@@ -10,13 +10,5 @@ export declare class BannerService {
         success: boolean;
         code: number;
         data?: undefined;
-    } | {
-        success: boolean;
-        code: number;
-        data: {
-            src: string;
-            title: string;
-            subTitle: string;
-        }[];
     }>;
 }

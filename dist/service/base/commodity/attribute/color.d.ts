@@ -4,7 +4,7 @@ export declare class BaseCommodityColorServer {
     commodityColorEntity: Repository<CommodityColorEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseHas(commodityId: any): Promise<CommodityColorEntity>;
-    BaseRetrieveCommodityId(payload: any): Promise<CommodityColorEntity[]>;
+    BaseRetrieveCommodityId(commodityId: any): Promise<CommodityColorEntity[]>;
     BaseRetrieve(payload: any): Promise<CommodityColorEntity[]>;
     BaseRetrieveAll(): Promise<CommodityColorEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;

@@ -72,9 +72,10 @@ export class MyService {
   }
 
   // 查找我的浏览记录
-  async findBrowsingHistory(userId) {
-    return await this.myBrowsingHistoryService.retrieveBrowsingHistory(userId)
+  async findBrowsingHistory(payload) {
+    return await this.myBrowsingHistoryService.retrieveBrowsingHistory(payload)
   }
+
 
 
   // 查找我的订单
