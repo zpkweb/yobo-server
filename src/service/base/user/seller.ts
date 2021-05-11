@@ -108,6 +108,17 @@ export class BaseSellerServer {
       .orWhere("seller.sellerId = :sellerId", { sellerId: payload.sellerId })
       .getOne();
   }
+  async baseSellerIdRetrieveSeller(sellerId) {
+    return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      .leftJoinAndSelect('seller.user', 'user')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
+      .leftJoin('seller.commoditys', 'commoditys')
+      .leftJoinAndMapMany('seller.commoditysPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
+      .addSelect('seller.createdDate')
+      .where("seller.sellerId = :sellerId", { sellerId: sellerId })
+      .getOne();
+  }
   /**
    * 检索所有
    * @param payload

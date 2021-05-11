@@ -1223,10 +1223,14 @@ export class BaseCommodityServer {
       // .innerJoinAndSelect('commodity.desc', 'desc', "desc.zh-cn like :desc", { desc : `%${payload.desc}%`})
       // .innerJoinAndSelect('commodity.price', 'price', "price.zh-cn BETWEEN :priceMin AND :priceMax", { priceMin : payload.price.min, priceMax : payload.price.max })
 
-      .innerJoinAndSelect('commodity.name', 'name')
-      .innerJoinAndSelect('commodity.desc', 'desc')
-      .innerJoinAndSelect('commodity.price', 'price')
-      .innerJoinAndSelect('commodity.colors', 'colors')
+      // .innerJoinAndSelect('commodity.name', 'name')
+      // .innerJoinAndSelect('commodity.desc', 'desc')
+      // .innerJoinAndSelect('commodity.price', 'price')
+      // .innerJoinAndSelect('commodity.colors', 'colors')
+      .innerJoin('commodity.name', 'name')
+      .innerJoin('commodity.desc', 'desc')
+      .innerJoin('commodity.price', 'price')
+      .innerJoin('commodity.colors', 'colors')
 
       // .innerJoinAndSelect('commodity.colors', 'colors', "colors.startColorValue > :color AND colors.endColorValue < :color", { color : payload.colors.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0) })
 
@@ -1295,6 +1299,16 @@ export class BaseCommodityServer {
       // .getSql();
       // console.log(data)
     return data;
+  }
+  /*
+  * 通过商品id获取艺术家信息
+  */
+  async BaseRetrieveSeller(commodityId) {
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .leftJoinAndSelect('commodity.seller', 'seller')
+      .where("commodityId = :commodityId", { commodityId: commodityId })
+      .getOne();
   }
   /**
    * 删除商品

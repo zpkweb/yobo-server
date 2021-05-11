@@ -6,7 +6,7 @@ echo "git auto push start..."
 
 
 # build
-yarn build
+# yarn build
 
 
 # push

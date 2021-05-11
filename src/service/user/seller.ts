@@ -433,6 +433,23 @@ export class SellerService {
       }
   }
 
+  async sellerIdFind(payload) {
+
+    const seller = await this.baseSellerServer.baseSellerIdRetrieveSeller(payload);
+
+      if(seller){
+        return {
+          data: seller,
+          success: true,
+          code : 10009
+        }
+      }else{
+        return {
+          success: false,
+          code : 10010
+        }
+      }
+  }
 
 
   /**

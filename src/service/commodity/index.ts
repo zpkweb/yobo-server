@@ -52,21 +52,8 @@ export class CommodityService {
       }
     }
 
-    // const commodityNew =  await this.commodityCommodityService.create(payload);
-    // if(!commodityNew.success){
-    //   return commodityNew
-    // }
-
-    // // 通过商品Id查找商品
-
-    // return await this.commodityCommodityService.retrieve({
-    //   commodityId: commodityNew.data.generatedMaps[0].commodityId
-    // })
     return await this.commodityCommodityService.create(payload);
-
   }
-
-
 
   // 查找商品
   async find(payload) {
@@ -76,13 +63,13 @@ export class CommodityService {
   // 编辑商品
   async edit(commodityId) {
     return await this.commodityCommodityService.edit(commodityId);
-
   }
 
   async buy(payload) {
     return await this.commodityCommodityService.buy(payload);
-
   }
+
+
 
 
   // 查找所有商品
@@ -214,7 +201,29 @@ export class CommodityService {
   }
 
   async searchs(payload) {
-    return await this.commodityCommodityService.searchs(payload);
+
+    return  await this.commodityCommodityService.searchs({
+      ...payload,
+      locale: payload.locale || 'zh-cn'
+    });
+
+  }
+
+
+  async clientSearch(payload) {
+    return await this.commodityCommodityService.clientSearch({
+      ...payload,
+      locale: payload.locale || 'zh-cn'
+    });
+
+  }
+
+  async serverSearch(payload) {
+    return await this.commodityCommodityService.serverSearch({
+      ...payload,
+      locale: payload.locale || 'zh-cn'
+    });
+
   }
 
 

@@ -64,7 +64,7 @@ export class CommodityController {
   async searchs(@Query(ALL) searchQuery) {
     const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
-    const data:any = await this.commodityService.searchs({
+    const data:any = await this.commodityService.clientSearch({
       ...searchQuery,
       pageSize: pageSize,
       currentPage: currentPage,
@@ -76,6 +76,7 @@ export class CommodityController {
     }
     return data;
   }
+
 
 
   // 查找商品选项-形状

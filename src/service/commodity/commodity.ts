@@ -20,7 +20,7 @@ import { CommodityTypeService } from './commodity-options/type';
 import { CommodityUseService } from './commodity-options/use';
 
 import { CommodityOptionService } from './commodityOption';
-
+import { SellerService } from 'src/service/user/seller';
 
 @Provide()
 export class CommodityCommodityService {
@@ -84,6 +84,9 @@ export class CommodityCommodityService {
 
   @Inject()
   commodityOptionService: CommodityOptionService;
+
+  @Inject()
+  sellerService: SellerService;
 
 
   // 编辑商品
@@ -355,6 +358,124 @@ export class CommodityCommodityService {
     }
   }
 
+
+  async clientSearch(payload) {
+    const result = await this.searchs(payload);
+    let data = result[0];
+    let total = result[1];
+    console.log("clientSearch", data, total)
+    if(data){
+      if(data && data.length) {
+        for(let item of data) {
+          const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+          if(commodityAttributeName) {
+            item.name = commodityAttributeName.data;
+          }
+          // const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(item.commodityId);
+          // if(commodityAttributeDesc) {
+          //   item.desc = commodityAttributeDesc.data;
+          // }
+          const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(item.commodityId);
+          if(commodityAttributePrice) {
+            item.price = commodityAttributePrice.data;
+          }
+          // const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(item.commodityId);
+          // if(commodityAttributeColor) {
+          //   item.colors = commodityAttributeColor.data;
+          // }
+
+
+          const commoditySeller:any =  await this.retrieveSeller(item.commodityId);
+          console.log("commoditySeller", commoditySeller)
+          if(commoditySeller) {
+            if(commoditySeller.data.seller) {
+              const commodityAttributeSeller =  await this.sellerService.sellerIdFind(commoditySeller.data.seller.sellerId);
+              console.log("commodityAttributeSeller", commodityAttributeSeller)
+              if(commodityAttributeSeller) {
+                item.seller = commodityAttributeSeller.data;
+              }
+            }
+          }
+        }
+      }
+
+      if(payload.isLocale){
+        data = this.searchFilter(payload.locale, data)
+      }
+      return {
+        data: {
+          list: data,
+          total
+        },
+        success: true,
+        code: 10009
+      }
+
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+
+  async serverSearch(payload) {
+    const result = await this.searchs(payload);
+    let data = result[0];
+    let total = result[1];
+    if(data){
+      if(data.list && data.list.length) {
+        for(let item of data.list) {
+          const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+          if(commodityAttributeName) {
+            item.name = commodityAttributeName.data;
+          }
+          const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(item.commodityId);
+          if(commodityAttributeDesc) {
+            item.desc = commodityAttributeDesc.data;
+          }
+          const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(item.commodityId);
+          if(commodityAttributePrice) {
+            item.price = commodityAttributePrice.data;
+          }
+          const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(item.commodityId);
+          if(commodityAttributeColor) {
+            item.colors = commodityAttributeColor.data;
+          }
+
+
+          const commoditySeller:any =  await this.retrieveSeller(item.commodityId);
+          if(commoditySeller) {
+            if(commoditySeller.data.seller) {
+              const commodityAttributeSeller =  await this.sellerService.sellerIdFind(commoditySeller.data.seller.sellerId);
+              if(commodityAttributeSeller) {
+                item.seller = commodityAttributeSeller.data;
+              }
+            }
+          }
+        }
+      }
+
+      if(payload.isLocale){
+        data = this.searchFilter(payload.locale, data)
+      }
+      return {
+        data: {
+          list: data,
+          total
+        },
+        success: true,
+        code: 10009
+      }
+
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 
 
 
@@ -956,6 +1077,23 @@ export class CommodityCommodityService {
         }
       }
     }
+
+    async retrieveSeller(commodityId) {
+      let data = await this.baseCommodityServer.BaseRetrieveSeller(commodityId);
+      if (data) {
+        return {
+          data: data,
+          success: true,
+          code: 10009
+        }
+      } else {
+        return {
+          success: false,
+          code: 10010
+        }
+      }
+    }
+
     async retrieveCategory(id) {
       let data = await this.baseCommodityServer.BaseRetrieveCategory(id);
 
@@ -1208,31 +1346,35 @@ export class CommodityCommodityService {
       result = await this.baseCommodityServer.BaseSearchs(payload);
     }
     // console.log("searchs result", result)
-    let data = result[0];
-    let total = result[1];
 
-    if (data) {
-      if(payload.isLocale){
-        data = this.searchFilter(payload.locale, data)
-      }
-      return {
-        data: {
-          list: data,
-          total
-        },
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
+
+    return result;
+    // let data = result[0];
+    // let total = result[1];
+
+    // if (data) {
+    //   if(payload.isLocale){
+    //     data = this.searchFilter(payload.locale, data)
+    //   }
+    //   return {
+    //     data: {
+    //       list: data,
+    //       total
+    //     },
+    //     success: true,
+    //     code: 10009
+    //   }
+    // } else {
+    //   return {
+    //     success: false,
+    //     code: 10010
+    //   }
+    // }
   }
 
   searchFilter(locale, data) {
     return data.map((item) => {
+
       if(item.name){
         item.name = item.name[locale]
       }
