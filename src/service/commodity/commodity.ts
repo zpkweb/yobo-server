@@ -365,7 +365,6 @@ export class CommodityCommodityService {
     let total = result[1];
     console.log("clientSearch", data, total)
     if(data){
-      if(data && data.length) {
         for(let item of data) {
           const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
           if(commodityAttributeName) {
@@ -386,18 +385,21 @@ export class CommodityCommodityService {
 
 
           const commoditySeller:any =  await this.retrieveSeller(item.commodityId);
-          console.log("commoditySeller", commoditySeller)
           if(commoditySeller) {
             if(commoditySeller.data.seller) {
               const commodityAttributeSeller =  await this.sellerService.sellerIdFind(commoditySeller.data.seller.sellerId);
-              console.log("commodityAttributeSeller", commodityAttributeSeller)
               if(commodityAttributeSeller) {
                 item.seller = commodityAttributeSeller.data;
+              }
+
+              let sellerFollowTotal = await this.sellerService.sellerFollowTotal(commoditySeller.data.seller.sellerId);
+              console.log("sellerFollowTotal", sellerFollowTotal)
+              if(sellerFollowTotal.success){
+                item.sellerFollowTotal = sellerFollowTotal.data;
               }
             }
           }
         }
-      }
 
       if(payload.isLocale){
         data = this.searchFilter(payload.locale, data)
@@ -425,8 +427,7 @@ export class CommodityCommodityService {
     let data = result[0];
     let total = result[1];
     if(data){
-      if(data.list && data.list.length) {
-        for(let item of data.list) {
+        for(let item of data) {
           const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
           if(commodityAttributeName) {
             item.name = commodityAttributeName.data;
@@ -449,13 +450,17 @@ export class CommodityCommodityService {
           if(commoditySeller) {
             if(commoditySeller.data.seller) {
               const commodityAttributeSeller =  await this.sellerService.sellerIdFind(commoditySeller.data.seller.sellerId);
-              if(commodityAttributeSeller) {
+              if(commodityAttributeSeller.success) {
                 item.seller = commodityAttributeSeller.data;
               }
+
+
+
+
+
             }
           }
         }
-      }
 
       if(payload.isLocale){
         data = this.searchFilter(payload.locale, data)

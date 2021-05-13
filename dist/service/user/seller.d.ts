@@ -123,6 +123,24 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     }>;
+    sellerIdFind(payload: any): Promise<{
+        data: UserSellerEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    sellerFollowTotal(sellerId: any): Promise<{
+        data: number;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     deleteSeller(sellerId: any): Promise<{
         success: boolean;
         code: number;

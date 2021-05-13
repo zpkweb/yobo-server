@@ -15,6 +15,7 @@ export class MyLikeSellerService {
   sellerService: SellerService;
 
   async addMyLikeSeller(payload) {
+    console.log("addMyLikeSeller", payload)
     // 查找用户
     const user = await this.userService.hasUser(payload.userId);
     if (!user.success) {
@@ -23,6 +24,7 @@ export class MyLikeSellerService {
 
     // 查找艺术家
     const seller = await this.sellerService.hasSeller(payload.sellerId);
+    console.log("查找艺术家", seller)
     if (!seller.success) {
       return seller;
     }
@@ -32,11 +34,12 @@ export class MyLikeSellerService {
       userId: payload.userId,
       sellerId: payload.sellerId
     })
+    console.log("查找我喜欢的艺术家", likeSeller)
     if (likeSeller.success) {
       // return likeSeller;
       return {
-        success: false,
-        code : 10602
+        success: true,
+        code : 10601
       }
     }
 
@@ -73,7 +76,8 @@ export class MyLikeSellerService {
    * 喜欢的艺术家列表
    */
   async myLikeSeller(userId) {
-    const data =await this.baseMyLikeSellerServer.BaseRetrieve(userId);
+    const data:any = await this.baseMyLikeSellerServer.BaseRetrieve(userId);
+
     if (data) {
       return {
         data: data,
@@ -164,7 +168,10 @@ export class MyLikeSellerService {
       sellerId: payload.sellerId
     })
     if (!likeSeller.success) {
-      return likeSeller;
+      return {
+        success: true,
+        code : 10602
+      }
     }
     // 删除艺术家
     return await this.delLikeSeller({

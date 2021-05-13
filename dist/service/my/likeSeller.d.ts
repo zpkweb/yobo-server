@@ -6,28 +6,16 @@ export declare class MyLikeSellerService {
     userService: UserService;
     sellerService: SellerService;
     addMyLikeSeller(payload: any): Promise<{
-        data: import("../../entity/user/user").UserEntity;
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
         data?: undefined;
     } | {
-        data: import("../../entity/user/seller/seller").UserSellerEntity;
-        success: boolean;
-        code: number;
-    } | {
-        data: import("typeorm").InsertResult;
-        success: boolean;
-        code: number;
-    } | {
-        data: import("../../entity/my/likeSeller").MyLikeSellerEntity[];
+        data: any;
         success: boolean;
         code: number;
     }>;
     myLikeSeller(userId: any): Promise<{
-        data: import("../../entity/my/likeSeller").MyLikeSellerEntity[];
+        data: any;
         success: boolean;
         code: number;
     } | {

@@ -391,7 +391,9 @@ export class SellerService {
    * @param sellerId
    */
   async hasSeller(sellerId) {
+    console.log("hasSeller sellerId", sellerId)
     const seller =  await this.baseSellerServer.BaseHas(sellerId)
+    console.log("hasSeller", seller)
       if(seller){
         return {
           data: seller,
@@ -451,6 +453,22 @@ export class SellerService {
       }
   }
 
+  async sellerFollowTotal(sellerId) {
+
+    const followTotal = await this.baseSellerServer.BaseRetrieveFollow(sellerId);
+      if(followTotal){
+        return {
+          data: followTotal,
+          success: true,
+          code : 10009
+        }
+      }else{
+        return {
+          success: false,
+          code : 10010
+        }
+      }
+  }
 
   /**
    * 删除艺术家

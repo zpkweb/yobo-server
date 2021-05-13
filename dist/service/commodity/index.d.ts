@@ -86,7 +86,20 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
-    searchs(payload: any): Promise<{
+    searchs(payload: any): Promise<any>;
+    clientSearch(payload: any): Promise<{
+        data: {
+            list: any;
+            total: any;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    serverSearch(payload: any): Promise<{
         data: {
             list: any;
             total: any;

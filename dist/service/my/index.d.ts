@@ -6,23 +6,11 @@ export declare class MyService {
     myLikeCommodityService: MyLikeCommodityService;
     myBrowsingHistoryService: MyBrowsingHistoryService;
     setSeller(payload: any): Promise<{
-        data: import("../../entity/user/user").UserEntity;
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
         data?: undefined;
     } | {
-        data: import("../../entity/user/seller/seller").UserSellerEntity;
-        success: boolean;
-        code: number;
-    } | {
-        data: import("typeorm").InsertResult;
-        success: boolean;
-        code: number;
-    } | {
-        data: import("../../entity/my/likeSeller").MyLikeSellerEntity[];
+        data: any;
         success: boolean;
         code: number;
     }>;
@@ -35,7 +23,7 @@ export declare class MyService {
         code: number;
     }>;
     getSeller(userId: any): Promise<{
-        data: import("../../entity/my/likeSeller").MyLikeSellerEntity[];
+        data: any;
         success: boolean;
         code: number;
     } | {

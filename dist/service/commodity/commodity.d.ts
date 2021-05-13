@@ -18,6 +18,7 @@ import { CommodityThemeService } from "./commodity-options/theme";
 import { CommodityTypeService } from "./commodity-options/type";
 import { CommodityUseService } from "./commodity-options/use";
 import { CommodityOptionService } from "./commodityOption";
+import { SellerService } from "../user/seller";
 export declare class CommodityCommodityService {
     baseCommodityServer: BaseCommodityServer;
     commodityAttributeName: CommodityAttributeName;
@@ -39,6 +40,7 @@ export declare class CommodityCommodityService {
     commodityTypeService: CommodityTypeService;
     commodityUseService: CommodityUseService;
     commodityOptionService: CommodityOptionService;
+    sellerService: SellerService;
     edit(commodityId: any): Promise<{
         data: any;
         success: boolean;
@@ -50,6 +52,30 @@ export declare class CommodityCommodityService {
     }>;
     buy(payload: any): Promise<{
         data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    clientSearch(payload: any): Promise<{
+        data: {
+            list: any;
+            total: any;
+        };
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    serverSearch(payload: any): Promise<{
+        data: {
+            list: any;
+            total: any;
+        };
         success: boolean;
         code: number;
     } | {
@@ -165,6 +191,15 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
+    retrieveSeller(commodityId: any): Promise<{
+        data: import("../../entity/commodity/commodity").CommodityEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     retrieveCategory(id: any): Promise<{
         data: import("../../entity/commodity/commodity").CommodityEntity[];
         success: boolean;
@@ -187,18 +222,7 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
-    searchs(payload: any): Promise<{
-        data: {
-            list: any;
-            total: any;
-        };
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
+    searchs(payload: any): Promise<any>;
     searchFilter(locale: any, data: any): any;
     deleteCommodityId(commodityId: any): Promise<{
         success: boolean;

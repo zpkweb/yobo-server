@@ -6,6 +6,7 @@ import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
 import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 
+import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
 @Provide()
 export class BaseSellerServer {
 
@@ -15,6 +16,8 @@ export class BaseSellerServer {
   @InjectEntityModel(UserSellerMetadataEntity)
   userSellerMetadataEntity: Repository<UserSellerMetadataEntity>
 
+  @InjectEntityModel(MyLikeSellerEntity)
+  myLikeSellerEntity: Repository<MyLikeSellerEntity>;
 
   /**
    * 增加
@@ -109,6 +112,7 @@ export class BaseSellerServer {
       .getOne();
   }
   async baseSellerIdRetrieveSeller(sellerId) {
+
     return await this.userSellerEntity
       .createQueryBuilder('seller')
       .leftJoinAndSelect('seller.user', 'user')
@@ -119,6 +123,15 @@ export class BaseSellerServer {
       .where("seller.sellerId = :sellerId", { sellerId: sellerId })
       .getOne();
   }
+
+  async BaseRetrieveFollow(sellerId) {
+    // return await this.myLikeSellerEntity
+    //   .createQueryBuilder('myLikeSeller')
+    //   .where("myLikeSeller.sellerId = :sellerId", { sellerId: sellerId })
+    //   .getMany();
+    return await this.myLikeSellerEntity.count({sellerId: sellerId})
+  }
+
   /**
    * 检索所有
    * @param payload
