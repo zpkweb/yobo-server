@@ -363,7 +363,7 @@ export class CommodityCommodityService {
     const result = await this.searchs(payload);
     let data = result[0];
     let total = result[1];
-    console.log("clientSearch", data, total)
+    // console.log("clientSearch", data, total)
     if(data){
         for(let item of data) {
           const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
@@ -393,7 +393,6 @@ export class CommodityCommodityService {
               }
 
               let sellerFollowTotal = await this.sellerService.sellerFollowTotal(commoditySeller.data.seller.sellerId);
-              console.log("sellerFollowTotal", sellerFollowTotal)
               if(sellerFollowTotal.success){
                 item.sellerFollowTotal = sellerFollowTotal.data;
               }
@@ -1183,7 +1182,7 @@ export class CommodityCommodityService {
   }
 
   async searchs(payload) {
-    // console.log("searchs payload", payload)
+    console.log("searchs payload", payload)
     let searchAll = true;
 
     if (payload.id) {
@@ -1231,7 +1230,12 @@ export class CommodityCommodityService {
 
     if(payload.colors){
       searchAll = false;
-      payload.colors = payload.colors.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+      if(payload.colors.substr(1) == '#'){
+        payload.colors = payload.colors.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+      }else{
+        payload.colors = payload.colors.toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0);
+      }
+
 
     }
 
@@ -1345,6 +1349,7 @@ export class CommodityCommodityService {
     }
 
     let result;
+    console.log("searchAll", searchAll)
     if(searchAll){
       result = await this.baseCommodityServer.BaseRetrieveAll(payload);
     }else{

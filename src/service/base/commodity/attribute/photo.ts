@@ -83,11 +83,11 @@ export class BaseCommodityPhotoServer {
   /**
    * 删除图片
    */
-  async BaseDelete(payload) {
+  async BaseDelete(id) {
     return await this.commodityPhotoEntity
       .createQueryBuilder()
       .delete()
-      .where('commodityId = :commodityId', { commodityId: payload.commodityId })
+      .where('id = :id', { id: id })
       .execute();
   }
 }

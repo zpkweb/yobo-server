@@ -52,7 +52,6 @@ export class BaseMyLikeSellerServer {
         .getMany();
     }
 
-    // const count = await manager.count(User, { firstName: "Timber" });
 
 
   // 商家 关联 用户

@@ -245,6 +245,7 @@ export class CommodityService {
   async update(payload) {
     // 查询商品是否存在
     const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
+    console.log('update commodity', commodity)
     //  商品不存在
     if(!commodity.success){
       return {
@@ -306,33 +307,52 @@ export class CommodityService {
 
 
 
+    for(let item of payload.removePhotos){
+      if(item.id) {
+        await this.commodityAttributePhoto.delete(item.id)
+      }
+    }
     // 更新商品图片
+
     for(let item of payload.photos){
+      console.log("photos item", item)
       if(item.id){
-        // 更新图片
-        const commodityPhotoUpdate = await this.commodityAttributePhoto.update({
-          src: item.url,
-          name: item.name,
-          commodityId: payload.commodityId,
-        });
-        if (!commodityPhotoUpdate.success) {
-          return commodityPhotoUpdate
+        if(item.remove){
+          // 删除图片
+          // await this.commodityAttributePhoto.delete(item.id)
+          // const commodityPhotoDelete = await this.commodityAttributePhoto.delete(item.id);
+          // if (!commodityPhotoDelete.success) {
+          //   return commodityPhotoDelete
+          // }
+
+        }else{
+          // 更新图片
+          // const commodityPhotoUpdate = await this.commodityAttributePhoto.update({
+          //   src: item.url,
+          //   name: item.name,
+          //   commodityId: payload.commodityId,
+          // });
+          // if (!commodityPhotoUpdate.success) {
+          //   return commodityPhotoUpdate
+          // }
         }
+
       }else{
-        //  添加图片
-        const commodityPhotoCreate = await this.commodityAttributePhoto.create({
-          src: item.url,
-          name: item.name
-        })
-        if (!commodityPhotoCreate.success) {
-          return commodityPhotoCreate
-        }
-        // 商品 关联 商品图片
-        await this.commodityCommodityService.relation({
-          name: 'photos',
-          of: { commodityId: payload.commodityId },
-          add: commodityPhotoCreate.data.identifiers[0].id
-        })
+          //  添加图片
+          const commodityPhotoCreate = await this.commodityAttributePhoto.create({
+            src: item.url,
+            name: item.name
+          })
+          if (!commodityPhotoCreate.success) {
+            return commodityPhotoCreate
+          }
+          // 商品 关联 商品图片
+          await this.commodityCommodityService.relation({
+            name: 'photos',
+            of: { commodityId: payload.commodityId },
+            add: commodityPhotoCreate.data.identifiers[0].id
+          })
+
       }
 
 

@@ -35,8 +35,12 @@ export class ServerSellerController {
    * sellerId
    */
   @Get('/',{summary:'获取艺术家详细信息'})
-  async find(@Query(ALL) findQuery) {
-    return await this.sellerService.find(findQuery)
+  async find(@Query(ALL) queryAll) {
+    return await this.sellerService.find({
+      sellerId: queryAll.sellerId,
+      locale: queryAll.locale || 'zh-cn',
+      isLocale: true
+    })
   }
 
   // 更新艺术家信息

@@ -31,6 +31,10 @@ export class UserSellerEntity {
   @Generated('uuid')
   sellerId: string;
 
+  // 头像
+  @Column()
+  banner: string;
+
   // 状态：0: 审核, 1: 通过, 2: 拒绝, 3: 禁用, 4: 注销
   @Column()
   state: number;

@@ -146,6 +146,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'user',
       identityIndex: 5,
+      banner: payload.banner || '',
       name: payload.firstname + payload.lastname || '',
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
@@ -209,6 +210,7 @@ export class UserRegisterService {
     return await this.register(Object.assign({}, {
       sourceType: 'admin',
       identityIndex: 5,
+      banner: payload.banner || '',
       avatar: payload.avatar || '',
       name: payload.firstname + payload.lastname || '',
       firstname: payload.firstname || '',
@@ -559,6 +561,7 @@ export class UserRegisterService {
       const seller = await this.baseSellerServer.baseCreateSeller({
         state: payload.state,
         type: payload.type || 0,
+        banner: payload.banner || '',
         typeName: payload.typeName || '',
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',

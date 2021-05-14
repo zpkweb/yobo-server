@@ -284,7 +284,7 @@ export class BaseCommodityServer {
       // .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
       .orderBy({
-        "commodity.id": Boolean(payload.news) ? "DESC"  :  "ASC",
+        "commodity.id": payload.news && payload.news =='true'  ? "DESC"  :  "ASC",
         // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
       })
       // .printSql()
@@ -308,7 +308,7 @@ export class BaseCommodityServer {
       // .leftJoinAndMapOne('commodity.category', CommodityCategoryEntity, "commodityCategorys", "commodityCategorys.id = categorys.optionId")
       .addSelect('commodity.createdDate')
       .orderBy({
-        "commodity.id": Boolean(payload.news) ? "DESC"  :  "ASC",
+        "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
         // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
       })
       // .printSql()
@@ -1027,8 +1027,8 @@ export class BaseCommodityServer {
       .setParameter("themes", payload.themes)
       .setParameter("types", payload.types)
       .setParameter("uses", payload.uses)
-      .orderBy("browsingCount.count", payload.hots ? "DESC"  :  "ASC")
-      .orderBy("commodity.createdDate", payload.news ? "DESC"  :  "ASC")
+      .orderBy("browsingCount.count", payload.hots && payload.hots =='true' ? "DESC"  :  "ASC")
+      .orderBy("commodity.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
 
 
       .skip((payload.currentPage-1)*payload.pageSize)
@@ -1290,8 +1290,8 @@ export class BaseCommodityServer {
       .setParameter("types", payload.types)
       .setParameter("uses", payload.uses)
       .orderBy({
-        "commodity.id": Boolean(payload.news) ? "DESC"  :  "ASC",
-        "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
+        "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
+        "browsingCount.count": payload.hots && payload.hots =='true' ? "DESC"  :  "ASC"
       })
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)

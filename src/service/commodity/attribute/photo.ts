@@ -98,5 +98,20 @@ export class CommodityAttributePhoto {
     }
   }
 
+  async delete(id) {
+    const data = await this.baseCommodityPhotoServer.BaseDelete(id);
+    if (data.affected) {
+      return {
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
 
 }

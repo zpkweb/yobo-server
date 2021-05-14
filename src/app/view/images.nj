@@ -6,6 +6,25 @@
 
 {% block head %}
   {# <link rel="stylesheet" href="../public/css/swiper.min.css"> #}
+  <style>
+    .images-li{
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    .images-img{
+      width: initial;
+      max-width: 100%;
+      height: 180px;
+
+    }
+    .images-img-title {
+      height: 34px;
+    }
+    .text-left {
+      text-align: left;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
@@ -43,9 +62,9 @@
           <li class="images-li" id="{{dataChildrenImages.path}}">
             <img class="images-img" src="{{data.path}}{{dataChildren.path}}{{dataChildrenImages.path}}"  />
 
-            <p class="images-img-title">{{dataChildrenImages.path}}</p>
-            <p class="images-img-size">大小：{{dataChildrenImages.size}}</p>
-            <p class="images-img-date">日期：{{ dataChildrenImages.date }}</p>
+            <p class="images-img-title text-left">{{dataChildrenImages.path}}</p>
+            <p class="images-img-size text-left">大小：{{dataChildrenImages.size}}</p>
+            <p class="images-img-date text-left">日期：{{ dataChildrenImages.date }}</p>
 
             <a class="images-a" href="javascript:;" onclick="deleteImage('{{data.path}}{{dataChildren.path}}', '{{dataChildrenImages.path}}')">X</a>
           </li>

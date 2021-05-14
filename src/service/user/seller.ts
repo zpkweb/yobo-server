@@ -9,6 +9,11 @@ import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import * as nodemailer from 'nodemailer';
 import { BaseUserServer } from '../base/user/user';
 import { BaseSellerServer } from "../base/user/seller";
+
+
+import { CommodityAttributeName } from 'src/service/commodity/attribute/name';
+import { CommodityAttributePhoto } from 'src/service/commodity/attribute/photo';
+
 import * as crypto from 'crypto';
 
 @Provide()
@@ -35,6 +40,13 @@ export class SellerService {
   @Inject()
   baseSellerServer: BaseSellerServer;
 
+  @Inject()
+  commodityAttributeName: CommodityAttributeName;
+
+  @Inject()
+  commodityAttributePhoto: CommodityAttributePhoto;
+
+
   @Config('email')
   email;
 
@@ -58,7 +70,7 @@ export class SellerService {
     }
     if(payload.state == '1'){ // 同意申请
       // 更新状态
-      let sellerState = await this.baseSellerServer.basseSetSellerState(payload)
+      let sellerState = await this.baseSellerServer.baseSetSellerState(payload)
       if(!sellerState.affected){
         return {
           success: false,
@@ -103,7 +115,7 @@ export class SellerService {
 
     }else if(payload.state == '2'){ // 拒绝申请
       // 更新状态
-      let sellerState = await this.baseSellerServer.basseSetSellerState(payload)
+      let sellerState = await this.baseSellerServer.baseSetSellerState(payload)
 
 
       if(!sellerState.affected){
@@ -180,7 +192,7 @@ export class SellerService {
 
   async updateSeller(payload){
     // 查找艺术家
-    const seller = await this.baseSellerServer.baseRetrieveSeller(payload);
+    const seller = await this.baseSellerServer.baseRetrieveSeller(payload.sellerId);
     if(!seller){
       return {
         success: false,
@@ -206,6 +218,7 @@ export class SellerService {
     const updateSeller = await this.baseSellerServer.baseUpdateSeller({
       sellerId: seller.sellerId,
       state: payload.state || 0,
+      banner: payload.banner || '',
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
       tags: payload.tags || '',
@@ -419,9 +432,39 @@ export class SellerService {
     //   .leftJoinAndMapOne('user.sellerMetadata', UserSellerMetadataEntity, 'sellerMetadata', 'sellerMetadata.sellerId = :sellerId', { sellerId: payload.sellerId})
     //   .where('user.userId = :userId', { userId : payload.userId })
     //   .getOne();
-    const seller = await this.baseSellerServer.baseRetrieveSeller(payload);
+    const seller:any = await this.baseSellerServer.baseRetrieveSeller(payload.sellerId);
 
       if(seller){
+
+        // metadata
+        const sellerMetadata = await this.baseSellerServer.baseRetrieveSellerMetadata(payload.sellerId);
+        if(sellerMetadata){
+          seller.metadata = sellerMetadata;
+        }
+
+        // commoditys
+
+        const commoditys:any = await this.baseSellerServer.baseRetrieveCommmodity(payload.sellerId);
+        if(commoditys){
+          for(let item of commoditys){
+
+            // name
+            const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+            if(commodityAttributeName) {
+              item.name = commodityAttributeName.data[payload.locale];
+            }
+
+            // photos
+            const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+            if(commodityAttributePhoto) {
+              item.photos = commodityAttributePhoto.data.map(item => item.src);
+            }
+          }
+
+          seller.commoditys = commoditys;
+        }
+
+
         return {
           data: seller,
           success: true,
