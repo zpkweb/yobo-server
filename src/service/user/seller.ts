@@ -219,6 +219,7 @@ export class SellerService {
       sellerId: seller.sellerId,
       state: payload.state || 0,
       banner: payload.banner || '',
+      choice: payload.choice || false,
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
       tags: payload.tags || '',
@@ -478,6 +479,26 @@ export class SellerService {
       }
   }
 
+  async choiceSeller(payload) {
+    const hotSaleSeller = await this.baseSellerServer.baseChoiceSeller({
+      pageSize: payload.pageSize,
+      currentPage: payload.currentPage,
+      news: payload.news
+    });
+    if(hotSaleSeller) {
+      return {
+        data: hotSaleSeller,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
+
   async sellerIdFind(payload) {
 
     const seller = await this.baseSellerServer.baseSellerIdRetrieveSeller(payload);
@@ -512,6 +533,8 @@ export class SellerService {
         }
       }
   }
+
+
 
   /**
    * 删除艺术家

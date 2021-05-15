@@ -43,6 +43,15 @@ export class ServerSellerController {
     })
   }
 
+  @Get('/choice',{summary:'精选艺术家'})
+  async choice(@Query(ALL) queryAll) {
+    return await this.sellerService.choiceSeller({
+      pageSize: queryAll.pageSize || 5,
+      currentPage: queryAll.currentPage || 1,
+      news: queryAll.news || 'true'
+    })
+  }
+
   // 更新艺术家信息
   @Post('/update',{summary:'更新艺术家信息'})
   async update(@Body(ALL) registerBody) {

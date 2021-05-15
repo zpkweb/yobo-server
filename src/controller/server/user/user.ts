@@ -43,6 +43,14 @@ export class AdminUserController {
     });
   }
 
+  @Get('/edit',{summary:'编辑用户'})
+  async editUser(@Query(ALL) findQuery) {
+    return await this.userService.edit({
+      type: findQuery.type,
+      userId: findQuery.userId
+    });
+  }
+
   // 搜索用户
   @Get('/search',{summary:'搜索用户'})
   async searchUser(@Query(ALL) searchParams) {

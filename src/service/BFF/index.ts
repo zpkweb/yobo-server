@@ -95,6 +95,7 @@ export class BFFService {
       pageSize: payload.pageSize || 5,
       currentPage: payload.currentPage || 1,
       isLocale: true,
+      news: 'true',
       locale: payload.locale || 'zh-cn'
     });
     if(!hotSaleSeller.success) {

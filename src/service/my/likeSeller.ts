@@ -46,6 +46,7 @@ export class MyLikeSellerService {
     // 创建喜欢的艺术家
     const creatLikeSeller = await this.createLikeSeller({
       banner: payload.banner || '',
+      choice: payload.choice || false,
       userName: payload.name || user.data.name,
       userId: payload.userId,
       sellerName: payload.sellerName || seller.data.firstname + seller.data.lastname,

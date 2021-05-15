@@ -14,13 +14,17 @@ export class UserSellerResumeEntity {
   })
   id: number;
 
+  // 类型
+  @Column()
+  type: string;
+
   // 年
   @Column()
   year: string;
 
-  // 事
+  // 履历
   @Column()
-  something: string;
+  resume: string;
 
   //  创建日期
   @CreateDateColumn({

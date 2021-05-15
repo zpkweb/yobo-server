@@ -29,12 +29,14 @@ export class BaseSellerServer {
    * @param payload
    */
   async baseCreateSeller(payload) {
+    console.log("baseCreateSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder()
       .insert()
       .into(UserSellerEntity)
       .values({
         banner: payload.banner,
+        choice: payload.choice,
         state: payload.state,
         type: payload.type,
         typeName: payload.typeName,
@@ -90,6 +92,25 @@ export class BaseSellerServer {
       .where("seller.sellerId = :sellerId", { sellerId: sellerId })
       .getOne();
   }
+
+
+  async baseChoiceSeller(payload) {
+    return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      // .leftJoinAndSelect('seller.user', 'user')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
+      // .leftJoinAndSelect('seller.commoditys', 'commoditys')
+      // .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
+      // .leftJoinAndMapOne('seller.commodityName', CommodityNameEntity, "commodityName", "commodityName.commodityId = commoditys.commodityId")
+      // .leftJoinAndMapMany('seller.commodityPhotos', '')
+      .addSelect('seller.createdDate')
+      .where("seller.choice = :choice", { choice: true })
+      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getMany();
+  }
+
   async baseSellerIdRetrieveSeller(sellerId) {
 
     return await this.userSellerEntity
@@ -125,7 +146,8 @@ export class BaseSellerServer {
       // .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
       // .leftJoinAndMapOne('seller.commodityName', CommodityNameEntity, "commodityName", "commodityName.commodityId = commoditys.commodityId")
       // .leftJoinAndMapMany('seller.commodityPhotos', '')
-      // .addSelect('seller.createdDate')
+      .addSelect('seller.createdDate')
+      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();
@@ -152,7 +174,7 @@ export class BaseSellerServer {
    * Seller
    */
   async baseSearchSeller(payload) {
-
+    // console.log("baseSearchSeller", payload)
     const where: any = {};
 
     if (payload.id) {
@@ -166,6 +188,9 @@ export class BaseSellerServer {
     }
     if (payload.type) {
       where.type = payload.type;
+    }
+    if (payload.choice) {
+      where.choice = payload.choice && payload.choice == 'true' ? true : false;
     }
     if (payload.label) {
       where.label = payload.label;

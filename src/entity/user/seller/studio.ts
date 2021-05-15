@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, PrimaryGeneratedColumn, ManyToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
 import { UserSellerEntity } from './seller';
 
 @EntityModel('user_seller_studio')
@@ -14,9 +14,17 @@ export class UserSellerStudioEntity {
   })
   id: number;
 
+  // banner
+  @Column()
+  banner: string;
+
   // 名称
   @Column()
   name: string;
+
+  // 简介
+  @Column()
+  introduce: string;
 
   // 图片
   @Column()
@@ -26,9 +34,7 @@ export class UserSellerStudioEntity {
   @Column()
   video: string;
 
-  // 简介
-  @Column()
-  text: string;
+
 
   //  创建日期
   @CreateDateColumn({
@@ -43,8 +49,13 @@ export class UserSellerStudioEntity {
   updatedDate: Date;
 
   // 关联商家
-  @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.studios,{
+  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.studios,{
+    cascade: true,
     onDelete: 'CASCADE'
   })
-  seller: UserSellerEntity[];
+  @JoinColumn({
+    name: 'sellerId',
+    referencedColumnName: 'sellerId'
+  })
+  seller: UserSellerEntity;
 }

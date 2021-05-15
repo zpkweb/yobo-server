@@ -9,9 +9,9 @@ import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
-import { BaseUserServer } from "../base/user/user";
-import { BaseSellerServer } from '../base/user/seller';
-import { BaseIdentityListServer } from '../base/user/identity/list';
+import { BaseUserServer } from "src/service/base/user/user";
+import { BaseSellerServer } from 'src/service/base/user/seller';
+import { BaseIdentityListServer } from 'src/service/base/user/identityList';
 import * as nodemailer from 'nodemailer';
 
 @Provide()
@@ -147,6 +147,7 @@ export class UserRegisterService {
       sourceType: 'user',
       identityIndex: 5,
       banner: payload.banner || '',
+      choice: payload.choice || false,
       name: payload.firstname + payload.lastname || '',
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
@@ -211,6 +212,7 @@ export class UserRegisterService {
       sourceType: 'admin',
       identityIndex: 5,
       banner: payload.banner || '',
+      choice: payload.choice || false,
       avatar: payload.avatar || '',
       name: payload.firstname + payload.lastname || '',
       firstname: payload.firstname || '',
@@ -506,10 +508,7 @@ export class UserRegisterService {
       }
       let identity: any;
       // 查询用户身份
-      identity = await this.baseUserServer.baseRetrieveUserIdentity({
-        userId: payload.userId,
-        zhcn: identityList['zh-cn']
-      });
+      identity = await this.baseUserServer.baseRetrieveUserIdentity(payload.userId);
       if(identity){
 
       }else{
@@ -562,6 +561,7 @@ export class UserRegisterService {
         state: payload.state,
         type: payload.type || 0,
         banner: payload.banner || '',
+        choice: payload.choice || false,
         typeName: payload.typeName || '',
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',

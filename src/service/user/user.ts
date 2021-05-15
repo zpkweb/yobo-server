@@ -38,9 +38,7 @@ export class UserService{
 
       })
       if(isParams){
-        if(payload['identity']){
-          // user = await this.baseUserServer.baseSearchUserIdentity(payload)
-          let result = await this.baseUserServer.baseSearchUserIdentity(payload);
+        let result = await this.baseUserServer.baseSearchUser(payload);
           let data = result[0];
           let total = result[1];
           if (data) {
@@ -58,27 +56,6 @@ export class UserService{
               code: 10010
             }
           }
-        }else{
-          // user = await this.baseUserServer.baseSearchUser(payload)
-          let result = await this.baseUserServer.baseSearchUser(payload);
-          let data = result[0];
-          let total = result[1];
-          if (data) {
-            return {
-              data: {
-                list: data,
-                total
-              },
-              success: true,
-              code: 10009
-            }
-          } else {
-            return {
-              success: false,
-              code: 10010
-            }
-          }
-        }
 
       }else{
         user = await this.baseUserServer.baseRetrieveUserAll()
@@ -109,10 +86,26 @@ export class UserService{
   async find(payload) {
     let user: UserEntity | UserEntity[];
     if(payload && Object.keys(payload).length){
-      user = await this.baseUserServer.baseRetrieveUser(payload)
+      user = await this.baseUserServer.baseRetrieveUserId(payload.userId)
     }else{
       user = await this.baseUserServer.baseRetrieveUserAll()
     }
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
+
+  async edit(userId) {
+    const user = await this.baseUserServer.baseRetrieveUserId(userId)
     if(user){
       return {
         data: user,
@@ -156,37 +149,60 @@ export class UserService{
    * @param userId
    */
   async findInfo(userId) {
-    const user =  await this.baseUserServer.baseRetrieveInfo(userId)
-
-      if(user){
-        return {
-          data: user,
-          success: true,
-          code : 10009
-        }
-      }else{
-        return {
-          success: false,
-          code : 10010
-        }
+    let user:any;
+    // base
+    const base =  await this.baseUserServer.baseRetrieveUserId(userId)
+    if(base){
+      user = base;
+    }else{
+      return {
+        success: false,
+        code : 10010
       }
-  }
-  async findSelf(userId) {
-    const user =  await this.baseUserServer.baseRetrieveSelf(userId)
-
-      if(user){
-        return {
-          data: user,
-          success: true,
-          code : 10009
-        }
-      }else{
-        return {
-          success: false,
-          code : 10010
-        }
+    }
+    // identitys
+    const identitys =  await this.baseUserServer.baseRetrieveUserId(userId)
+    if(identitys){
+      user = identitys;
+    }else{
+      return {
+        success: false,
+        code : 10010
       }
+    }
+    // address
+
+    // seller
+
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
   }
+  // async findSelf(userId) {
+  //   const user =  await this.baseUserServer.baseRetrieveSelf(userId)
+
+  //     if(user){
+  //       return {
+  //         data: user,
+  //         success: true,
+  //         code : 10009
+  //       }
+  //     }else{
+  //       return {
+  //         success: false,
+  //         code : 10010
+  //       }
+  //     }
+  // }
 
   /**
    * 查找用户是否存在

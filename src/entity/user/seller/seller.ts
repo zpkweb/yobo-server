@@ -11,9 +11,10 @@ import { UserCustomerServiceEntity } from 'src/entity/user/customerService/custo
 import { CommodityEntity } from 'src/entity/commodity/commodity';
 import { UserSellerMetadataEntity } from './metadata';
 import { UserSellerStudioEntity } from './studio';
+import { UserSellerResumeEntity } from './resume';
 import { OrderEntity } from 'src/entity/order/order';
 import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
-import { UserIdentityEntity } from 'src/entity/user/identity/identity';
+// import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 
 @EntityModel('user_seller')
 export class UserSellerEntity {
@@ -34,6 +35,10 @@ export class UserSellerEntity {
   // 头像
   @Column()
   banner: string;
+
+  // 精选
+  @Column()
+  choice: boolean;
 
   // 状态：0: 审核, 1: 通过, 2: 拒绝, 3: 禁用, 4: 注销
   @Column()
@@ -83,28 +88,27 @@ export class UserSellerEntity {
 
   // 关联商家信息
   @OneToOne(type => UserSellerMetadataEntity, UserSellerMetadataEntity => UserSellerMetadataEntity.seller)
-
   metadata: UserSellerMetadataEntity;
 
   // 关联商家工作室
-  @ManyToMany(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller, {
-    cascade: true
-  })
-  @JoinTable({
-    joinColumn: {
-      referencedColumnName: 'sellerId'
-    },
-    inverseJoinColumn: {
-      referencedColumnName: 'id'
-    }
-  })
-  studios: UserSellerStudioEntity[];
+  @OneToOne(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller)
+  studios: UserSellerStudioEntity;
+
+  // @JoinTable({
+  //   joinColumn: {
+  //     referencedColumnName: 'sellerId'
+  //   },
+  //   inverseJoinColumn: {
+  //     referencedColumnName: 'id'
+  //   }
+  // })
+  // studios: UserSellerStudioEntity[];
 
   // 关联商家履历
-  @OneToMany(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller, {
+  @OneToMany(type => UserSellerResumeEntity, UserSellerResumeEntity => UserSellerResumeEntity.seller, {
     onDelete: 'CASCADE'
   })
-  resumes: UserSellerStudioEntity[];
+  resumes: UserSellerResumeEntity[];
 
   // 关联用户
   @OneToOne(type => UserEntity, UserEntity => UserEntity.seller, {
@@ -118,8 +122,8 @@ export class UserSellerEntity {
   user: UserEntity;
 
   //  关联身份
-  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.seller)
-  identitys: UserIdentityEntity[];
+  // @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.seller)
+  // identitys: UserIdentityEntity[];
 
   // 关联喜欢我的人列表
   @OneToMany(type => MyLikeSellerEntity, MyLikeSellerEntity => MyLikeSellerEntity.seller)
@@ -127,7 +131,6 @@ export class UserSellerEntity {
 
   // 关联商品
   @OneToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.seller)
-
   commoditys: CommodityEntity[];
 
   // 关联客服

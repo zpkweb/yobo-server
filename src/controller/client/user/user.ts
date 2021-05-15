@@ -40,10 +40,10 @@ export class UserController {
     return await this.userService.findInfo(userId);
   }
 
-  @Get('/self',{summary:'查找个人信息'})
-  async self(@Query() userId) {
-    return await this.userService.findSelf(userId);
-  }
+  // @Get('/self',{summary:'查找个人信息'})
+  // async self(@Query() userId) {
+  //   return await this.userService.findSelf(userId);
+  // }
 
   /**
    * 修改密码

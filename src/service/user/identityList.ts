@@ -1,8 +1,7 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseIdentityListServer } from "../base/user/identity/list";
+import { BaseIdentityListServer } from "src/service/base/user/identityList";
 @Provide()
 export class IdentityListService {
-
 
   @Inject()
   baseIdentityListServer: BaseIdentityListServer;

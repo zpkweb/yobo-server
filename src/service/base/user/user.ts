@@ -1,6 +1,6 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository } from "typeorm";
+import { Repository, Like } from "typeorm";
 import { UserEntity } from "src/entity/user/user";
 import * as crypto from 'crypto';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
@@ -67,11 +67,11 @@ export class BaseUserServer {
    * 查询用户身份
    * @param payload
    */
-   async baseRetrieveUserIdentity(payload) {
+   async baseRetrieveUserIdentity(userId) {
     return await this.userIdentityEntity
     .createQueryBuilder('userIdentity')
-    .where('userIdentity.userId = :userId', { userId: payload.userId })
-    .andWhere("userIdentity.zh-cn = :zhcn", { zhcn: payload.zhcn })
+    .where('userIdentity.userId = :userId', { userId: userId })
+    // .andWhere("userIdentity.zh-cn = :zhcn", { zhcn: payload.zhcn })
     .getOne();
   }
   /**
@@ -177,8 +177,8 @@ export class BaseUserServer {
   async baseRetrieveUser(payload) {
     return await this.userEntity
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      .leftJoinAndSelect('user.seller', 'seller')
+      // .leftJoinAndSelect('user.identitys', 'identitys')
+      // .leftJoinAndSelect('user.seller', 'seller')
       .where("user.name = :name", { name: payload.name })
       .andWhere("user.email = :email", { email: payload.email })
       // .orWhere("user.phone = :phone", { phone: payload.phone })
@@ -186,11 +186,13 @@ export class BaseUserServer {
       .getOne();
   }
 
+
+
   async baseRetrieveUserId(userId) {
     return await this.userEntity
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      .leftJoinAndSelect('user.seller', 'seller')
+      // .leftJoinAndSelect('user.identitys', 'identitys')
+      // .leftJoinAndSelect('user.seller', 'seller')
       .where("user.userId = :userId", { userId: userId })
       // .orWhere("user.email = :email", { email: payload.email })
       // .orWhere("user.phone = :phone", { phone: payload.phone })
@@ -218,27 +220,27 @@ export class BaseUserServer {
    * 查找个人信息
    * @param payload
    */
-  async baseRetrieveInfo(userId) {
-    return await this.userEntity
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.identitys', 'identitys')
-    .leftJoinAndSelect('user.address', 'address')
-    .leftJoinAndSelect('user.seller', 'seller')
-    .where("user.userId = :userId", { userId: userId })
-    .getOne();
-  }
-    async baseRetrieveSelf(userId) {
-      return await this.userEntity
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identitys')
-      .leftJoinAndSelect('user.seller', 'seller')
-      .leftJoinAndSelect('user.address', 'address')
-      .leftJoinAndSelect('user.likeSellers', 'likeSellers')
-      .leftJoinAndSelect('user.likeCommoditys', 'likeCommoditys')
-      .leftJoinAndSelect('user.browsingHistory', 'browsingHistory')
-      .where("user.userId = :userId", { userId: userId })
-      .getOne();
-    }
+  // async baseRetrieveInfo(userId) {
+  //   return await this.userEntity
+  //   .createQueryBuilder('user')
+  //   // .leftJoinAndSelect('user.identitys', 'identitys')
+  //   // .leftJoinAndSelect('user.address', 'address')
+  //   // .leftJoinAndSelect('user.seller', 'seller')
+  //   .where("user.userId = :userId", { userId: userId })
+  //   .getOne();
+  // }
+    // async baseRetrieveSelf(userId) {
+    //   return await this.userEntity
+    //   .createQueryBuilder('user')
+    //   .leftJoinAndSelect('user.identitys', 'identitys')
+    //   .leftJoinAndSelect('user.seller', 'seller')
+    //   .leftJoinAndSelect('user.address', 'address')
+    //   .leftJoinAndSelect('user.likeSellers', 'likeSellers')
+    //   .leftJoinAndSelect('user.likeCommoditys', 'likeCommoditys')
+    //   .leftJoinAndSelect('user.browsingHistory', 'browsingHistory')
+    //   .where("user.userId = :userId", { userId: userId })
+    //   .getOne();
+    // }
 
   /**
    * 模糊查询
@@ -249,30 +251,30 @@ export class BaseUserServer {
    * userId
    */
   async baseSearchUser(payload) {
+    const where: any = {};
+    if (payload.name) {
+      where.name = Like(`%${payload.name}%`);
+    }
+    if (payload.email) {
+      where.email = Like(`%${payload.email}%`);
+    }
+    if (payload.phone) {
+      where.phone = Like(`%${payload.phone}%`);
+    }
+
     return await this.userEntity
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.identitys', 'identity')
-      .where("user.name like :name", { name: `%${payload.name}%` })
-      .andWhere("user.email like :email", { email: `%${payload.email}%` })
-      .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
+      // .leftJoinAndSelect('user.identitys', 'identity')
+      // .where("user.name like :name", { name: `%${payload.name}%` })
+      // .andWhere("user.email like :email", { email: `%${payload.email}%` })
+      // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
+      .where(where)
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();
 
   }
 
-  async baseSearchUserIdentity(payload) {
-    return await this.userEntity
-      .createQueryBuilder('user')
-      .innerJoinAndSelect('user.identitys', 'identity', 'identity.en-us like :enus ', { enus: `%${payload.identity}%` })
-      .where("user.name like :name", { name: `%${payload.name}%` })
-      .andWhere("user.email like :email", { email: `%${payload.email}%` })
-      .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
-      .skip((payload.currentPage-1)*payload.pageSize)
-      .take(payload.pageSize)
-      .getManyAndCount();
-
-  }
 
   /**
    * 更新
