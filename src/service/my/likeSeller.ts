@@ -117,6 +117,22 @@ export class MyLikeSellerService {
       }
   }
 
+  async retrieveFollow(sellerId) {
+    const followTotal = await this.baseMyLikeSellerServer.BaseRetrieveFollow(sellerId);
+      if(followTotal){
+        return {
+          data: followTotal,
+          success: true,
+          code : 10009
+        }
+      }else{
+        return {
+          success: false,
+          code : 10010
+        }
+      }
+  }
+
   /**
    * 创建喜欢的艺术家
    * @param payload

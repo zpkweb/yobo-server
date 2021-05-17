@@ -2,18 +2,25 @@ import { Provide, Config, Inject } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
-import { UserSellerEntity } from 'src/entity/user/seller/seller';
-import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
-import { UserSellerStudioEntity } from 'src/entity/user/seller/studio';
-import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
-import * as nodemailer from 'nodemailer';
+
+
+
 import { BaseUserServer } from '../base/user/user';
-import { BaseSellerServer } from "../base/user/seller";
 
+import { BaseSellerServer } from "src/service/base/seller/seller";
+import { BaseSellerMetadataServer } from "src/service/base/seller/metadata";
+import { BaseSellerResumeServer } from "src/service/base/seller/resume";
+import { BaseSellerStudioServer } from "src/service/base/seller/studio";
 
+import { CommodityCommodityService } from 'src/service/commodity/commodity';
 import { CommodityAttributeName } from 'src/service/commodity/attribute/name';
 import { CommodityAttributePhoto } from 'src/service/commodity/attribute/photo';
 
+import { MyLikeSellerService } from 'src/service/my/likeSeller';
+
+
+
+import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
 
 @Provide()
@@ -22,18 +29,6 @@ export class SellerService {
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;
 
-  @InjectEntityModel(UserSellerEntity)
-  userSellerEntity: Repository<UserSellerEntity>;
-
-  @InjectEntityModel(UserSellerMetadataEntity)
-  userSellerMetadataEntity: Repository<UserSellerMetadataEntity>;
-
-  @InjectEntityModel(UserSellerStudioEntity)
-  userSellerStudioEntity: Repository<UserSellerStudioEntity>;
-
-  @InjectEntityModel(UserSellerResumeEntity)
-  userSellerResumeEntity: Repository<UserSellerResumeEntity>;
-
   @Inject()
   baseUserServer: BaseUserServer;
 
@@ -41,15 +36,340 @@ export class SellerService {
   baseSellerServer: BaseSellerServer;
 
   @Inject()
+  baseSellerMetadataServer: BaseSellerMetadataServer;
+
+  @Inject()
+  baseSellerResumeServer: BaseSellerResumeServer;
+
+  @Inject()
+  baseSellerStudioServer: BaseSellerStudioServer;
+
+  @Inject()
+  commodityCommodityService: CommodityCommodityService;
+
+  @Inject()
   commodityAttributeName: CommodityAttributeName;
 
   @Inject()
   commodityAttributePhoto: CommodityAttributePhoto;
 
+  @Inject()
+  myLikeSellerService: MyLikeSellerService;
+
 
   @Config('email')
   email;
 
+  // 创建艺术家
+  async create(payload) {
+    // console.log("创建艺术家 payload", payload)
+
+    // 判断用户是否关联艺术家
+    if(payload.userId) {
+      const userSeller = await this.baseSellerServer.baseApplySeller(payload.userId);
+      if(userSeller) {
+        return {
+          success: false,
+          code: 10415
+        }
+      }
+    }
+
+    // 艺术家
+      // 判断艺术家姓名是否重复
+      if(payload.seller.firstname || payload.seller.lastname) {
+        const sellerName = await this.baseSellerServer.BaseHasName({
+          firstname: payload.firstname,
+          lastname: payload.lastname,
+        })
+        // console.log("判断艺术家姓名是否重复", sellerName)
+        if(sellerName) {
+          return {
+            success: false,
+            code: 10414
+          }
+        }
+      }
+
+      // 创建艺术家
+      const seller:any = await this.baseSellerServer.baseCreateSeller({
+        banner: payload.seller.banner,
+        choice: payload.seller.choice,
+        state: payload.seller.state,
+        type: payload.seller.type,
+        firstname: payload.seller.firstname,
+        lastname: payload.seller.lastname,
+        tags: payload.seller.tags,
+        gender: payload.seller.gender,
+        country: payload.seller.country,
+      })
+      // console.log("创建艺术家", seller)
+      if(!seller) {
+        return {
+          success: false,
+          code: 10004
+        }
+      }
+
+
+    // 创建艺术家基本信息
+    const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
+      language: payload.metadata.language,
+      findUs: payload.metadata.findUs,
+      isFullTime: payload.metadata.isFullTime,
+      onlineSell: payload.metadata.onlineSell,
+      sold: payload.metadata.sold,
+      channel: payload.metadata.channel,
+      gallery: payload.metadata.gallery,
+      medium: payload.metadata.medium,
+      galleryInfo: payload.metadata.galleryInfo,
+      recommend: payload.metadata.recommend,
+      prize: payload.metadata.prize,
+      website: payload.metadata.website,
+      profile: payload.metadata.profile,
+    })
+    // console.log("艺术家基本信息", sellerMetadata)
+
+    if(sellerMetadata) {
+      // 关联基本信息
+      await this.baseSellerMetadataServer.relation({
+        name: "seller",
+        of: sellerMetadata.identifiers[0].id,
+        set: { sellerId: seller.generatedMaps[0].sellerId }
+      })
+    }else{
+      return {
+        success: false,
+        code: 10004
+      }
+    }
+
+    // 创建艺术家工作室
+    const sellerStudio:any = await this.baseSellerStudioServer.baseCreate({
+      name: payload.studio.name,
+      photo: payload.studio.photo,
+      video: payload.studio.video,
+      banner: payload.studio.banner,
+      introduce: payload.studio.introduce,
+    })
+    // console.log("创建艺术家工作室", sellerStudio)
+    if(sellerStudio) {
+      // 关联工作室
+      await this.baseSellerStudioServer.relation({
+        name: "seller",
+        of: sellerStudio.identifiers[0].id,
+        set: { sellerId: seller.generatedMaps[0].sellerId }
+      })
+    }else{
+      return {
+        success: false,
+        code: 10004
+      }
+    }
+
+    // 创建艺术家履历
+    const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
+      resume: JSON.stringify(payload.resume)
+    })
+    // console.log("创建艺术家履历", sellerResume)
+    if(sellerResume) {
+      // 关联艺术家履历
+      await this.baseSellerResumeServer.relation({
+        name: "seller",
+        of: sellerResume.identifiers[0].id,
+        set: { sellerId: seller.generatedMaps[0].sellerId }
+      })
+    }else{
+      return {
+        success: false,
+        code: 10004
+      }
+    }
+
+    // 关联用户
+    if(payload.userId) {
+      const user = await this.baseUserServer.baseRetrieveUserIdentity(payload.userId);
+      // console.log("关联用户", user)
+      if(user) {
+        // 关联用户
+        await this.baseSellerServer.relation({
+          name: "user",
+          of: seller.identifiers[0].id,
+          set: { userId: payload.userId }
+        })
+
+      }else {
+        return {
+          success: false,
+          code: 10202
+        }
+      }
+    }
+
+    return {
+      success: true,
+      code: 10003
+    };
+  }
+
+  // 编辑艺术家
+  async edit(payload) {
+    if(payload.sellerId) {
+      let edit:any = {};
+      // 获取艺术家
+      const sellerData = await this.baseSellerServer.baseRetrieveUser(payload.sellerId);
+      if(sellerData) {
+        const { user, ...seller} = sellerData;
+        edit.seller = seller;
+        // 用户信息
+        if(user) {
+          edit.user = user;
+        }
+        // 艺术家基本信息
+        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.sellerId);
+        if(sellerMetadata) {
+          edit.metadata = sellerMetadata;
+        }
+        // 艺术家工作室
+        const sellerStudio = await this.baseSellerStudioServer.baseRetrieve(payload.sellerId);
+        if(sellerStudio) {
+          edit.studio = sellerStudio;
+        }
+        // 艺术家履历
+        const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.sellerId);
+        if(sellerResume) {
+          edit.resume = JSON.parse(sellerResume.resume);
+        }
+
+      }else{
+        return {
+          success: false,
+          code: 10412
+        }
+      }
+
+      return {
+        data: edit,
+        success: true,
+        code: 10009
+      };
+    }else{
+      return {
+        success: false,
+        code: 10104
+      }
+    }
+
+  }
+
+  async update(payload) {
+    if(payload.seller.sellerId) {
+      // 获取艺术家
+      const sellerData = await this.baseSellerServer.baseRetrieveUser(payload.seller.sellerId);
+      if(sellerData) {
+        const { user} = sellerData;
+        if(user){
+          if(payload.userId !== user.userId){
+            // 解绑用户 user.userId
+
+            // 关联用户 payload.userId
+
+          }
+        }else{
+          if(payload.userId) {
+            // 关联用户 payload.userId
+
+          }
+        }
+        // 更新艺术家
+        const seller:any = await this.baseSellerServer.baseUpdateSeller({
+          sellerId: payload.seller.sellerId,
+
+          banner: payload.seller.banner,
+          choice: payload.seller.choice,
+          state: payload.seller.state,
+          type: payload.seller.type,
+          firstname: payload.seller.firstname,
+          lastname: payload.seller.lastname,
+          tags: payload.seller.tags,
+          gender: payload.seller.gender,
+          country: payload.seller.country,
+        })
+        if(!seller.affected) {
+          return {
+            success: false,
+            code: 10008
+          }
+        }
+        // 更新艺术家基本信息
+        const sellerMetadata:any = await this.baseSellerMetadataServer.baseUpdate({
+          sellerId: payload.seller.sellerId,
+
+          language: payload.metadata.language,
+          findUs: payload.metadata.findUs,
+          isFullTime: payload.metadata.isFullTime,
+          onlineSell: payload.metadata.onlineSell,
+          sold: payload.metadata.sold,
+          channel: payload.metadata.channel,
+          gallery: payload.metadata.gallery,
+          medium: payload.metadata.medium,
+          galleryInfo: payload.metadata.galleryInfo,
+          recommend: payload.metadata.recommend,
+          prize: payload.metadata.prize,
+          website: payload.metadata.website,
+          profile: payload.metadata.profile,
+        })
+        if(!sellerMetadata.affected) {
+          return {
+            success: false,
+            code: 10008
+          }
+        }
+        // 更新艺术家工作室
+        const sellerStudio:any = await this.baseSellerStudioServer.baseUpdate({
+          sellerId: payload.seller.sellerId,
+
+          name: payload.studio.name,
+          photo: payload.studio.photo,
+          video: payload.studio.video,
+          banner: payload.studio.banner,
+          introduce: payload.studio.introduce,
+        })
+        if(!sellerStudio.affected) {
+          return {
+            success: false,
+            code: 10008
+          }
+        }
+        // 更新艺术家履历
+        const sellerResume:any = await this.baseSellerResumeServer.baseUpdate({
+          sellerId: payload.seller.sellerId,
+
+          resume: JSON.stringify(payload.resume),
+        })
+        if(!sellerResume.affected) {
+          return {
+            success: false,
+            code: 10008
+          }
+        }
+      }else{
+        return {
+          success: false,
+          code: 10412
+        }
+      }
+      return {
+        success: true,
+        code: 10007
+      };
+    }else{
+      return {
+        success: false,
+        code: 10104
+      }
+    }
+  }
 
 
   // 通过艺术家申请 ，发送邮件：账号密码
@@ -99,7 +419,7 @@ export class SellerService {
         ...payload,
         email: seller.user.email,
         subject: 'yobo-审核通过',
-        html: `<p><img src="http://39.105.190.188:7001/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://39.105.190.188:8088/">http://39.105.190.188:8088/</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
+        html: `<p><img src="http://39.105.190.188:7001/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://www.yoboart.com">http://www.yoboart.com</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
       });
       if(sendmail.messageId){
         return {
@@ -223,7 +543,6 @@ export class SellerService {
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
       tags: payload.tags || '',
-      label: payload.label || '',
       gender: payload.gender || '',
       country: payload.country || ''
     })
@@ -234,7 +553,7 @@ export class SellerService {
       };
     }
     // 更新商家基本信息
-    const updateSellerMetadata = await this.baseSellerServer.baseUpdateSellerMetadata({
+    const updateSellerMetadata = await this.baseSellerMetadataServer.baseUpdate({
       sellerId: seller.sellerId,
       language: payload.language || '',
       findUs: payload.findUs || '',
@@ -438,16 +757,17 @@ export class SellerService {
       if(seller){
 
         // metadata
-        const sellerMetadata = await this.baseSellerServer.baseRetrieveSellerMetadata(payload.sellerId);
+        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.sellerId);
         if(sellerMetadata){
           seller.metadata = sellerMetadata;
         }
 
         // commoditys
 
-        const commoditys:any = await this.baseSellerServer.baseRetrieveCommmodity(payload.sellerId);
-        if(commoditys){
-          for(let item of commoditys){
+        const commoditys:any = await this.commodityCommodityService.retrieveCommmoditySellerId(payload.sellerId);
+
+        if(commoditys.success){
+          for(let item of commoditys.data){
 
             // name
             const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
@@ -519,7 +839,7 @@ export class SellerService {
 
   async sellerFollowTotal(sellerId) {
 
-    const followTotal = await this.baseSellerServer.BaseRetrieveFollow(sellerId);
+    const followTotal = await this.myLikeSellerService.retrieveFollow(sellerId);
       if(followTotal){
         return {
           data: followTotal,

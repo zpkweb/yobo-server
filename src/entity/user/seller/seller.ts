@@ -48,9 +48,6 @@ export class UserSellerEntity {
   @Column()
   type: number;
 
-  @Column()
-  typeName: string;
-
   // 姓氏
   @Column()
   firstname: string;
@@ -63,8 +60,7 @@ export class UserSellerEntity {
   @Column('simple-array')
   tags: string[];
 
-  @Column()
-  label: string;
+
 
   // 性别
   @Column()
@@ -92,7 +88,7 @@ export class UserSellerEntity {
 
   // 关联商家工作室
   @OneToOne(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller)
-  studios: UserSellerStudioEntity;
+  studio: UserSellerStudioEntity;
 
   // @JoinTable({
   //   joinColumn: {
@@ -105,16 +101,12 @@ export class UserSellerEntity {
   // studios: UserSellerStudioEntity[];
 
   // 关联商家履历
-  @OneToMany(type => UserSellerResumeEntity, UserSellerResumeEntity => UserSellerResumeEntity.seller, {
-    onDelete: 'CASCADE'
-  })
-  resumes: UserSellerResumeEntity[];
+  @OneToOne(type => UserSellerResumeEntity, UserSellerResumeEntity => UserSellerResumeEntity.seller)
+  resume: UserSellerResumeEntity;
 
   // 关联用户
-  @OneToOne(type => UserEntity, UserEntity => UserEntity.seller, {
-    cascade: true,
-    onDelete: 'CASCADE'
-  })
+  @OneToOne(type => UserEntity, UserEntity => UserEntity.seller)
+
   @JoinColumn({
     name: 'userId',
     referencedColumnName: 'userId'

@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
 import { UserSellerEntity } from './seller';
 
 @EntityModel('user_seller_resume')
@@ -14,16 +14,10 @@ export class UserSellerResumeEntity {
   })
   id: number;
 
-  // 类型
-  @Column()
-  type: string;
-
-  // 年
-  @Column()
-  year: string;
-
   // 履历
-  @Column()
+  @Column({
+    type: 'text'
+  })
   resume: string;
 
   //  创建日期
@@ -39,10 +33,12 @@ export class UserSellerResumeEntity {
   updatedDate: Date;
 
   // 关联商家
-  @ManyToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.resumes, {
-    cascade: true
+  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.resume, {
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
+    name: 'sellerId',
     referencedColumnName: 'sellerId'
   })
   seller: UserSellerEntity;

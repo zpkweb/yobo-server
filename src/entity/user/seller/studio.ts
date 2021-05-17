@@ -49,7 +49,7 @@ export class UserSellerStudioEntity {
   updatedDate: Date;
 
   // 关联商家
-  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.studios,{
+  @OneToOne(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.studio,{
     cascade: true,
     onDelete: 'CASCADE'
   })

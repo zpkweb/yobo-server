@@ -10,7 +10,8 @@ import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
 import { BaseUserServer } from "src/service/base/user/user";
-import { BaseSellerServer } from 'src/service/base/user/seller';
+import { BaseSellerServer } from 'src/service/base/seller/seller';
+import { BaseSellerMetadataServer } from "src/service/base/seller/metadata";
 import { BaseIdentityListServer } from 'src/service/base/user/identityList';
 import * as nodemailer from 'nodemailer';
 
@@ -47,6 +48,9 @@ export class UserRegisterService {
 
   @Inject()
   baseSellerServer: BaseSellerServer;
+
+  @Inject()
+  baseSellerMetadataServer: BaseSellerMetadataServer;
 
   @Inject()
   baseIdentityListServer: BaseIdentityListServer;
@@ -87,7 +91,7 @@ export class UserRegisterService {
         to: payload.email,
         subject: 'yobo-注册成功',
         // html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
-        html: `<p><img src="http://39.105.190.188:7001/images/user-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下，欢迎加入永宝YOROART！</p><p style="font-size:16px;">您可以点击此链接<span style="font-size: 12px; color: red">开启您的艺术之旅+（连接<a href="http://39.105.190.188:8088/">http://39.105.190.188:8088/</a>)</span></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
+        html: `<p><img src="http://39.105.190.188:7001/images/user-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下，欢迎加入永宝YOROART！</p><p style="font-size:16px;">您可以点击此链接<span style="font-size: 12px; color: red">开启您的艺术之旅+（连接<a href="http://www.yoboart.com">http://www.yoboart.com</a>)</span></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
       });
 
       // if(data.messageId){
@@ -562,11 +566,9 @@ export class UserRegisterService {
         type: payload.type || 0,
         banner: payload.banner || '',
         choice: payload.choice || false,
-        typeName: payload.typeName || '',
         firstname: payload.firstname || '',
         lastname: payload.lastname || '',
         tags: payload.tags || [],
-        label: payload.label || '',
         gender: payload.gender || '',
         country: payload.country || '',
       });
@@ -577,7 +579,7 @@ export class UserRegisterService {
         };
       }
       // 添加商家基本信息
-      const sellerMetadata = await this.baseSellerServer.baseCreateSellerMetadata({
+      const sellerMetadata = await this.baseSellerMetadataServer.baseCreate({
         language: payload.language || '',
         findUs: payload.findUs || '',
         isFullTime: payload.isFullTime || '',

@@ -4,7 +4,7 @@ import { UserRegisterService } from 'src/service/user/register';
 import { SellerService } from 'src/service/user/seller';
 
 @Provide()
-@Controller('/api/admin/user/seller',{tagName:'后台管理-艺术家'})
+@Controller('/api/admin/seller', {tagName:'后台管理-艺术家'})
 export class AdminUserSellerController {
 
   @Inject()
@@ -25,6 +25,19 @@ export class AdminUserSellerController {
   @Config('pagination')
   pagination;
 
+  // 创建艺术家
+  @Post('/create', { summary: '创建艺术家' })
+  async create(@Body(ALL) createBody) {
+    const data = await this.sellerService.create(createBody);
+    return data;
+  }
+
+  @Get('/edit', { summary: '编辑艺术家' })
+  async edit(@Query(ALL) editQuery) {
+    const data = await this.sellerService.edit(editQuery);
+    return data;
+  }
+
   // 获取艺术家详细信息
   @Get('/',{summary:'获取艺术家详细信息'})
   async find(@Query(ALL) findQuery) {
@@ -34,7 +47,8 @@ export class AdminUserSellerController {
   // 更新艺术家信息
   @Post('/update',{summary:'更新艺术家信息'})
   async update(@Body(ALL) registerBody) {
-    return await this.sellerService.updateSeller(registerBody);
+    return await this.sellerService.update(registerBody);
+    // return await this.sellerService.updateSeller(registerBody);
   }
 
   // 艺术家申请 registerList

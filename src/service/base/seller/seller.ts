@@ -1,28 +1,28 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository, Like } from "typeorm";
+import { Repository, Like, IsNull } from "typeorm";
 import { UserSellerEntity } from "src/entity/user/seller/seller";
-import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
 import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 
-import { CommodityEntity } from 'src/entity/commodity/commodity';
 
-import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
 @Provide()
 export class BaseSellerServer {
 
   @InjectEntityModel(UserSellerEntity)
   userSellerEntity: Repository<UserSellerEntity>
 
-  @InjectEntityModel(UserSellerMetadataEntity)
-  userSellerMetadataEntity: Repository<UserSellerMetadataEntity>
 
-  @InjectEntityModel(MyLikeSellerEntity)
-  myLikeSellerEntity: Repository<MyLikeSellerEntity>;
+  // 关联
+  async relation(payload) {
+    console.log("关联 relation", payload)
+    return await this.userSellerEntity
+      .createQueryBuilder()
+      .relation(UserSellerEntity, payload.name)
+      .of(payload.of)
+      .set(payload.set);
+  }
 
-  @InjectEntityModel(CommodityEntity)
-  commodityEntity: Repository<CommodityEntity>;
 
   /**
    * 增加
@@ -39,11 +39,9 @@ export class BaseSellerServer {
         choice: payload.choice,
         state: payload.state,
         type: payload.type,
-        typeName: payload.typeName,
         firstname: payload.firstname,
         lastname: payload.lastname,
         tags: payload.tags,
-        label: payload.label,
         gender: payload.gender,
         country: payload.country,
       })
@@ -63,6 +61,14 @@ export class BaseSellerServer {
     .getOne();
   }
 
+  async BaseHasName(payload) {
+    return await this.userSellerEntity
+    .createQueryBuilder('seller')
+    .where('seller.firstname = :firstname', { firstname: payload.firstname })
+    .where('seller.lastname = :lastname', { lastname: payload.lastname })
+    .getOne();
+  }
+
   /**
    * 判断用户是否申请艺术家
    *
@@ -71,8 +77,8 @@ export class BaseSellerServer {
   async baseApplySeller(userId) {
     return await this.userSellerEntity
     .createQueryBuilder('seller')
-    .leftJoinAndSelect('seller.user', 'user')
-    .where('user.userId = :userId', { userId: userId })
+    // .leftJoinAndSelect('seller.user', 'user')
+    .where('seller.userId = :userId', { userId: userId })
     .getOne();
   }
 
@@ -92,6 +98,15 @@ export class BaseSellerServer {
       .where("seller.sellerId = :sellerId", { sellerId: sellerId })
       .getOne();
   }
+
+  async baseRetrieveUser(sellerId) {
+    return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      .leftJoinAndSelect('seller.user', 'user')
+      .where("seller.sellerId = :sellerId", { sellerId: sellerId })
+      .getOne();
+  }
+
 
 
   async baseChoiceSeller(payload) {
@@ -124,13 +139,7 @@ export class BaseSellerServer {
       .getOne();
   }
 
-  async BaseRetrieveFollow(sellerId) {
-    // return await this.myLikeSellerEntity
-    //   .createQueryBuilder('myLikeSeller')
-    //   .where("myLikeSeller.sellerId = :sellerId", { sellerId: sellerId })
-    //   .getMany();
-    return await this.myLikeSellerEntity.count({sellerId: sellerId})
-  }
+
 
   /**
    * 检索所有
@@ -192,16 +201,15 @@ export class BaseSellerServer {
     if (payload.choice) {
       where.choice = payload.choice && payload.choice == 'true' ? true : false;
     }
-    if (payload.label) {
-      where.label = payload.label;
-    }
+
     if(payload.other){
-      if(payload.other == '男'){
+      if(payload.other == '男') {
         where.gender = '男'
       }else if(payload.other == '女') {
         where.gender = '女'
-      }else{
-        where.label = payload.other
+      }
+      if(payload.other == '工作室') {
+        where.studioId = IsNull()
       }
     }
     if (payload.gender) {
@@ -225,8 +233,8 @@ export class BaseSellerServer {
 
     return await this.userSellerEntity
       .createQueryBuilder('seller')
-      .leftJoinAndSelect('seller.user', 'user')
-      .leftJoinAndSelect('seller.metadata', 'metadata')
+      // .leftJoinAndSelect('seller.user', 'user')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
       .addSelect('seller.createdDate')
       .where(where)
       .skip((payload.currentPage-1)*payload.pageSize)
@@ -250,7 +258,6 @@ export class BaseSellerServer {
       //   state: payload.state,
       //   firstname: payload.firstname,
       //   lastname: payload.lastname,
-      //   label: payload.label,
       //   gender: payload.gender,
       //   country: payload.country,
       // })
@@ -262,80 +269,7 @@ export class BaseSellerServer {
 
 
 
-  /**
-   * 增加基本信息
-   * @param payload
-   */
-   async baseCreateSellerMetadata(payload) {
-    return await this.userSellerMetadataEntity
-      .createQueryBuilder()
-      .insert()
-      .into(UserSellerMetadataEntity)
-      .values({
-        language: payload.language,
-        findUs: payload.findUs,
-        isFullTime: payload.isFullTime,
-        onlineSell: payload.onlineSell,
-        sold: payload.sold,
-        channel: payload.channel,
-        gallery: payload.gallery,
-        medium: payload.medium,
-        galleryInfo: payload.galleryInfo,
-        recommend: payload.recommend,
-        prize: payload.prize,
-        website: payload.website,
-        profile: payload.profile,
 
-      })
-      .execute();
-  }
-
-  /**
-   * 查找基本信息
-   * @param payload
-   * sellerId
-   * seller
-   * metadata
-   */
-   async baseRetrieveSellerMetadata(sellerId) {
-    return await this.userSellerMetadataEntity
-      .createQueryBuilder('sellerMetadata')
-      // .leftJoin('sellerMetadata.seller', 'seller')
-      .where("sellerMetadata.sellerId = :sellerId", { sellerId: sellerId })
-      .getOne();
-  }
-
-  /**
-   * 更新基本信息
-   * @param payload
-   * sellerId
-   * seller
-   * metadata
-   */
-  async baseUpdateSellerMetadata(payload) {
-    const { sellerId, ...setData } = payload;
-    return await this.userSellerMetadataEntity
-      .createQueryBuilder()
-      .update(UserSellerMetadataEntity)
-      // .set({
-      //   language: payload.language,
-      //   findUs: payload.findUs,
-      //   isFullTime: payload.isFullTime,
-      //   onlineSell: payload.onlineSell,
-      //   sold: payload.sold,
-      //   channel: payload.channel,
-      //   gallery: payload.gallery,
-      //   medium: payload.medium,
-      //   galleryInfo: payload.galleryInfo,
-      //   recommend: payload.recommend,
-      //   prize: payload.prize,
-      //   website: payload.website,
-      //   profile: payload.profile,
-      // })
-      .set(setData)
-      .where("sellerId = :sellerId", { sellerId: sellerId })
-      .execute()
-  }
 
   /**
    * 删除
@@ -379,18 +313,5 @@ export class BaseSellerServer {
         .where("sellerId = :sellerId", { sellerId: sellerId })
         .execute()
     }
-  /**
-   * 根据sellerId获取commodity
-   * @param sellerId
-   * @returns
-   */
-  async baseRetrieveCommmodity(sellerId) {
-    return await this.commodityEntity
-      .createQueryBuilder('commodity')
-      // .leftJoin('sellerMetadata.seller', 'seller')
-      .where("commodity.sellerId = :sellerId", { sellerId: sellerId })
-      .getMany();
-  }
-
 
 }

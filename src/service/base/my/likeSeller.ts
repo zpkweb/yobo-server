@@ -52,6 +52,10 @@ export class BaseMyLikeSellerServer {
         .getMany();
     }
 
+    async BaseRetrieveFollow(sellerId) {
+      return await this.myLikeSellerEntity.count({sellerId: sellerId})
+    }
+
 
 
   // 商家 关联 用户

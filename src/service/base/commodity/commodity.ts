@@ -1339,4 +1339,17 @@ export class BaseCommodityServer {
       .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
+
+  /**
+   * 根据sellerId获取commodity
+   * @param sellerId
+   * @returns
+   */
+   async baseRetrieveCommmodity(sellerId) {
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .where("commodity.sellerId = :sellerId", { sellerId: sellerId })
+      .getMany();
+  }
+
 }
