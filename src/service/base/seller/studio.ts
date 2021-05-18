@@ -20,6 +20,7 @@ export class BaseSellerStudioServer {
       .insert()
       .into(UserSellerStudioEntity)
       .values({
+        sellerId: payload.sellerId,
         name: payload.name,
         photo: payload.photo,
         video: payload.video,

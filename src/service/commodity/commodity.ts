@@ -93,10 +93,18 @@ export class CommodityCommodityService {
   async edit(commodityId) {
     let commodity:any = {};
     const baseCommodityServer = await this.baseCommodityServer.BaseRetrieveCommodityId(commodityId);
-    // console.log("edit baseCommodityServer", baseCommodityServer)
     if(baseCommodityServer) {
       commodity = baseCommodityServer
+      if(baseCommodityServer.seller) {
+        commodity.seller = baseCommodityServer.seller;
+      }
     }
+
+    // const commoditySellerService =  await this.baseCommodityServer.retrieveCommodityId(commodityId);
+    // // console.log("edit commodityUseService", commodityUseService)
+    // if(commodityUseService) {
+    //   commodity.uses = commodityUseService.data;
+    // }
 
     const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(commodityId);
     // console.log("edit commodityAttributeColor", commodityAttributeColor)
@@ -206,6 +214,8 @@ export class CommodityCommodityService {
     if(commodityUseService) {
       commodity.uses = commodityUseService.data;
     }
+
+
 
 
 
@@ -597,18 +607,21 @@ export class CommodityCommodityService {
 
     await this.relationCreate(payload);
     // 商品 关联 商家
-    if(payload.sellerId){
+    if(payload.seller){
       await this.relation({
         name: 'seller',
         of: commodity.data.identifiers[0].id,
         // of: { commodityId: payload.commodityId },
-        set: { sellerId: payload.sellerId }
+        set: { sellerId: payload.seller.sellerId }
       })
     }
 
     // return commodity
     if (commodity.data.identifiers[0].id) {
       return {
+        data: {
+          commodityId: payload.commodityId
+        },
         success: true,
         code: 10003
       }

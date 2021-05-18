@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from "@midwayjs/orm";
-import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from "typeorm";
+import { Column, PrimaryGeneratedColumn, OneToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { UserSellerEntity } from './seller';
 
 @EntityModel('user_seller_studio')
@@ -13,6 +13,9 @@ export class UserSellerStudioEntity {
     type: 'bigint'
   })
   id: number;
+
+  @Column()
+  sellerId: string;
 
   // banner
   @Column()
@@ -53,9 +56,6 @@ export class UserSellerStudioEntity {
     cascade: true,
     onDelete: 'CASCADE'
   })
-  @JoinColumn({
-    name: 'sellerId',
-    referencedColumnName: 'sellerId'
-  })
+
   seller: UserSellerEntity;
 }

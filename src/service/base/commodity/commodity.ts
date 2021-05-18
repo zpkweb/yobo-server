@@ -224,7 +224,7 @@ export class BaseCommodityServer {
   async BaseRetrieveCommodityId(commodityId) {
     const data =  await this.commodityEntity
       .createQueryBuilder('commodity')
-      .innerJoinAndSelect('commodity.seller', 'seller')
+      .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();

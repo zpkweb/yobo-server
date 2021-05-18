@@ -243,7 +243,7 @@ export class BaseUserServer {
     // }
 
   /**
-   * 模糊查询
+   * 模糊查询 添加seller 判断用户是否关联seller
    * @param payload
    * name
    * email
@@ -264,7 +264,7 @@ export class BaseUserServer {
 
     return await this.userEntity
       .createQueryBuilder('user')
-      // .leftJoinAndSelect('user.identitys', 'identity')
+      .leftJoinAndSelect('user.seller', 'seller')
       // .where("user.name like :name", { name: `%${payload.name}%` })
       // .andWhere("user.email like :email", { email: `%${payload.email}%` })
       // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })

@@ -1,6 +1,6 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository, Like, IsNull } from "typeorm";
+import { Repository, Like } from "typeorm";
 import { UserSellerEntity } from "src/entity/user/seller/seller";
 import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
 import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
@@ -22,6 +22,7 @@ export class BaseSellerServer {
       .of(payload.of)
       .set(payload.set);
   }
+
 
 
   /**
@@ -208,9 +209,7 @@ export class BaseSellerServer {
       }else if(payload.other == '女') {
         where.gender = '女'
       }
-      if(payload.other == '工作室') {
-        where.studioId = IsNull()
-      }
+
     }
     if (payload.gender) {
       where.gender = payload.gender;
@@ -230,16 +229,33 @@ export class BaseSellerServer {
     if (payload.lastname) {
       where.lastname = Like(`%${payload.lastname}%`);
     }
-
-    return await this.userSellerEntity
+    if(payload.other == '工作室') {
+      return await this.userSellerEntity
       .createQueryBuilder('seller')
-      // .leftJoinAndSelect('seller.user', 'user')
+      .leftJoinAndSelect('seller.user', 'user')
       // .leftJoinAndSelect('seller.metadata', 'metadata')
+      .innerJoin('seller.studio', 'studio')
       .addSelect('seller.createdDate')
       .where(where)
+      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();
+    }else {
+      return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      .leftJoinAndSelect('seller.user', 'user')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
+      // .leftJoin('seller.studio', 'studio')
+      .addSelect('seller.createdDate')
+      .where(where)
+      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
+    }
+
+
   }
 
   /**

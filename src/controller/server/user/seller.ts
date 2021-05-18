@@ -38,17 +38,17 @@ export class AdminUserSellerController {
     return data;
   }
 
-  // 获取艺术家详细信息
-  @Get('/',{summary:'获取艺术家详细信息'})
-  async find(@Query(ALL) findQuery) {
-    return await this.sellerService.find(findQuery)
-  }
-
   // 更新艺术家信息
   @Post('/update',{summary:'更新艺术家信息'})
   async update(@Body(ALL) registerBody) {
     return await this.sellerService.update(registerBody);
     // return await this.sellerService.updateSeller(registerBody);
+  }
+
+  // 获取艺术家详细信息
+  @Get('/',{summary:'获取艺术家详细信息'})
+  async find(@Query(ALL) findQuery) {
+    return await this.sellerService.find(findQuery)
   }
 
   // 艺术家申请 registerList

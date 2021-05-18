@@ -65,8 +65,8 @@ export class SellerService {
     // console.log("创建艺术家 payload", payload)
 
     // 判断用户是否关联艺术家
-    if(payload.userId) {
-      const userSeller = await this.baseSellerServer.baseApplySeller(payload.userId);
+    if(payload.user && payload.user.userId) {
+      const userSeller = await this.baseSellerServer.baseApplySeller(payload.user.userId);
       if(userSeller) {
         return {
           success: false,
@@ -90,112 +90,167 @@ export class SellerService {
           }
         }
       }
-
-      // 创建艺术家
-      const seller:any = await this.baseSellerServer.baseCreateSeller({
-        banner: payload.seller.banner,
-        choice: payload.seller.choice,
-        state: payload.seller.state,
-        type: payload.seller.type,
-        firstname: payload.seller.firstname,
-        lastname: payload.seller.lastname,
-        tags: payload.seller.tags,
-        gender: payload.seller.gender,
-        country: payload.seller.country,
+      let seller:any;
+      if(payload.seller){
+      if(payload.seller.banner
+      || payload.seller.choice
+      || payload.seller.state
+      || payload.seller.type
+      || payload.seller.firstname
+      || payload.seller.lastname
+      || payload.seller.tags
+      || payload.seller.gender
+      || payload.seller.country
+      ){
+        // 创建艺术家
+        seller = await this.baseSellerServer.baseCreateSeller({
+          banner: payload.seller.banner,
+          choice: payload.seller.choice,
+          state: payload.seller.state,
+          type: payload.seller.type,
+          firstname: payload.seller.firstname,
+          lastname: payload.seller.lastname,
+          tags: payload.seller.tags,
+          gender: payload.seller.gender,
+          country: payload.seller.country,
+        })
+        // console.log("创建艺术家", seller)
+        if(!seller) {
+          return {
+            success: false,
+            code: 10004
+          }
+        }
+      }else{
+        return {
+          success: false,
+          code: 10104
+        }
+      }
+    }else{
+      return {
+        success: false,
+        code: 10104
+      }
+    }
+      if(payload.metadata){
+    if(payload.metadata.language
+    || payload.metadata.findUs
+    || payload.metadata.isFullTime
+    || payload.metadata.onlineSell
+    || payload.metadata.sold
+    || payload.metadata.channel
+    || payload.metadata.gallery
+    || payload.metadata.medium
+    || payload.metadata.galleryInfo
+    || payload.metadata.recommend
+    || payload.metadata.prize
+    || payload.metadata.website
+    || payload.metadata.profile
+    ){
+      // 创建艺术家基本信息
+      const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
+        language: payload.metadata.language,
+        findUs: payload.metadata.findUs,
+        isFullTime: payload.metadata.isFullTime,
+        onlineSell: payload.metadata.onlineSell,
+        sold: payload.metadata.sold,
+        channel: payload.metadata.channel,
+        gallery: payload.metadata.gallery,
+        medium: payload.metadata.medium,
+        galleryInfo: payload.metadata.galleryInfo,
+        recommend: payload.metadata.recommend,
+        prize: payload.metadata.prize,
+        website: payload.metadata.website,
+        profile: payload.metadata.profile,
       })
-      // console.log("创建艺术家", seller)
-      if(!seller) {
+      // console.log("艺术家基本信息", sellerMetadata)
+
+      if(sellerMetadata) {
+        // 关联基本信息
+        await this.baseSellerMetadataServer.relation({
+          name: "seller",
+          of: sellerMetadata.identifiers[0].id,
+          set: { sellerId: seller.generatedMaps[0].sellerId }
+        })
+      }else{
         return {
           success: false,
           code: 10004
         }
       }
-
-
-    // 创建艺术家基本信息
-    const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
-      language: payload.metadata.language,
-      findUs: payload.metadata.findUs,
-      isFullTime: payload.metadata.isFullTime,
-      onlineSell: payload.metadata.onlineSell,
-      sold: payload.metadata.sold,
-      channel: payload.metadata.channel,
-      gallery: payload.metadata.gallery,
-      medium: payload.metadata.medium,
-      galleryInfo: payload.metadata.galleryInfo,
-      recommend: payload.metadata.recommend,
-      prize: payload.metadata.prize,
-      website: payload.metadata.website,
-      profile: payload.metadata.profile,
-    })
-    // console.log("艺术家基本信息", sellerMetadata)
-
-    if(sellerMetadata) {
-      // 关联基本信息
-      await this.baseSellerMetadataServer.relation({
-        name: "seller",
-        of: sellerMetadata.identifiers[0].id,
-        set: { sellerId: seller.generatedMaps[0].sellerId }
+    }
+  }
+  if(payload.studio){
+    if(payload.studio.name
+    || payload.studio.photo
+    || payload.studio.video
+    || payload.studio.banner
+    || payload.studio.introduce
+    ){
+      // 创建艺术家工作室
+      const sellerStudio:any = await this.baseSellerStudioServer.baseCreate({
+        sellerId: seller.generatedMaps[0].sellerId,
+        name: payload.studio.name,
+        photo: payload.studio.photo,
+        video: payload.studio.video,
+        banner: payload.studio.banner,
+        introduce: payload.studio.introduce,
       })
-    }else{
-      return {
-        success: false,
-        code: 10004
+      // console.log("创建艺术家工作室", sellerStudio)
+      if(sellerStudio) {
+        // 关联工作室
+        await this.baseSellerServer.relation({
+          name: "studio",
+          of: seller.identifiers[0].id,
+          set: sellerStudio.identifiers[0].id,
+        })
+      }else{
+        return {
+          success: false,
+          code: 10004
+        }
       }
     }
+  }
+  if(payload.resume){
 
-    // 创建艺术家工作室
-    const sellerStudio:any = await this.baseSellerStudioServer.baseCreate({
-      name: payload.studio.name,
-      photo: payload.studio.photo,
-      video: payload.studio.video,
-      banner: payload.studio.banner,
-      introduce: payload.studio.introduce,
-    })
-    // console.log("创建艺术家工作室", sellerStudio)
-    if(sellerStudio) {
-      // 关联工作室
-      await this.baseSellerStudioServer.relation({
-        name: "seller",
-        of: sellerStudio.identifiers[0].id,
-        set: { sellerId: seller.generatedMaps[0].sellerId }
+    if(payload.resume.prize.length
+    || payload.resume.individua.length
+    || payload.resume.organizing.length
+    || payload.resume.publish.length
+    ){
+      // 创建艺术家履历
+      const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
+        resume: JSON.stringify(payload.resume)
       })
-    }else{
-      return {
-        success: false,
-        code: 10004
+      // console.log("创建艺术家履历", sellerResume)
+      if(sellerResume) {
+        // 关联艺术家履历
+        await this.baseSellerResumeServer.relation({
+          name: "seller",
+          of: sellerResume.identifiers[0].id,
+          set: { sellerId: seller.generatedMaps[0].sellerId }
+        })
+      }else{
+        return {
+          success: false,
+          code: 10004
+        }
       }
     }
-
-    // 创建艺术家履历
-    const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
-      resume: JSON.stringify(payload.resume)
-    })
-    // console.log("创建艺术家履历", sellerResume)
-    if(sellerResume) {
-      // 关联艺术家履历
-      await this.baseSellerResumeServer.relation({
-        name: "seller",
-        of: sellerResume.identifiers[0].id,
-        set: { sellerId: seller.generatedMaps[0].sellerId }
-      })
-    }else{
-      return {
-        success: false,
-        code: 10004
-      }
-    }
+  }
 
     // 关联用户
-    if(payload.userId) {
-      const user = await this.baseUserServer.baseRetrieveUserIdentity(payload.userId);
+    if(payload.user && payload.user.userId) {
+      const user = await this.baseUserServer.baseRetrieveUserIdentity(payload.user.userId);
       // console.log("关联用户", user)
       if(user) {
         // 关联用户
         await this.baseSellerServer.relation({
           name: "user",
           of: seller.identifiers[0].id,
-          set: { userId: payload.userId }
+          set: { userId: payload.user.userId }
         })
 
       }else {
@@ -207,6 +262,7 @@ export class SellerService {
     }
 
     return {
+      data: { sellerId: seller.generatedMaps[0].sellerId },
       success: true,
       code: 10003
     };
@@ -262,25 +318,136 @@ export class SellerService {
 
   }
 
+  /**
+   * 查找艺术家个人信息
+   * @param payload
+   */
+   async find(payload) {
+
+      if(payload.sellerId){
+        let find:any = {};
+        const sellerData:any = await this.baseSellerServer.baseRetrieveSeller(payload.sellerId);
+        if(sellerData) {
+          const { user, ...seller} = sellerData;
+          find.seller = seller;
+          // 用户信息
+          if(user) {
+            find.user = user;
+          }
+
+          // metadata
+          const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.sellerId);
+          if(sellerMetadata){
+            find.metadata = sellerMetadata;
+          }
+
+          // studio
+          const sellerStudio = await this.baseSellerStudioServer.baseRetrieve(payload.sellerId);
+          if(sellerStudio){
+            find.studio = sellerStudio;
+          }
+
+
+          // resume
+          const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.sellerId);
+          if(sellerResume){
+            find.resume = JSON.parse(sellerResume.resume);
+          }
+
+
+
+          // commoditys
+
+          const commoditys:any = await this.commodityCommodityService.retrieveCommmoditySellerId(payload.sellerId);
+
+          if(commoditys.success && commoditys.data && commoditys.data.length){
+
+            for(let item of commoditys.data){
+
+              // name
+              const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+              if(commodityAttributeName) {
+                item.name = commodityAttributeName.data[payload.locale];
+              }
+
+              // photos
+              const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+              if(commodityAttributePhoto) {
+                item.photos = commodityAttributePhoto.data.map(item => item.src);
+              }
+            }
+
+            find.commoditys = commoditys.data;
+          }
+
+        }else{
+          return {
+            success: false,
+            code: 10412
+          }
+        }
+
+
+
+
+
+        return {
+          data: find,
+          success: true,
+          code: 10009
+        };
+      }else{
+        return {
+          success: false,
+          code: 10104
+        }
+      }
+  }
+
+
   async update(payload) {
     if(payload.seller.sellerId) {
       // 获取艺术家
       const sellerData = await this.baseSellerServer.baseRetrieveUser(payload.seller.sellerId);
+      console.log("获取艺术家", sellerData)
       if(sellerData) {
-        const { user} = sellerData;
+        const { user } = sellerData;
         if(user){
-          if(payload.userId !== user.userId){
+          if(payload.user) {
+            if(payload.user.userId !== user.userId){
+              // 解绑用户 user.userId
+              await this.baseSellerServer.relation({
+                name: "user",
+                of: sellerData.id,
+                set: null
+              })
+              // 关联用户 payload.user.userId
+              await this.baseSellerServer.relation({
+                name: "user",
+                of: sellerData.id,
+                set: { userId: payload.user.userId }
+              })
+            }
+          }else{
             // 解绑用户 user.userId
-
-            // 关联用户 payload.userId
-
+            await this.baseSellerServer.relation({
+              name: "user",
+              of: sellerData.id,
+              set: null
+            })
           }
-        }else{
-          if(payload.userId) {
-            // 关联用户 payload.userId
 
+        }else{
+          if(payload.user && payload.user.userId) {
+            // 关联用户 payload.user.userId
+            await this.baseSellerServer.relation({
+              name: "user",
+              of: sellerData.id,
+              set: { userId: payload.user.userId }
+            })
           }
         }
+
         // 更新艺术家
         const seller:any = await this.baseSellerServer.baseUpdateSeller({
           sellerId: payload.seller.sellerId,
@@ -295,70 +462,224 @@ export class SellerService {
           gender: payload.seller.gender,
           country: payload.seller.country,
         })
+        console.log("更新艺术家", seller)
         if(!seller.affected) {
           return {
             success: false,
             code: 10008
           }
         }
-        // 更新艺术家基本信息
-        const sellerMetadata:any = await this.baseSellerMetadataServer.baseUpdate({
-          sellerId: payload.seller.sellerId,
 
-          language: payload.metadata.language,
-          findUs: payload.metadata.findUs,
-          isFullTime: payload.metadata.isFullTime,
-          onlineSell: payload.metadata.onlineSell,
-          sold: payload.metadata.sold,
-          channel: payload.metadata.channel,
-          gallery: payload.metadata.gallery,
-          medium: payload.metadata.medium,
-          galleryInfo: payload.metadata.galleryInfo,
-          recommend: payload.metadata.recommend,
-          prize: payload.metadata.prize,
-          website: payload.metadata.website,
-          profile: payload.metadata.profile,
-        })
-        if(!sellerMetadata.affected) {
-          return {
-            success: false,
-            code: 10008
-          }
-        }
-        // 更新艺术家工作室
-        const sellerStudio:any = await this.baseSellerStudioServer.baseUpdate({
-          sellerId: payload.seller.sellerId,
 
-          name: payload.studio.name,
-          photo: payload.studio.photo,
-          video: payload.studio.video,
-          banner: payload.studio.banner,
-          introduce: payload.studio.introduce,
-        })
-        if(!sellerStudio.affected) {
-          return {
-            success: false,
-            code: 10008
-          }
-        }
-        // 更新艺术家履历
-        const sellerResume:any = await this.baseSellerResumeServer.baseUpdate({
-          sellerId: payload.seller.sellerId,
 
-          resume: JSON.stringify(payload.resume),
-        })
-        if(!sellerResume.affected) {
-          return {
-            success: false,
-            code: 10008
-          }
-        }
+
       }else{
         return {
           success: false,
           code: 10412
         }
       }
+
+
+      // 艺术家基本信息
+      if(payload.metadata) {
+        // 艺术家基本信息
+        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.seller.sellerId);
+        if(sellerMetadata) {
+          // 更新艺术家基本信息
+          const sellerMetadata:any = await this.baseSellerMetadataServer.baseUpdate({
+            sellerId: payload.seller.sellerId,
+
+            language: payload.metadata.language,
+            findUs: payload.metadata.findUs,
+            isFullTime: payload.metadata.isFullTime,
+            onlineSell: payload.metadata.onlineSell,
+            sold: payload.metadata.sold,
+            channel: payload.metadata.channel,
+            gallery: payload.metadata.gallery,
+            medium: payload.metadata.medium,
+            galleryInfo: payload.metadata.galleryInfo,
+            recommend: payload.metadata.recommend,
+            prize: payload.metadata.prize,
+            website: payload.metadata.website,
+            profile: payload.metadata.profile,
+          })
+          console.log("更新艺术家基本信息", sellerMetadata)
+          if(!sellerMetadata.affected) {
+            return {
+              success: false,
+              code: 10008
+            }
+          }
+        }else{
+
+          if(payload.metadata){
+            if(payload.metadata.language
+            || payload.metadata.findUs
+            || payload.metadata.isFullTime
+            || payload.metadata.onlineSell
+            || payload.metadata.sold
+            || payload.metadata.channel
+            || payload.metadata.gallery
+            || payload.metadata.medium
+            || payload.metadata.galleryInfo
+            || payload.metadata.recommend
+            || payload.metadata.prize
+            || payload.metadata.website
+            || payload.metadata.profile
+            ){
+          // 创建艺术家基本信息
+          const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
+            language: payload.metadata.language,
+            findUs: payload.metadata.findUs,
+            isFullTime: payload.metadata.isFullTime,
+            onlineSell: payload.metadata.onlineSell,
+            sold: payload.metadata.sold,
+            channel: payload.metadata.channel,
+            gallery: payload.metadata.gallery,
+            medium: payload.metadata.medium,
+            galleryInfo: payload.metadata.galleryInfo,
+            recommend: payload.metadata.recommend,
+            prize: payload.metadata.prize,
+            website: payload.metadata.website,
+            profile: payload.metadata.profile,
+          })
+          // console.log("艺术家基本信息", sellerMetadata)
+
+          if(sellerMetadata) {
+            // 关联基本信息
+            await this.baseSellerMetadataServer.relation({
+              name: "seller",
+              of: sellerMetadata.identifiers[0].id,
+              set: { sellerId: payload.seller.sellerId }
+            })
+          }else{
+            return {
+              success: false,
+              code: 10004
+            }
+          }
+        }
+      }
+        }
+      }
+
+      // 艺术家工作室
+      if(payload.studio) {
+        // 查找艺术家是否有工作室
+        const sellerStudio = await this.baseSellerStudioServer.baseRetrieve(payload.seller.sellerId);
+        if(sellerStudio) {
+          // 更新艺术家工作室
+          const sellerStudioUpdate:any = await this.baseSellerStudioServer.baseUpdate({
+            sellerId: payload.seller.sellerId,
+
+            name: payload.studio.name,
+            photo: payload.studio.photo,
+            video: payload.studio.video,
+            banner: payload.studio.banner,
+            introduce: payload.studio.introduce,
+          })
+          console.log("更新艺术家工作室", sellerStudioUpdate)
+          if(!sellerStudioUpdate.affected) {
+            return {
+              success: false,
+              code: 10008
+            }
+          }
+
+        }else {
+          if(payload.studio){
+            if(payload.studio.name
+            || payload.studio.photo
+            || payload.studio.video
+            || payload.studio.banner
+            || payload.studio.introduce
+            ){
+          // 创建艺术家工作室
+          const sellerStudio:any = await this.baseSellerStudioServer.baseCreate({
+            sellerId: payload.seller.sellerId,
+            name: payload.studio.name,
+            photo: payload.studio.photo,
+            video: payload.studio.video,
+            banner: payload.studio.banner,
+            introduce: payload.studio.introduce,
+          })
+          console.log("创建艺术家工作室", sellerStudio)
+          if(sellerStudio) {
+            // 关联工作室
+            // await this.baseSellerStudioServer.relation({
+            //   name: "seller",
+            //   of: sellerStudio.identifiers[0].id,
+            //   set: { sellerId: payload.seller.sellerId }
+            // })
+            await this.baseSellerServer.relation({
+              name: "studio",
+              of: { sellerId: payload.seller.sellerId },
+              set: sellerStudio.identifiers[0].id,
+            })
+          }else{
+            return {
+              success: false,
+              code: 10004
+            }
+          }
+        }
+      }
+        }
+
+      }
+
+      // 艺术家履历
+      if(payload.resume) {
+        // 查找艺术家是否有履历
+        const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.seller.sellerId);
+        if(sellerResume){
+          // 更新艺术家履历
+          const sellerResume:any = await this.baseSellerResumeServer.baseUpdate({
+            sellerId: payload.seller.sellerId,
+
+            resume: JSON.stringify(payload.resume),
+          })
+          console.log("更新艺术家履历", sellerResume)
+          if(!sellerResume.affected) {
+            return {
+              success: false,
+              code: 10008
+            }
+          }
+        }else{
+          if(payload.resume){
+
+            if(payload.resume.prize.length
+            || payload.resume.individua.length
+            || payload.resume.organizing.length
+            || payload.resume.publish.length
+            ){
+          // 创建艺术家履历
+          const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
+            resume: JSON.stringify(payload.resume)
+          })
+          console.log("创建艺术家履历", sellerResume)
+          if(sellerResume) {
+            // 关联艺术家履历
+            await this.baseSellerResumeServer.relation({
+              name: "seller",
+              of: sellerResume.identifiers[0].id,
+              set: { sellerId: payload.seller.sellerId }
+            })
+          }else{
+            return {
+              success: false,
+              code: 10004
+            }
+          }
+        }
+      }
+
+        }
+      }
+
+
       return {
         success: true,
         code: 10007
@@ -608,6 +929,7 @@ export class SellerService {
    * 搜索艺术家
    * @param payload
    */
+  //  前端搜索艺术家
 
    async search(payload) {
      const { locale, currentPage, pageSize, ...searchData } = payload;
@@ -616,6 +938,7 @@ export class SellerService {
      }else{
       return this.retrieveSellerAll(payload)
      }
+
    }
 
   async searchSeller(payload) {
@@ -623,6 +946,7 @@ export class SellerService {
       let data = result[0];
       let total = result[1];
       if (data) {
+
         return {
           data: {
             list: data,
@@ -650,9 +974,7 @@ export class SellerService {
 
 
       if (data) {
-        if(payload.isLocale){
-          data = this.retrieveSellerAllFilter(payload.locale, data)
-        }
+
         return {
           data: {
             list: data,
@@ -741,63 +1063,7 @@ export class SellerService {
       }
   }
 
-  /**
-   * 查找艺术家个人信息
-   * @param payload
-   */
-  async find(payload) {
-    // const user = await this.userEntity
-    //   .createQueryBuilder('user')
-    //   .leftJoinAndSelect('user.seller', 'seller')
-    //   .leftJoinAndMapOne('user.sellerMetadata', UserSellerMetadataEntity, 'sellerMetadata', 'sellerMetadata.sellerId = :sellerId', { sellerId: payload.sellerId})
-    //   .where('user.userId = :userId', { userId : payload.userId })
-    //   .getOne();
-    const seller:any = await this.baseSellerServer.baseRetrieveSeller(payload.sellerId);
 
-      if(seller){
-
-        // metadata
-        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.sellerId);
-        if(sellerMetadata){
-          seller.metadata = sellerMetadata;
-        }
-
-        // commoditys
-
-        const commoditys:any = await this.commodityCommodityService.retrieveCommmoditySellerId(payload.sellerId);
-
-        if(commoditys.success){
-          for(let item of commoditys.data){
-
-            // name
-            const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
-            if(commodityAttributeName) {
-              item.name = commodityAttributeName.data[payload.locale];
-            }
-
-            // photos
-            const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
-            if(commodityAttributePhoto) {
-              item.photos = commodityAttributePhoto.data.map(item => item.src);
-            }
-          }
-
-          seller.commoditys = commoditys;
-        }
-
-
-        return {
-          data: seller,
-          success: true,
-          code : 10009
-        }
-      }else{
-        return {
-          success: false,
-          code : 10010
-        }
-      }
-  }
 
   async choiceSeller(payload) {
     const hotSaleSeller = await this.baseSellerServer.baseChoiceSeller({

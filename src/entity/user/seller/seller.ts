@@ -88,6 +88,10 @@ export class UserSellerEntity {
 
   // 关联商家工作室
   @OneToOne(type => UserSellerStudioEntity, UserSellerStudioEntity => UserSellerStudioEntity.seller)
+  @JoinColumn({
+    name: 'studioId',
+    referencedColumnName: 'id'
+  })
   studio: UserSellerStudioEntity;
 
   // @JoinTable({

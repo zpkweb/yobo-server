@@ -186,6 +186,10 @@ export class UserRegisterService {
       case 'superAdmin':
         adminRegister = await this.createSuperAdmin(payload);
         break;
+      default:
+        adminRegister = await this.adminRegisterUser(payload);
+        break;
+
     }
     return adminRegister;
 

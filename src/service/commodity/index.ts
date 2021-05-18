@@ -61,8 +61,8 @@ export class CommodityService {
   }
 
   // 编辑商品
-  async edit(commodityId) {
-    return await this.commodityCommodityService.edit(commodityId);
+  async edit(payload) {
+    return await this.commodityCommodityService.edit(payload.commodityId);
   }
 
   async buy(payload) {
@@ -386,7 +386,7 @@ export class CommodityService {
 
     // 更新艺术家
     // 商品 关联 商家
-    if(payload.sellerId){
+    if(payload.seller && payload.seller.sellerId){
       await this.commodityCommodityService.relation({
         name: 'seller',
         // of: commodity.data.identifiers[0].id,
@@ -394,7 +394,17 @@ export class CommodityService {
         // of: payload.commodityId,
         // of: { commodityId: payload.commodityId },
         of: commodity.data.id,
-        set: { sellerId: payload.sellerId }
+        set: { sellerId: payload.seller.sellerId }
+      })
+    }else{
+      await this.commodityCommodityService.relation({
+        name: 'seller',
+        // of: commodity.data.identifiers[0].id,
+        // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
+        // of: payload.commodityId,
+        // of: { commodityId: payload.commodityId },
+        of: commodity.data.id,
+        set: null
       })
     }
 

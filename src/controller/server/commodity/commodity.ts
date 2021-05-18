@@ -41,9 +41,9 @@ export class AdminCommodityController {
 
   // 编辑商品
   @Get('/edit',{summary:'编辑商品'})
-  async edit(@Query() commodityId) {
+  async edit(@Query(ALL) queryAll) {
 
-    const data: any = await this.commodityService.edit(commodityId);
+    const data: any = await this.commodityService.edit(queryAll);
 
     return data;
   }
