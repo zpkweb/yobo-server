@@ -45,7 +45,8 @@ export class UserMemberEntity {
 
   // 关联用户
   @OneToOne(type => UserEntity, UserEntity => UserEntity.member, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'

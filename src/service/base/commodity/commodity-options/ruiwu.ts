@@ -27,7 +27,7 @@ export class BaseCommodityRuiwuServer {
     return await this.CommodityRuiwuEntity
       .createQueryBuilder('ruiwu')
       // .leftJoinAndSelect('ruiwu.commoditys', 'commoditys')
-      .leftJoinAndSelect('ruiwu.options', 'options')
+      .innerJoinAndSelect('ruiwu.options', 'options')
       .where('ruiwu.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
@@ -35,8 +35,8 @@ export class BaseCommodityRuiwuServer {
   async BaseRetrieveID(payload) {
     return await this.CommodityRuiwuEntity
       .createQueryBuilder('ruiwu')
-      .leftJoinAndSelect('ruiwu.commoditys', 'commoditys')
-      .leftJoinAndSelect('ruiwu.options', 'options')
+      // .leftJoinAndSelect('ruiwu.commoditys', 'commoditys')
+      .innerJoinAndSelect('ruiwu.options', 'options')
       .where('ruiwu.commodityId = :commodityId', { commodityId: payload.commodityId })
       .andWhere('ruiwu.optionId = :optionId', { optionId: payload.optionId })
       .getOne();

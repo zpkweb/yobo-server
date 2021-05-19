@@ -9,11 +9,17 @@ export declare class AdminCommodityController {
         success: boolean;
         code: number;
     } | {
+        data: {
+            commodityId: any;
+        };
+        success: boolean;
+        code: number;
+    } | {
         success: boolean;
         code: number;
     }>;
     find(findParams: any): Promise<any>;
-    edit(commodityId: any): Promise<any>;
+    edit(queryAll: any): Promise<any>;
     findAll(findAllParams: any): Promise<any>;
     search(searchParams: any): Promise<any>;
     searchs(searchParams: any): Promise<any>;

@@ -50,7 +50,8 @@ export class OrderEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.orders, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'
@@ -59,7 +60,8 @@ export class OrderEntity {
 
   // 关联商品
   @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.orders, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinTable({
     joinColumn: {
@@ -73,7 +75,8 @@ export class OrderEntity {
 
   // 关联商家
   @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.orders, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinTable({
     joinColumn: {

@@ -27,7 +27,7 @@ export class BaseCommodityShapeServer {
     return await this.CommodityShapeEntity
       .createQueryBuilder('shape')
       // .leftJoinAndSelect('shape.commoditys', 'commoditys')
-      .leftJoinAndSelect('shape.options', 'options')
+      .innerJoinAndSelect('shape.options', 'options')
       .where('shape.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
@@ -35,8 +35,8 @@ export class BaseCommodityShapeServer {
   async BaseRetrieveID(payload) {
     return await this.CommodityShapeEntity
       .createQueryBuilder('shape')
-      .leftJoinAndSelect('shape.commoditys', 'commoditys')
-      .leftJoinAndSelect('shape.options', 'options')
+      // .leftJoinAndSelect('shape.commoditys', 'commoditys')
+      .innerJoinAndSelect('shape.options', 'options')
       .where('shape.commodityId = :commodityId', { commodityId: payload.commodityId })
       .andWhere('shape.optionId = :optionId', { optionId: payload.optionId })
       .getOne();

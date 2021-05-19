@@ -25,37 +25,37 @@ export class UserIdentityEntity {
   @Generated('uuid')
   identityId: string;
 
-  // 语言
-  @Column()
-  'zh-cn': string;
+  // // 语言
+  // @Column()
+  // 'zh-cn': string;
 
-  @Column()
-  'en-us': string;
+  // @Column()
+  // 'en-us': string;
 
-  @Column()
-  'ja-jp': string;
+  // @Column()
+  // 'ja-jp': string;
 
-  @Column()
-  'fr-fr': string;
+  // @Column()
+  // 'fr-fr': string;
 
-  @Column()
-  'es-es': string;
+  // @Column()
+  // 'es-es': string;
 
   // 身份序号
   @Column()
-  index: number;
+  identityIndex: number;
 
-  // 用户名
-  @Column()
-  userName: string;
+  // // 用户名
+  // @Column()
+  // userName: string;
 
-  // 邮箱
-  @Column()
-  userEmail: string;
+  // // 邮箱
+  // @Column()
+  // userEmail: string;
 
-  // 手机号
-  @Column()
-  userPhone: string;
+  // // 手机号
+  // @Column()
+  // userPhone: string;
 
   // 关联 用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.identitys, {

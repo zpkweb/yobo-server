@@ -37,7 +37,8 @@ export class UserOrdinaryEntity {
 
   // 关联用户
   @OneToOne(type => UserEntity, UserEntity => UserEntity.ordinary, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'

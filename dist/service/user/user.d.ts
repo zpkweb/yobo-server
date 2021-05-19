@@ -31,27 +31,36 @@ export declare class UserService {
         code: number;
         data?: undefined;
     }>;
+    retrieveUserId(userId: any): Promise<{
+        data: UserEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    edit(userId: any): Promise<{
+        data: UserEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     remove(userId: any): Promise<{
         success: boolean;
         code: number;
     }>;
     findInfo(userId: any): Promise<{
-        data: UserEntity;
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
         data?: undefined;
-    }>;
-    findSelf(userId: any): Promise<{
-        data: UserEntity;
-        success: boolean;
-        code: number;
     } | {
+        data: any;
         success: boolean;
         code: number;
-        data?: undefined;
     }>;
     hasUser(userId: any): Promise<{
         data: UserEntity;

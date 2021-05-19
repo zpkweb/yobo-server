@@ -1,4 +1,4 @@
-import { UserIdentityListEntity } from "../../../../entity/user/identity/list";
+import { UserIdentityListEntity } from "../../../entity/user/identity/list";
 import { Repository } from "typeorm";
 export declare class BaseIdentityListServer {
     userIdentityListEntity: Repository<UserIdentityListEntity>;

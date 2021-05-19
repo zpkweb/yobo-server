@@ -8,5 +8,5 @@ export declare class BaseCommodityPhotoServer {
     BaseRetrieve(payload: any): Promise<CommodityPhotoEntity[]>;
     BaseRetrieveAll(): Promise<CommodityPhotoEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
-    BaseDelete(payload: any): Promise<import("typeorm").DeleteResult>;
+    BaseDelete(id: any): Promise<import("typeorm").DeleteResult>;
 }

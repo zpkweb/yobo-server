@@ -1,8 +1,7 @@
 import { UserSellerEntity } from "./seller";
 export declare class UserSellerResumeEntity {
     id: number;
-    year: string;
-    something: string;
+    resume: string;
     createdDate: Date;
     updatedDate: Date;
     seller: UserSellerEntity;

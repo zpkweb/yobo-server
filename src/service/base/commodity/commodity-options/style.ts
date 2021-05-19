@@ -27,7 +27,7 @@ export class BaseCommodityStyleServer {
     return await this.CommodityStyleEntity
       .createQueryBuilder('style')
       // .leftJoinAndSelect('style.commoditys', 'commoditys')
-      .leftJoinAndSelect('style.options', 'options')
+      .innerJoinAndSelect('style.options', 'options')
       .where('style.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
@@ -35,8 +35,8 @@ export class BaseCommodityStyleServer {
   async BaseRetrieveID(payload) {
     return await this.CommodityStyleEntity
       .createQueryBuilder('style')
-      .leftJoinAndSelect('style.commoditys', 'commoditys')
-      .leftJoinAndSelect('style.options', 'options')
+      // .leftJoinAndSelect('style.commoditys', 'commoditys')
+      .innerJoinAndSelect('style.options', 'options')
       .where('style.commodityId = :commodityId', { commodityId: payload.commodityId })
       .andWhere('style.optionId = :optionId', { optionId: payload.optionId })
       .getOne();

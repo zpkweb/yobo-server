@@ -17,28 +17,9 @@ export class MyLikeCommodityEntity {
   })
   id: number;
 
-  // 用户名
-  @Column()
-  userName: string;
 
   @Column()
   userId: string;
-
-  // 语言
-  @Column()
-  'zh-cn': string;
-
-  @Column()
-  'en-us': string;
-
-  @Column()
-  'ja-jp': string;
-
-  @Column()
-  'fr-fr': string;
-
-  @Column()
-  'es-es': string;
 
   @Column()
   commodityId: string;
@@ -58,7 +39,7 @@ export class MyLikeCommodityEntity {
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.likeCommoditys, {
     cascade: true,
-    onDelete: 'SET NULL'
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'
@@ -68,7 +49,7 @@ export class MyLikeCommodityEntity {
   // 关联商品
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.likeCommoditys, {
     cascade: true,
-    onDelete: 'SET NULL'
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'commodityId'

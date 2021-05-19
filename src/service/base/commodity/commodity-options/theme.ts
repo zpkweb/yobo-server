@@ -27,7 +27,7 @@ export class BaseCommodityThemeServer {
     return await this.CommodityThemeEntity
       .createQueryBuilder('theme')
       // .leftJoinAndSelect('theme.commoditys', 'commoditys')
-      .leftJoinAndSelect('theme.options', 'options')
+      .innerJoinAndSelect('theme.options', 'options')
       .where('theme.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
@@ -35,8 +35,8 @@ export class BaseCommodityThemeServer {
   async BaseRetrieveID(payload) {
     return await this.CommodityThemeEntity
       .createQueryBuilder('theme')
-      .leftJoinAndSelect('theme.commoditys', 'commoditys')
-      .leftJoinAndSelect('theme.options', 'options')
+      // .leftJoinAndSelect('theme.commoditys', 'commoditys')
+      .innerJoinAndSelect('theme.options', 'options')
       .where('theme.commodityId = :commodityId', { commodityId: payload.commodityId })
       .andWhere('theme.optionId = :optionId', { optionId: payload.optionId })
       .getOne();

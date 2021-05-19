@@ -4,6 +4,20 @@ export declare class MyBrowsingHistoryService {
     baseBrowsingHistoryServer: BaseBrowsingHistoryServer;
     baseCommodityBrowsingCountServer: BaseCommodityBrowsingCountServer;
     addBrowsingHistory(payload: any): Promise<any>;
+    addMyBrowsingHistory(payload: any): Promise<any>;
+    addCommodityBrowsingHistory(payload: any): Promise<{
+        data: import("typeorm").UpdateResult;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        data: import("typeorm").InsertResult;
+        success: boolean;
+        code: number;
+    }>;
     createBrowsingHistory(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -46,7 +60,7 @@ export declare class MyBrowsingHistoryService {
     filter(type: any, payload: any): any;
     relationUser(payload: any): Promise<void>;
     relationCommodity(payload: any): Promise<void>;
-    createBrowsingCount(): Promise<{
+    createBrowsingCount(commodityId: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
         code: number;

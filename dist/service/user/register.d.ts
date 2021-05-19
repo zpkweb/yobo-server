@@ -8,8 +8,9 @@ import { UserIdentityEntity } from "../../entity/user/identity/identity";
 import { UserAdminEntity } from "../../entity/user/admin/admin";
 import { UserCustomerServiceEntity } from "../../entity/user/customerService/customerService";
 import { BaseUserServer } from "../base/user/user";
-import { BaseSellerServer } from "../base/user/seller";
-import { BaseIdentityListServer } from "../base/user/identity/list";
+import { BaseSellerServer } from "../base/seller/seller";
+import { BaseSellerMetadataServer } from "../base/seller/metadata";
+import { BaseIdentityListServer } from "../base/user/identityList";
 export declare class UserRegisterService {
     userEntity: Repository<UserEntity>;
     userSellerEntity: Repository<UserSellerEntity>;
@@ -21,6 +22,7 @@ export declare class UserRegisterService {
     userCustomerServiceEntity: Repository<UserCustomerServiceEntity>;
     baseUserServer: BaseUserServer;
     baseSellerServer: BaseSellerServer;
+    baseSellerMetadataServer: BaseSellerMetadataServer;
     baseIdentityListServer: BaseIdentityListServer;
     email: any;
     registerUser(payload: any): Promise<any>;

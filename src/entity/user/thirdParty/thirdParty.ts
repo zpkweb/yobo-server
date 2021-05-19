@@ -41,7 +41,8 @@ export class UserThirdPartyEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.thirdParty, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'

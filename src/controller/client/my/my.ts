@@ -54,7 +54,8 @@ export class MyController {
   async getCommodity(@Query(ALL) query) {
     return await this.myService.getCommodity({
       ...query,
-      isLocale: true
+      isLocale: true,
+      locale: query.locale || 'zh-cn'
     });
   }
 

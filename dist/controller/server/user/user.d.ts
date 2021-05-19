@@ -28,6 +28,15 @@ export declare class AdminUserController {
         code: number;
         data?: undefined;
     }>;
+    editUser(findQuery: any): Promise<{
+        data: import("../../../entity/user/user").UserEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     searchUser(searchParams: any): Promise<any>;
     deleteUserIdentity(identityDeleteQuery: any): Promise<{
         success: boolean;

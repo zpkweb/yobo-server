@@ -4,9 +4,9 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, Column, Generated, OneToOne, ManyToMany, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Generated, OneToOne,ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserSellerEntity } from 'src/entity/user/seller/seller';
+// import { UserSellerEntity } from 'src/entity/user/seller/seller';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 
 @EntityModel('user_customerService')
@@ -47,9 +47,10 @@ export class UserCustomerServiceEntity {
   updatedDate: Date;
 
   // 关联商家
-  @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.customerServices)
-
-  sellers: UserSellerEntity[];
+  // @ManyToMany(type => UserSellerEntity, UserSellerEntity => UserSellerEntity.customerServices,{
+  //   onDelete: 'CASCADE'
+  // })
+  // sellers: UserSellerEntity[];
 
   // 关联管理员
   @ManyToOne(type => UserAdminEntity, UserAdminEntity => UserAdminEntity.customerService, {

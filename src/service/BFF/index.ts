@@ -45,14 +45,18 @@ export class BFFService {
       return banner;
     }
 
-    // 您的线上画廊:搜索艺术家-画廊
-    const gallerySeller = await this.sellerService.retrieveSellerHome({
+    // 您的线上画廊:搜索艺术品
+    const gallerySeller = await this.commodityService.choiceCommodity({
       pageSize: payload.pageSize || 4,
       currentPage: payload.currentPage || 1,
       isLocale: true,
-      locale: payload.locale || 'zh-cn'
+      locale: payload.locale || 'zh-cn',
+      news: 'true'
     });
-    if(!gallerySeller.success) {
+    if(gallerySeller.success) {
+
+
+    }else{
       return gallerySeller;
     }
 
@@ -108,7 +112,7 @@ export class BFFService {
       code: 10009,
       data: {
         banner: banner.data,
-        gallerySeller: gallerySeller.data.list,
+        gallerySeller: gallerySeller.data,
         latestCommodity: latestCommodity.data.list,
         lookWorld: commodityOption.data,
         commentCommodity: commodityComment.data,
@@ -123,12 +127,14 @@ export class BFFService {
    * @param {*} payload
    * @memberof BFFService
    */
-  async buy(payload) {
+  async clientCommodity(payload) {
     // 商品 简介
-    const commodity = await this.commodityService.buy({
+    const commodity = await this.commodityService.clientCommodity({
       locale: payload.locale,
       isLocale: true,
-      commodityId: payload.commodityId
+      commodityId: payload.commodityId,
+      pageSize: payload.pageSize || 5,
+      currentPage: payload.currentPage || 1,
     });
     if(!commodity.success) {
       return commodity;
@@ -138,24 +144,27 @@ export class BFFService {
 
 
     // 商家
-    let seller:any = {
-      data: {}
-    }
+    // let seller:any = {
+    //   data: {}
+    // }
     // 其他作品
     // let sellerCommodity:any = {
     //   data: []
     // }
-    if(commodity.data.seller) {
-      const findseller = await this.sellerService.find({
-        sellerId: commodity.data.seller.sellerId
-      })
-      if(!findseller.success) {
-        return findseller;
-      }
-      seller = findseller;
 
-      // const sellerCommodity = await this.
-    }
+    // 商品关联的商家
+    // if(commodity.data.seller && commodity.data.seller.sellerId) {
+    //   const findseller = await this.sellerService.findSellerMetadata({
+    //     sellerId: commodity.data.seller.sellerId,
+    //     locale: payload.locale
+    //   })
+    //   if(!findseller.success) {
+    //     return findseller;
+    //   }
+    //   seller = findseller;
+
+    //   // const sellerCommodity = await this.
+    // }
 
 
 
@@ -167,27 +176,35 @@ export class BFFService {
     // if(!commoditySimilar.success) {
     //   return commoditySimilar;
     // }
-
     // 最近浏览的作品
     let browsingHistory:any = {
       data: []
     };
+
     if(payload.userId) {
-      const findBrowsingHistory = await this.myService.findBrowsingHistory(payload);
+
+      const findBrowsingHistory = await this.myService.findBrowsingHistory({
+        userId: payload.userId,
+        pageSize: payload.pageSize || 4,
+        currentPage: payload.currentPage || 1,
+      });
       if(!findBrowsingHistory.success) {
         return findBrowsingHistory;
       }
-      browsingHistory = findBrowsingHistory
+      browsingHistory = findBrowsingHistory;
+
+      // 添加浏览记录
+      await this.myService.addBrowsingHistory(payload);
+
     }
-
-
+    const { seller, ...commodityData } = commodity.data;
     return {
       success: true,
       code: 10009,
       data: {
-        commodity: commodity.data,
+        commodity: commodityData,
         // commoditySimilar: commoditySimilar.data.list,
-        seller: seller.data,
+        seller: seller,
         browsingHistory: browsingHistory.data
       }
     }

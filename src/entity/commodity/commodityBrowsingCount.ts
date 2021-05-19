@@ -11,6 +11,9 @@ export class CommodityBrowsingCountEntity {
   @Column()
   count: number;
 
+  @Column()
+  commodityId: string;
+
   //  创建日期
   @CreateDateColumn({
     select: false
@@ -28,7 +31,6 @@ export class CommodityBrowsingCountEntity {
     onDelete: 'CASCADE'
   })
   @JoinColumn({
-    name: 'commodityId',
     referencedColumnName: 'commodityId'
   })
   commodity: CommodityEntity;

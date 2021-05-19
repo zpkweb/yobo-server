@@ -1,4 +1,4 @@
-import { BaseIdentityListServer } from "../base/user/identity/list";
+import { BaseIdentityListServer } from "../base/user/identityList";
 export declare class IdentityListService {
     baseIdentityListServer: BaseIdentityListServer;
     createIdentityList(payload: any): Promise<{

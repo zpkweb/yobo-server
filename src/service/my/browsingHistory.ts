@@ -11,9 +11,31 @@ export class MyBrowsingHistoryService {
   @Inject()
   baseCommodityBrowsingCountServer: BaseCommodityBrowsingCountServer;
 
-  // 添加我的商品浏览记录
+  // 添加浏览记录
   async addBrowsingHistory(payload) {
 
+    const myBrowsingHistory = await this.addMyBrowsingHistory(payload);
+    if(!myBrowsingHistory.success) {
+      return myBrowsingHistory;
+    }
+
+    const commodityBrowsingHistory = await this.addCommodityBrowsingHistory(payload);
+    if(!commodityBrowsingHistory.success) {
+      return commodityBrowsingHistory;
+    }
+
+    return {
+      success: true,
+      code: 10003
+    }
+    // 我的浏览历史-商品
+
+    // return await this.retrieveBrowsingHistory(payload.userId)
+    // return browsingHistory;
+  }
+
+  // 添加我的浏览记录
+  async addMyBrowsingHistory(payload) {
     // 查找商品浏览记录
     let browsingHistory:any = await this.hasBrowsingHistory({
       userId: payload.userId,
@@ -34,6 +56,8 @@ export class MyBrowsingHistoryService {
       // 创建商品浏览记录
       browsingHistory = await this.createBrowsingHistory({
         count: 1,
+        userId: payload.userId,
+        commodityId: payload.commodityId,
       });
       if(!browsingHistory.success) {
         return browsingHistory
@@ -49,7 +73,14 @@ export class MyBrowsingHistoryService {
         set: payload.commodityId
       })
     }
+    return {
+      success: true,
+      code: 10003
+    }
+  }
 
+  // 添加商品浏览记录
+  async addCommodityBrowsingHistory(payload) {
     // 查找商品浏览数是否存在
     const browsingCount = await this.retrieveBrowsingCount(payload.commodityId);
     if(browsingCount.success){
@@ -63,7 +94,9 @@ export class MyBrowsingHistoryService {
       }
     }else{
       // 创建商品浏览数
-      const browsingCountCreate = await this.createBrowsingCount();
+      const browsingCountCreate = await this.createBrowsingCount({
+        commodityId: payload.commodityId,
+      });
       if(!browsingCountCreate.success){
         return browsingCountCreate;
       }
@@ -73,11 +106,10 @@ export class MyBrowsingHistoryService {
         set: payload.commodityId
       })
     }
-
-    // 我的浏览历史-商品
-
-    // return await this.retrieveBrowsingHistory(payload.userId)
-    return browsingHistory;
+    return {
+      success: true,
+      code: 10003
+    }
   }
 
 
@@ -151,8 +183,10 @@ export class MyBrowsingHistoryService {
     let result = await this.baseBrowsingHistoryServer.BaseRetrieve({
       userId: payload.userId,
       currentPage: payload.currentPage,
-      pageSize: payload.pageSize
+      pageSize: payload.pageSize,
+
     });
+
     if(result){
 
 
@@ -235,8 +269,8 @@ export class MyBrowsingHistoryService {
    * 创建商品浏览数
    * @param commodityId
    */
-  async createBrowsingCount() {
-    const data = await this.baseCommodityBrowsingCountServer.BaseCreate()
+  async createBrowsingCount(commodityId) {
+    const data = await this.baseCommodityBrowsingCountServer.BaseCreate(commodityId)
     if(data){
       return {
         data: data,

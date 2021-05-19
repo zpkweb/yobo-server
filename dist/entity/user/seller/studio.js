@@ -24,7 +24,19 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
+], UserSellerStudioEntity.prototype, "sellerId", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], UserSellerStudioEntity.prototype, "banner", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
 ], UserSellerStudioEntity.prototype, "name", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], UserSellerStudioEntity.prototype, "introduce", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
@@ -33,10 +45,6 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], UserSellerStudioEntity.prototype, "video", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], UserSellerStudioEntity.prototype, "text", void 0);
 __decorate([
     typeorm_1.CreateDateColumn({
         select: false
@@ -50,13 +58,14 @@ __decorate([
     __metadata("design:type", Date)
 ], UserSellerStudioEntity.prototype, "updatedDate", void 0);
 __decorate([
-    typeorm_1.ManyToMany(type => seller_1.UserSellerEntity, UserSellerEntity => UserSellerEntity.studios, {
+    typeorm_1.OneToOne(type => seller_1.UserSellerEntity, UserSellerEntity => UserSellerEntity.studio, {
+        cascade: true,
         onDelete: 'CASCADE'
     }),
-    __metadata("design:type", Array)
+    __metadata("design:type", seller_1.UserSellerEntity)
 ], UserSellerStudioEntity.prototype, "seller", void 0);
 UserSellerStudioEntity = __decorate([
     orm_1.EntityModel('user_seller_studio')
 ], UserSellerStudioEntity);
 exports.UserSellerStudioEntity = UserSellerStudioEntity;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3R1ZGlvLmpzIiwic291cmNlUm9vdCI6Ii9Vc2Vycy95YW5zaHVvL0RvY3VtZW50cy96cGsvZ2l0aHViL3lvYm8tc2VydmVyL3NyYy8iLCJzb3VyY2VzIjpbImVudGl0eS91c2VyL3NlbGxlci9zdHVkaW8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBSUEsdUNBQTRDO0FBQzVDLHFDQUF5RztBQUN6RyxxQ0FBNEM7QUFHNUMsSUFBYSxzQkFBc0IsR0FBbkMsTUFBYSxzQkFBc0I7Q0F3Q2xDLENBQUE7QUFuQ0M7SUFIQyxnQ0FBc0IsQ0FBQztRQUN0QixJQUFJLEVBQUUsUUFBUTtLQUNmLENBQUM7O2tEQUNTO0FBSVg7SUFEQyxnQkFBTSxFQUFFOztvREFDSTtBQUliO0lBREMsZ0JBQU0sRUFBRTs7cURBQ0s7QUFJZDtJQURDLGdCQUFNLEVBQUU7O3FEQUNLO0FBSWQ7SUFEQyxnQkFBTSxFQUFFOztvREFDSTtBQU1iO0lBSEMsMEJBQWdCLENBQUM7UUFDaEIsTUFBTSxFQUFFLEtBQUs7S0FDZCxDQUFDOzhCQUNXLElBQUk7MkRBQUM7QUFNbEI7SUFIQywwQkFBZ0IsQ0FBQztRQUNoQixNQUFNLEVBQUUsS0FBSztLQUNkLENBQUM7OEJBQ1csSUFBSTsyREFBQztBQU1sQjtJQUhDLG9CQUFVLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQyx5QkFBZ0IsRUFBRSxnQkFBZ0IsQ0FBQyxFQUFFLENBQUMsZ0JBQWdCLENBQUMsT0FBTyxFQUFDO1FBQ2pGLFFBQVEsRUFBRSxTQUFTO0tBQ3BCLENBQUM7O3NEQUN5QjtBQXZDaEIsc0JBQXNCO0lBRGxDLGlCQUFXLENBQUMsb0JBQW9CLENBQUM7R0FDckIsc0JBQXNCLENBd0NsQztBQXhDWSx3REFBc0IifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3R1ZGlvLmpzIiwic291cmNlUm9vdCI6Ii9Vc2Vycy95YW5zaHVvL0RvY3VtZW50cy96cGsvZ2l0aHViL3lvYm8tc2VydmVyL3NyYy8iLCJzb3VyY2VzIjpbImVudGl0eS91c2VyL3NlbGxlci9zdHVkaW8udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBSUEsdUNBQTRDO0FBQzVDLHFDQUF1RztBQUN2RyxxQ0FBNEM7QUFHNUMsSUFBYSxzQkFBc0IsR0FBbkMsTUFBYSxzQkFBc0I7Q0FtRGxDLENBQUE7QUE5Q0M7SUFIQyxnQ0FBc0IsQ0FBQztRQUN0QixJQUFJLEVBQUUsUUFBUTtLQUNmLENBQUM7O2tEQUNTO0FBR1g7SUFEQyxnQkFBTSxFQUFFOzt3REFDUTtBQUlqQjtJQURDLGdCQUFNLEVBQUU7O3NEQUNNO0FBSWY7SUFEQyxnQkFBTSxFQUFFOztvREFDSTtBQUliO0lBREMsZ0JBQU0sRUFBRTs7eURBQ1M7QUFJbEI7SUFEQyxnQkFBTSxFQUFFOztxREFDSztBQUlkO0lBREMsZ0JBQU0sRUFBRTs7cURBQ0s7QUFRZDtJQUhDLDBCQUFnQixDQUFDO1FBQ2hCLE1BQU0sRUFBRSxLQUFLO0tBQ2QsQ0FBQzs4QkFDVyxJQUFJOzJEQUFDO0FBTWxCO0lBSEMsMEJBQWdCLENBQUM7UUFDaEIsTUFBTSxFQUFFLEtBQUs7S0FDZCxDQUFDOzhCQUNXLElBQUk7MkRBQUM7QUFRbEI7SUFMQyxrQkFBUSxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMseUJBQWdCLEVBQUUsZ0JBQWdCLENBQUMsRUFBRSxDQUFDLGdCQUFnQixDQUFDLE1BQU0sRUFBQztRQUM5RSxPQUFPLEVBQUUsSUFBSTtRQUNiLFFBQVEsRUFBRSxTQUFTO0tBQ3BCLENBQUM7OEJBRU0seUJBQWdCO3NEQUFDO0FBbERkLHNCQUFzQjtJQURsQyxpQkFBVyxDQUFDLG9CQUFvQixDQUFDO0dBQ3JCLHNCQUFzQixDQW1EbEM7QUFuRFksd0RBQXNCIn0=

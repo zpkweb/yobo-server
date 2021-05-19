@@ -26,7 +26,7 @@ export class BaseCommodityClassificationServer {
     return await this.CommodityClassificationEntity
       .createQueryBuilder('classification')
       // .leftJoinAndSelect('classification.commoditys', 'commoditys')
-      .leftJoinAndSelect('classification.options', 'options')
+      .innerJoinAndSelect('classification.options', 'options')
       .where('classification.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
@@ -34,8 +34,8 @@ export class BaseCommodityClassificationServer {
   async BaseRetrieveID(payload) {
     return await this.CommodityClassificationEntity
       .createQueryBuilder('classification')
-      .leftJoinAndSelect('classification.commoditys', 'commoditys')
-      .leftJoinAndSelect('classification.options', 'options')
+      // .leftJoinAndSelect('classification.commoditys', 'commoditys')
+      .innerJoinAndSelect('classification.options', 'options')
       .where('classification.commodityId = :commodityId', { commodityId: payload.commodityId })
       .andWhere('classification.optionId = :optionId', { optionId: payload.optionId })
       .getOne();

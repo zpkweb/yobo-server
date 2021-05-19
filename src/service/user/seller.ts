@@ -322,6 +322,7 @@ export class SellerService {
    * 查找艺术家个人信息
    * @param payload
    */
+
    async find(payload) {
 
       if(payload.sellerId){
@@ -409,7 +410,7 @@ export class SellerService {
     if(payload.seller.sellerId) {
       // 获取艺术家
       const sellerData = await this.baseSellerServer.baseRetrieveUser(payload.seller.sellerId);
-      console.log("获取艺术家", sellerData)
+      // console.log("获取艺术家", sellerData)
       if(sellerData) {
         const { user } = sellerData;
         if(user){
@@ -462,7 +463,7 @@ export class SellerService {
           gender: payload.seller.gender,
           country: payload.seller.country,
         })
-        console.log("更新艺术家", seller)
+        // console.log("更新艺术家", seller)
         if(!seller.affected) {
           return {
             success: false,
@@ -504,7 +505,7 @@ export class SellerService {
             website: payload.metadata.website,
             profile: payload.metadata.profile,
           })
-          console.log("更新艺术家基本信息", sellerMetadata)
+          // console.log("更新艺术家基本信息", sellerMetadata)
           if(!sellerMetadata.affected) {
             return {
               success: false,
@@ -579,7 +580,7 @@ export class SellerService {
             banner: payload.studio.banner,
             introduce: payload.studio.introduce,
           })
-          console.log("更新艺术家工作室", sellerStudioUpdate)
+          // console.log("更新艺术家工作室", sellerStudioUpdate)
           if(!sellerStudioUpdate.affected) {
             return {
               success: false,
@@ -604,7 +605,7 @@ export class SellerService {
             banner: payload.studio.banner,
             introduce: payload.studio.introduce,
           })
-          console.log("创建艺术家工作室", sellerStudio)
+          // console.log("创建艺术家工作室", sellerStudio)
           if(sellerStudio) {
             // 关联工作室
             // await this.baseSellerStudioServer.relation({
@@ -640,7 +641,7 @@ export class SellerService {
 
             resume: JSON.stringify(payload.resume),
           })
-          console.log("更新艺术家履历", sellerResume)
+          // console.log("更新艺术家履历", sellerResume)
           if(!sellerResume.affected) {
             return {
               success: false,
@@ -659,7 +660,7 @@ export class SellerService {
           const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
             resume: JSON.stringify(payload.resume)
           })
-          console.log("创建艺术家履历", sellerResume)
+          // console.log("创建艺术家履历", sellerResume)
           if(sellerResume) {
             // 关联艺术家履历
             await this.baseSellerResumeServer.relation({
@@ -994,6 +995,8 @@ export class SellerService {
 
   async retrieveSellerHome(payload) {
     let result = await this.baseSellerServer.baseRetrieveSellerHome(payload);
+    // 获取加精的艺术品
+
     if(result){
 
 
@@ -1046,9 +1049,9 @@ export class SellerService {
    * @param sellerId
    */
   async hasSeller(sellerId) {
-    console.log("hasSeller sellerId", sellerId)
+    // console.log("hasSeller sellerId", sellerId)
     const seller =  await this.baseSellerServer.BaseHas(sellerId)
-    console.log("hasSeller", seller)
+    // console.log("hasSeller", seller)
       if(seller){
         return {
           data: seller,
@@ -1108,7 +1111,7 @@ export class SellerService {
     const followTotal = await this.myLikeSellerService.retrieveFollow(sellerId);
       if(followTotal){
         return {
-          data: followTotal,
+          data: followTotal.data,
           success: true,
           code : 10009
         }

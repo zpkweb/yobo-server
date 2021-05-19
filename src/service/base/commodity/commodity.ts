@@ -100,6 +100,7 @@ export class BaseCommodityServer {
       .insert()
       .into(CommodityEntity)
       .values({
+        choice: payload.choice,
         state: payload.state,
         width: payload.width,
         height: payload.height
@@ -518,7 +519,7 @@ export class BaseCommodityServer {
 
 
 
-    console.log("commodityIds", commodityIds)
+    // console.log("commodityIds", commodityIds)
     if(commodityIds.size){
       where.commodityId = In([...commodityIds])
     }
@@ -762,7 +763,7 @@ export class BaseCommodityServer {
           .from(CommodityCategoryEntity, "category")
           .getQuery();
         }
-        console.log("category subQuery", subQuery)
+        // console.log("category subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -781,7 +782,7 @@ export class BaseCommodityServer {
           .from(CommodityClassificationEntity, "classification")
           .getQuery();
         }
-        console.log("classification subQuery", subQuery)
+        // console.log("classification subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -800,7 +801,7 @@ export class BaseCommodityServer {
           .from(CommodityMaterialEntity, "material")
           .getQuery();
         }
-        console.log("material subQuery", subQuery)
+        // console.log("material subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
 
@@ -820,7 +821,7 @@ export class BaseCommodityServer {
           .from(CommodityModelEntity, "model")
           .getQuery();
         }
-        console.log("model subQuery", subQuery)
+        // console.log("model subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -839,7 +840,7 @@ export class BaseCommodityServer {
           .from(CommodityPlaceEntity, "place")
           .getQuery();
         }
-        console.log("place subQuery", subQuery)
+        // console.log("place subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -858,7 +859,7 @@ export class BaseCommodityServer {
           .from(CommodityRuiwuEntity, "ruiwu")
           .getQuery();
         }
-        console.log("ruiwu subQuery", subQuery)
+        // console.log("ruiwu subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -877,7 +878,7 @@ export class BaseCommodityServer {
           .from(CommodityShapeEntity, "shape")
           .getQuery();
         }
-        console.log("shape subQuery", subQuery)
+        // console.log("shape subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -896,7 +897,7 @@ export class BaseCommodityServer {
           .from(CommoditySpecificationEntity, "specification")
           .getQuery();
         }
-        console.log("specification subQuery", subQuery)
+        // console.log("specification subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -915,7 +916,7 @@ export class BaseCommodityServer {
           .from(CommodityStyleEntity, "style")
           .getQuery();
         }
-        console.log("style subQuery", subQuery)
+        // console.log("style subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -934,7 +935,7 @@ export class BaseCommodityServer {
           .from(CommodityTechniqueEntity, "technique")
           .getQuery();
         }
-        console.log("technique subQuery", subQuery)
+        // console.log("technique subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -953,7 +954,7 @@ export class BaseCommodityServer {
           .from(CommodityThemeEntity, "theme")
           .getQuery();
         }
-        console.log("theme subQuery", subQuery)
+        // console.log("theme subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -972,7 +973,7 @@ export class BaseCommodityServer {
           .from(CommodityTypeEntity, "type")
           .getQuery();
         }
-        console.log("type subQuery", subQuery)
+        // console.log("type subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
       .andWhere(qb => {
@@ -991,7 +992,7 @@ export class BaseCommodityServer {
           .from(CommodityUseEntity, "use")
           .getQuery();
         }
-        console.log("use subQuery", subQuery)
+        // console.log("use subQuery", subQuery)
         return "commodity.commodityId IN " + subQuery;
       })
 
@@ -1035,7 +1036,7 @@ export class BaseCommodityServer {
       .take(payload.pageSize)
       // .getManyAndCount();
       .getSql()
-      console.log(data)
+      // console.log(data)
     return data;
 
   }
@@ -1088,52 +1089,31 @@ export class BaseCommodityServer {
   }
 
   async BaseSearchs(payload) {
-    console.log("BaseSearchs", payload)
+    // console.log("BaseSearchs", payload)
+
     let where: any = '';
     var isAND = false;
     if (payload.id) {
-      // where.id = payload.id;
       where += `commodity.id = :id`
       isAND = true;
     }
 
     if (payload.commodityId) {
-      // where.commodityId = payload.commodityId;
       where += `${isAND ? ' AND ' : ''} commodity.commodityId = :commodityId`
       isAND = true;
     }
 
     if (payload.sellerId) {
-      // where.seller = {
-      //   sellerId: payload.sellerId
-      // }
       where += `${isAND ? ' AND ' : ''} commodity.seller.sellerId = :sellerId`
       isAND = true;
     }
 
     if (payload.state) {
-      // where.state = payload.state;
       where += `${isAND ? ' AND ' : ''} commodity.state = :state`
       isAND = true;
     }
 
-    // if (payload.widthMin && !payload.widthMax) {
-    //   where.width = MoreThanOrEqual(payload.widthMin);
-    // }else if(!payload.widthMin && payload.widthMax) {
-    //   where.width = LessThanOrEqual(payload.widthMax);
-    // }else if(payload.widthMin && payload.widthMax){
-    //   where.width = Between(payload.widthMin, payload.widthMax);
-    // }
 
-    // if (payload.heightMin && !payload.heightMax) {
-    //   where.height = MoreThanOrEqual(payload.heightMin);
-    // }else if(!payload.heightMin && payload.heightMax) {
-    //   where.height = LessThanOrEqual(payload.heightMax);
-    // }else if(payload.heightMin && payload.heightMax){
-    //   where.height = Between(payload.heightMin, payload.heightMax);
-    // }
-
-    // let andWhere:any = `name.zh-cn like :name AND desc.zh-cn like :desc AND price.zh-cn BETWEEN :priceMin AND :priceMax `;
 
     if(payload.name){
       where += `${isAND ? ' AND ' : ''} name.zh-cn like :name `
@@ -1155,67 +1135,67 @@ export class BaseCommodityServer {
       isAND = true;
     }
 
-    if(payload.categorys.length){
+    if(payload.categorys && payload.categorys.length){
       where += `${isAND ? ' AND ' : ''} categorys.optionId IN (:...categorys) `
       isAND = true;
     }
 
-    if(payload.classifications.length){
+    if(payload.classifications && payload.classifications.length){
       where += `${isAND ? ' AND ' : ''} classifications.optionId IN (:...classifications) `
       isAND = true;
     }
 
-    if(payload.materials.length){
-      where += `${isAND ? ' AND ' : ''} materials.optionId IN (:...materials) `
-      isAND = true;
-    }
+    // if(payload.materials && payload.materials.length){
+    //   where += `${isAND ? ' AND ' : ''} materials.optionId IN (:...materials) `
+    //   isAND = true;
+    // }
 
-    if(payload.models.length){
-      where += `${isAND ? ' AND ' : ''} models.optionId IN (:...models) `
-      isAND = true;
-    }
+    // if(payload.models && payload.models.length){
+    //   where += `${isAND ? ' AND ' : ''} models.optionId IN (:...models) `
+    //   isAND = true;
+    // }
 
-    if(payload.places.length){
-      where += `${isAND ? ' AND ' : ''} places.optionId IN (:...places) `
-      isAND = true;
-    }
+    // if(payload.places && payload.places.length){
+    //   where += `${isAND ? ' AND ' : ''} places.optionId IN (:...places) `
+    //   isAND = true;
+    // }
 
-    if(payload.ruiwus.length){
-      where += `${isAND ? ' AND ' : ''} ruiwus.optionId IN (:...ruiwus) `
-      isAND = true;
-    }
+    // if(payload.ruiwus && payload.ruiwus.length){
+    //   where += `${isAND ? ' AND ' : ''} ruiwus.optionId IN (:...ruiwus) `
+    //   isAND = true;
+    // }
 
-    if(payload.shapes.length){
+    if(payload.shapes && payload.shapes.length){
       where += `${isAND ? ' AND ' : ''} shapes.optionId IN (:...shapes) `
       isAND = true;
     }
 
-    if(payload.specifications.length){
-      where += `${isAND ? ' AND ' : ''} specifications.optionId IN (:...specifications) `
-      isAND = true;
-    }
+    // if(payload.specifications && payload.specifications.length){
+    //   where += `${isAND ? ' AND ' : ''} specifications.optionId IN (:...specifications) `
+    //   isAND = true;
+    // }
 
-    if(payload.techniques.length){
-      where += `${isAND ? ' AND ' : ''} techniques.optionId IN (:...techniques) `
-      isAND = true;
-    }
+    // if(payload.techniques && payload.techniques.length){
+    //   where += `${isAND ? ' AND ' : ''} techniques.optionId IN (:...techniques) `
+    //   isAND = true;
+    // }
 
-    if(payload.themes.length){
-      where += `${isAND ? ' AND ' : ''} themes.optionId IN (:...themes) `
-      isAND = true;
-    }
+    // if(payload.themes && payload.themes.length){
+    //   where += `${isAND ? ' AND ' : ''} themes.optionId IN (:...themes) `
+    //   isAND = true;
+    // }
 
-    if(payload.types.length){
-      where += `${isAND ? ' AND ' : ''} types.optionId IN (:...types) `
-      isAND = true;
-    }
+    // if(payload.types && payload.types.length){
+    //   where += `${isAND ? ' AND ' : ''} types.optionId IN (:...types) `
+    //   isAND = true;
+    // }
 
-    if(payload.uses.length){
-      where += `${isAND ? ' AND ' : ''} uses.optionId IN (:...uses) `
-      isAND = true;
-    }
+    // if(payload.uses && payload.uses.length){
+    //   where += `${isAND ? ' AND ' : ''} uses.optionId IN (:...uses) `
+    //   isAND = true;
+    // }
 
-    console.log("where", where)
+    // console.log("where", where)
 
     const data = await this.commodityEntity
       .createQueryBuilder('commodity')
@@ -1251,19 +1231,19 @@ export class BaseCommodityServer {
 
       .innerJoin('commodity.categorys', 'categorys')
       .innerJoin('commodity.classifications', 'classifications')
-      .innerJoin('commodity.materials', 'materials')
-      .innerJoin('commodity.models', 'models')
-      .innerJoin('commodity.places', 'places')
-      .innerJoin('commodity.ruiwus', 'ruiwus')
+      // .innerJoin('commodity.materials', 'materials')
+      // .innerJoin('commodity.models', 'models')
+      // .innerJoin('commodity.places', 'places')
+      // .innerJoin('commodity.ruiwus', 'ruiwus')
       .innerJoin('commodity.shapes', 'shapes')
-      .innerJoin('commodity.specifications', 'specifications')
-      .innerJoin('commodity.styles', 'styles')
-      .innerJoin('commodity.techniques', 'techniques')
-      .innerJoin('commodity.themes', 'themes')
-      .innerJoin('commodity.types', 'types')
-      .innerJoin('commodity.uses', 'uses')
-      .leftJoinAndSelect('commodity.photos', 'photos')
-      .leftJoinAndSelect('commodity.browsingCount', 'browsingCount')
+      // .innerJoin('commodity.specifications', 'specifications')
+      // .innerJoin('commodity.styles', 'styles')
+      // .innerJoin('commodity.techniques', 'techniques')
+      // .innerJoin('commodity.themes', 'themes')
+      // .innerJoin('commodity.types', 'types')
+      // .innerJoin('commodity.uses', 'uses')
+      // .leftJoinAndSelect('commodity.photos', 'photos')
+      // .leftJoinAndSelect('commodity.browsingCount', 'browsingCount')
 
       .addSelect('commodity.createdDate')
       .where(where)
@@ -1291,7 +1271,7 @@ export class BaseCommodityServer {
       .setParameter("uses", payload.uses)
       .orderBy({
         "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
-        "browsingCount.count": payload.hots && payload.hots =='true' ? "DESC"  :  "ASC"
+        // "browsingCount.count": payload.hots && payload.hots =='true' ? "DESC"  :  "ASC"
       })
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
@@ -1349,6 +1329,27 @@ export class BaseCommodityServer {
     return await this.commodityEntity
       .createQueryBuilder('commodity')
       .where("commodity.sellerId = :sellerId", { sellerId: sellerId })
+      .getMany();
+  }
+  async baseRetrieveCommmodityPagination(payload) {
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .where("commodity.sellerId = :sellerId", { sellerId: payload.sellerId })
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
+  }
+
+  // 获取加精的艺术品
+  async baseChoiceCommodity(payload) {
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .leftJoinAndSelect('commodity.seller', 'seller')
+      .addSelect('commodity.createdDate')
+      .where("commodity.choice = :choice", { choice: true })
+      .orderBy("commodity.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
       .getMany();
   }
 

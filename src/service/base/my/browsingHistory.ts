@@ -28,7 +28,9 @@ export class BaseBrowsingHistoryServer {
       .insert()
       .into(MyBrowsingHistoryEntity)
       .values({
-        count: payload.count
+        count: payload.count,
+        userId: payload.userId,
+        commodityId: payload.commodityId
       })
       .execute();
   }
@@ -42,14 +44,14 @@ export class BaseBrowsingHistoryServer {
   async BaseRetrieve(payload) {
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
-      .leftJoinAndSelect("myBrowsingHistory.user", "user")
+      // .leftJoinAndSelect("myBrowsingHistory.user", "user")
       // .leftJoinAndSelect('myBrowsingHistory.commodity', 'commodity')
       // .leftJoinAndMapOne('myBrowsingHistory.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
       // .leftJoinAndMapOne('myBrowsingHistory.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
       // .leftJoinAndMapOne('myBrowsingHistory.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
       // .leftJoinAndMapMany('myBrowsingHistory.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
       // .leftJoinAndMapOne('myBrowsingHistory.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
-      .where("user.userId = :userId", { userId: payload.userId })
+      .where("myBrowsingHistory.userId = :userId", { userId: payload.userId })
       // .andWhere(qb => {
       //   const subQuery = qb
       //     .subQuery()
@@ -69,10 +71,10 @@ export class BaseBrowsingHistoryServer {
   async BaseHas(payload) {
     return await this.myBrowsingHistoryEntity
       .createQueryBuilder('myBrowsingHistory')
-      .leftJoinAndSelect("myBrowsingHistory.user", "user")
-      .leftJoinAndSelect("myBrowsingHistory.commodity", "commodity")
-      .where("user.userId = :userId", { userId: payload.userId })
-      .andWhere("commodity.commodityId = :commodityId", { commodityId: payload.commodityId })
+      // .leftJoinAndSelect("myBrowsingHistory.user", "user")
+      // .leftJoinAndSelect("myBrowsingHistory.commodity", "commodity")
+      .where("myBrowsingHistory.userId = :userId", { userId: payload.userId })
+      .andWhere("myBrowsingHistory.commodityId = :commodityId", { commodityId: payload.commodityId })
       .getOne();
   }
 
@@ -86,8 +88,8 @@ export class BaseBrowsingHistoryServer {
       .createQueryBuilder()
       .update(MyBrowsingHistoryEntity)
       .set(setData)
-      .where("user.userId = :userId", { userId: payload.userId })
-      .andWhere("commodity.commodityId = :commodityId", { commodityId: payload.commodityId })
+      .where("userId = :userId", { userId: userId })
+      .andWhere("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
 

@@ -17,10 +17,13 @@ import { CommodityTechniqueService } from "./commodity-options/technique";
 import { CommodityThemeService } from "./commodity-options/theme";
 import { CommodityTypeService } from "./commodity-options/type";
 import { CommodityUseService } from "./commodity-options/use";
+import { BaseSellerMetadataServer } from "../base/seller/metadata";
 import { CommodityOptionService } from "./commodityOption";
 import { SellerService } from "../user/seller";
+import { BaseSellerServer } from "../base/seller/seller";
 export declare class CommodityCommodityService {
     baseCommodityServer: BaseCommodityServer;
+    baseSellerMetadataServer: BaseSellerMetadataServer;
     commodityAttributeName: CommodityAttributeName;
     commodityAttributeDesc: CommodityAttributeDesc;
     commodityAttributePrice: CommodityAttributePrice;
@@ -41,6 +44,7 @@ export declare class CommodityCommodityService {
     commodityUseService: CommodityUseService;
     commodityOptionService: CommodityOptionService;
     sellerService: SellerService;
+    baseSellerServer: BaseSellerServer;
     edit(commodityId: any): Promise<{
         data: any;
         success: boolean;
@@ -50,7 +54,7 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
-    buy(payload: any): Promise<{
+    clientCommodity(payload: any): Promise<{
         data: any;
         success: boolean;
         code: number;
@@ -91,6 +95,12 @@ export declare class CommodityCommodityService {
         success: boolean;
         code: number;
         data?: undefined;
+    } | {
+        data: {
+            commodityId: any;
+        };
+        success: boolean;
+        code: number;
     }>;
     createMetadata(payload: any): Promise<{
         data: import("typeorm").InsertResult;
@@ -243,6 +253,42 @@ export declare class CommodityCommodityService {
     }>;
     update(payload: any): Promise<{
         data: import("typeorm").UpdateResult;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrieveCommmoditySellerId(sellerId: any): Promise<{
+        data: import("../../entity/commodity/commodity").CommodityEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrieveCommmoditySellerPagination(payload: any): Promise<{
+        data: import("../../entity/commodity/commodity").CommodityEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    retrieveCommodityId(commodityId: any): Promise<{
+        data: import("../../entity/commodity/commodity").CommodityEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    choiceCommodity(payload: any): Promise<{
+        data: any;
         success: boolean;
         code: number;
     } | {

@@ -41,7 +41,7 @@ export declare class MyService {
         data?: undefined;
     }>;
     setCommodity(payload: any): Promise<{
-        data: import("../../entity/commodity/commodity").CommodityEntity;
+        data: import("../../entity/user/user").UserEntity;
         success: boolean;
         code: number;
     } | {
@@ -49,7 +49,7 @@ export declare class MyService {
         code: number;
         data?: undefined;
     } | {
-        data: import("../../entity/user/user").UserEntity;
+        data: import("../../entity/commodity/commodity").CommodityEntity;
         success: boolean;
         code: number;
     } | {
@@ -66,7 +66,7 @@ export declare class MyService {
         code: number;
     }>;
     getCommodity(payload: any): Promise<{
-        data: import("../../entity/my/likeCommodity").MyLikeCommodityEntity[];
+        data: any;
         success: boolean;
         code: number;
     } | {

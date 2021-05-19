@@ -13,60 +13,15 @@ export declare class BFFService {
     commodityOptionsThemeService: CommodityOptionsThemeService;
     host: any;
     home(payload: any): Promise<{
-        data: {
-            list: import("../../entity/commodity/commodity").CommodityEntity[];
-            total: number;
-        };
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
         data?: undefined;
     } | {
+        data: any;
         success: boolean;
         code: number;
-        data: {
-            id: number;
-            src: string;
-            star: number;
-            title: string;
-            desc: string;
-        }[];
-    } | {
-        data: import("../../entity/page/banner").PageBannerEntity[];
-        success: boolean;
-        code: number;
-    } | {
-        data: {
-            list: import("../../entity/user/seller/seller").UserSellerEntity[];
-            total: number;
-        };
-        success: boolean;
-        code: number;
-    } | {
-        data: import("../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data: {
-            banner: import("../../entity/page/banner").PageBannerEntity[];
-            gallerySeller: import("../../entity/user/seller/seller").UserSellerEntity[];
-            latestCommodity: import("../../entity/commodity/commodity").CommodityEntity[];
-            lookWorld: import("../../entity/commodity/options/theme").CommodityOptionsThemeEntity[];
-            commentCommodity: {
-                id: number;
-                src: string;
-                star: number;
-                title: string;
-                desc: string;
-            }[];
-            hotSaleSeller: import("../../entity/user/seller/seller").UserSellerEntity[];
-        };
     }>;
-    buy(payload: any): Promise<{
+    clientCommodity(payload: any): Promise<{
         data: any;
         success: boolean;
         code: number;

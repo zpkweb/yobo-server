@@ -65,18 +65,15 @@ export class MyService {
 
 
 
-  // 添加我的浏览记录
+  // 添加浏览记录
   async addBrowsingHistory(payload) {
     return await this.myBrowsingHistoryService.addBrowsingHistory(payload);
-
   }
 
   // 查找我的浏览记录
   async findBrowsingHistory(payload) {
     return await this.myBrowsingHistoryService.retrieveBrowsingHistory(payload)
   }
-
-
 
   // 查找我的订单
   async findOrder() {

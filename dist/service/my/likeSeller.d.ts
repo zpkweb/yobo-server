@@ -32,6 +32,15 @@ export declare class MyLikeSellerService {
         code: number;
         data?: undefined;
     }>;
+    retrieveFollow(sellerId: any): Promise<{
+        data: number;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     createLikeSeller(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

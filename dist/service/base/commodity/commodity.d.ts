@@ -59,4 +59,7 @@ export declare class BaseCommodityServer {
     BaseDeleteCommodityId(commodityId: any): Promise<import("typeorm").DeleteResult>;
     BaseDeleteAll(): Promise<import("typeorm").DeleteResult>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
+    baseRetrieveCommmodity(sellerId: any): Promise<CommodityEntity[]>;
+    baseRetrieveCommmodityPagination(payload: any): Promise<[CommodityEntity[], number]>;
+    baseChoiceCommodity(payload: any): Promise<CommodityEntity[]>;
 }

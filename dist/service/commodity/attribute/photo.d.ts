@@ -46,4 +46,8 @@ export declare class CommodityAttributePhoto {
         code: number;
         data?: undefined;
     }>;
+    delete(id: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
 }

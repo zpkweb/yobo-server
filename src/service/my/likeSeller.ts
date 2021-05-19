@@ -15,7 +15,7 @@ export class MyLikeSellerService {
   sellerService: SellerService;
 
   async addMyLikeSeller(payload) {
-    console.log("addMyLikeSeller", payload)
+    // console.log("addMyLikeSeller", payload)
     // 查找用户
     const user = await this.userService.hasUser(payload.userId);
     if (!user.success) {
@@ -24,7 +24,7 @@ export class MyLikeSellerService {
 
     // 查找艺术家
     const seller = await this.sellerService.hasSeller(payload.sellerId);
-    console.log("查找艺术家", seller)
+    // console.log("查找艺术家", seller)
     if (!seller.success) {
       return seller;
     }
@@ -34,7 +34,7 @@ export class MyLikeSellerService {
       userId: payload.userId,
       sellerId: payload.sellerId
     })
-    console.log("查找我喜欢的艺术家", likeSeller)
+    // console.log("查找我喜欢的艺术家", likeSeller)
     if (likeSeller.success) {
       // return likeSeller;
       return {
@@ -81,6 +81,12 @@ export class MyLikeSellerService {
     const data:any = await this.baseMyLikeSellerServer.BaseRetrieve(userId);
 
     if (data) {
+      for(let item of data) {
+        const userData = await this.userService.retrieveUserId(item.userId)
+        if(userData.success) {
+          item.user = userData.data;
+        }
+      }
       return {
         data: data,
         success: true,

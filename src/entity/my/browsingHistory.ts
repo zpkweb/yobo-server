@@ -3,7 +3,7 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { PrimaryGeneratedColumn, Column, Generated, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
 
@@ -16,12 +16,12 @@ export class MyBrowsingHistoryEntity {
   })
   id: number;
 
-  // id
-  @Column({
-    unique: true
-  })
-  @Generated('uuid')
-  myBrowsingHistoryId: string;
+
+  @Column()
+  userId: string;
+
+  @Column()
+  commodityId: string;
 
   // 浏览数
   @Column()
@@ -42,7 +42,7 @@ export class MyBrowsingHistoryEntity {
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.browsingHistory, {
     cascade: true,
-    onDelete: 'SET NULL'
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'
@@ -52,7 +52,7 @@ export class MyBrowsingHistoryEntity {
   // 关联商品
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.browsingHistory, {
     cascade: true,
-    onDelete: 'SET NULL'
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'commodityId'

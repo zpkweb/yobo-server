@@ -65,8 +65,8 @@ export class CommodityService {
     return await this.commodityCommodityService.edit(payload.commodityId);
   }
 
-  async buy(payload) {
-    return await this.commodityCommodityService.buy(payload);
+  async clientCommodity(payload) {
+    return await this.commodityCommodityService.clientCommodity(payload);
   }
 
 
@@ -245,7 +245,7 @@ export class CommodityService {
   async update(payload) {
     // 查询商品是否存在
     const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
-    console.log('update commodity', commodity)
+    // console.log('update commodity', commodity)
     //  商品不存在
     if(!commodity.success){
       return {
@@ -256,6 +256,7 @@ export class CommodityService {
     // 更新商品属性
     const commodityUpdate = await this.commodityCommodityService.update({
       commodityId: payload.commodityId,
+      choice: payload.choice,
       state: payload.state,
       width: payload.width,
       height: payload.height
@@ -315,7 +316,7 @@ export class CommodityService {
     // 更新商品图片
 
     for(let item of payload.photos){
-      console.log("photos item", item)
+      // console.log("photos item", item)
       if(item.id){
         if(item.remove){
           // 删除图片
@@ -389,20 +390,12 @@ export class CommodityService {
     if(payload.seller && payload.seller.sellerId){
       await this.commodityCommodityService.relation({
         name: 'seller',
-        // of: commodity.data.identifiers[0].id,
-        // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        // of: payload.commodityId,
-        // of: { commodityId: payload.commodityId },
         of: commodity.data.id,
         set: { sellerId: payload.seller.sellerId }
       })
     }else{
       await this.commodityCommodityService.relation({
         name: 'seller',
-        // of: commodity.data.identifiers[0].id,
-        // of: { commodityId: commodity.data.generatedMaps[0].commodityId },
-        // of: payload.commodityId,
-        // of: { commodityId: payload.commodityId },
         of: commodity.data.id,
         set: null
       })
@@ -594,5 +587,7 @@ export class CommodityService {
       return await this.commentService.home(payload);
     }
 
-
+    async choiceCommodity(payload) {
+      return await this.commodityCommodityService.choiceCommodity(payload);
+    }
 }

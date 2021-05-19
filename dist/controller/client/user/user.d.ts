@@ -11,22 +11,13 @@ export declare class UserController {
     jwt: any;
     jwtConfig: any;
     info(userId: any): Promise<{
-        data: import("../../../entity/user/user").UserEntity;
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
         data?: undefined;
-    }>;
-    self(userId: any): Promise<{
-        data: import("../../../entity/user/user").UserEntity;
-        success: boolean;
-        code: number;
     } | {
+        data: any;
         success: boolean;
         code: number;
-        data?: undefined;
     }>;
     changePassword(changePasswordBody: any): Promise<{
         success: boolean;

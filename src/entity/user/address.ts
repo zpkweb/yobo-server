@@ -45,7 +45,8 @@ export class UserAddressEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.address, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     name: 'userId',

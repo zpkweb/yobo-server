@@ -4,7 +4,7 @@ import { Context } from 'egg';
 import { BFFService } from 'src/service/BFF';
 
 @Provide()
-@Controller('/api', {tagName:'整合前端接口'})
+@Controller('/api/BFF', {tagName:'整合前端接口'})
 export class BFFController {
 
   @Inject()
@@ -23,9 +23,12 @@ export class BFFController {
   }
 
   // 购买
-  @Get('/buy', {summary: '购买' })
-  async buy(@Query(ALL) query) {
-    return await this.bffService.buy(query)
+  @Get('/commodity', {summary: '购买' })
+  async commodity(@Query(ALL) query) {
+    return await this.bffService.clientCommodity({
+      ...query,
+      locale: 'zh-cn'
+    })
   }
 
   //  艺术品选项

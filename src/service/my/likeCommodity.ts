@@ -1,7 +1,11 @@
 import { Inject, Provide } from "@midwayjs/decorator";
 import { BaseMyLikeCommodityServer } from "../base/my/likeCommodity";
 import { UserService } from "../user/user";
-import { CommodityCommodityService } from "../commodity/commodity";
+
+import { CommodityCommodityService } from 'src/service/commodity/commodity';
+import { CommodityAttributeName } from 'src/service/commodity/attribute/name';
+import { CommodityAttributePhoto } from 'src/service/commodity/attribute/photo';
+
 @Provide()
 export class MyLikeCommodityService {
 
@@ -13,6 +17,12 @@ export class MyLikeCommodityService {
 
   @Inject()
   commodityCommodityService: CommodityCommodityService;
+
+  @Inject()
+  commodityAttributeName: CommodityAttributeName;
+
+  @Inject()
+  commodityAttributePhoto: CommodityAttributePhoto;
 
   async addMyLikeCommodity(payload) {
     // 查找用户
@@ -80,14 +90,40 @@ export class MyLikeCommodityService {
    * 喜欢的艺术家列表
    */
   async myLikeCommodity(payload) {
-    let data = await this.baseMyLikeCommodityServer.BaseRetrieve(payload.userId);
+    let commoditys:any = await this.baseMyLikeCommodityServer.BaseRetrieve(payload.userId);
+    // console.log("commoditys", commoditys)
+    if(commoditys && commoditys.length){
 
-    if (data) {
-      if(payload.isLocale) {
-        data = this.filter(payload.locale, data);
+      for(let item of commoditys){
+        const commodityData:any = await this.commodityCommodityService.retrieveCommodityId(item.commodityId);
+        if(commodityData.success) {
+          item = Object.assign(item, commodityData.data)
+          // name
+          const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+          if(commodityAttributeName) {
+            item.name = commodityAttributeName.data[payload.locale];
+          }
+
+          // photos
+          const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+          if(commodityAttributePhoto) {
+            item.photos = commodityAttributePhoto.data.map(item => item.src);
+          }
+        }
+
       }
+
+    }
+
+
+
+
+    if (commoditys) {
+      // if(payload.isLocale) {
+      //   commoditys = this.filter(payload.locale, commoditys);
+      // }
       return {
-        data: data,
+        data: commoditys,
         success: true,
         code: 10009
       }

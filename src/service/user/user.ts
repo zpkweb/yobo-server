@@ -103,6 +103,21 @@ export class UserService{
       }
     }
   }
+  async retrieveUserId(userId) {
+    const user = await this.baseUserServer.baseRetrieveUserId(userId);
+    if(user){
+      return {
+        data: user,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
 
   async edit(userId) {
     const user = await this.baseUserServer.baseRetrieveUserId(userId)

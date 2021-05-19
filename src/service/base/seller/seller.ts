@@ -15,7 +15,7 @@ export class BaseSellerServer {
 
   // 关联
   async relation(payload) {
-    console.log("关联 relation", payload)
+    // console.log("关联 relation", payload)
     return await this.userSellerEntity
       .createQueryBuilder()
       .relation(UserSellerEntity, payload.name)
@@ -30,7 +30,7 @@ export class BaseSellerServer {
    * @param payload
    */
   async baseCreateSeller(payload) {
-    console.log("baseCreateSeller", payload)
+    // console.log("baseCreateSeller", payload)
     return await this.userSellerEntity
       .createQueryBuilder()
       .insert()
@@ -162,6 +162,7 @@ export class BaseSellerServer {
       .take(payload.pageSize)
       .getManyAndCount();
   }
+
 
   async baseRetrieveSellerHome(payload) {
     return await this.userSellerEntity

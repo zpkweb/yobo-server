@@ -8,21 +8,36 @@ export declare class AdminUserSellerController {
     jwt: any;
     jwtConfig: any;
     pagination: any;
-    find(findQuery: any): Promise<{
-        data: import("../../../entity/user/seller/seller").UserSellerEntity;
-        success: boolean;
-        code: number;
-    } | {
+    create(createBody: any): Promise<{
         success: boolean;
         code: number;
         data?: undefined;
+    } | {
+        data: {
+            sellerId: any;
+        };
+        success: boolean;
+        code: number;
+    }>;
+    edit(editQuery: any): Promise<{
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        data: any;
+        success: boolean;
+        code: number;
     }>;
     update(registerBody: any): Promise<{
         success: boolean;
         code: number;
+    }>;
+    find(findQuery: any): Promise<{
+        success: boolean;
+        code: number;
         data?: undefined;
     } | {
-        data: import("../../../entity/user/seller/seller").UserSellerEntity;
+        data: any;
         success: boolean;
         code: number;
     }>;

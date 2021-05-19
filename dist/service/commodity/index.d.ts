@@ -20,6 +20,12 @@ export declare class CommodityService {
         success: boolean;
         code: number;
     } | {
+        data: {
+            commodityId: any;
+        };
+        success: boolean;
+        code: number;
+    } | {
         success: boolean;
         code: number;
     }>;
@@ -32,7 +38,7 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
-    edit(commodityId: any): Promise<{
+    edit(payload: any): Promise<{
         data: any;
         success: boolean;
         code: number;
@@ -41,7 +47,7 @@ export declare class CommodityService {
         code: number;
         data?: undefined;
     }>;
-    buy(payload: any): Promise<{
+    clientCommodity(payload: any): Promise<{
         data: any;
         success: boolean;
         code: number;
@@ -174,5 +180,14 @@ export declare class CommodityService {
             title: string;
             desc: string;
         }[];
+    }>;
+    choiceCommodity(payload: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
     }>;
 }

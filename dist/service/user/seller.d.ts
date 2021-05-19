@@ -1,20 +1,59 @@
 import { Repository } from "typeorm";
 import { UserEntity } from "../../entity/user/user";
-import { UserSellerEntity } from "../../entity/user/seller/seller";
-import { UserSellerMetadataEntity } from "../../entity/user/seller/metadata";
-import { UserSellerStudioEntity } from "../../entity/user/seller/studio";
-import { UserSellerResumeEntity } from "../../entity/user/seller/resume";
 import { BaseUserServer } from "../base/user/user";
-import { BaseSellerServer } from "../base/user/seller";
+import { BaseSellerServer } from "../base/seller/seller";
+import { BaseSellerMetadataServer } from "../base/seller/metadata";
+import { BaseSellerResumeServer } from "../base/seller/resume";
+import { BaseSellerStudioServer } from "../base/seller/studio";
+import { CommodityCommodityService } from "../commodity/commodity";
+import { CommodityAttributeName } from "../commodity/attribute/name";
+import { CommodityAttributePhoto } from "../commodity/attribute/photo";
+import { MyLikeSellerService } from "../my/likeSeller";
 export declare class SellerService {
     userEntity: Repository<UserEntity>;
-    userSellerEntity: Repository<UserSellerEntity>;
-    userSellerMetadataEntity: Repository<UserSellerMetadataEntity>;
-    userSellerStudioEntity: Repository<UserSellerStudioEntity>;
-    userSellerResumeEntity: Repository<UserSellerResumeEntity>;
     baseUserServer: BaseUserServer;
     baseSellerServer: BaseSellerServer;
+    baseSellerMetadataServer: BaseSellerMetadataServer;
+    baseSellerResumeServer: BaseSellerResumeServer;
+    baseSellerStudioServer: BaseSellerStudioServer;
+    commodityCommodityService: CommodityCommodityService;
+    commodityAttributeName: CommodityAttributeName;
+    commodityAttributePhoto: CommodityAttributePhoto;
+    myLikeSellerService: MyLikeSellerService;
     email: any;
+    create(payload: any): Promise<{
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        data: {
+            sellerId: any;
+        };
+        success: boolean;
+        code: number;
+    }>;
+    edit(payload: any): Promise<{
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        data: any;
+        success: boolean;
+        code: number;
+    }>;
+    find(payload: any): Promise<{
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        data: any;
+        success: boolean;
+        code: number;
+    }>;
+    update(payload: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
     updateSellerState(payload: any): Promise<{
         success: boolean;
         code: number;
@@ -25,7 +64,7 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     } | {
-        data: UserSellerEntity;
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
         success: boolean;
         code: number;
     }>;
@@ -34,7 +73,7 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     } | {
-        data: UserSellerEntity;
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
         success: boolean;
         code: number;
     }>;
@@ -43,12 +82,12 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     } | {
-        data: UserSellerEntity;
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
         success: boolean;
         code: number;
     }>;
     applyList(): Promise<{
-        data: [UserSellerEntity[], number];
+        data: [import("../../entity/user/seller/seller").UserSellerEntity[], number];
         success: boolean;
         code: number;
     } | {
@@ -58,7 +97,7 @@ export declare class SellerService {
     }>;
     search(payload: any): Promise<{
         data: {
-            list: UserSellerEntity[];
+            list: import("../../entity/user/seller/seller").UserSellerEntity[];
             total: number;
         };
         success: boolean;
@@ -70,7 +109,7 @@ export declare class SellerService {
     }>;
     searchSeller(payload: any): Promise<{
         data: {
-            list: UserSellerEntity[];
+            list: import("../../entity/user/seller/seller").UserSellerEntity[];
             total: number;
         };
         success: boolean;
@@ -82,7 +121,7 @@ export declare class SellerService {
     }>;
     retrieveSellerAll(payload: any): Promise<{
         data: {
-            list: UserSellerEntity[];
+            list: import("../../entity/user/seller/seller").UserSellerEntity[];
             total: number;
         };
         success: boolean;
@@ -94,7 +133,7 @@ export declare class SellerService {
     }>;
     retrieveSellerHome(payload: any): Promise<{
         data: {
-            list: UserSellerEntity[];
+            list: import("../../entity/user/seller/seller").UserSellerEntity[];
             total: number;
         };
         success: boolean;
@@ -106,7 +145,7 @@ export declare class SellerService {
     }>;
     retrieveSellerAllFilter(type: any, payload: any): any;
     hasSeller(sellerId: any): Promise<{
-        data: UserSellerEntity;
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
         success: boolean;
         code: number;
     } | {
@@ -114,8 +153,8 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     }>;
-    find(payload: any): Promise<{
-        data: UserSellerEntity;
+    choiceSeller(payload: any): Promise<{
+        data: import("../../entity/user/seller/seller").UserSellerEntity[];
         success: boolean;
         code: number;
     } | {
@@ -124,7 +163,7 @@ export declare class SellerService {
         data?: undefined;
     }>;
     sellerIdFind(payload: any): Promise<{
-        data: UserSellerEntity;
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
         success: boolean;
         code: number;
     } | {

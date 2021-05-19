@@ -23,6 +23,12 @@ export class MyShoppingCartEntity {
   @Generated('uuid')
   myShoppingCartId: string;
 
+  @Column()
+  userId: string;
+
+  @Column()
+  commodityid: string;
+
   //  创建日期
   @CreateDateColumn({
     select: false
@@ -37,7 +43,8 @@ export class MyShoppingCartEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.shoppingCart, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'
@@ -46,7 +53,8 @@ export class MyShoppingCartEntity {
 
   // 关联商品
   @ManyToMany(type => CommodityEntity, CommodityEntity => CommodityEntity.shoppingCart, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinTable({
     joinColumn: {

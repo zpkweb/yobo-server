@@ -8,7 +8,7 @@ export declare class BaseUserServer {
     userAddressEntity: Repository<UserAddressEntity>;
     baseCreateUser(payload: any): Promise<import("typeorm").InsertResult>;
     baseCreateUserIdentity(payload: any): Promise<import("typeorm").InsertResult>;
-    baseRetrieveUserIdentity(payload: any): Promise<UserIdentityEntity>;
+    baseRetrieveUserIdentity(userId: any): Promise<UserIdentityEntity>;
     baseDeleteUserIdentity(payload: any): Promise<import("typeorm").DeleteResult>;
     baseLoginUser(payload: any): Promise<UserEntity>;
     baseLoginAdmin(payload: any): Promise<UserEntity>;
@@ -20,10 +20,7 @@ export declare class BaseUserServer {
     baseRetrieveUserId(userId: any): Promise<UserEntity>;
     baseRetrieveUserPass(payload: any): Promise<UserEntity>;
     baseRetrieveUserAll(): Promise<UserEntity[]>;
-    baseRetrieveInfo(userId: any): Promise<UserEntity>;
-    baseRetrieveSelf(userId: any): Promise<UserEntity>;
     baseSearchUser(payload: any): Promise<[UserEntity[], number]>;
-    baseSearchUserIdentity(payload: any): Promise<[UserEntity[], number]>;
     baseUpdateUser(payload: any): Promise<import("typeorm").UpdateResult>;
     baseDeleteUser(userId: any): Promise<import("typeorm").DeleteResult>;
     baseDeleteUserAll(): Promise<import("typeorm").DeleteResult>;

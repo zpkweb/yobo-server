@@ -27,7 +27,7 @@ export class BaseCommoditySpecificationServer {
     return await this.CommoditySpecificationEntity
       .createQueryBuilder('specification')
       // .leftJoinAndSelect('specification.commoditys', 'commoditys')
-      .leftJoinAndSelect('specification.options', 'options')
+      .innerJoinAndSelect('specification.options', 'options')
       .where('specification.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
@@ -35,8 +35,8 @@ export class BaseCommoditySpecificationServer {
   async BaseRetrieveID(payload) {
     return await this.CommoditySpecificationEntity
       .createQueryBuilder('specification')
-      .leftJoinAndSelect('specification.commoditys', 'commoditys')
-      .leftJoinAndSelect('specification.options', 'options')
+      // .leftJoinAndSelect('specification.commoditys', 'commoditys')
+      .innerJoinAndSelect('specification.options', 'options')
       .where('specification.commodityId = :commodityId', { commodityId: payload.commodityId })
       .andWhere('specification.optionId = :optionId', { optionId: payload.optionId })
       .getOne();

@@ -8,8 +8,17 @@ export declare class ServerSellerController {
     jwt: any;
     jwtConfig: any;
     pagination: any;
-    find(findQuery: any): Promise<{
-        data: import("../../../entity/user/seller/seller").UserSellerEntity;
+    find(queryAll: any): Promise<{
+        success: boolean;
+        code: number;
+        data?: undefined;
+    } | {
+        data: any;
+        success: boolean;
+        code: number;
+    }>;
+    choice(queryAll: any): Promise<{
+        data: import("../../../entity/user/seller/seller").UserSellerEntity[];
         success: boolean;
         code: number;
     } | {

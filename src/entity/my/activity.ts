@@ -37,7 +37,8 @@ export class MyActivityEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.myActivitys, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'
@@ -46,7 +47,8 @@ export class MyActivityEntity {
 
   // 关联活动
   @ManyToOne(type => ActivityEntity, ActivityEntity => ActivityEntity.myActivity, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     referencedColumnName: 'activityId'

@@ -1,12 +1,16 @@
 import { BaseMyLikeCommodityServer } from "../base/my/likeCommodity";
 import { UserService } from "../user/user";
 import { CommodityCommodityService } from "../commodity/commodity";
+import { CommodityAttributeName } from "../commodity/attribute/name";
+import { CommodityAttributePhoto } from "../commodity/attribute/photo";
 export declare class MyLikeCommodityService {
     baseMyLikeCommodityServer: BaseMyLikeCommodityServer;
     userService: UserService;
     commodityCommodityService: CommodityCommodityService;
+    commodityAttributeName: CommodityAttributeName;
+    commodityAttributePhoto: CommodityAttributePhoto;
     addMyLikeCommodity(payload: any): Promise<{
-        data: import("../../entity/commodity/commodity").CommodityEntity;
+        data: import("../../entity/user/user").UserEntity;
         success: boolean;
         code: number;
     } | {
@@ -14,7 +18,7 @@ export declare class MyLikeCommodityService {
         code: number;
         data?: undefined;
     } | {
-        data: import("../../entity/user/user").UserEntity;
+        data: import("../../entity/commodity/commodity").CommodityEntity;
         success: boolean;
         code: number;
     } | {
@@ -23,7 +27,7 @@ export declare class MyLikeCommodityService {
         code: number;
     }>;
     myLikeCommodity(payload: any): Promise<{
-        data: import("../../entity/my/likeCommodity").MyLikeCommodityEntity[];
+        data: any;
         success: boolean;
         code: number;
     } | {

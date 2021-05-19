@@ -51,15 +51,7 @@ export class BaseUserServer {
       .insert()
       .into(UserIdentityEntity)
       .values({
-        'zh-cn': payload['zh-cn'] || '',
-        'en-us': payload['en-us'] || '',
-        'ja-jp': payload['ja-jp'] || '',
-        'fr-fr': payload['fr-fr'] || '',
-        'es-es': payload['es-es'] || '',
-        'userName': payload.userName || '',
-        'userEmail': payload.userEmail || '',
-        'userPhone': payload.userPhone || '',
-        index: payload.index
+        identityIndex: payload.index
       })
       .execute()
   }

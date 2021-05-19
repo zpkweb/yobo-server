@@ -93,6 +93,8 @@ export class CommodityEntity {
   @Column()
   state: number;
 
+  @Column()
+  choice: boolean;
 
   @Column()
   width: number;

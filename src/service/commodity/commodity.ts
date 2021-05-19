@@ -18,15 +18,20 @@ import { CommodityTechniqueService } from './commodity-options/technique';
 import { CommodityThemeService } from './commodity-options/theme';
 import { CommodityTypeService } from './commodity-options/type';
 import { CommodityUseService } from './commodity-options/use';
+import { BaseSellerMetadataServer } from "src/service/base/seller/metadata";
 
 import { CommodityOptionService } from './commodityOption';
 import { SellerService } from 'src/service/user/seller';
+import { BaseSellerServer } from "src/service/base/seller/seller";
 
 @Provide()
 export class CommodityCommodityService {
 
   @Inject()
   baseCommodityServer: BaseCommodityServer;
+
+  @Inject()
+  baseSellerMetadataServer: BaseSellerMetadataServer;
 
   @Inject()
   commodityAttributeName: CommodityAttributeName;
@@ -88,6 +93,8 @@ export class CommodityCommodityService {
   @Inject()
   sellerService: SellerService;
 
+  @Inject()
+  baseSellerServer: BaseSellerServer;
 
   // 编辑商品
   async edit(commodityId) {
@@ -234,12 +241,66 @@ export class CommodityCommodityService {
     }
   }
 
-  async buy(payload) {
+  async clientCommodity(payload) {
     let commodity:any = {};
     const baseCommodityServer = await this.baseCommodityServer.BaseRetrieveCommodityId(payload.commodityId);
     // console.log("edit baseCommodityServer", baseCommodityServer)
     if(baseCommodityServer) {
-      commodity = baseCommodityServer
+      const { seller, ...commodityData } = baseCommodityServer;
+      commodity = commodityData;
+
+      // 商品关联的商家
+      if(seller && seller.sellerId) {
+        // user
+        const sellerData:any = await this.baseSellerServer.baseRetrieveSeller(seller.sellerId);
+        // console.log("sellerData", sellerData)
+        if(sellerData && sellerData.user) {
+          seller.user = sellerData.user;
+        }
+        // metadata
+        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(seller.sellerId);
+        if(sellerMetadata){
+          seller.metadata = sellerMetadata;
+        }
+        // commoditys
+
+        const commoditys:any = await this.retrieveCommmoditySellerPagination({
+          sellerId: seller.sellerId,
+          pageSize: payload.pageSize,
+          currentPage: payload.currentPage,
+        });
+        // console.log("commoditys", commoditys)
+
+        if(commoditys.success && commoditys.data && commoditys.data.length){
+          let commodityIndex = 0;
+          let commodityData:any = []
+          for(let item of commoditys.data){
+            if(item.commodityId != payload.commodityId && commodityIndex < 4) {
+              commodityIndex++;
+              // name
+              const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+              // console.log("commodityAttributeName", commodityAttributeName)
+              if(commodityAttributeName) {
+                item.name = commodityAttributeName.data[payload.locale];
+              }
+
+              // photos
+              const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+              if(commodityAttributePhoto) {
+                item.photos = commodityAttributePhoto.data.map(item => item.src);
+              }
+              commodityData.push(item)
+            }
+
+          }
+
+          seller.commoditys = commodityData;
+        }
+
+
+        commodity.seller = seller;
+
+      }
     }
 
     // const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(commodityId);
@@ -393,6 +454,11 @@ export class CommodityCommodityService {
           //   item.colors = commodityAttributeColor.data;
           // }
 
+          const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+          if(commodityAttributePhoto) {
+            item.photos = commodityAttributePhoto.data;
+          }
+
 
           const commoditySeller:any =  await this.retrieveSeller(item.commodityId);
           if(commoditySeller) {
@@ -454,6 +520,10 @@ export class CommodityCommodityService {
             item.colors = commodityAttributeColor.data;
           }
 
+          const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+          if(commodityAttributePhoto) {
+            item.photos = commodityAttributePhoto.data;
+          }
 
           const commoditySeller:any =  await this.retrieveSeller(item.commodityId);
           if(commoditySeller) {
@@ -501,6 +571,7 @@ export class CommodityCommodityService {
     // 宽度 width
     // 高度 heigth
     const commodity = await this.createMetadata({
+      choice: payload.choice || 0,
       state: payload.state || '0',
       width: payload.width || 0,
       height: payload.height || 0
@@ -1195,7 +1266,7 @@ export class CommodityCommodityService {
   }
 
   async searchs(payload) {
-    console.log("searchs payload", payload)
+    // console.log("searchs payload", payload)
     let searchAll = true;
 
     if (payload.id) {
@@ -1270,6 +1341,8 @@ export class CommodityCommodityService {
     }else{
       payload.classifications = []
     }
+
+
 
     if(payload.materials){
       searchAll = false;
@@ -1362,14 +1435,28 @@ export class CommodityCommodityService {
     }
 
     let result;
-    console.log("searchAll", searchAll)
+    // console.log("searchAll", searchAll)
     if(searchAll){
       result = await this.baseCommodityServer.BaseRetrieveAll(payload);
     }else{
       result = await this.baseCommodityServer.BaseSearchs(payload);
-    }
-    // console.log("searchs result", result)
 
+    }
+
+    // console.log("searchs result", result)
+    // if(result) {
+    //   for(let item of result) {
+    //     const photos = await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+    //     if(photos.success) {
+    //       item.photos = photos.data;
+    //     }
+
+    //     // const browsingCount = await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+    //     // if(photos.success) {
+    //     //   item.photos = photos.data;
+    //     // }
+    //   }
+    // }
 
     return result;
     // let data = result[0];
@@ -1481,8 +1568,6 @@ export class CommodityCommodityService {
         code: 10010
       }
     }
-
-
   }
 
 
@@ -1502,6 +1587,69 @@ export class CommodityCommodityService {
     }
   }
 
+  async retrieveCommmoditySellerPagination(payload) {
+    const result = await this.baseCommodityServer.baseRetrieveCommmodityPagination({
+      sellerId: payload.sellerId,
+      pageSize: payload.pageSize,
+      currentPage: payload.currentPage,
+    });
+    let data = result[0];
+    // let total = result[1];
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 
+  async retrieveCommodityId(commodityId) {
+    const data = await this.baseCommodityServer.BaseRetrieveCommodityId(commodityId);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async choiceCommodity(payload) {
+    const data:any = await this.baseCommodityServer.baseChoiceCommodity(payload);
+
+    if (data) {
+      for(let item of data) {
+        const name = await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
+        if(name.success) {
+          item.name = payload.isLocale ? name.data[payload.locale] : name.data;
+        }
+        const photos = await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
+        if(photos.success) {
+          item.photos = photos.data.map(item => item.src);
+        }
+      }
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 
 }

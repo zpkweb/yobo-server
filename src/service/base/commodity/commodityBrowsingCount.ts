@@ -14,13 +14,14 @@ export class BaseCommodityBrowsingCountServer {
    * 创建
    * @param payload
    */
-  async BaseCreate() {
+  async BaseCreate(commodityId) {
     return await this.commodityBrowsingCountEntity
       .createQueryBuilder()
       .insert()
       .into(CommodityBrowsingCountEntity)
       .values({
-        count: 1
+        count: 1,
+        commodityId: commodityId
       })
       .execute();
   }
@@ -34,8 +35,8 @@ export class BaseCommodityBrowsingCountServer {
   async BaseRetrieve(commodityId) {
     return await this.commodityBrowsingCountEntity
       .createQueryBuilder('browsingCount')
-      .leftJoinAndSelect("browsingCount.commodity", "commodity")
-      .where("commodity.commodityId = :commodityId", { commodityId: commodityId })
+      // .leftJoinAndSelect("browsingCount.commodity", "commodity")
+      .where("browsingCount.commodityId = :commodityId", { commodityId: commodityId })
       .getOne();
   }
 

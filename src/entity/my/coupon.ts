@@ -37,7 +37,8 @@ export class MyCouponEntity {
 
   // 关联用户
   @ManyToOne(type => UserEntity, UserEntity => UserEntity.myCoupons, {
-    cascade: true
+    cascade: true,
+    onDelete: 'CASCADE'
   })
   @JoinColumn({
     referencedColumnName: 'userId'
@@ -46,7 +47,8 @@ export class MyCouponEntity {
 
   // 关联优惠券
   @ManyToOne(type => CouponEntity, CouponEntity => CouponEntity.myCoupon, {
-    cascade: true
+    cascade: true,
+    onDelete: 'SET NULL'
   })
   @JoinColumn({
     referencedColumnName: 'couponId'

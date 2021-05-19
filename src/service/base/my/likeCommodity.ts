@@ -2,11 +2,11 @@ import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { MyLikeCommodityEntity } from 'src/entity/my/likeCommodity';
-import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
-import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
-import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
-import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
-import { UserSellerEntity } from 'src/entity/user/seller/seller';
+// import { CommodityPriceEntity } from 'src/entity/commodity/attribute/price';
+// import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
+// import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
+// import { CommodityDescEntity } from 'src/entity/commodity/attribute/desc';
+// import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @Provide()
 export class BaseMyLikeCommodityServer {
@@ -26,13 +26,7 @@ export class BaseMyLikeCommodityServer {
       .insert()
       .into(MyLikeCommodityEntity)
       .values({
-        userName: payload.userName,
         userId: payload.userId,
-        'zh-cn': payload['zh-cn'] || '',
-        'en-us': payload['en-us'] || '',
-        'ja-jp': payload['ja-jp'] || '',
-        'fr-fr': payload['fr-fr'] || '',
-        'es-es': payload['es-es'] || '',
         commodityId: payload.commodityId
       })
       .execute();
@@ -50,18 +44,18 @@ export class BaseMyLikeCommodityServer {
   }
 
   /**
-   * 查找我喜欢的艺术家
+   * 查找我喜欢的艺术品
    * @param payload
    */
     async BaseRetrieve(userId) {
       return await this.myLikeCommodityEntity
         .createQueryBuilder('myLikeCommodity')
-        .leftJoinAndSelect('myLikeCommodity.commodity', 'commodity')
-        .leftJoinAndMapOne('myLikeCommodity.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
-        .leftJoinAndMapOne('myLikeCommodity.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
-        .leftJoinAndMapOne('myLikeCommodity.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
-        .leftJoinAndMapMany('myLikeCommodity.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
-        .leftJoinAndMapOne('myLikeCommodity.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
+        // .leftJoinAndSelect('myLikeCommodity.commodity', 'commodity')
+        // .leftJoinAndMapOne('myLikeCommodity.name', CommodityNameEntity, "commodityName", "commodityName.commodityId = commodity.commodityId")
+        // .leftJoinAndMapOne('myLikeCommodity.desc', CommodityDescEntity, "commodityDesc", "commodityDesc.commodityId = commodity.commodityId")
+        // .leftJoinAndMapOne('myLikeCommodity.price', CommodityPriceEntity, "commodityPrice", "commodityPrice.commodityId = commodity.commodityId")
+        // .leftJoinAndMapMany('myLikeCommodity.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commodity.commodityId")
+        // .leftJoinAndMapOne('myLikeCommodity.seller', UserSellerEntity, "commoditySeller", "commoditySeller.sellerId = commodity.sellerId")
         .where("myLikeCommodity.userId = :userId", { userId: userId })
         .getMany();
     }

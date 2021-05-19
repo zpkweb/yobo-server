@@ -27,6 +27,7 @@ export declare class CommodityEntity {
     id: number;
     commodityId: string;
     state: number;
+    choice: boolean;
     width: number;
     height: number;
     name: CommodityNameEntity;

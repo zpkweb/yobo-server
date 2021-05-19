@@ -5,9 +5,9 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, PrimaryGeneratedColumn, Generated, OneToOne, JoinColumn, OneToMany, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Generated, OneToOne, JoinColumn, OneToMany, ManyToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
+// import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
 import { CommodityEntity } from 'src/entity/commodity/commodity';
 import { UserSellerMetadataEntity } from './metadata';
 import { UserSellerStudioEntity } from './studio';
@@ -109,7 +109,10 @@ export class UserSellerEntity {
   resume: UserSellerResumeEntity;
 
   // 关联用户
-  @OneToOne(type => UserEntity, UserEntity => UserEntity.seller)
+  @OneToOne(type => UserEntity, UserEntity => UserEntity.seller, {
+    cascade: true,
+    onDelete: 'SET NULL'
+  })
 
   @JoinColumn({
     name: 'userId',
@@ -130,18 +133,18 @@ export class UserSellerEntity {
   commoditys: CommodityEntity[];
 
   // 关联客服
-  @ManyToMany(type => UserCustomerServiceEntity, UserCustomerServiceEntity => UserCustomerServiceEntity.sellers, {
-    cascade: true
-  })
-  @JoinTable({
-    joinColumn: {
-      referencedColumnName: 'sellerId'
-    },
-    inverseJoinColumn: {
-      referencedColumnName: 'costomerServiceId'
-    }
-  })
-  customerServices: UserCustomerServiceEntity[];
+  // @ManyToMany(type => UserCustomerServiceEntity, UserCustomerServiceEntity => UserCustomerServiceEntity.sellers, {
+  //   cascade: true
+  // })
+  // @JoinTable({
+  //   joinColumn: {
+  //     referencedColumnName: 'sellerId'
+  //   },
+  //   inverseJoinColumn: {
+  //     referencedColumnName: 'costomerServiceId'
+  //   }
+  // })
+  // customerServices: UserCustomerServiceEntity[];
 
   // 关联商家订单
   @ManyToMany(type => OrderEntity, OrderEntity => OrderEntity.sellers)

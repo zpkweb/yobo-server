@@ -2,7 +2,7 @@ import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
-import { UserEntity } from 'src/entity/user/user';
+// import { UserEntity } from 'src/entity/user/user';
 
 @Provide()
 export class BaseMyLikeSellerServer {
@@ -47,7 +47,7 @@ export class BaseMyLikeSellerServer {
       return await this.myLikeSellerEntity
         .createQueryBuilder('myLikeSeller')
         .leftJoinAndSelect('myLikeSeller.seller', 'seller')
-        .leftJoinAndMapOne('myLikeSeller.user', UserEntity, "user", "user.userId = seller.userId")
+        // .leftJoinAndMapOne('myLikeSeller.user', UserEntity, "user", "user.userId = seller.userId")
         .where("myLikeSeller.userId = :userId", { userId: userId })
         .getMany();
     }
