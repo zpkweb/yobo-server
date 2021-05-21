@@ -99,4 +99,12 @@ export class BaseCommodityPriceServer {
       .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
+
+  async BaseSearch(payload) {
+    return await this.commodityPriceEntity
+      .createQueryBuilder('price')
+      .innerJoinAndSelect('price.commodity', 'commoditys')
+      .where('price.zh-cn BETWEEN :priceMin AND :priceMax', { priceMin: payload[0], priceMax: payload[1] })
+      .getMany();
+  }
 }

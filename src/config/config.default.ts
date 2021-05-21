@@ -12,6 +12,8 @@ export default (appInfo: EggAppInfo) => {
 
   config.host = {
     origin: 'http://localhost:7001',
+    // origin: 'http://39.105.190.188:7001'
+    // origin: 'http://www.yoboart.com',
   };
 
   config.orm = {

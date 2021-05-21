@@ -139,7 +139,21 @@ export class CommodityCategoryService {
 
   }
 
-
+  async search(payload) {
+    const data = await this.baseCommodityCategoryServer.BaseSearch(payload);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 
 
 }

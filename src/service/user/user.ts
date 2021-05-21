@@ -6,6 +6,8 @@ import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
 import { BaseUserServer } from '../base/user/user';
 
+import { BaseIdentityServer } from 'src/service/base/user/identity'
+import { IdentityService } from 'src/service/user/identity';
 @Provide()
 export class UserService{
 
@@ -18,9 +20,113 @@ export class UserService{
   @Inject()
   baseUserServer: BaseUserServer;
 
-  async getUser() {
-    return 123;
+  @Inject()
+  baseIdentityServer: BaseIdentityServer;
+
+  @Inject()
+  identityService: IdentityService;
+
+  async create(payload) {
+    // 查询姓名是否存在
+    if(payload.name){
+      const hasUserName = await this.baseUserServer.baseRetrieveUserName(payload.name);
+      if(hasUserName) {
+        return {
+          success: false,
+          code: 10208
+        }
+      }
+    }else{
+      return {
+        success: false,
+        code: 10104
+      }
+    }
+
+    // 查询邮箱是否已已存在
+    if(payload.email){
+      const hasUserEmail = await this.baseUserServer.baseRetrieveUserEmail(payload.email);
+      if(hasUserEmail) {
+        return {
+          success: false,
+          code: 10210
+        }
+      }
+    }else{
+      return {
+        success: false,
+        code: 10104
+      }
+    }
+
+    // 查询手机号是否已存在
+    if(payload.Phone){
+      const hasUserPhone = await this.baseUserServer.baseRetrieveUserPhone(payload.Phone);
+      if(hasUserPhone) {
+        return {
+          success: false,
+          code: 10212
+        }
+      }
+    }
+
+    // 创建用户
+    const user = await this.baseUserServer.baseCreateUser({
+      avatar: payload.avatar || '',
+      name: payload.name || '',
+      phone: payload.phone || '',
+      email: payload.email || '',
+      password: payload.password ? crypto.createHash('md5').update(payload.password).digest('hex') : '123456'
+    });
+    if(user){
+      const userId = user.generatedMaps[0].userId;
+      if(userId && payload.identityList && payload.identityList.length) {
+        for(let item of payload.identityList) {
+            console.log(item);
+            const userIdentity = await this.identityService.retrieveUserIdentityList({
+              userId: userId,
+              identityIndex: item.value
+            });
+            if(userIdentity.success) {
+              if(!item.check){
+                // delete
+                const deleteIdentity = await this.identityService.deleteUserIdIdentityId({
+                  userId: userId,
+                  identityIndex: item.value
+                })
+                if(deleteIdentity.success) {
+
+                }
+              }
+            }else{
+              if(item.check){
+                // create
+                const identity = await this.identityService.create({
+                  userId: userId,
+                  identityIndex: item.value
+                })
+                if(identity.success) {
+
+                }
+              }
+            }
+
+        }
+      }
+      return {
+        success: true,
+        code: 10003,
+      }
+    }else{
+      return {
+        success: false,
+        code: 10004
+      }
+    }
+
   }
+
+
 
   /**
    * 搜索用户通过：name, email, phone
@@ -84,13 +190,24 @@ export class UserService{
    * type: identitys
    */
   async find(payload) {
-    let user: UserEntity | UserEntity[];
+    let user:any;
     if(payload && Object.keys(payload).length){
       user = await this.baseUserServer.baseRetrieveUserId(payload.userId)
     }else{
       user = await this.baseUserServer.baseRetrieveUserAll()
     }
     if(user){
+          // 通过用户 userId 获取身份信息
+          const identityList:any = await this.baseIdentityServer.baseRetrieveUserIdentity(payload.userId)
+          if(identityList) {
+            let identityLists = new Set();
+            for(let item of identityList){
+              identityLists.add(item.identityIndex)
+            }
+            user.identityList = [...identityLists];
+          }
+
+
       return {
         data: user,
         success: true,
@@ -369,19 +486,59 @@ export class UserService{
    */
   async update(payload) {
     // 查找用户
-    const user = await this.baseUserServer.baseRetrieveUserPass(payload);
+    const user:any = await this.baseUserServer.baseRetrieveUserPass(payload.userId);
     if(!user){
       return {
         success: false,
         code: 10202
       }
     }
+
+    // 密码
     let password = '';
     if(payload.password){
       password = crypto.createHash('md5').update(payload.password).digest('hex')
     }else{
       password = user.password
     }
+
+    // 身份
+    if(payload.identityList && payload.identityList.length) {
+      for(let item of payload.identityList) {
+          console.log(item);
+          // 查找
+          const userIdentity = await this.identityService.retrieveUserIdentityList({
+            userId: payload.userId,
+            identityIndex: item.value
+          });
+          if(userIdentity.success) {
+            if(!item.check){
+              // delete
+              const deleteIdentity = await this.identityService.deleteUserIdIdentityId({
+                userId: payload.userId,
+                identityIndex: item.value
+              })
+              if(deleteIdentity.success) {
+
+              }
+            }
+          }else{
+            if(item.check){
+              // create
+              const identity = await this.identityService.create({
+                userId: payload.userId,
+                identityIndex: item.value
+              })
+              if(identity.success) {
+
+              }
+            }
+          }
+
+      }
+    }
+
+
     const userUpdate = await this.baseUserServer.baseUpdateUser({
       userId: user.userId,
       avatar: payload.avatar || user.avatar,
@@ -393,10 +550,10 @@ export class UserService{
 
     if(userUpdate.affected){
       // 获取用户
-      const user = await this.baseUserServer.baseRetrieveUser(payload);
+      // const user = await this.baseUserServer.baseRetrieveUser(payload);
         // 修改成功
         return {
-          data: user,
+          // data: user,
           success: true,
           code : 10007
         }

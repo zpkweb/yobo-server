@@ -6,7 +6,7 @@
 import { EntityModel } from '@midwayjs/orm';
 import { Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, Generated, JoinColumn, ManyToOne } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
-import { UserIdentityListEntity } from './list';
+// import { UserIdentityListEntity } from './list';
 // import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @EntityModel('user_identity')
@@ -80,15 +80,15 @@ export class UserIdentityEntity {
   // seller: UserSellerEntity;
 
   // 关联 身份列表
-  @ManyToOne(type => UserIdentityListEntity, userIdentityListEntity => userIdentityListEntity.identitys, {
-    cascade: true,
-    onDelete: 'SET NULL'
-  })
-  @JoinColumn({
-    name: 'identityListId',
-    referencedColumnName: "id"
-  })
-  identityList: UserIdentityListEntity;
+  // @ManyToOne(type => UserIdentityListEntity, userIdentityListEntity => userIdentityListEntity.identitys, {
+  //   cascade: true,
+  //   onDelete: 'SET NULL'
+  // })
+  // @JoinColumn({
+  //   name: 'identityListId',
+  //   referencedColumnName: "id"
+  // })
+  // identityList: UserIdentityListEntity;
 
 
 

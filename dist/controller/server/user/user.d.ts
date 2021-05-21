@@ -13,14 +13,9 @@ export declare class AdminUserController {
     updateUser(updateBody: any): Promise<{
         success: boolean;
         code: number;
-        data?: undefined;
-    } | {
-        data: import("../../../entity/user/user").UserEntity;
-        success: boolean;
-        code: number;
     }>;
     findUser(findQuery: any): Promise<{
-        data: import("../../../entity/user/user").UserEntity | import("../../../entity/user/user").UserEntity[];
+        data: any;
         success: boolean;
         code: number;
     } | {

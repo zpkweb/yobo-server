@@ -9,4 +9,5 @@ export declare class BaseCommodityNameServer {
     BaseRetrieveAll(): Promise<CommodityNameEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
     BaseDelete(commodityId: any): Promise<import("typeorm").DeleteResult>;
+    BaseSearch(payload: any): Promise<CommodityNameEntity[]>;
 }

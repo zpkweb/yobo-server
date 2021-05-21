@@ -11,6 +11,22 @@ export class CommodityClassificationService {
   @Inject()
   commodityOptionsClassificationService: CommodityOptionsClassificationService;
 
+  async search(payload) {
+    const data = await this.baseCommodityClassificationServer.BaseSearch(payload);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
   async create(payload) {
     const data = await this.baseCommodityClassificationServer.BaseCreate(payload);
     if (data.identifiers[0].id) {

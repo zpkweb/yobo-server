@@ -59,9 +59,12 @@ export class BaseCommodityNameServer {
   async BaseRetrieveCommodityId(commodityId) {
     return await this.commodityNameEntity
       .createQueryBuilder('name')
+
       .where('name.commodityId = :commodityId', { commodityId: commodityId })
       .getOne();
   }
+
+
 
   /**
    * 查询商品所有名称
@@ -71,6 +74,7 @@ export class BaseCommodityNameServer {
       .createQueryBuilder()
       .getMany();
   }
+
 
   /**
    * 修改商品名称
@@ -101,4 +105,13 @@ export class BaseCommodityNameServer {
       .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
+
+  async BaseSearch(payload) {
+    return await this.commodityNameEntity
+      .createQueryBuilder('name')
+      .innerJoinAndSelect('name.commodity', 'commoditys')
+      .where('name.zh-cn like :zhcn', { zhcn: `%${payload}%` })
+      .getMany();
+  }
+
 }

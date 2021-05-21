@@ -26,11 +26,6 @@ export declare class UserController {
     updateUser(updateBody: any): Promise<{
         success: boolean;
         code: number;
-        data?: undefined;
-    } | {
-        data: import("../../../entity/user/user").UserEntity;
-        success: boolean;
-        code: number;
     }>;
     getAddress(userId: any): Promise<{
         data: import("../../../entity/user/address").UserAddressEntity;

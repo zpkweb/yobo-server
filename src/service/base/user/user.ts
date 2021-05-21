@@ -37,7 +37,7 @@ export class BaseUserServer {
         name: payload.name,
         phone: payload.phone,
         email: payload.email,
-        password: crypto.createHash('md5').update(payload.password).digest('hex')
+        password: payload.password,
       })
       .execute();
   }
@@ -150,8 +150,6 @@ export class BaseUserServer {
    async baseRetrieveUserName(name) {
     return await this.userEntity
       .createQueryBuilder('user')
-      // .leftJoinAndSelect('user.identitys', 'identitys')
-      // .leftJoinAndSelect('user.seller', 'seller')
       .where("user.name = :name", { name: name })
       .getOne();
   }
@@ -159,9 +157,14 @@ export class BaseUserServer {
   async baseRetrieveUserEmail(email) {
     return await this.userEntity
       .createQueryBuilder('user')
-      // .leftJoinAndSelect('user.identitys', 'identitys')
-      // .leftJoinAndSelect('user.seller', 'seller')
       .where("user.email = :email", { email: email })
+      .getOne();
+  }
+
+  async baseRetrieveUserPhone(phone) {
+    return await this.userEntity
+      .createQueryBuilder('user')
+      .where("user.phone = :phone", { phone: phone })
       .getOne();
   }
 
@@ -191,13 +194,12 @@ export class BaseUserServer {
       .getOne();
   }
 
-  async baseRetrieveUserPass(payload) {
+  async baseRetrieveUserPass(userId) {
     return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.identitys', 'identitys')
       .addSelect("user.password")
-      .where("user.userId = :userId", { userId: payload.userId })
-      .orWhere("user.email = :email", { email: payload.email })
+      .where("user.userId = :userId", { userId: userId })
       .getOne();
   }
 

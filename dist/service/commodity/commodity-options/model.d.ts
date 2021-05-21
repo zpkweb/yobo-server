@@ -3,6 +3,15 @@ import { CommodityOptionsModelService } from "../options/model";
 export declare class CommodityModelService {
     baseCommodityModelServer: BaseCommodityModelServer;
     commodityOptionsModelService: CommodityOptionsModelService;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/model").CommodityModelEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

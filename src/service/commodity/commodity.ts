@@ -24,6 +24,9 @@ import { CommodityOptionService } from './commodityOption';
 import { SellerService } from 'src/service/user/seller';
 import { BaseSellerServer } from "src/service/base/seller/seller";
 
+
+import { CommoditySearchService } from './commodity-search'
+
 @Provide()
 export class CommodityCommodityService {
 
@@ -95,6 +98,9 @@ export class CommodityCommodityService {
 
   @Inject()
   baseSellerServer: BaseSellerServer;
+
+  @Inject()
+  commoditySearchService: CommoditySearchService;
 
   // 编辑商品
   async edit(commodityId) {
@@ -430,10 +436,18 @@ export class CommodityCommodityService {
   }
 
 
+  async searchTest(payload) {
+    return await this.commoditySearchService.search(payload);
+  }
+
   async clientSearch(payload) {
-    const result = await this.searchs(payload);
-    let data = result[0];
-    let total = result[1];
+    // const result = await this.searchs(payload);
+    const result = await this.commoditySearchService.search(payload);
+    if(!result.success){
+      return result;
+    }
+    let data = result.data.list;
+    let total = result.data.total;
     // console.log("clientSearch", data, total)
     if(data){
         for(let item of data) {
@@ -498,9 +512,16 @@ export class CommodityCommodityService {
 
 
   async serverSearch(payload) {
-    const result = await this.searchs(payload);
-    let data = result[0];
-    let total = result[1];
+    // const result = await this.searchs(payload);
+    // let data = result[0];
+    // let total = result[1];
+    const result = await this.commoditySearchService.search(payload);
+    if(!result.success){
+      return result;
+    }
+    let data = result.data.list;
+    let total = result.data.total;
+
     if(data){
         for(let item of data) {
           const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
@@ -584,6 +605,7 @@ export class CommodityCommodityService {
 
     // 创建商品名称
     const commodityName = await this.commodityAttributeName.create({
+      commodityId: payload.commodityId,
       'zh-cn': payload.name['zh-cn'] || '',
       'en-us': payload.name['en-us'] || '',
       'ja-jp': payload.name['ja-jp'] || '',
@@ -603,6 +625,7 @@ export class CommodityCommodityService {
 
     // 创建商品详情
     const commodityDesc = await this.commodityAttributeDesc.create({
+      commodityId: payload.commodityId,
       'zh-cn': payload.desc['zh-cn'] || '',
       'en-us': payload.desc['en-us'] || '',
       'ja-jp': payload.desc['ja-jp'] || '',
@@ -622,6 +645,7 @@ export class CommodityCommodityService {
 
     // 创建商品价格
     const commodityPrice = await this.commodityAttributePrice.create({
+      commodityId: payload.commodityId,
       'zh-cn': payload.price['zh-cn'] || 0,
       'en-us': payload.price['en-us'] || 0,
       'ja-jp': payload.price['ja-jp'] || 0,
@@ -643,6 +667,7 @@ export class CommodityCommodityService {
     // 创建商品图片
     for(let item of payload.photos){
       const commodityPhoto = await this.commodityAttributePhoto.create({
+        commodityId: payload.commodityId,
         src: item.url,
         name: item.name
       })
@@ -660,6 +685,7 @@ export class CommodityCommodityService {
     // 创建商品颜色
     for(let item of payload.colors){
       const commodityColor = await this.commodityAttributeColor.create({
+        commodityId: payload.commodityId,
         startColor: item.startColor,
         startColorValue: item.startColor.substr(1).toLowerCase().split('').reduce( (result, ch) => result !== '#' ? result * 16 + '0123456789abcdefgh'.indexOf(ch) : 0, 0),
         endColor: item.endColor,

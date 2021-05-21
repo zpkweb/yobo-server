@@ -3,6 +3,15 @@ import { CommodityOptionsRuiwuService } from "../options/ruiwu";
 export declare class CommodityRuiwuService {
     baseCommodityRuiwuServer: BaseCommodityRuiwuServer;
     commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/ruiwu").CommodityRuiwuEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

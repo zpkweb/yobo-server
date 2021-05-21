@@ -24,6 +24,9 @@ export class BaseSellerStudioServer {
         name: payload.name,
         photo: payload.photo,
         video: payload.video,
+        ccId: payload.ccId,
+        siteId: payload.siteId,
+        videoPhoto: payload.videoPhoto,
         banner: payload.banner,
         introduce: payload.introduce,
       })

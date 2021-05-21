@@ -88,4 +88,19 @@ export class CommodityAttributePrice {
     }
   }
 
+  async search(payload) {
+    const data = await this.baseCommodityPriceServer.BaseSearch(payload);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 }

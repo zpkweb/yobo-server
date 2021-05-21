@@ -21,6 +21,7 @@ import { BaseSellerMetadataServer } from "../base/seller/metadata";
 import { CommodityOptionService } from "./commodityOption";
 import { SellerService } from "../user/seller";
 import { BaseSellerServer } from "../base/seller/seller";
+import { CommoditySearchService } from "./commodity-search";
 export declare class CommodityCommodityService {
     baseCommodityServer: BaseCommodityServer;
     baseSellerMetadataServer: BaseSellerMetadataServer;
@@ -45,6 +46,7 @@ export declare class CommodityCommodityService {
     commodityOptionService: CommodityOptionService;
     sellerService: SellerService;
     baseSellerServer: BaseSellerServer;
+    commoditySearchService: CommoditySearchService;
     edit(commodityId: any): Promise<{
         data: any;
         success: boolean;
@@ -63,30 +65,9 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
-    clientSearch(payload: any): Promise<{
-        data: {
-            list: any;
-            total: any;
-        };
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
-    serverSearch(payload: any): Promise<{
-        data: {
-            list: any;
-            total: any;
-        };
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
+    searchTest(payload: any): Promise<any>;
+    clientSearch(payload: any): Promise<any>;
+    serverSearch(payload: any): Promise<any>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

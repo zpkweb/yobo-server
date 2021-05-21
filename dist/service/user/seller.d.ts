@@ -184,4 +184,13 @@ export declare class SellerService {
         success: boolean;
         code: number;
     }>;
+    retrieveSeller(sellerId: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
 }

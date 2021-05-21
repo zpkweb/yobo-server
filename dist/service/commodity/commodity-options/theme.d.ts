@@ -3,6 +3,15 @@ import { CommodityOptionsThemeService } from "../options/theme";
 export declare class CommodityThemeService {
     baseCommodityThemeServer: BaseCommodityThemeServer;
     commodityOptionsThemeService: CommodityOptionsThemeService;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/theme").CommodityThemeEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

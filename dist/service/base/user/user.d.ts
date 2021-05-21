@@ -16,9 +16,10 @@ export declare class BaseUserServer {
     BaseHas(userId: any): Promise<UserEntity>;
     baseRetrieveUserName(name: any): Promise<UserEntity>;
     baseRetrieveUserEmail(email: any): Promise<UserEntity>;
+    baseRetrieveUserPhone(phone: any): Promise<UserEntity>;
     baseRetrieveUser(payload: any): Promise<UserEntity>;
     baseRetrieveUserId(userId: any): Promise<UserEntity>;
-    baseRetrieveUserPass(payload: any): Promise<UserEntity>;
+    baseRetrieveUserPass(userId: any): Promise<UserEntity>;
     baseRetrieveUserAll(): Promise<UserEntity[]>;
     baseSearchUser(payload: any): Promise<[UserEntity[], number]>;
     baseUpdateUser(payload: any): Promise<import("typeorm").UpdateResult>;

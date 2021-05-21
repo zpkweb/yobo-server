@@ -90,4 +90,12 @@ export class BaseCommodityColorServer {
       .where('commodityId = :commodityId', { commodityId: payload.commodityId })
       .execute();
   }
+
+  async BaseSearch(payload) {
+    return await this.commodityColorEntity
+      .createQueryBuilder('color')
+      .innerJoinAndSelect('color.commodity', 'commoditys')
+      .where('color.startColorValue >= :colors AND color.endColorValue <= :colors', { colors: payload })
+      .getMany();
+  }
 }

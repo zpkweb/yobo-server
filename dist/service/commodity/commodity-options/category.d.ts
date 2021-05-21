@@ -42,4 +42,13 @@ export declare class CommodityCategoryService {
     relation(payload: any): Promise<void>;
     relationCreate(payload: any): Promise<void>;
     relationUpdate(payload: any): Promise<void>;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/category").CommodityCategoryEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
 }

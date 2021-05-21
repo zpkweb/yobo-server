@@ -50,4 +50,13 @@ export declare class CommodityAttributePrice {
         success: boolean;
         code: number;
     }>;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/attribute/price").CommodityPriceEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
 }

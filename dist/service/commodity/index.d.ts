@@ -93,30 +93,9 @@ export declare class CommodityService {
         data?: undefined;
     }>;
     searchs(payload: any): Promise<any>;
-    clientSearch(payload: any): Promise<{
-        data: {
-            list: any;
-            total: any;
-        };
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
-    serverSearch(payload: any): Promise<{
-        data: {
-            list: any;
-            total: any;
-        };
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    }>;
+    searchTest(payload: any): Promise<any>;
+    clientSearch(payload: any): Promise<any>;
+    serverSearch(payload: any): Promise<any>;
     delete(commodityId: any): Promise<{
         success: boolean;
         code: number;

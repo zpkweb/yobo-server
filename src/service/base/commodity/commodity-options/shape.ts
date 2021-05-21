@@ -51,4 +51,13 @@ export class BaseCommodityShapeServer {
   }
 
 
+  async BaseSearch(payload) {
+    return await this.CommodityShapeEntity
+    .createQueryBuilder('search')
+    // .innerJoinAndSelect('search.commoditys', 'commoditys')
+    .where('search.optionsId IN (:...searchs)', { searchs: payload })
+    .getMany();
+  }
+
+
 }

@@ -185,6 +185,9 @@ export class SellerService {
     if(payload.studio.name
     || payload.studio.photo
     || payload.studio.video
+    || payload.studio.ccId
+    || payload.studio.siteId
+    || payload.studio.videoPhoto
     || payload.studio.banner
     || payload.studio.introduce
     ){
@@ -194,6 +197,9 @@ export class SellerService {
         name: payload.studio.name,
         photo: payload.studio.photo,
         video: payload.studio.video,
+        ccId: payload.studio.ccId,
+        siteId: payload.studio.siteId,
+        videoPhoto: payload.studio.videoPhoto,
         banner: payload.studio.banner,
         introduce: payload.studio.introduce,
       })
@@ -577,6 +583,9 @@ export class SellerService {
             name: payload.studio.name,
             photo: payload.studio.photo,
             video: payload.studio.video,
+            ccId: payload.studio.ccId,
+            siteId: payload.studio.siteId,
+            videoPhoto: payload.studio.videoPhoto,
             banner: payload.studio.banner,
             introduce: payload.studio.introduce,
           })
@@ -593,6 +602,9 @@ export class SellerService {
             if(payload.studio.name
             || payload.studio.photo
             || payload.studio.video
+            || payload.studio.ccId
+            || payload.studio.siteId
+            || payload.studio.videoPhoto
             || payload.studio.banner
             || payload.studio.introduce
             ){
@@ -602,6 +614,9 @@ export class SellerService {
             name: payload.studio.name,
             photo: payload.studio.photo,
             video: payload.studio.video,
+            ccId: payload.studio.ccId,
+            siteId: payload.studio.siteId,
+            videoPhoto: payload.studio.videoPhoto,
             banner: payload.studio.banner,
             introduce: payload.studio.introduce,
           })
@@ -741,7 +756,7 @@ export class SellerService {
         ...payload,
         email: seller.user.email,
         subject: 'yobo-审核通过',
-        html: `<p><img src="http://39.105.190.188:7001/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://www.yoboart.com">http://www.yoboart.com</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
+        html: `<p><img src="http://www.yoboart.com/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://www.yoboart.com">http://www.yoboart.com</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
       });
       if(sendmail.messageId){
         return {
@@ -1145,4 +1160,20 @@ export class SellerService {
     }
   }
 
+
+  async retrieveSeller(sellerId) {
+    const sellerData:any = await this.baseSellerServer.baseRetrieveSeller(sellerId);
+    if(sellerData){
+      return {
+        data: sellerData,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
 }

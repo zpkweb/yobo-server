@@ -46,7 +46,7 @@ export class BaseMyLikeSellerServer {
     async BaseRetrieve(userId) {
       return await this.myLikeSellerEntity
         .createQueryBuilder('myLikeSeller')
-        .leftJoinAndSelect('myLikeSeller.seller', 'seller')
+        // .leftJoinAndSelect('myLikeSeller.seller', 'seller')
         // .leftJoinAndMapOne('myLikeSeller.user', UserEntity, "user", "user.userId = seller.userId")
         .where("myLikeSeller.userId = :userId", { userId: userId })
         .getMany();

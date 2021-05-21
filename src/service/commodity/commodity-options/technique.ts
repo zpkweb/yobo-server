@@ -11,6 +11,22 @@ export class CommodityTechniqueService {
   @Inject()
   commodityOptionsTechniqueService: CommodityOptionsTechniqueService;
 
+  async search(payload) {
+    const data = await this.baseCommodityTechniqueServer.BaseSearch(payload);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
   async create(payload) {
     const data = await this.baseCommodityTechniqueServer.BaseCreate(payload);
     if (data.identifiers[0].id) {

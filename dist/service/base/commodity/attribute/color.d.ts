@@ -9,4 +9,5 @@ export declare class BaseCommodityColorServer {
     BaseRetrieveAll(): Promise<CommodityColorEntity[]>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
     BaseDelete(payload: any): Promise<import("typeorm").DeleteResult>;
+    BaseSearch(payload: any): Promise<CommodityColorEntity[]>;
 }

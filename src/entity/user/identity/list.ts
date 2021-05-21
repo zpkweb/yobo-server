@@ -3,8 +3,8 @@
  */
 
 import { EntityModel } from '@midwayjs/orm';
-import { Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { UserIdentityEntity } from './identity';
+import { Column,  PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+// import { UserIdentityEntity } from './identity';
 @EntityModel('user_identity_list')
 export class UserIdentityListEntity {
 
@@ -52,7 +52,7 @@ export class UserIdentityListEntity {
   updatedDate: Date;
 
   // 关联用户身份
-  @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.identityList)
-  identitys: UserIdentityEntity[];
+  // @OneToMany(type => UserIdentityEntity, UserIdentityEntity => UserIdentityEntity.identityList)
+  // identitys: UserIdentityEntity[];
 
 }

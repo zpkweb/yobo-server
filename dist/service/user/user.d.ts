@@ -1,11 +1,18 @@
 import { Repository } from 'typeorm';
 import { UserEntity } from "../../entity/user/user";
 import { BaseUserServer } from "../base/user/user";
+import { BaseIdentityServer } from "../base/user/identity";
+import { IdentityService } from "./identity";
 export declare class UserService {
     email: any;
     userEntity: Repository<UserEntity>;
     baseUserServer: BaseUserServer;
-    getUser(): Promise<number>;
+    baseIdentityServer: BaseIdentityServer;
+    identityService: IdentityService;
+    create(payload: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
     search(payload: any): Promise<{
         data: {
             list: UserEntity[];
@@ -23,7 +30,7 @@ export declare class UserService {
         code: number;
     }>;
     find(payload: any): Promise<{
-        data: UserEntity | UserEntity[];
+        data: any;
         success: boolean;
         code: number;
     } | {
@@ -89,11 +96,6 @@ export declare class UserService {
         code: number;
     }>;
     update(payload: any): Promise<{
-        success: boolean;
-        code: number;
-        data?: undefined;
-    } | {
-        data: UserEntity;
         success: boolean;
         code: number;
     }>;

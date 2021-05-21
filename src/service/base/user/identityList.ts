@@ -53,6 +53,8 @@ export class BaseIdentityListServer {
     .getOne();
   }
 
+
+
   async baseRetrieveIdentityListAll() {
     return await this.userIdentityListEntity
     .createQueryBuilder()

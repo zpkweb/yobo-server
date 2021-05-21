@@ -12,6 +12,8 @@ export class CommodityColorEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
+
+
   // 色值 16进制
   @Column()
   startColor: string;

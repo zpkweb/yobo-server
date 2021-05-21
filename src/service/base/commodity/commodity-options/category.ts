@@ -50,4 +50,14 @@ export class BaseCommodityCategoryServer {
       .of(payload.of)
       .set(payload.set);
   }
+
+  async BaseSearch(payload) {
+    return await this.commodityCategoryEntity
+      .createQueryBuilder('search')
+      // .innerJoinAndSelect('search.commoditys', 'commoditys')
+      .where('search.optionsId IN (:...searchs)', { searchs: payload })
+      .getMany();
+  }
+
+
 }

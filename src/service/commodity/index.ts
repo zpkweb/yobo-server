@@ -210,6 +210,13 @@ export class CommodityService {
   }
 
 
+  async searchTest(payload) {
+    return await this.commodityCommodityService.searchTest({
+      ...payload,
+      locale: payload.locale || 'zh-cn'
+    });
+  }
+
   async clientSearch(payload) {
     return await this.commodityCommodityService.clientSearch({
       ...payload,

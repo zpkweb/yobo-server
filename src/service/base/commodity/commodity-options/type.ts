@@ -50,5 +50,13 @@ export class BaseCommodityTypeServer {
       .set(payload.set);
   }
 
+  async BaseSearch(payload) {
+    return await this.CommodityTypeEntity
+    .createQueryBuilder('search')
+    // .innerJoinAndSelect('search.commoditys', 'commoditys')
+    .where('search.optionsId IN (:...searchs)', { searchs: payload })
+    .getMany();
+  }
+
 
 }

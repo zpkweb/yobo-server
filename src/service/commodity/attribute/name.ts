@@ -90,6 +90,22 @@ export class CommodityAttributeName {
     }
   }
 
+  async search(payload) {
+    const data = await this.baseCommodityNameServer.BaseSearch(payload);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
   // 更新商品名称
   async update(payload) {
     const data = await this.baseCommodityNameServer.BaseUpdate(payload);

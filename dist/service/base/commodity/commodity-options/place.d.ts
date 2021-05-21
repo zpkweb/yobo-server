@@ -6,4 +6,5 @@ export declare class BaseCommodityPlaceServer {
     BaseRetrieveCommodityId(commodityId: any): Promise<CommodityPlaceEntity[]>;
     BaseRetrieveID(payload: any): Promise<CommodityPlaceEntity>;
     BaseRelationSet(payload: any): Promise<void>;
+    BaseSearch(payload: any): Promise<CommodityPlaceEntity[]>;
 }

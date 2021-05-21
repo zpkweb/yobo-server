@@ -12,6 +12,8 @@ export class CommodityPriceEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
+
+
   // 语言
   @Column()
   'zh-cn': number;

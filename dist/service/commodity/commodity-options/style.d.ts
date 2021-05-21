@@ -3,6 +3,15 @@ import { CommodityOptionsStyleService } from "../options/style";
 export declare class CommodityStyleService {
     baseCommodityStyleServer: BaseCommodityStyleServer;
     commodityOptionsStyleService: CommodityOptionsStyleService;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/commodity-options/style").CommodityStyleEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

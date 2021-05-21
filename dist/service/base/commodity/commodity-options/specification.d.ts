@@ -6,4 +6,5 @@ export declare class BaseCommoditySpecificationServer {
     BaseRetrieveCommodityId(commodityId: any): Promise<CommoditySpecificationEntity[]>;
     BaseRetrieveID(payload: any): Promise<CommoditySpecificationEntity>;
     BaseRelationSet(payload: any): Promise<void>;
+    BaseSearch(payload: any): Promise<CommoditySpecificationEntity[]>;
 }

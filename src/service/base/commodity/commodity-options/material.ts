@@ -51,5 +51,12 @@ export class BaseCommodityMaterialServer {
       .set(payload.set);
   }
 
+  async BaseSearch(payload) {
+    return await this.CommodityMaterialEntity
+      .createQueryBuilder('search')
+      // .innerJoinAndSelect('search.commoditys', 'commoditys')
+      .where('search.optionsId IN (:...searchs)', { searchs: payload })
+      .getMany();
+  }
 
 }

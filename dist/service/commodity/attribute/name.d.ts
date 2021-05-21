@@ -37,6 +37,15 @@ export declare class CommodityAttributeName {
         code: number;
         data?: undefined;
     }>;
+    search(payload: any): Promise<{
+        data: import("../../../entity/commodity/attribute/name").CommodityNameEntity[];
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     update(payload: any): Promise<{
         data: import("typeorm").UpdateResult;
         success: boolean;

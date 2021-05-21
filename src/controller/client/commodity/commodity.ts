@@ -60,6 +60,24 @@ export class CommodityController {
     return data;
   }
 
+  @Get('/searchTest', { summary: '测试搜索商品'})
+  async searchTest(@Query(ALL) searchQuery) {
+    const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
+    const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
+    const data:any = await this.commodityService.searchTest({
+      ...searchQuery,
+      pageSize: pageSize,
+      currentPage: currentPage,
+      isLocale: true
+    });
+    console.log("searchTest data", data)
+    if(data.success){
+      data.data.pageSize = pageSize;
+      data.data.currentPage = currentPage;
+    }
+    return data;
+  }
+
   @Get('/searchs', { summary: '搜索商品'})
   async searchs(@Query(ALL) searchQuery) {
     const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;

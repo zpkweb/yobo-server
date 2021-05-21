@@ -101,4 +101,13 @@ export class BaseCommodityDescServer {
       .where('commodityId = :commodityId', { commodityId: commodityId })
       .execute();
   }
+
+  async BaseSearch(payload) {
+    return await this.commodityDescEntity
+      .createQueryBuilder('desc')
+      .innerJoinAndSelect('desc.commodity', 'commoditys')
+      .where('desc.zh-cn like :zhcn', { zhcn: `%${payload}%` })
+      .getMany();
+  }
+
 }

@@ -37,6 +37,15 @@ export class UserSellerStudioEntity {
   @Column()
   video: string;
 
+  @Column()
+  ccId: string;
+
+  @Column()
+  siteId: string;
+
+  @Column()
+  videoPhoto: string;
+
 
 
   //  创建日期

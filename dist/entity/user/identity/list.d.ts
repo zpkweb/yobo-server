@@ -1,4 +1,3 @@
-import { UserIdentityEntity } from "./identity";
 export declare class UserIdentityListEntity {
     id: number;
     'zh-cn': string;
@@ -10,5 +9,4 @@ export declare class UserIdentityListEntity {
     index: number;
     createdDate: Date;
     updatedDate: Date;
-    identitys: UserIdentityEntity[];
 }

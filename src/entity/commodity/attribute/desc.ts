@@ -13,6 +13,7 @@ export class CommodityDescEntity {
   @PrimaryGeneratedColumn({type: 'bigint'})
   id: number;
 
+
   // 语言
   @Column({
     type: "text"

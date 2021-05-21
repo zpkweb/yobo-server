@@ -1280,6 +1280,71 @@ export class BaseCommodityServer {
       // console.log(data)
     return data;
   }
+
+  async BaseSearchCommodity(payload) {
+    const where: any = {};
+
+    if (payload.id) {
+      where.id = payload.id;
+    }
+
+    if (payload.commodityId) {
+      where.commodityId = payload.commodityId;
+    }else{
+      if(payload.isSearchCommodityIds) {
+        where.commodityId = In(payload.commodityIds)
+      }
+      // else{
+      //   if(payload.commodityIds.length) {
+      //     where.commodityId = In(payload.commodityIds)
+      //   }
+      // }
+
+    }
+
+    if (payload.sellerId) {
+      where.seller = {
+        sellerId: payload.sellerId
+      }
+    }
+
+
+    if (payload.state) {
+      where.state = payload.state;
+    }
+
+    if (payload.widthMin && !payload.widthMax) {
+      where.width = MoreThanOrEqual(payload.widthMin);
+    }else if(!payload.widthMin && payload.widthMax) {
+      where.width = LessThanOrEqual(payload.widthMax);
+    }else if(payload.widthMin && payload.widthMax){
+      where.width = Between(payload.widthMin, payload.widthMax);
+    }
+
+    if (payload.heightMin && !payload.heightMax) {
+      where.height = MoreThanOrEqual(payload.heightMin);
+    }else if(!payload.heightMin && payload.heightMax) {
+      where.height = LessThanOrEqual(payload.heightMax);
+    }else if(payload.heightMin && payload.heightMax){
+      where.height = Between(payload.heightMin, payload.heightMax);
+    }
+
+
+
+    console.log("where", where)
+
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .where(where)
+      .orderBy({
+        "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
+        // "browsingCount.count": payload.hots && payload.hots =='true' ? "DESC"  :  "ASC"
+      })
+      .skip((payload.currentPage-1)*payload.pageSize)
+      .take(payload.pageSize)
+      .getManyAndCount();
+
+  }
   /*
   * 通过商品id获取艺术家信息
   */

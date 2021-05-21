@@ -7,6 +7,9 @@ export declare class UserSellerStudioEntity {
     introduce: string;
     photo: string;
     video: string;
+    ccId: string;
+    siteId: string;
+    videoPhoto: string;
     createdDate: Date;
     updatedDate: Date;
     seller: UserSellerEntity;

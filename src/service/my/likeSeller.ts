@@ -79,13 +79,15 @@ export class MyLikeSellerService {
    */
   async myLikeSeller(userId) {
     const data:any = await this.baseMyLikeSellerServer.BaseRetrieve(userId);
-
     if (data) {
       for(let item of data) {
-        const userData = await this.userService.retrieveUserId(item.userId)
-        if(userData.success) {
-          item.user = userData.data;
+        if(item.sellerId) {
+          const userData = await this.sellerService.retrieveSeller(item.sellerId)
+          if(userData.success) {
+            item.seller = userData.data;
+          }
         }
+
       }
       return {
         data: data,

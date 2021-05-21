@@ -49,5 +49,13 @@ export class BaseCommodityClassificationServer {
       .set(payload.set);
   }
 
+  async BaseSearch(payload) {
+    return await this.CommodityClassificationEntity
+      .createQueryBuilder('search')
+      // .innerJoinAndSelect('search.commoditys', 'commoditys')
+      .where('search.optionsId IN (:...searchs)', { searchs: payload })
+      .getMany();
+  }
+
 
 }

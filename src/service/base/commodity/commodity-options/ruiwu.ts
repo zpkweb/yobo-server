@@ -50,5 +50,13 @@ export class BaseCommodityRuiwuServer {
       .set(payload.set);
   }
 
+  async BaseSearch(payload) {
+    return await this.CommodityRuiwuEntity
+    .createQueryBuilder('search')
+    // .innerJoinAndSelect('search.commoditys', 'commoditys')
+    .where('search.optionsId IN (:...searchs)', { searchs: payload })
+    .getMany();
+  }
+
 
 }
