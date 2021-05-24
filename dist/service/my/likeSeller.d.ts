@@ -1,10 +1,12 @@
 import { BaseMyLikeSellerServer } from "../base/my/likeSeller";
 import { UserService } from "../user/user";
 import { SellerService } from "../user/seller";
+import { CommodityCommodityService } from "../commodity/commodity";
 export declare class MyLikeSellerService {
     baseMyLikeSellerServer: BaseMyLikeSellerServer;
     userService: UserService;
     sellerService: SellerService;
+    commodityCommodityService: CommodityCommodityService;
     addMyLikeSeller(payload: any): Promise<{
         success: boolean;
         code: number;

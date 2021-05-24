@@ -1418,4 +1418,14 @@ export class BaseCommodityServer {
       .getMany();
   }
 
+  // 艺术家创建艺术品数
+  async baseRetrieveSellerCount(sellerId) {
+    return await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .where("commodity.sellerId = :sellerId", { sellerId: sellerId })
+      // .getManyAndCount();
+      .getCount()
+  }
+
+
 }

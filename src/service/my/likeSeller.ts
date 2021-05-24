@@ -2,6 +2,8 @@ import { Inject, Provide } from "@midwayjs/decorator";
 import { BaseMyLikeSellerServer } from "../base/my/likeSeller";
 import { UserService } from "../user/user";
 import { SellerService } from "../user/seller";
+import { CommodityCommodityService } from "src/service/commodity/commodity";
+
 @Provide()
 export class MyLikeSellerService {
 
@@ -13,6 +15,9 @@ export class MyLikeSellerService {
 
   @Inject()
   sellerService: SellerService;
+
+  @Inject()
+  commodityCommodityService: CommodityCommodityService;
 
   async addMyLikeSeller(payload) {
     // console.log("addMyLikeSeller", payload)
@@ -85,6 +90,10 @@ export class MyLikeSellerService {
           const userData = await this.sellerService.retrieveSeller(item.sellerId)
           if(userData.success) {
             item.seller = userData.data;
+          }
+          const commodityCount = await this.commodityCommodityService.retrieveSellerCount(item.sellerId);
+          if(commodityCount.success) {
+            item.commodityCount = commodityCount.data;
           }
         }
 

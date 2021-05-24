@@ -63,4 +63,5 @@ export declare class BaseCommodityServer {
     baseRetrieveCommmodity(sellerId: any): Promise<CommodityEntity[]>;
     baseRetrieveCommmodityPagination(payload: any): Promise<[CommodityEntity[], number]>;
     baseChoiceCommodity(payload: any): Promise<CommodityEntity[]>;
+    baseRetrieveSellerCount(sellerId: any): Promise<number>;
 }

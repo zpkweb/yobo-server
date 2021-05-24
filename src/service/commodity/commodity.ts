@@ -1678,4 +1678,19 @@ export class CommodityCommodityService {
     }
   }
 
+  async retrieveSellerCount(sellerId) {
+    const data = await this.baseCommodityServer.baseRetrieveSellerCount(sellerId);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
 }

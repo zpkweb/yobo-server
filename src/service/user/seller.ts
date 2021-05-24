@@ -79,8 +79,8 @@ export class SellerService {
       // 判断艺术家姓名是否重复
       if(payload.seller.firstname || payload.seller.lastname) {
         const sellerName = await this.baseSellerServer.BaseHasName({
-          firstname: payload.firstname,
-          lastname: payload.lastname,
+          firstname: payload.seller.firstname,
+          lastname: payload.seller.lastname,
         })
         // console.log("判断艺术家姓名是否重复", sellerName)
         if(sellerName) {
@@ -809,7 +809,7 @@ export class SellerService {
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",
       service: this.email.service,
-      port: 465,
+      port: this.email.port,
       secureConnection: true,
       auth: {
         user: this.email.user,

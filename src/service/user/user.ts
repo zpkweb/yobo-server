@@ -419,7 +419,7 @@ export class UserService{
     let transporter = nodemailer.createTransport({
       // host: "smtp.qq.com",
       service: this.email.service,
-      port: 465,
+      port: this.email.port,
       secureConnection: true,
       auth: {
         user: this.email.user,

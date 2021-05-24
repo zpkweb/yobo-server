@@ -277,4 +277,13 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
+    retrieveSellerCount(sellerId: any): Promise<{
+        data: number;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
 }

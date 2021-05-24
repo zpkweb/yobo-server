@@ -43,17 +43,20 @@ export default (appInfo: EggAppInfo) => {
     password: '123456',
   };
 
+  // config.email = {
+  //   service: 'smtp.126.com',
+  //   user: 'zpk18612875765@126.com',
+  //   pass: 'IGNNAMOJPGMOXTMW',
+  //   port: 465
+  // };
+
   config.email = {
     service: 'qq',
     user: '547790132@qq.com',
     pass: 'vgmowhcgqcpobcaf',
+    port: 465
   };
 
-  // config.email = {
-  //   service: 'qq',
-  //   user: '41728127@qq.com',
-  //   pass: 'cblmwxiolsxycada'
-  // };
 
   config.jwt = {
     secret: 'yobo',
