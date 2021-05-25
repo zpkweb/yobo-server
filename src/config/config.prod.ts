@@ -8,18 +8,26 @@ export default (appInfo: EggAppInfo) => {
   const config = {} as DefaultConfig;
 
 
-  // config.email = {
-  //   service: 'qq',
-  //   user: '41728127@qq.com',
-  //   pass: 'cblmwxiolsxycada',
-  //   port: 465
-  // }
   config.email = {
-    service: 'smtp.126.com',
-    user: 'li_shuo2014@126.com',
-    pass: 'DSGFZHHXILXBYBLE',
+    service: 'qq',
+    user: '41728127@qq.com',
+    pass: 'cblmwxiolsxycada',
     port: 465
-  };
+  }
+
+  // config.email = {
+  //   service: 'smtp.126.com',
+  //   user: 'zpk18612875765@126.com',
+  //   pass: 'IGNNAMOJPGMOXTMW',
+  //   port: 465
+  // };
+
+  // config.email = {
+  //   service: 'smtp.126.com',
+  //   user: 'li_shuo2014@126.com',
+  //   pass: 'DSGFZHHXILXBYBLE',
+  //   port: 465
+  // };
 
 
 
