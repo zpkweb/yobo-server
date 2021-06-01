@@ -62,7 +62,9 @@ export class UserSellerMetadataEntity {
   website: string;
 
   // 用户简介
-  @Column()
+  @Column({
+    type: 'text'
+  })
   profile: string;
 
   //  创建日期

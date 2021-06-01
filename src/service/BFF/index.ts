@@ -62,7 +62,7 @@ export class BFFService {
 
     // 最新上线的艺术作品:搜索艺术品
     const latestCommodity = await this.commodityService.findPhoto({
-      news: true,
+      news: 'true',
       pageSize: payload.pageSize || 4,
       currentPage: payload.currentPage || 1,
       isLocale: true,
