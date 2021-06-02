@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPriceServer } from '../../base/commodity/attribute/price';
+import { BaseCommodityDetailsServer } from 'src/service/base/commodity/attribute/details';
 
 @Provide()
-export class CommodityAttributePrice {
+export class CommodityAttributeDetails {
 
   @Inject()
-  baseCommodityPriceServer: BaseCommodityPriceServer;
+  baseCommodityDetailsServer: BaseCommodityDetailsServer;
 
-  // 创建价格
+  // 创建
   async create(payload) {
-    const data = await this.baseCommodityPriceServer.BaseCreate(payload);
+    const data = await this.baseCommodityDetailsServer.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -26,12 +26,12 @@ export class CommodityAttributePrice {
   }
 
   /**
-   * 通过commodityId判断商品是否存在
+   * 通过commodityId判断是否存在
    * @param payload
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityPriceServer.BaseHas(commodityId);
+    const data = await this.baseCommodityDetailsServer.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -47,7 +47,7 @@ export class CommodityAttributePrice {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityPriceServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityDetailsServer.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -62,35 +62,8 @@ export class CommodityAttributePrice {
     }
   }
 
-
-  // 更新商品价格
-  async update(payload) {
-    const data = await this.baseCommodityPriceServer.BaseUpdate(payload);
-    if (data.affected) {
-      return {
-        data: data,
-        success: true,
-        code: 10009
-      }
-    } else {
-      return {
-        success: false,
-        code: 10010
-      }
-    }
-  }
-
-  async updatePrice(payload) {
-    const updatePrice = await this.hasId(payload.commodityId);
-    if(updatePrice.success){
-      return await this.update(payload)
-    }else{
-      return await this.create(payload)
-    }
-  }
-
   async search(payload) {
-    const data = await this.baseCommodityPriceServer.BaseSearch(payload);
+    const data = await this.baseCommodityDetailsServer.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -102,6 +75,31 @@ export class CommodityAttributePrice {
         success: false,
         code: 10010
       }
+    }
+  }
+
+  // 更新
+  async update(payload) {
+    const data = await this.baseCommodityDetailsServer.BaseUpdate(payload);
+    if (data.affected) {
+      return {
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async updateDetails(payload) {
+    const updateDetails = await this.hasId(payload.commodityId);
+    if(updateDetails.success){
+      return await this.update(payload)
+    }else{
+      return await this.create(payload)
     }
   }
 

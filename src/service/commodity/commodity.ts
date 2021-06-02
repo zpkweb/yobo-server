@@ -2,6 +2,7 @@ import { Inject, Provide } from '@midwayjs/decorator';
 import { BaseCommodityServer } from '../base/commodity/commodity';
 import { CommodityAttributeName } from './attribute/name';
 import { CommodityAttributeDesc } from './attribute/desc';
+import { CommodityAttributeDetails } from './attribute/details';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
 import { CommodityAttributeColor } from './attribute/color';
@@ -41,6 +42,9 @@ export class CommodityCommodityService {
 
   @Inject()
   commodityAttributeDesc: CommodityAttributeDesc;
+
+  @Inject()
+  commodityAttributeDetails: CommodityAttributeDetails;
 
   @Inject()
   commodityAttributePrice: CommodityAttributePrice;
@@ -121,110 +125,116 @@ export class CommodityCommodityService {
 
     const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(commodityId);
     // console.log("edit commodityAttributeColor", commodityAttributeColor)
-    if(commodityAttributeColor) {
+    if(commodityAttributeColor.success) {
       commodity.colors = commodityAttributeColor.data;
     }
 
     const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(commodityId);
     // console.log("edit commodityAttributeDesc", commodityAttributeDesc)
-    if(commodityAttributeDesc) {
+    if(commodityAttributeDesc.success) {
       commodity.desc = commodityAttributeDesc.data;
+    }
+
+    const commodityAttributeDetails =  await this.commodityAttributeDetails.retrieveCommodityId(commodityId);
+    // console.log("edit commodityAttributeDetails", commodityAttributeDetails)
+    if(commodityAttributeDetails.success) {
+      commodity.details = commodityAttributeDetails.data;
     }
 
     const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(commodityId);
     // console.log("edit commodityAttributeName", commodityAttributeName)
-    if(commodityAttributeName) {
+    if(commodityAttributeName.success) {
       commodity.name = commodityAttributeName.data;
     }
 
     const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(commodityId);
     // console.log("edit commodityAttributePhoto", commodityAttributePhoto)
-    if(commodityAttributePhoto) {
+    if(commodityAttributePhoto.success) {
       commodity.photos = commodityAttributePhoto.data;
     }
 
     const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(commodityId);
     // console.log("edit commodityAttributePrice", commodityAttributePrice)
-    if(commodityAttributePrice) {
+    if(commodityAttributePrice.success) {
       commodity.price = commodityAttributePrice.data;
     }
 
 
     const commodityCategoryService =  await this.commodityCategoryService.retrieveCommodityId(commodityId);
     // console.log("edit commodityCategoryService", commodityCategoryService)
-    if(commodityCategoryService) {
+    if(commodityCategoryService.success) {
       commodity.categorys = commodityCategoryService.data;
     }
 
     const commodityClassificationService =  await this.commodityClassificationService.retrieveCommodityId(commodityId);
     // console.log("edit commodityClassificationService", commodityClassificationService)
-    if(commodityClassificationService) {
+    if(commodityClassificationService.success) {
       commodity.classifications = commodityClassificationService.data;
     }
 
     const commodityMaterialService =  await this.commodityMaterialService.retrieveCommodityId(commodityId);
     // console.log("edit commodityMaterialService", commodityMaterialService)
-    if(commodityMaterialService) {
+    if(commodityMaterialService.success) {
       commodity.materials = commodityMaterialService.data;
     }
 
     const commodityModelService =  await this.commodityModelService.retrieveCommodityId(commodityId);
     // console.log("edit commodityModelService", commodityModelService)
-    if(commodityModelService) {
+    if(commodityModelService.success) {
       commodity.models = commodityModelService.data;
     }
 
     const commodityPlaceService =  await this.commodityPlaceService.retrieveCommodityId(commodityId);
     // console.log("edit commodityPlaceService", commodityPlaceService)
-    if(commodityPlaceService) {
+    if(commodityPlaceService.success) {
       commodity.places = commodityPlaceService.data;
     }
 
     const commodityRuiwuService =  await this.commodityRuiwuService.retrieveCommodityId(commodityId);
     // console.log("edit commodityRuiwuService", commodityRuiwuService)
-    if(commodityRuiwuService) {
+    if(commodityRuiwuService.success) {
       commodity.ruiwus = commodityRuiwuService.data;
     }
 
     const commodityShapeService =  await this.commodityShapeService.retrieveCommodityId(commodityId);
     // console.log("edit commodityShapeService", commodityShapeService)
-    if(commodityShapeService) {
+    if(commodityShapeService.success) {
       commodity.shapes = commodityShapeService.data;
     }
 
     const commoditySpecificationService =  await this.commoditySpecificationService.retrieveCommodityId(commodityId);
     // console.log("edit commoditySpecificationService", commoditySpecificationService)
-    if(commoditySpecificationService) {
+    if(commoditySpecificationService.success) {
       commodity.specifications = commoditySpecificationService.data;
     }
 
     const commodityStyleService =  await this.commodityStyleService.retrieveCommodityId(commodityId);
     // console.log("edit commodityStyleService", commodityStyleService)
-    if(commodityStyleService) {
+    if(commodityStyleService.success) {
       commodity.styles = commodityStyleService.data;
     }
 
     const commodityTechniqueService =  await this.commodityTechniqueService.retrieveCommodityId(commodityId);
     // console.log("edit commodityTechniqueService", commodityTechniqueService)
-    if(commodityTechniqueService) {
+    if(commodityTechniqueService.success) {
       commodity.techniques = commodityTechniqueService.data;
     }
 
     const commodityThemeService =  await this.commodityThemeService.retrieveCommodityId(commodityId);
     // console.log("edit commodityThemeService", commodityThemeService)
-    if(commodityThemeService) {
+    if(commodityThemeService.success) {
       commodity.themes = commodityThemeService.data;
     }
 
     const commodityTypeService =  await this.commodityTypeService.retrieveCommodityId(commodityId);
     // console.log("edit commodityTypeService", commodityTypeService)
-    if(commodityTypeService) {
+    if(commodityTypeService.success) {
       commodity.types = commodityTypeService.data;
     }
 
     const commodityUseService =  await this.commodityUseService.retrieveCommodityId(commodityId);
     // console.log("edit commodityUseService", commodityUseService)
-    if(commodityUseService) {
+    if(commodityUseService.success) {
       commodity.uses = commodityUseService.data;
     }
 
@@ -286,13 +296,15 @@ export class CommodityCommodityService {
               // name
               const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
               // console.log("commodityAttributeName", commodityAttributeName)
-              if(commodityAttributeName) {
+              if(commodityAttributeName.success) {
                 item.name = commodityAttributeName.data[payload.locale];
               }
 
+
+
               // photos
               const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
-              if(commodityAttributePhoto) {
+              if(commodityAttributePhoto.success) {
                 item.photos = commodityAttributePhoto.data.map(item => item.src);
               }
               commodityData.push(item)
@@ -317,104 +329,110 @@ export class CommodityCommodityService {
 
     const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityAttributeDesc", commodityAttributeDesc)
-    if(commodityAttributeDesc) {
+    if(commodityAttributeDesc.success) {
       commodity.desc = payload.isLocale ? commodityAttributeDesc.data[payload.locale] : commodityAttributeDesc.data;
+    }
+
+    const commodityAttributeDetails =  await this.commodityAttributeDetails.retrieveCommodityId(payload.commodityId);
+    console.log("edit commodityAttributeDetails", commodityAttributeDetails)
+    if(commodityAttributeDetails.success) {
+      commodity.details = payload.isLocale ? commodityAttributeDetails.data[payload.locale] : commodityAttributeDetails.data;
     }
 
     const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityAttributeName", commodityAttributeName)
-    if(commodityAttributeName) {
+    if(commodityAttributeName.success) {
       commodity.name = payload.isLocale ? commodityAttributeName.data[payload.locale] : commodityAttributeName.data;
     }
 
     const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityAttributePhoto", commodityAttributePhoto)
-    if(commodityAttributePhoto) {
+    if(commodityAttributePhoto.success) {
       commodity.photos = commodityAttributePhoto.data;
     }
 
     const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityAttributePrice", commodityAttributePrice)
-    if(commodityAttributePrice) {
+    if(commodityAttributePrice.success) {
       commodity.price = payload.isLocale ? commodityAttributePrice.data[payload.locale] : commodityAttributePrice.data;
     }
 
 
     const commodityCategoryService =  await this.commodityCategoryService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityCategoryService", commodityCategoryService)
-    if(commodityCategoryService) {
+    if(commodityCategoryService.success) {
       commodity.categorys = payload.isLocale ? commodityCategoryService.data.map(item => item.options[payload.locale]) : commodityCategoryService.data;
     }
 
     const commodityClassificationService =  await this.commodityClassificationService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityClassificationService", commodityClassificationService)
-    if(commodityClassificationService) {
+    if(commodityClassificationService.success) {
       commodity.classifications = payload.isLocale ? commodityClassificationService.data.map(item => item.options[payload.locale]) : commodityClassificationService.data;
     }
 
     const commodityMaterialService =  await this.commodityMaterialService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityMaterialService", commodityMaterialService)
-    if(commodityMaterialService) {
+    if(commodityMaterialService.success) {
       commodity.materials = payload.isLocale ? commodityMaterialService.data.map(item => item.options[payload.locale]) : commodityMaterialService.data;
     }
 
     const commodityModelService =  await this.commodityModelService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityModelService", commodityModelService)
-    if(commodityModelService) {
+    if(commodityModelService.success) {
       commodity.models = payload.isLocale ? commodityModelService.data.map(item => item.options[payload.locale]) : commodityModelService.data;
     }
 
     const commodityPlaceService =  await this.commodityPlaceService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityPlaceService", commodityPlaceService)
-    if(commodityPlaceService) {
+    if(commodityPlaceService.success) {
       commodity.places = payload.isLocale ? commodityPlaceService.data.map(item => item.options[payload.locale]) : commodityPlaceService.data;
     }
 
     const commodityRuiwuService =  await this.commodityRuiwuService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityRuiwuService", commodityRuiwuService)
-    if(commodityRuiwuService) {
+    if(commodityRuiwuService.success) {
       commodity.ruiwus = payload.isLocale ? commodityRuiwuService.data.map(item => item.options[payload.locale]) : commodityRuiwuService.data;
     }
 
     const commodityShapeService =  await this.commodityShapeService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityShapeService", commodityShapeService)
-    if(commodityShapeService) {
+    if(commodityShapeService.success) {
       commodity.shapes = payload.isLocale ? commodityShapeService.data.map(item => item.options[payload.locale]) : commodityShapeService.data;
     }
 
     const commoditySpecificationService =  await this.commoditySpecificationService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commoditySpecificationService", commoditySpecificationService)
-    if(commoditySpecificationService) {
+    if(commoditySpecificationService.success) {
       commodity.specifications = payload.isLocale ? commoditySpecificationService.data.map(item => item.options[payload.locale]) : commoditySpecificationService.data;
     }
 
     const commodityStyleService =  await this.commodityStyleService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityStyleService", commodityStyleService)
-    if(commodityStyleService) {
+    if(commodityStyleService.success) {
       commodity.styles = payload.isLocale ? commodityStyleService.data.map(item => item.options[payload.locale]) : commodityStyleService.data;
     }
 
     const commodityTechniqueService =  await this.commodityTechniqueService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityTechniqueService", commodityTechniqueService)
-    if(commodityTechniqueService) {
+    if(commodityTechniqueService.success) {
       commodity.techniques = payload.isLocale ? commodityTechniqueService.data.map(item => item.options[payload.locale]) : commodityTechniqueService.data;
     }
 
     const commodityThemeService =  await this.commodityThemeService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityThemeService", commodityThemeService)
-    if(commodityThemeService) {
+    if(commodityThemeService.success) {
       commodity.themes = payload.isLocale ? commodityThemeService.data.map(item => item.options[payload.locale]) : commodityThemeService.data;
     }
 
     const commodityTypeService =  await this.commodityTypeService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityTypeService", commodityTypeService)
-    if(commodityTypeService) {
+    if(commodityTypeService.success) {
       commodity.types = payload.isLocale ? commodityTypeService.data.map(item => item.options[payload.locale]) : commodityTypeService.data;
     }
 
     const commodityUseService =  await this.commodityUseService.retrieveCommodityId(payload.commodityId);
     // console.log("edit commodityUseService", commodityUseService)
-    if(commodityUseService) {
+    if(commodityUseService.success) {
       commodity.uses = payload.isLocale ? commodityUseService.data.map(item => item.options[payload.locale]) : commodityUseService.data;
     }
 
@@ -452,7 +470,7 @@ export class CommodityCommodityService {
     if(data){
         for(let item of data) {
           const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
-          if(commodityAttributeName) {
+          if(commodityAttributeName.success) {
             item.name = commodityAttributeName.data;
           }
           // const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(item.commodityId);
@@ -460,7 +478,7 @@ export class CommodityCommodityService {
           //   item.desc = commodityAttributeDesc.data;
           // }
           const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(item.commodityId);
-          if(commodityAttributePrice) {
+          if(commodityAttributePrice.success) {
             item.price = commodityAttributePrice.data;
           }
           // const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(item.commodityId);
@@ -469,7 +487,7 @@ export class CommodityCommodityService {
           // }
 
           const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
-          if(commodityAttributePhoto) {
+          if(commodityAttributePhoto.success) {
             item.photos = commodityAttributePhoto.data;
           }
 
@@ -525,24 +543,30 @@ export class CommodityCommodityService {
     if(data){
         for(let item of data) {
           const commodityAttributeName =  await this.commodityAttributeName.retrieveCommodityId(item.commodityId);
-          if(commodityAttributeName) {
+          if(commodityAttributeName.success) {
             item.name = commodityAttributeName.data;
           }
           const commodityAttributeDesc =  await this.commodityAttributeDesc.retrieveCommodityId(item.commodityId);
-          if(commodityAttributeDesc) {
+          if(commodityAttributeDesc.success) {
             item.desc = commodityAttributeDesc.data;
           }
+
+          const commodityAttributeDetails =  await this.commodityAttributeDetails.retrieveCommodityId(item.commodityId);
+          if(commodityAttributeDetails.success) {
+            item.details = commodityAttributeDetails.data;
+          }
+
           const commodityAttributePrice =  await this.commodityAttributePrice.retrieveCommodityId(item.commodityId);
-          if(commodityAttributePrice) {
+          if(commodityAttributePrice.success) {
             item.price = commodityAttributePrice.data;
           }
           const commodityAttributeColor =  await this.commodityAttributeColor.retrieveCommodityId(item.commodityId);
-          if(commodityAttributeColor) {
+          if(commodityAttributeColor.success) {
             item.colors = commodityAttributeColor.data;
           }
 
           const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
-          if(commodityAttributePhoto) {
+          if(commodityAttributePhoto.success) {
             item.photos = commodityAttributePhoto.data;
           }
 
@@ -601,7 +625,7 @@ export class CommodityCommodityService {
     if (!commodity.success) {
       return commodity
     }
-    payload.commodityId = commodity.data.generatedMaps[0].commodityId;
+    payload.commodityId = commodity.commodityId;
 
     // 创建商品名称
     const commodityName = await this.commodityAttributeName.create({
@@ -620,7 +644,7 @@ export class CommodityCommodityService {
     await this.relation({
       name: 'name',
       of: { commodityId: payload.commodityId },
-      set: commodityName.data.identifiers[0].id
+      set: commodityName.id
     })
 
     // 创建商品详情
@@ -636,11 +660,33 @@ export class CommodityCommodityService {
       return commodityDesc
     }
 
+
+
     // 商品 关联 商品详情
     await this.relation({
       name: 'desc',
       of: { commodityId: payload.commodityId },
-      set: commodityDesc.data.identifiers[0].id
+      set: commodityDesc.id
+    })
+
+
+    const commodityDetails = await this.commodityAttributeDetails.create({
+      commodityId: payload.commodityId,
+      'zh-cn': payload.details['zh-cn'] || '',
+      'en-us': payload.details['en-us'] || '',
+      'ja-jp': payload.details['ja-jp'] || '',
+      'fr-fr': payload.details['fr-fr'] || '',
+      'es-es': payload.details['es-es'] || ''
+    })
+    if (!commodityDetails.success) {
+      return commodityDetails
+    }
+
+    // console.log('commodityDetails', commodityDetails)
+    await this.relation({
+      name: 'details',
+      of: { commodityId: payload.commodityId },
+      set: commodityDetails.id
     })
 
     // 创建商品价格
@@ -660,7 +706,7 @@ export class CommodityCommodityService {
     await this.relation({
       name: 'price',
       of: { commodityId: payload.commodityId },
-      set: commodityPrice.data.identifiers[0].id
+      set: commodityPrice.id
     })
 
 
@@ -678,7 +724,7 @@ export class CommodityCommodityService {
       await this.relation({
         name: 'photos',
         of: { commodityId: payload.commodityId },
-        add: commodityPhoto.data.identifiers[0].id
+        add: commodityPhoto.id
       })
     }
 
@@ -698,7 +744,7 @@ export class CommodityCommodityService {
       await this.relation({
         name: 'colors',
         of: { commodityId: payload.commodityId },
-        add: commodityColor.data.identifiers[0].id
+        add: commodityColor.id
       })
     }
 
@@ -707,14 +753,14 @@ export class CommodityCommodityService {
     if(payload.seller){
       await this.relation({
         name: 'seller',
-        of: commodity.data.identifiers[0].id,
+        of: commodity.id,
         // of: { commodityId: payload.commodityId },
         set: { sellerId: payload.seller.sellerId }
       })
     }
 
     // return commodity
-    if (commodity.data.identifiers[0].id) {
+    if (commodity.id) {
       return {
         data: {
           commodityId: payload.commodityId
@@ -737,6 +783,8 @@ export class CommodityCommodityService {
     if (data.identifiers[0].id) {
       return {
         data: data,
+        id: data.identifiers[0].id,
+        commodityId: data.generatedMaps[0].commodityId,
         success: true,
         code: 10009
       }

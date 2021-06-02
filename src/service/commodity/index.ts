@@ -2,6 +2,7 @@ import { Inject, Provide } from '@midwayjs/decorator';
 import { CommodityCommodityService } from './commodity';
 import { CommodityAttributeName } from './attribute/name';
 import { CommodityAttributeDesc } from './attribute/desc';
+import { CommodityAttributeDetails } from './attribute/details';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
 import { CommodityAttributeColor } from './attribute/color';
@@ -19,6 +20,9 @@ export class CommodityService {
 
   @Inject()
   commodityAttributeDesc: CommodityAttributeDesc;
+
+  @Inject()
+  commodityAttributeDetails: CommodityAttributeDetails;
 
   @Inject()
   commodityAttributePrice: CommodityAttributePrice;
@@ -261,21 +265,24 @@ export class CommodityService {
       }
     }
     // 更新商品属性
-    const commodityUpdate = await this.commodityCommodityService.update({
+    const commodityUpdate:any = await this.commodityCommodityService.update({
       commodityId: payload.commodityId,
       choice: payload.choice,
       state: payload.state,
       width: payload.width,
       height: payload.height
     })
-    // 更新失败
-    if (!commodityUpdate.success) {
-      return commodityUpdate
+
+
+    if(commodityUpdate.success) {
+
+    }else{
+      return commodityUpdate;
     }
 
 
     // 更新商品名称
-    const commodityName = await this.commodityAttributeName.updateName({
+    const commodityName:any = await this.commodityAttributeName.updateName({
       commodityId: payload.commodityId,
       'zh-cn': payload.name['zh-cn'] || '',
       'en-us': payload.name['en-us'] || '',
@@ -283,12 +290,21 @@ export class CommodityService {
       'fr-fr': payload.name['fr-fr'] || '',
       'es-es': payload.name['es-es'] || ''
     })
-    if(!commodityName.success) {
+
+    if(commodityName.success) {
+      if(commodityName.id){
+        await this.commodityCommodityService.relation({
+          name: 'name',
+          of: { commodityId: payload.commodityId },
+          set: commodityName.id
+        })
+      }
+    }else{
       return commodityName;
     }
 
     // 更新商品详情
-    const commodityDesc = await this.commodityAttributeDesc.updateDesc({
+    const commodityDesc:any = await this.commodityAttributeDesc.updateDesc({
       commodityId: payload.commodityId,
       'zh-cn': payload.desc['zh-cn'] || '',
       'en-us': payload.desc['en-us'] || '',
@@ -296,12 +312,43 @@ export class CommodityService {
       'fr-fr': payload.desc['fr-fr'] || '',
       'es-es': payload.desc['es-es'] || ''
     });
-    if(!commodityDesc.success) {
+    if(commodityDesc.success) {
+      if(commodityDesc.id){
+        await this.commodityCommodityService.relation({
+          name: 'desc',
+          of: { commodityId: payload.commodityId },
+          set: commodityDesc.id
+        })
+      }
+    }else{
       return commodityDesc;
     }
 
+    const commodityDetails:any = await this.commodityAttributeDetails.updateDetails({
+      commodityId: payload.commodityId,
+      'zh-cn': payload.details['zh-cn'] || '',
+      'en-us': payload.details['en-us'] || '',
+      'ja-jp': payload.details['ja-jp'] || '',
+      'fr-fr': payload.details['fr-fr'] || '',
+      'es-es': payload.details['es-es'] || ''
+    });
+    if(commodityDetails.success) {
+      if(commodityDetails.id){
+        await this.commodityCommodityService.relation({
+          name: 'details',
+          of: { commodityId: payload.commodityId },
+          set: commodityDetails.id
+        })
+      }
+    }else{
+      return commodityDetails;
+    }
+
+
+
+
     // 更新商品价格
-    const commodityPrice = await this.commodityAttributePrice.updatePrice({
+    const commodityPrice:any = await this.commodityAttributePrice.updatePrice({
       commodityId: payload.commodityId,
       'zh-cn': payload.price['zh-cn'] || 0,
       'en-us': payload.price['en-us'] || 0,
@@ -309,7 +356,15 @@ export class CommodityService {
       'fr-fr': payload.price['fr-fr'] || 0,
       'es-es': payload.price['es-es'] || 0
     });
-    if(!commodityPrice.success) {
+    if(commodityPrice.success) {
+      if(commodityPrice.id){
+        await this.commodityCommodityService.relation({
+          name: 'price',
+          of: { commodityId: payload.commodityId },
+          set: commodityPrice.id
+        })
+      }
+    }else{
       return commodityPrice;
     }
 

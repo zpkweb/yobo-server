@@ -45,6 +45,7 @@ import { EntityModel } from "@midwayjs/orm";
 import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, CreateDateColumn, UpdateDateColumn, JoinColumn, ManyToMany, OneToOne } from "typeorm";
 import { CommodityNameEntity } from './attribute/name';
 import { CommodityDescEntity } from './attribute/desc';
+import { CommodityDetailsEntity } from './attribute/details';
 import { CommodityPhotoEntity } from './attribute/photo';
 import { CommodityPriceEntity } from './attribute/price';
 import { CommodityColorEntity } from './attribute/color';
@@ -114,6 +115,10 @@ export class CommodityEntity {
   })
   desc: CommodityDescEntity;
 
+  @OneToOne(type => CommodityDetailsEntity, CommodityDetailsEntity => CommodityDetailsEntity.commodity, {
+    cascade: true,
+  })
+  details: CommodityDetailsEntity;
 
   // 关联 商品价格
   @OneToOne(type => CommodityPriceEntity, CommodityPriceEntity => CommodityPriceEntity.commodity, {

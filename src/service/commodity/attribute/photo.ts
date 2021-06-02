@@ -13,6 +13,7 @@ export class CommodityAttributePhoto {
     if (data.identifiers[0].id) {
       return {
         data: data,
+        id: data.identifiers[0].id,
         success: true,
         code: 10009
       }
