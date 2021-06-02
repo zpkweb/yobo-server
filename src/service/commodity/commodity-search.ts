@@ -231,6 +231,7 @@ export class CommoditySearchService {
 
     return await this.searchCommodity({
         id: payload.id,
+        news: payload.news,
         commodityId: payload.commodityId,
         sellerId: payload.sellerId,
         state: payload.state,

@@ -1282,6 +1282,7 @@ export class BaseCommodityServer {
   }
 
   async BaseSearchCommodity(payload) {
+    console.log("BaseSearchCommodity", payload)
     const where: any = {};
 
     if (payload.id) {
