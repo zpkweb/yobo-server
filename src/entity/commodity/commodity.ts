@@ -46,7 +46,9 @@ import { Column, OneToMany, ManyToOne, PrimaryGeneratedColumn, Generated, Create
 import { CommodityNameEntity } from './attribute/name';
 import { CommodityDescEntity } from './attribute/desc';
 import { CommodityDetailsEntity } from './attribute/details';
+import { CommodityPostageEntity } from './attribute/postage';
 import { CommodityPhotoEntity } from './attribute/photo';
+import { CommodityVideoEntity } from './attribute/video';
 import { CommodityPriceEntity } from './attribute/price';
 import { CommodityColorEntity } from './attribute/color';
 import { CommodityBrowsingCountEntity } from './commodityBrowsingCount';
@@ -120,6 +122,11 @@ export class CommodityEntity {
   })
   details: CommodityDetailsEntity;
 
+  @OneToOne(type => CommodityPostageEntity, CommodityPostageEntity => CommodityPostageEntity.commodity, {
+    cascade: true,
+  })
+  postage: CommodityPostageEntity;
+
   // 关联 商品价格
   @OneToOne(type => CommodityPriceEntity, CommodityPriceEntity => CommodityPriceEntity.commodity, {
     cascade: true,
@@ -137,6 +144,11 @@ export class CommodityEntity {
     cascade: true,
   })
   photos: CommodityPhotoEntity[];
+
+  @OneToMany(type => CommodityVideoEntity, CommodityVideoEntity => CommodityVideoEntity.commodity, {
+    cascade: true,
+  })
+  videos: CommodityVideoEntity[];
 
   // options
   // 关联 商品类别

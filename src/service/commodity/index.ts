@@ -3,8 +3,10 @@ import { CommodityCommodityService } from './commodity';
 import { CommodityAttributeName } from './attribute/name';
 import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributeDetails } from './attribute/details';
+import { CommodityAttributePostage } from './attribute/postage';
 import { CommodityAttributePrice } from './attribute/price';
 import { CommodityAttributePhoto } from './attribute/photo';
+import { CommodityAttributeVideo } from './attribute/video';
 import { CommodityAttributeColor } from './attribute/color';
 
 import { CommentService } from './comment';
@@ -25,10 +27,16 @@ export class CommodityService {
   commodityAttributeDetails: CommodityAttributeDetails;
 
   @Inject()
+  commodityAttributePostage: CommodityAttributePostage;
+
+  @Inject()
   commodityAttributePrice: CommodityAttributePrice;
 
   @Inject()
   commodityAttributePhoto: CommodityAttributePhoto;
+
+  @Inject()
+  commodityAttributeVideo: CommodityAttributeVideo;
 
   @Inject()
   commodityAttributeColor: CommodityAttributeColor;
@@ -345,6 +353,27 @@ export class CommodityService {
     }
 
 
+    const commodityPostage:any = await this.commodityAttributePostage.updatePostage({
+      commodityId: payload.commodityId,
+      'zh-cn': payload.postage['zh-cn'] || '',
+      'en-us': payload.postage['en-us'] || '',
+      'ja-jp': payload.postage['ja-jp'] || '',
+      'fr-fr': payload.postage['fr-fr'] || '',
+      'es-es': payload.postage['es-es'] || ''
+    });
+    if(commodityPostage.success) {
+      if(commodityPostage.id){
+        await this.commodityCommodityService.relation({
+          name: 'postage',
+          of: { commodityId: payload.commodityId },
+          set: commodityPostage.id
+        })
+      }
+    }else{
+      return commodityPostage;
+    }
+
+
 
 
     // 更新商品价格
@@ -369,62 +398,79 @@ export class CommodityService {
     }
 
 
-
+    // 更新商品图片
     for(let item of payload.removePhotos){
       if(item.id) {
         await this.commodityAttributePhoto.delete(item.id)
       }
     }
-    // 更新商品图片
 
     for(let item of payload.photos){
-      // console.log("photos item", item)
       if(item.id){
-        if(item.remove){
-          // 删除图片
-          // await this.commodityAttributePhoto.delete(item.id)
-          // const commodityPhotoDelete = await this.commodityAttributePhoto.delete(item.id);
-          // if (!commodityPhotoDelete.success) {
-          //   return commodityPhotoDelete
-          // }
-
-        }else{
-          // 更新图片
-          // const commodityPhotoUpdate = await this.commodityAttributePhoto.update({
-          //   src: item.url,
-          //   name: item.name,
-          //   commodityId: payload.commodityId,
-          // });
-          // if (!commodityPhotoUpdate.success) {
-          //   return commodityPhotoUpdate
-          // }
+        //  更新
+        const commodityPhotoUpdate = await this.commodityAttributePhoto.update({
+          id: item.id,
+          src: item.url,
+          name: item.name
+        })
+        if (!commodityPhotoUpdate.success) {
+          return commodityPhotoUpdate
         }
-
       }else{
-          //  添加图片
-          const commodityPhotoCreate = await this.commodityAttributePhoto.create({
-            src: item.url,
-            name: item.name
-          })
-          if (!commodityPhotoCreate.success) {
-            return commodityPhotoCreate
-          }
-          // 商品 关联 商品图片
-          await this.commodityCommodityService.relation({
-            name: 'photos',
-            of: { commodityId: payload.commodityId },
-            add: commodityPhotoCreate.data.identifiers[0].id
-          })
-
+        //  添加图片
+        const commodityPhotoCreate = await this.commodityAttributePhoto.create({
+          src: item.url,
+          name: item.name
+        })
+        if (!commodityPhotoCreate.success) {
+          return commodityPhotoCreate
+        }
+        // 商品 关联 商品图片
+        await this.commodityCommodityService.relation({
+          name: 'photos',
+          of: { commodityId: payload.commodityId },
+          add: commodityPhotoCreate.data.identifiers[0].id
+        })
       }
+    }
 
+    for(let item of payload.removeVideos){
+      if(item.id) {
+        await this.commodityAttributeVideo.delete(item.id)
+      }
+    }
 
-      // 商品 关联 商品图片
-      // await this.relation({
-      //   name: 'photos',
-      //   of: { commodityId: payload.commodityId },
-      //   add: commodityPhoto.data.identifiers[0].id
-      // })
+    for(let item of payload.videos){
+      if(item.id){
+        //  更新
+        const commodityVideoUpdate = await this.commodityAttributeVideo.update({
+          id: item.id,
+          video: item.video,
+          ccId: item.ccId,
+          siteId: item.siteId,
+          videoPhoto: item.videoPhoto
+        })
+        if (!commodityVideoUpdate.success) {
+          return commodityVideoUpdate
+        }
+      }else{
+        //  添加
+        const commodityVideoCreate = await this.commodityAttributeVideo.create({
+          video: item.video,
+          ccId: item.ccId,
+          siteId: item.siteId,
+          videoPhoto: item.videoPhoto
+        })
+        if (!commodityVideoCreate.success) {
+          return commodityVideoCreate
+        }
+        // 商品 关联 商品图片
+        await this.commodityCommodityService.relation({
+          name: 'videos',
+          of: { commodityId: payload.commodityId },
+          add: commodityVideoCreate.data.identifiers[0].id
+        })
+      }
     }
 
     // 更新商品颜色

@@ -1,5 +1,5 @@
 /**
- * 商品图片
+ * 图片
  */
 
 import { EntityModel } from "@midwayjs/orm";
@@ -12,11 +12,11 @@ export class CommodityPhotoEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  // 图片路径
+  // 路径
   @Column()
   src: string;
 
-  // 图片名称
+  // 名称
   @Column()
   name: string;
 
@@ -32,7 +32,7 @@ export class CommodityPhotoEntity {
   })
   updatedDate: Date;
 
-  // 关联商品
+  // 关联
   @ManyToOne(type => CommodityEntity, CommodityEntity => CommodityEntity.photos, {
     onDelete: 'CASCADE'
   })

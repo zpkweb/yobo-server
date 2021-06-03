@@ -1,26 +1,22 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
-import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
+import { CommodityVideoEntity } from 'src/entity/commodity/attribute/video';
 
 @Provide()
-export class BaseCommodityPhotoServer {
+export class BaseCommodityVideoServer {
 
-  @InjectEntityModel(CommodityPhotoEntity)
-  commodityPhotoEntity: Repository<CommodityPhotoEntity>;
+  @InjectEntityModel(CommodityVideoEntity)
+  commodityVideoEntity: Repository<CommodityVideoEntity>;
 
   /**
    * 创建
    */
   async BaseCreate(payload) {
-    return await this.commodityPhotoEntity
+    return await this.commodityVideoEntity
       .createQueryBuilder()
       .insert()
-      .into(CommodityPhotoEntity)
-      // .values({
-      //   'src': payload.src,
-      //   'name': payload.name
-      // })
+      .into(CommodityVideoEntity)
       .values(payload)
       .execute();
   }
@@ -30,7 +26,7 @@ export class BaseCommodityPhotoServer {
    * @param commodityId
    */
   async BaseHas(commodityId) {
-    return await this.commodityPhotoEntity
+    return await this.commodityVideoEntity
     .createQueryBuilder('commodity')
     .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
     .getOne();
@@ -41,9 +37,9 @@ export class BaseCommodityPhotoServer {
    * 查询
    */
   async BaseRetrieveCommodityId(commodityId) {
-    return await this.commodityPhotoEntity
-      .createQueryBuilder('photo')
-      .where('photo.commodityId = :commodityId', { commodityId: commodityId })
+    return await this.commodityVideoEntity
+      .createQueryBuilder('video')
+      .where('video.commodityId = :commodityId', { commodityId: commodityId })
       .getMany();
   }
 
@@ -51,11 +47,11 @@ export class BaseCommodityPhotoServer {
    * 查询
    */
   async BaseRetrieve(payload) {
-    return await this.commodityPhotoEntity
-      .createQueryBuilder('photo')
-      .where('photo.commodityId = :commodityId', { commodityId: payload.commodityId })
-      .orWhere('photo.name = :name', { name: payload.name })
-      .orWhere('photo.src = :src', { src: payload.src })
+    return await this.commodityVideoEntity
+      .createQueryBuilder('video')
+      .where('video.commodityId = :commodityId', { commodityId: payload.commodityId })
+      .orWhere('video.name = :name', { name: payload.name })
+      .orWhere('video.src = :src', { src: payload.src })
       .getMany();
   }
 
@@ -63,7 +59,7 @@ export class BaseCommodityPhotoServer {
    * 查询所有
    */
   async BaseRetrieveAll() {
-    return await this.commodityPhotoEntity
+    return await this.commodityVideoEntity
       .createQueryBuilder()
       .getMany();
   }
@@ -73,9 +69,9 @@ export class BaseCommodityPhotoServer {
    */
   async BaseUpdate(payload) {
     const { id, ...setData } = payload;
-    return await this.commodityPhotoEntity
+    return await this.commodityVideoEntity
       .createQueryBuilder()
-      .update(CommodityPhotoEntity)
+      .update(CommodityVideoEntity)
       .set(setData)
       .where('id = :id', { id: id })
       .execute();
@@ -85,7 +81,7 @@ export class BaseCommodityPhotoServer {
    * 删除
    */
   async BaseDelete(id) {
-    return await this.commodityPhotoEntity
+    return await this.commodityVideoEntity
       .createQueryBuilder()
       .delete()
       .where('id = :id', { id: id })
