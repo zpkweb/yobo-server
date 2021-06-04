@@ -65,7 +65,22 @@ export class UserSellerMetadataEntity {
   @Column({
     type: 'text'
   })
-  profile: string;
+  profileZhcn: string;
+
+  @Column({
+    type: 'text'
+  })
+  profileEnus: string;
+
+  @Column({
+    type: 'text'
+  })
+  profileJajp: string;
+
+  @Column({
+    type: 'text'
+  })
+  profileEses: string;
 
   //  创建日期
   @CreateDateColumn({

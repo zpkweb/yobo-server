@@ -32,8 +32,10 @@ export class BaseSellerMetadataServer {
         recommend: payload.recommend,
         prize: payload.prize,
         website: payload.website,
-        profile: payload.profile,
-
+        profileZhcn: payload.profileZhcn,
+        profileEnus: payload.profileEnus,
+        profileJajp: payload.profileJajp,
+        profileEses: payload.profileEses,
       })
       .execute();
   }

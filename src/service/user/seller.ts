@@ -146,7 +146,10 @@ export class SellerService {
     || payload.metadata.recommend
     || payload.metadata.prize
     || payload.metadata.website
-    || payload.metadata.profile
+    || payload.metadata.profileZhcn
+    || payload.metadata.profileEnus
+    || payload.metadata.profileJajp
+    || payload.metadata.profileEses
     ){
       // 创建艺术家基本信息
       const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
@@ -162,7 +165,10 @@ export class SellerService {
         recommend: payload.metadata.recommend,
         prize: payload.metadata.prize,
         website: payload.metadata.website,
-        profile: payload.metadata.profile,
+        profileZhcn: payload.metadata.profileZhcn,
+        profileEnus: payload.metadata.profileEnus,
+        profileJajp: payload.metadata.profileJajp,
+        profileEses: payload.metadata.profileEses,
       })
       // console.log("艺术家基本信息", sellerMetadata)
 
@@ -509,7 +515,10 @@ export class SellerService {
             recommend: payload.metadata.recommend,
             prize: payload.metadata.prize,
             website: payload.metadata.website,
-            profile: payload.metadata.profile,
+            profileZhcn: payload.metadata.profileZhcn,
+            profileEnus: payload.metadata.profileEnus,
+            profileJajp: payload.metadata.profileJajp,
+            profileEses: payload.metadata.profileEses,
           })
           // console.log("更新艺术家基本信息", sellerMetadata)
           if(!sellerMetadata.affected) {
@@ -533,7 +542,10 @@ export class SellerService {
             || payload.metadata.recommend
             || payload.metadata.prize
             || payload.metadata.website
-            || payload.metadata.profile
+            || payload.metadata.profileZhcn
+            || payload.metadata.profileEnus
+            || payload.metadata.profileJajp
+            || payload.metadata.profileEses
             ){
           // 创建艺术家基本信息
           const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
@@ -549,7 +561,10 @@ export class SellerService {
             recommend: payload.metadata.recommend,
             prize: payload.metadata.prize,
             website: payload.metadata.website,
-            profile: payload.metadata.profile,
+            profileZhcn: payload.metadata.profileZhcn,
+            profileEnus: payload.metadata.profileEnus,
+            profileJajp: payload.metadata.profileJajp,
+            profileEses: payload.metadata.profileEses,
           })
           // console.log("艺术家基本信息", sellerMetadata)
 
@@ -904,7 +919,10 @@ export class SellerService {
       recommend: payload.recommend || '',
       prize: payload.prize || '',
       website: payload.website || '',
-      profile: payload.profile || ''
+      profileZhcn: payload.profileZhcn || '',
+      profileEnus: payload.profileEnus || '',
+      profileJajp: payload.profileJajp || '',
+      profileEses: payload.profileEses || ''
     })
     if(!updateSellerMetadata.affected){
       return {
