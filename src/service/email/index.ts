@@ -33,15 +33,16 @@ export default class EmailService {
     // send mail with defined transport object
     const data =  await transporter.sendMail({
       from: this.email.user,
-      // to: payload.email,
-      to: this.email.user,
+      to: payload.email,
+      // to: this.email.user,
       subject: 'yobo-直接联系',
       // html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
-      html: `
-        <p>邮箱：${payload.email}</p>
-        <p>链接：${payload.href}</p>
-        <p>内容：${payload.msg}</p>
-      `
+      // html: `
+      //   <p>邮箱：${payload.email}</p>
+      //   <p>链接：${payload.href}</p>
+      //   <p>内容：${payload.msg}</p>
+      // `
+      html: payload.msg
     });
 
     if(data.messageId){
