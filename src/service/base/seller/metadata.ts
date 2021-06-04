@@ -71,6 +71,15 @@ export class BaseSellerMetadataServer {
       .execute()
   }
 
+  async baseUpdateMetadata(payload) {
+
+    return await this.userSellerMetadataEntity
+      .createQueryBuilder()
+      .update(UserSellerMetadataEntity)
+      .set({...payload})
+      .execute();
+  }
+
   // 关联
   async relation(payload) {
     return await this.userSellerMetadataEntity

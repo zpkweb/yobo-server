@@ -5,5 +5,6 @@ export declare class BaseSellerMetadataServer {
     baseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     baseRetrieve(sellerId: any): Promise<UserSellerMetadataEntity>;
     baseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
+    baseUpdateMetadata(payload: any): Promise<import("typeorm").UpdateResult>;
     relation(payload: any): Promise<void>;
 }

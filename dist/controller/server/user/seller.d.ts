@@ -50,4 +50,12 @@ export declare class AdminUserSellerController {
         success: boolean;
         code: number;
     }>;
+    updateMetadata(queryAll: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
+    updateResume(queryAll: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
 }

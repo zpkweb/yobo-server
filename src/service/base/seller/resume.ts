@@ -56,6 +56,14 @@ export class BaseSellerResumeServer {
       .execute()
   }
 
+  async baseUpdateResume(payload) {
+    return await this.userSellerResumeEntity
+      .createQueryBuilder()
+      .update(UserSellerResumeEntity)
+      .set({...payload})
+      .execute();
+  }
+
   // 关联
   async relation(payload) {
     return await this.userSellerResumeEntity

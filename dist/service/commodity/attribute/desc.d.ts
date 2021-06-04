@@ -3,12 +3,14 @@ export declare class CommodityAttributeDesc {
     baseCommodityDescServer: BaseCommodityDescServer;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
+        id?: undefined;
     }>;
     hasId(commodityId: any): Promise<{
         data: import("../../../entity/commodity/attribute/desc").CommodityDescEntity;
@@ -48,15 +50,16 @@ export declare class CommodityAttributeDesc {
     }>;
     updateDesc(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
+        success: boolean;
+        code: number;
+    } | {
+        data: import("typeorm").UpdateResult;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
-    } | {
-        data: import("typeorm").UpdateResult;
-        success: boolean;
-        code: number;
     }>;
 }

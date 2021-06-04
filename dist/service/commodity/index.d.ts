@@ -1,8 +1,11 @@
 import { CommodityCommodityService } from "./commodity";
 import { CommodityAttributeName } from "./attribute/name";
 import { CommodityAttributeDesc } from "./attribute/desc";
+import { CommodityAttributeDetails } from "./attribute/details";
+import { CommodityAttributePostage } from "./attribute/postage";
 import { CommodityAttributePrice } from "./attribute/price";
 import { CommodityAttributePhoto } from "./attribute/photo";
+import { CommodityAttributeVideo } from "./attribute/video";
 import { CommodityAttributeColor } from "./attribute/color";
 import { CommentService } from "./comment";
 import { CommodityOptionService } from "./commodityOption";
@@ -10,22 +13,28 @@ export declare class CommodityService {
     commodityCommodityService: CommodityCommodityService;
     commodityAttributeName: CommodityAttributeName;
     commodityAttributeDesc: CommodityAttributeDesc;
+    commodityAttributeDetails: CommodityAttributeDetails;
+    commodityAttributePostage: CommodityAttributePostage;
     commodityAttributePrice: CommodityAttributePrice;
     commodityAttributePhoto: CommodityAttributePhoto;
+    commodityAttributeVideo: CommodityAttributeVideo;
     commodityAttributeColor: CommodityAttributeColor;
     commentService: CommentService;
     commodityOptionService: CommodityOptionService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
         success: boolean;
         code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+        id?: undefined;
     } | {
         data: {
             commodityId: any;
         };
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
     }>;
@@ -100,23 +109,7 @@ export declare class CommodityService {
         success: boolean;
         code: number;
     }>;
-    update(payload: any): Promise<{
-        data: import("typeorm").InsertResult;
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    } | {
-        data: import("../../entity/commodity/commodity").CommodityEntity;
-        success: boolean;
-        code: number;
-    } | {
-        data: import("typeorm").UpdateResult;
-        success: boolean;
-        code: number;
-    }>;
+    update(payload: any): Promise<any>;
     createOptions(payload: any): Promise<{
         success: boolean;
         code: number;

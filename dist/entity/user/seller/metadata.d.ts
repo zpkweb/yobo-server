@@ -13,7 +13,10 @@ export declare class UserSellerMetadataEntity {
     recommend: string;
     prize: string;
     website: string;
-    profile: string;
+    profileZhcn: string;
+    profileEnus: string;
+    profileJajp: string;
+    profileEses: string;
     createdDate: Date;
     updatedDate: Date;
     seller: UserSellerEntity;

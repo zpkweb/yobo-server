@@ -90,7 +90,14 @@ export class AdminUserSellerController {
     return await this.sellerService.deleteSeller(sellerId);
   }
 
+  @Post('/update/metadata',{summary:'更新艺术家个人信息'})
+  async updateMetadata(@Query(ALL) queryAll) {
+    return await this.sellerService.updateMetadata(queryAll);
+  }
 
-
+  @Post('/update/resume',{summary:'更新艺术家个人信息'})
+  async updateResume(@Query(ALL) queryAll) {
+    return await this.sellerService.updateResume(queryAll);
+  }
 
 }

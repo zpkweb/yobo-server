@@ -3,12 +3,14 @@ export declare class CommodityAttributePrice {
     baseCommodityPriceServer: BaseCommodityPriceServer;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
+        id?: undefined;
     }>;
     hasId(commodityId: any): Promise<{
         data: import("../../../entity/commodity/attribute/price").CommodityPriceEntity;
@@ -39,16 +41,17 @@ export declare class CommodityAttributePrice {
     }>;
     updatePrice(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
+        success: boolean;
+        code: number;
+    } | {
+        data: import("typeorm").UpdateResult;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
-    } | {
-        data: import("typeorm").UpdateResult;
-        success: boolean;
-        code: number;
     }>;
     search(payload: any): Promise<{
         data: import("../../../entity/commodity/attribute/price").CommodityPriceEntity[];

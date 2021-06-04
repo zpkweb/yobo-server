@@ -5,5 +5,6 @@ export declare class BaseSellerResumeServer {
     baseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     baseRetrieve(sellerId: any): Promise<UserSellerResumeEntity>;
     baseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
+    baseUpdateResume(payload: any): Promise<import("typeorm").UpdateResult>;
     relation(payload: any): Promise<void>;
 }

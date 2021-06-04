@@ -3,12 +3,14 @@ export declare class CommodityAttributePhoto {
     baseCommodityPhotoServer: BaseCommodityPhotoServer;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
+        id?: undefined;
     }>;
     hasId(commodityId: any): Promise<{
         data: import("../../../entity/commodity/attribute/photo").CommodityPhotoEntity;

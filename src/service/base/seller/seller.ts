@@ -300,6 +300,7 @@ export class BaseSellerServer {
       .where("sellerId = :sellerId", { sellerId: sellerId })
       .execute();
   }
+
   /**
    * 删除所有
    * @param payload

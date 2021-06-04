@@ -1,6 +1,9 @@
 import { CommodityNameEntity } from "./attribute/name";
 import { CommodityDescEntity } from "./attribute/desc";
+import { CommodityDetailsEntity } from "./attribute/details";
+import { CommodityPostageEntity } from "./attribute/postage";
 import { CommodityPhotoEntity } from "./attribute/photo";
+import { CommodityVideoEntity } from "./attribute/video";
 import { CommodityPriceEntity } from "./attribute/price";
 import { CommodityColorEntity } from "./attribute/color";
 import { CommodityBrowsingCountEntity } from "./commodityBrowsingCount";
@@ -32,9 +35,12 @@ export declare class CommodityEntity {
     height: number;
     name: CommodityNameEntity;
     desc: CommodityDescEntity;
+    details: CommodityDetailsEntity;
+    postage: CommodityPostageEntity;
     price: CommodityPriceEntity;
     colors: CommodityColorEntity[];
     photos: CommodityPhotoEntity[];
+    videos: CommodityVideoEntity[];
     categorys: CommodityCategoryEntity[];
     classifications: CommodityClassificationEntity[];
     materials: CommodityMaterialEntity[];

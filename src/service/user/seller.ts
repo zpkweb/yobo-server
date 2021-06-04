@@ -724,11 +724,11 @@ export class SellerService {
   }
 
 
-  // 通过艺术家申请 ，发送邮件：账号密码
+  // 通过艺术家申请 ，发送邮件
   /**
    * 修改艺术家状态
    * @param payload
-   * 通过申请：发送通过申请邮件 -> 账号密码
+   * 通过申请：发送通过申请邮件
    * 拒绝申请：发送拒绝申请邮件
    */
   async updateSellerState(payload) {
@@ -750,28 +750,29 @@ export class SellerService {
         }
       }
       // 设置密码
-      const passwordCrypto = crypto.createHash('md5').update('123456').digest('hex');
-      const password = await this.baseUserServer.baseUpdateUser({
-        userId: seller.user.userId,
-        avatar: seller.user.avatar,
-        name: seller.user.name,
-        email: seller.user.email,
-        phone: seller.user.phone,
-        password: passwordCrypto
-      })
-      if(!password.affected){
-        return {
-          success: false,
-          code : 10008
-        }
-      }
+      // const passwordCrypto = crypto.createHash('md5').update('123456').digest('hex');
+      // const password = await this.baseUserServer.baseUpdateUser({
+      //   userId: seller.user.userId,
+      //   avatar: seller.user.avatar,
+      //   name: seller.user.name,
+      //   email: seller.user.email,
+      //   phone: seller.user.phone,
+      //   password: passwordCrypto
+      // })
+      // if(!password.affected){
+      //   return {
+      //     success: false,
+      //     code : 10008
+      //   }
+      // }
 
       // 发送邮件
       const sendmail =  await this.sendMailSellerApply({
         ...payload,
         email: seller.user.email,
         subject: 'yobo-审核通过',
-        html: `<p><img src="http://www.yoboart.com/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://www.yoboart.com">http://www.yoboart.com</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
+        // html: `<p><img src="http://www.yoboart.com/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！您的初始密码为 <span style="font-size: 20px; color: red">123456</span></p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://www.yoboart.com">http://www.yoboart.com</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
+        html: `<p><img src="http://www.yoboart.com/images/artists-success.jpg" /></p><p style="font-size:16px;">尊贵的阁下， 您已通过注册审核，欢迎加入永宝YOROART！</p><p style="font-size:16px;">您可以点击此链接进行登录<a href="http://www.yoboart.com">http://www.yoboart.com</a></p><p style="font-size:16px;">我们始终致力于为用户带来灵活便利的服务体验，通过YOBOART连接彼此、获取灵感以及拓展业务。我们希望您能够充分享受您的会籍权益，再次感谢您成为我们的会员。在我们的心目中，您也是永宝大家庭中的一员。</p>`
       });
       if(sendmail.messageId){
         return {
@@ -1174,6 +1175,38 @@ export class SellerService {
       return {
         success: false,
         code : 10006
+      }
+    }
+  }
+
+  async updateMetadata(payload) {
+    const seller = await this.baseSellerMetadataServer.baseUpdateMetadata(payload);
+    if(seller.affected){
+
+      return {
+        success: true,
+        code : 10007
+      }
+    }else{
+      return {
+        success: false,
+        code : 10008
+      }
+    }
+  }
+
+  async updateResume(payload) {
+    const seller = await this.baseSellerResumeServer.baseUpdateResume(payload);
+    if(seller.affected){
+
+      return {
+        success: true,
+        code : 10007
+      }
+    }else{
+      return {
+        success: false,
+        code : 10008
       }
     }
   }

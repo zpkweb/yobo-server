@@ -6,15 +6,18 @@ export declare class AdminCommodityController {
     pagination: any;
     createCommodity(createBody: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
         success: boolean;
         code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+        id?: undefined;
     } | {
         data: {
             commodityId: any;
         };
-        success: boolean;
-        code: number;
-    } | {
         success: boolean;
         code: number;
     }>;
@@ -27,23 +30,7 @@ export declare class AdminCommodityController {
         success: boolean;
         code: number;
     }>;
-    updateCommodity(updateBody: any): Promise<{
-        data: import("typeorm").InsertResult;
-        success: boolean;
-        code: number;
-    } | {
-        success: boolean;
-        code: number;
-        data?: undefined;
-    } | {
-        data: import("../../../entity/commodity/commodity").CommodityEntity;
-        success: boolean;
-        code: number;
-    } | {
-        data: import("typeorm").UpdateResult;
-        success: boolean;
-        code: number;
-    }>;
+    updateCommodity(updateBody: any): Promise<any>;
     createOptions(type: any, optionsBody: any): Promise<{
         success: boolean;
         code: number;

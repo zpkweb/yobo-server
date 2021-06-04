@@ -1,8 +1,11 @@
 import { BaseCommodityServer } from "../base/commodity/commodity";
 import { CommodityAttributeName } from "./attribute/name";
 import { CommodityAttributeDesc } from "./attribute/desc";
+import { CommodityAttributeDetails } from "./attribute/details";
+import { CommodityAttributePostage } from "./attribute/postage";
 import { CommodityAttributePrice } from "./attribute/price";
 import { CommodityAttributePhoto } from "./attribute/photo";
+import { CommodityAttributeVideo } from "./attribute/video";
 import { CommodityAttributeColor } from "./attribute/color";
 import { CommodityCategoryService } from "./commodity-options/category";
 import { CommodityClassificationService } from "./commodity-options/classification";
@@ -27,8 +30,11 @@ export declare class CommodityCommodityService {
     baseSellerMetadataServer: BaseSellerMetadataServer;
     commodityAttributeName: CommodityAttributeName;
     commodityAttributeDesc: CommodityAttributeDesc;
+    commodityAttributeDetails: CommodityAttributeDetails;
+    commodityAttributePostage: CommodityAttributePostage;
     commodityAttributePrice: CommodityAttributePrice;
     commodityAttributePhoto: CommodityAttributePhoto;
+    commodityAttributeVideo: CommodityAttributeVideo;
     commodityAttributeColor: CommodityAttributeColor;
     commodityCategoryService: CommodityCategoryService;
     commodityClassificationService: CommodityClassificationService;
@@ -70,12 +76,14 @@ export declare class CommodityCommodityService {
     serverSearch(payload: any): Promise<any>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
+        id?: undefined;
     } | {
         data: {
             commodityId: any;
@@ -85,12 +93,16 @@ export declare class CommodityCommodityService {
     }>;
     createMetadata(payload: any): Promise<{
         data: import("typeorm").InsertResult;
+        id: any;
+        commodityId: any;
         success: boolean;
         code: number;
     } | {
         success: boolean;
         code: number;
         data?: undefined;
+        id?: undefined;
+        commodityId?: undefined;
     }>;
     relation(payload: any): Promise<void>;
     relationCreate(payload: any): Promise<void>;

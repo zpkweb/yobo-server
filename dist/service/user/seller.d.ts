@@ -184,6 +184,14 @@ export declare class SellerService {
         success: boolean;
         code: number;
     }>;
+    updateMetadata(payload: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
+    updateResume(payload: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
     retrieveSeller(sellerId: any): Promise<{
         data: any;
         success: boolean;
