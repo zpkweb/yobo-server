@@ -14,6 +14,7 @@ export declare class UserSellerEntity {
     type: number;
     firstname: string;
     lastname: string;
+    searchName: string;
     tags: string[];
     gender: string;
     country: string;

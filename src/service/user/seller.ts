@@ -98,6 +98,7 @@ export class SellerService {
       || payload.seller.type
       || payload.seller.firstname
       || payload.seller.lastname
+      || payload.seller.searchName
       || payload.seller.tags
       || payload.seller.gender
       || payload.seller.country
@@ -110,6 +111,7 @@ export class SellerService {
           type: payload.seller.type,
           firstname: payload.seller.firstname,
           lastname: payload.seller.lastname,
+          searchName: payload.seller.searchName,
           tags: payload.seller.tags,
           gender: payload.seller.gender,
           country: payload.seller.country,
@@ -471,6 +473,7 @@ export class SellerService {
           type: payload.seller.type,
           firstname: payload.seller.firstname,
           lastname: payload.seller.lastname,
+          searchName: payload.seller.searchName,
           tags: payload.seller.tags,
           gender: payload.seller.gender,
           country: payload.seller.country,
@@ -895,6 +898,7 @@ export class SellerService {
       choice: payload.choice || false,
       firstname: payload.firstname || '',
       lastname: payload.lastname || '',
+      searchName: payload.searchName || '',
       tags: payload.tags || '',
       gender: payload.gender || '',
       country: payload.country || ''

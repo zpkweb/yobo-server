@@ -42,6 +42,7 @@ export class BaseSellerServer {
         type: payload.type,
         firstname: payload.firstname,
         lastname: payload.lastname,
+        searchName: payload.searchName,
         tags: payload.tags,
         gender: payload.gender,
         country: payload.country,
@@ -217,6 +218,10 @@ export class BaseSellerServer {
     }
     if (payload.country) {
       where.country = payload.country;
+    }
+
+    if(payload.searchName) {
+      where.searchName = Like(`%${payload.searchName}%`);
     }
 
     if (payload.firstname) {

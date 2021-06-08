@@ -56,6 +56,10 @@ export class UserSellerEntity {
   @Column()
   lastname: string;
 
+  // 搜索名
+  @Column()
+  searchName: string;
+
   // 标签
   @Column('simple-array')
   tags: string[];

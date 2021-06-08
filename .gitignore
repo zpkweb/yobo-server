@@ -14,3 +14,4 @@ run/
 .tsbuildinfo.*
 *.zip
 public/
+src/config/config.prod.ts
