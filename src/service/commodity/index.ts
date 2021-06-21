@@ -278,7 +278,8 @@ export class CommodityService {
       choice: payload.choice,
       state: payload.state,
       width: payload.width,
-      height: payload.height
+      height: payload.height,
+      images: payload.images
     })
 
 

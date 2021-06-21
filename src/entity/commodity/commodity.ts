@@ -105,6 +105,10 @@ export class CommodityEntity {
   @Column()
   height: number;
 
+  // 封面图
+  @Column()
+  images: string;
+
   // 关联 商品名称
   @OneToOne(type => CommodityNameEntity, CommodityNameEntity => CommodityNameEntity.commodity, {
     cascade: true,

@@ -82,7 +82,7 @@ export class UserService{
       const userId = user.generatedMaps[0].userId;
       if(userId && payload.identityList && payload.identityList.length) {
         for(let item of payload.identityList) {
-            console.log(item);
+            // console.log(item);
             const userIdentity = await this.identityService.retrieveUserIdentityList({
               userId: userId,
               identityIndex: item.value
@@ -505,7 +505,7 @@ export class UserService{
     // 身份
     if(payload.identityList && payload.identityList.length) {
       for(let item of payload.identityList) {
-          console.log(item);
+          // console.log(item);
           // 查找
           const userIdentity = await this.identityService.retrieveUserIdentityList({
             userId: payload.userId,

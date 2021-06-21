@@ -1,6 +1,7 @@
 import { Inject, Provide } from "@midwayjs/decorator";
 import { BaseBrowsingHistoryServer } from '../base/my/browsingHistory';
 import { BaseCommodityBrowsingCountServer } from '../base/commodity/commodityBrowsingCount';
+import { BaseCommodityServer } from 'src/service/base/commodity/commodity';
 
 @Provide()
 export class MyBrowsingHistoryService {
@@ -10,6 +11,9 @@ export class MyBrowsingHistoryService {
 
   @Inject()
   baseCommodityBrowsingCountServer: BaseCommodityBrowsingCountServer;
+
+  @Inject()
+  baseCommodityServer: BaseCommodityServer;
 
   // 添加浏览记录
   async addBrowsingHistory(payload) {
@@ -190,13 +194,27 @@ export class MyBrowsingHistoryService {
     if(result){
 
 
-      let data = result[0];
+      let data:any = result[0];
         let total = result[1];
 
-      if(data){
-        if(payload.isLocale) {
-          data = this.filter(payload.locale, data);
+      if(data && data.length){
+        // 查找商品
+        for(let item of data) {
+          // console.log("查找商品", item)
+          let commodity:any = await this.baseCommodityServer.BaseRetrieveCommodityPhoto(item.commodityId);
+          // console.log("commodity", commodity)
+          if(commodity) {
+            if(payload.isLocale) {
+
+              commodity.name = commodity.name[payload.locale || 'zh-cn'];
+              commodity.photos = commodity.photos.map(item => item.src);
+            }
+
+            item.commodity = commodity;
+          }
         }
+        // console.log(payload.isLocale)
+
         return {
           data: {
             list: data,
@@ -223,21 +241,21 @@ export class MyBrowsingHistoryService {
     return payload.map(item => {
       let name = item.name ? item.name[type] : '';
 
-      let desc = item.desc ? item.desc[type] : '';
+      // let desc = item.desc ? item.desc[type] : '';
       // let price = item.price ? item.price[type] : '';
-      let price = item.price;
-      let shapes = item.shapes ? item.shapes.map(item => {return {id: item.id, name: item[type]}}) : '';
-      let themes = item.themes ? item.themes.map(item => {return {id: item.id, name: item[type]}})  : '';
-      let categorys = item.categorys ? item.categorys.map(item => {return {id: item.id, name: item[type]}})  : '';
-      let techniques = item.techniques ? item.techniques.map(item => {return {id: item.id, name: item[type]}})  : '';
+      // let price = item.price;
+      // let shapes = item.shapes ? item.shapes.map(item => {return {id: item.id, name: item[type]}}) : '';
+      // let themes = item.themes ? item.themes.map(item => {return {id: item.id, name: item[type]}})  : '';
+      // let categorys = item.categorys ? item.categorys.map(item => {return {id: item.id, name: item[type]}})  : '';
+      // let techniques = item.techniques ? item.techniques.map(item => {return {id: item.id, name: item[type]}})  : '';
       return Object.assign(item,{
         name,
-        desc,
-        price,
-        shapes,
-        themes,
-        categorys,
-        techniques,
+        // desc,
+        // price,
+        // shapes,
+        // themes,
+        // categorys,
+        // techniques,
       })
     })
   }

@@ -307,7 +307,7 @@ export class SellerService {
         }
         // 艺术家履历
         const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.sellerId);
-        if(sellerResume) {
+        if(sellerResume && sellerResume.resume) {
           edit.resume = JSON.parse(sellerResume.resume);
         }
 
@@ -365,7 +365,7 @@ export class SellerService {
 
           // resume
           const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.sellerId);
-          if(sellerResume){
+          if(sellerResume && sellerResume.resume){
             find.resume = JSON.parse(sellerResume.resume);
           }
 

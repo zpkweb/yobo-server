@@ -176,6 +176,15 @@ export class BFFService {
     // if(!commoditySimilar.success) {
     //   return commoditySimilar;
     // }
+
+    const commoditySimilar = await this.commodityService.findAll({
+      pageSize: payload.pageSize || 4,
+      currentPage: payload.currentPage || 1,
+      isLocale: true,
+      locale: payload.locale || 'zh-cn',
+      news: 'true'
+    });
+
     // 最近浏览的作品
     let browsingHistory:any = {
       data: []
@@ -184,14 +193,17 @@ export class BFFService {
     if(payload.userId) {
 
       const findBrowsingHistory = await this.myService.findBrowsingHistory({
+        locale: payload.locale,
+        isLocale: true,
         userId: payload.userId,
         pageSize: payload.pageSize || 4,
         currentPage: payload.currentPage || 1,
       });
+      // console.log("findBrowsingHistory", findBrowsingHistory)
       if(!findBrowsingHistory.success) {
         return findBrowsingHistory;
       }
-      browsingHistory = findBrowsingHistory;
+      browsingHistory = findBrowsingHistory.data.list;
 
       // 添加浏览记录
       await this.myService.addBrowsingHistory(payload);
@@ -205,7 +217,8 @@ export class BFFService {
         commodity: commodityData,
         // commoditySimilar: commoditySimilar.data.list,
         seller: seller,
-        browsingHistory: browsingHistory.data
+        browsingHistory: browsingHistory,
+        commoditySimilar: commoditySimilar.data.list,
       }
     }
   }

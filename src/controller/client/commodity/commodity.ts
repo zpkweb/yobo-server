@@ -70,7 +70,7 @@ export class CommodityController {
       currentPage: currentPage,
       isLocale: true
     });
-    console.log("searchTest data", data)
+    // console.log("searchTest data", data)
     if(data.success){
       data.data.pageSize = pageSize;
       data.data.currentPage = currentPage;

@@ -103,7 +103,8 @@ export class BaseCommodityServer {
         choice: payload.choice,
         state: payload.state,
         width: payload.width,
-        height: payload.height
+        height: payload.height,
+        images: payload.images
       })
       .execute();
   }
@@ -319,6 +320,18 @@ export class BaseCommodityServer {
       .getManyAndCount();
       // .getSql();
       // console.log(data)
+    return data;
+  }
+
+  async BaseRetrieveCommodityPhoto(commodityId) {
+    const data = await this.commodityEntity
+      .createQueryBuilder('commodity')
+      .leftJoinAndSelect('commodity.name', 'name')
+      .innerJoinAndSelect('commodity.photos', 'photos')
+      .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
+      .addSelect('commodity.createdDate')
+      .getOne();
+
     return data;
   }
 
@@ -1282,7 +1295,7 @@ export class BaseCommodityServer {
   }
 
   async BaseSearchCommodity(payload) {
-    console.log("BaseSearchCommodity", payload)
+    // console.log("BaseSearchCommodity", payload)
     const where: any = {};
 
     if (payload.id) {
@@ -1332,7 +1345,7 @@ export class BaseCommodityServer {
 
 
 
-    console.log("where", where)
+    // console.log("where", where)
 
     return await this.commodityEntity
       .createQueryBuilder('commodity')

@@ -75,7 +75,7 @@ export class CommoditySearchService {
 
 
   async search(payload) {
-    console.log("search", payload)
+    // console.log("search", payload)
     var commodityIds = [];
     let isSearchCommodityIds = false;
     let searchResule = true;
@@ -376,7 +376,7 @@ export class CommoditySearchService {
     // console.log("data", data.data)
     dataIds = data.success ? data.data.map(item => item.commodityId) : [];
 
-    console.log("dataIds", type, dataIds);
+    // console.log("dataIds", type, dataIds);
 
     if(dataIds.length) {
       if(commodityIds && commodityIds.length) {
@@ -404,7 +404,7 @@ export class CommoditySearchService {
 
 
   async searchCommodity(payload) {
-    console.log("searchCommodity", payload)
+    // console.log("searchCommodity", payload)
     const result = await this.baseCommodityServer.BaseSearchCommodity(payload);
     let data = result[0];
     let total = result[1];

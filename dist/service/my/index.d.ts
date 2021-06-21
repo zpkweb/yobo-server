@@ -86,7 +86,7 @@ export declare class MyService {
     addBrowsingHistory(payload: any): Promise<any>;
     findBrowsingHistory(payload: any): Promise<{
         data: {
-            list: import("../../entity/my/browsingHistory").MyBrowsingHistoryEntity[];
+            list: any;
             total: number;
         };
         success: boolean;

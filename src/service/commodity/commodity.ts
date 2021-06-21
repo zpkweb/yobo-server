@@ -672,7 +672,8 @@ export class CommodityCommodityService {
       choice: payload.choice || 0,
       state: payload.state || '0',
       width: payload.width || 0,
-      height: payload.height || 0
+      height: payload.height || 0,
+      images: payload.images || ''
     })
 
     if (!commodity.success) {
@@ -754,9 +755,9 @@ export class CommodityCommodityService {
       return commodityPostage
     }
 
-    // console.log('commodityDetails', commodityDetails)
+    // console.log('commodityPostage', commodityPostage)
     await this.relation({
-      name: 'details',
+      name: 'postage',
       of: { commodityId: payload.commodityId },
       set: commodityPostage.id
     })
@@ -773,7 +774,7 @@ export class CommodityCommodityService {
     if (!commodityPrice.success) {
       return commodityPrice
     }
-
+    // console.log('commodityPrice', commodityPrice)
     // 商品 关联 商品价格
     await this.relation({
       name: 'price',
@@ -801,7 +802,7 @@ export class CommodityCommodityService {
     }
 
     for(let item of payload.videos){
-      console.log("video item", item)
+      // console.log("video item", item)
       const commodityVideo = await this.commodityAttributeVideo.create({
         commodityId: payload.commodityId,
         video: item.video,

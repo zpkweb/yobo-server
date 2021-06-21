@@ -1,8 +1,10 @@
 import { BaseBrowsingHistoryServer } from "../base/my/browsingHistory";
 import { BaseCommodityBrowsingCountServer } from "../base/commodity/commodityBrowsingCount";
+import { BaseCommodityServer } from "../base/commodity/commodity";
 export declare class MyBrowsingHistoryService {
     baseBrowsingHistoryServer: BaseBrowsingHistoryServer;
     baseCommodityBrowsingCountServer: BaseCommodityBrowsingCountServer;
+    baseCommodityServer: BaseCommodityServer;
     addBrowsingHistory(payload: any): Promise<any>;
     addMyBrowsingHistory(payload: any): Promise<any>;
     addCommodityBrowsingHistory(payload: any): Promise<{
@@ -47,7 +49,7 @@ export declare class MyBrowsingHistoryService {
     }>;
     retrieveBrowsingHistory(payload: any): Promise<{
         data: {
-            list: import("../../entity/my/browsingHistory").MyBrowsingHistoryEntity[];
+            list: any;
             total: number;
         };
         success: boolean;
