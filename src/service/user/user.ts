@@ -4,9 +4,9 @@ import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user/user';
 import * as crypto from 'crypto';
 import * as nodemailer from 'nodemailer';
-import { BaseUserServer } from '../base/user/user';
+import { BaseUserService } from '../base/user/user';
 
-import { BaseIdentityServer } from 'src/service/base/user/identity'
+import { BaseIdentityService } from 'src/service/base/user/identity'
 import { IdentityService } from 'src/service/user/identity';
 @Provide()
 export class UserService{
@@ -18,10 +18,10 @@ export class UserService{
   userEntity: Repository<UserEntity>;
 
   @Inject()
-  baseUserServer: BaseUserServer;
+  baseUserService: BaseUserService;
 
   @Inject()
-  baseIdentityServer: BaseIdentityServer;
+  baseIdentityService: BaseIdentityService;
 
   @Inject()
   identityService: IdentityService;
@@ -29,7 +29,7 @@ export class UserService{
   async create(payload) {
     // 查询姓名是否存在
     if(payload.name){
-      const hasUserName = await this.baseUserServer.baseRetrieveUserName(payload.name);
+      const hasUserName = await this.baseUserService.baseRetrieveUserName(payload.name);
       if(hasUserName) {
         return {
           success: false,
@@ -45,7 +45,7 @@ export class UserService{
 
     // 查询邮箱是否已已存在
     if(payload.email){
-      const hasUserEmail = await this.baseUserServer.baseRetrieveUserEmail(payload.email);
+      const hasUserEmail = await this.baseUserService.baseRetrieveUserEmail(payload.email);
       if(hasUserEmail) {
         return {
           success: false,
@@ -61,7 +61,7 @@ export class UserService{
 
     // 查询手机号是否已存在
     if(payload.Phone){
-      const hasUserPhone = await this.baseUserServer.baseRetrieveUserPhone(payload.Phone);
+      const hasUserPhone = await this.baseUserService.baseRetrieveUserPhone(payload.Phone);
       if(hasUserPhone) {
         return {
           success: false,
@@ -71,7 +71,7 @@ export class UserService{
     }
 
     // 创建用户
-    const user = await this.baseUserServer.baseCreateUser({
+    const user = await this.baseUserService.baseCreateUser({
       avatar: payload.avatar || '',
       name: payload.name || '',
       phone: payload.phone || '',
@@ -144,7 +144,7 @@ export class UserService{
 
       })
       if(isParams){
-        let result = await this.baseUserServer.baseSearchUser(payload);
+        let result = await this.baseUserService.baseSearchUser(payload);
           let data = result[0];
           let total = result[1];
           if (data) {
@@ -164,11 +164,11 @@ export class UserService{
           }
 
       }else{
-        user = await this.baseUserServer.baseRetrieveUserAll()
+        user = await this.baseUserService.baseRetrieveUserAll()
       }
 
     }else{
-      user = await this.baseUserServer.baseRetrieveUserAll()
+      user = await this.baseUserService.baseRetrieveUserAll()
     }
     if(user){
       return {
@@ -192,13 +192,13 @@ export class UserService{
   async find(payload) {
     let user:any;
     if(payload && Object.keys(payload).length){
-      user = await this.baseUserServer.baseRetrieveUserId(payload.userId)
+      user = await this.baseUserService.baseRetrieveUserId(payload.userId)
     }else{
-      user = await this.baseUserServer.baseRetrieveUserAll()
+      user = await this.baseUserService.baseRetrieveUserAll()
     }
     if(user){
           // 通过用户 userId 获取身份信息
-          const identityList:any = await this.baseIdentityServer.baseRetrieveUserIdentity(payload.userId)
+          const identityList:any = await this.baseIdentityService.baseRetrieveUserIdentity(payload.userId)
           if(identityList) {
             let identityLists = new Set();
             for(let item of identityList){
@@ -221,7 +221,7 @@ export class UserService{
     }
   }
   async retrieveUserId(userId) {
-    const user = await this.baseUserServer.baseRetrieveUserId(userId);
+    const user = await this.baseUserService.baseRetrieveUserId(userId);
     if(user){
       return {
         data: user,
@@ -237,7 +237,7 @@ export class UserService{
   }
 
   async edit(userId) {
-    const user = await this.baseUserServer.baseRetrieveUserId(userId)
+    const user = await this.baseUserService.baseRetrieveUserId(userId)
     if(user){
       return {
         data: user,
@@ -254,12 +254,12 @@ export class UserService{
 
   // 删除用户
   async remove(userId) {
-    const user = await this.baseUserServer.baseDeleteUser(userId)
+    const user = await this.baseUserService.baseDeleteUser(userId)
     // let user;
     // if(payload && Object.keys(payload).length){
-    //   user = await this.baseUserServer.baseDeleteUser(payload)
+    //   user = await this.baseUserService.baseDeleteUser(payload)
     // }else{
-    //   user = await this.baseUserServer.baseDeleteUserAll()
+    //   user = await this.baseUserService.baseDeleteUserAll()
     // }
 
     if(user.affected){
@@ -283,7 +283,7 @@ export class UserService{
   async findInfo(userId) {
     let user:any;
     // base
-    const base =  await this.baseUserServer.baseRetrieveUserId(userId)
+    const base =  await this.baseUserService.baseRetrieveUserId(userId)
     if(base){
       user = base;
     }else{
@@ -293,7 +293,7 @@ export class UserService{
       }
     }
     // identitys
-    const identitys =  await this.baseUserServer.baseRetrieveUserId(userId)
+    const identitys =  await this.baseUserService.baseRetrieveUserId(userId)
     if(identitys){
       user = identitys;
     }else{
@@ -320,7 +320,7 @@ export class UserService{
     }
   }
   // async findSelf(userId) {
-  //   const user =  await this.baseUserServer.baseRetrieveSelf(userId)
+  //   const user =  await this.baseUserService.baseRetrieveSelf(userId)
 
   //     if(user){
   //       return {
@@ -341,7 +341,7 @@ export class UserService{
    * @param userId
    */
   async hasUser(userId) {
-    const user =  await this.baseUserServer.BaseHas(userId)
+    const user =  await this.baseUserService.BaseHas(userId)
       if(user){
         return {
           data: user,
@@ -362,7 +362,7 @@ export class UserService{
 
   async changePassword(payload) {
     // 查找用户
-    const user = await this.baseUserServer.baseRetrieveUser(payload)
+    const user = await this.baseUserService.baseRetrieveUser(payload)
     if(!user){
       // 找不到用户
       return{
@@ -378,7 +378,7 @@ export class UserService{
         code : 10204
       }
     }
-    const changeUser = await this.baseUserServer.baseUpdateUser({
+    const changeUser = await this.baseUserService.baseUpdateUser({
       userId: user.userId,
       avatar: user.avatar,
       name: user.name,
@@ -408,7 +408,7 @@ export class UserService{
    */
   async passwordRetrieveCodeSend(payload) {
     // 通过邮箱查找用户
-    const user = await this.baseUserServer.baseRetrieveUser(payload);
+    const user = await this.baseUserService.baseRetrieveUser(payload);
     if(!user) {
       return {
         success: false,
@@ -486,7 +486,7 @@ export class UserService{
    */
   async update(payload) {
     // 查找用户
-    const user:any = await this.baseUserServer.baseRetrieveUserPass(payload.userId);
+    const user:any = await this.baseUserService.baseRetrieveUserPass(payload.userId);
     if(!user){
       return {
         success: false,
@@ -539,7 +539,7 @@ export class UserService{
     }
 
 
-    const userUpdate = await this.baseUserServer.baseUpdateUser({
+    const userUpdate = await this.baseUserService.baseUpdateUser({
       userId: user.userId,
       avatar: payload.avatar || user.avatar,
       name: payload.name || user.name,
@@ -550,7 +550,7 @@ export class UserService{
 
     if(userUpdate.affected){
       // 获取用户
-      // const user = await this.baseUserServer.baseRetrieveUser(payload);
+      // const user = await this.baseUserService.baseRetrieveUser(payload);
         // 修改成功
         return {
           // data: user,
@@ -576,7 +576,7 @@ export class UserService{
    * userId
    */
   async deleteUserIdentity(payload) {
-    const userIdentity = await this.baseUserServer.baseDeleteUserIdentity(payload);
+    const userIdentity = await this.baseUserService.baseDeleteUserIdentity(payload);
     if(userIdentity.affected){
       return {
         success: true,

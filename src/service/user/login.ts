@@ -2,7 +2,7 @@ import { Config, Inject, Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { UserEntity } from 'src/entity/user/user';
-import { BaseUserServer } from "../base/user/user";
+import { BaseUserService } from "../base/user/user";
 import { IdentityListService } from './identityList';
 
 @Provide()
@@ -12,7 +12,7 @@ export class LoginService {
   userEntity: Repository<UserEntity>;
 
   @Inject()
-  baseUserServer: BaseUserServer;
+  baseUserService: BaseUserService;
 
   @Inject()
   identityListService: IdentityListService;
@@ -27,7 +27,7 @@ export class LoginService {
    * password
    */
   async validatePassword(payload) {
-    const validataPassword = await this.baseUserServer.baseValidatePassword(payload);
+    const validataPassword = await this.baseUserService.baseValidatePassword(payload);
 
     if(validataPassword){
       return {
@@ -49,7 +49,7 @@ export class LoginService {
    */
   async login(payload) {
     // 查找用户
-    const user:any = await this.baseUserServer.baseLoginUser(payload)
+    const user:any = await this.baseUserService.baseLoginUser(payload)
 
     if(!user){
       // 用户不存在
@@ -92,7 +92,7 @@ export class LoginService {
     }
     // 后台管理登录
 
-    const user:any = await this.baseUserServer.baseLoginAdmin(payload)
+    const user:any = await this.baseUserService.baseLoginAdmin(payload)
 
     if(!user){
       // 用户不存在

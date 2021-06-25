@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPostageServer } from 'src/service/base/commodity/attribute/postage';
+import { BaseCommodityPostageService } from 'src/service/base/commodity/attribute/postage';
 
 @Provide()
 export class CommodityAttributePostage {
 
   @Inject()
-  baseCommodityPostageServer: BaseCommodityPostageServer;
+  baseCommodityPostageService: BaseCommodityPostageService;
 
   // 创建
   async create(payload) {
-    const data = await this.baseCommodityPostageServer.BaseCreate(payload);
+    const data = await this.baseCommodityPostageService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -31,7 +31,7 @@ export class CommodityAttributePostage {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityPostageServer.BaseHas(commodityId);
+    const data = await this.baseCommodityPostageService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -47,7 +47,7 @@ export class CommodityAttributePostage {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityPostageServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityPostageService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -63,7 +63,7 @@ export class CommodityAttributePostage {
   }
 
   async search(payload) {
-    const data = await this.baseCommodityPostageServer.BaseSearch(payload);
+    const data = await this.baseCommodityPostageService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -80,7 +80,7 @@ export class CommodityAttributePostage {
 
   // 更新
   async update(payload) {
-    const data = await this.baseCommodityPostageServer.BaseUpdate(payload);
+    const data = await this.baseCommodityPostageService.BaseUpdate(payload);
     if (data.affected) {
       return {
         success: true,

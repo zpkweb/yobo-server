@@ -87,7 +87,7 @@ export class AdminCommodityController {
   async searchs(@Query(ALL) searchParams) {
     const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
-    const data:any = await this.commodityService.serverSearch({
+    const data:any = await this.commodityService.ServiceSearch({
       ...searchParams,
       isLocale: true,
       locale: searchParams.locale || 'zh-cn',

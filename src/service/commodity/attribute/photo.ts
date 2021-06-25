@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPhotoServer } from '../../base/commodity/attribute/photo';
+import { BaseCommodityPhotoService } from '../../base/commodity/attribute/photo';
 
 @Provide()
 export class CommodityAttributePhoto {
 
   @Inject()
-  baseCommodityPhotoServer: BaseCommodityPhotoServer;
+  baseCommodityPhotoService: BaseCommodityPhotoService;
 
   // 创建
   async create(payload) {
-    const data = await this.baseCommodityPhotoServer.BaseCreate(payload);
+    const data = await this.baseCommodityPhotoService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -31,7 +31,7 @@ export class CommodityAttributePhoto {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityPhotoServer.BaseHas(commodityId);
+    const data = await this.baseCommodityPhotoService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -50,7 +50,7 @@ export class CommodityAttributePhoto {
    * @param payload
    */
     async getCommodity(commodityId) {
-      const data = await this.baseCommodityPhotoServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityPhotoService.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -66,7 +66,7 @@ export class CommodityAttributePhoto {
     }
 
     async retrieveCommodityId(commodityId) {
-      const data = await this.baseCommodityPhotoServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityPhotoService.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -84,7 +84,7 @@ export class CommodityAttributePhoto {
 
   // 更新商品
   async update(payload) {
-    const data = await this.baseCommodityPhotoServer.BaseUpdate(payload);
+    const data = await this.baseCommodityPhotoService.BaseUpdate(payload);
     if (data.affected) {
       return {
         data: data,
@@ -100,7 +100,7 @@ export class CommodityAttributePhoto {
   }
 
   async delete(id) {
-    const data = await this.baseCommodityPhotoServer.BaseDelete(id);
+    const data = await this.baseCommodityPhotoService.BaseDelete(id);
     if (data.affected) {
       return {
         success: true,

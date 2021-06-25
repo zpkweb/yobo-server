@@ -5,7 +5,7 @@ import { CommodityMaterialEntity } from 'src/entity/commodity/commodity-options/
 
 
 @Provide()
-export class BaseCommodityMaterialServer {
+export class BaseCommodityMaterialService {
 
   @InjectEntityModel(CommodityMaterialEntity)
   CommodityMaterialEntity: Repository<CommodityMaterialEntity>;

@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommodityVideoEntity } from 'src/entity/commodity/attribute/video';
 
 @Provide()
-export class BaseCommodityVideoServer {
+export class BaseCommodityVideoService {
 
   @InjectEntityModel(CommodityVideoEntity)
   commodityVideoEntity: Repository<CommodityVideoEntity>;

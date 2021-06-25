@@ -5,7 +5,7 @@ import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 
 
 @Provide()
-export class BaseSellerResumeServer {
+export class BaseSellerResumeService {
 
   @InjectEntityModel(UserSellerResumeEntity)
   userSellerResumeEntity: Repository<UserSellerResumeEntity>

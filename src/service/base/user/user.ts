@@ -8,7 +8,7 @@ import { UserAddressEntity } from 'src/entity/user/address';
 
 
 @Provide()
-export class BaseUserServer {
+export class BaseUserService {
 
   @InjectEntityModel(UserEntity)
   userEntity: Repository<UserEntity>;

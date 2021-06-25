@@ -1,9 +1,9 @@
 // 资讯 视频 评论
 import { EntityModel } from "@midwayjs/orm";
-import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from "typeorm";
 import { InformationVideoEntity } from "./video";
-
-@EntityModel()
+import { InformationReplyEntity } from "./reply";
+@EntityModel('information_comment')
 export class InformationCommentEntity {
 
   @PrimaryGeneratedColumn()
@@ -13,15 +13,15 @@ export class InformationCommentEntity {
     unique: true
   })
   @Generated('uuid')
-  informationCommentId: string;
+  commentId: string;
 
-  // 评论
+  // 评论内容
   @Column({
     type: 'text'
   })
   content: string;
 
-  // 评论人
+  // 评论者
   @Column()
   userId: string;
 
@@ -29,9 +29,17 @@ export class InformationCommentEntity {
   @Column()
   videoId: string;
 
+  // // 点赞数
+  // @Column()
+  // likes: number;
+
   // 关联视频
-  @ManyToOne(type => InformationVideoEntity, InformationVideoEntity => InformationVideoEntity.video)
+  @ManyToOne(type => InformationVideoEntity, InformationVideoEntity => InformationVideoEntity.comments)
   video: InformationVideoEntity;
+
+  // 关联回复
+  @OneToMany(type => InformationReplyEntity, InformationReplyEntity => InformationReplyEntity.comment)
+  replys: InformationReplyEntity[];
 
 
 
@@ -40,6 +48,12 @@ export class InformationCommentEntity {
     select: false
   })
   isShow: boolean;
+
+  // 是否删除
+  @Column({
+    select: false
+  })
+  isDelete: boolean;
 
 
   //  创建日期

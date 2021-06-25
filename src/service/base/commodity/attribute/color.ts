@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommodityColorEntity } from 'src/entity/commodity/attribute/color';
 
 @Provide()
-export class BaseCommodityColorServer {
+export class BaseCommodityColorService {
 
   @InjectEntityModel(CommodityColorEntity)
   commodityColorEntity: Repository<CommodityColorEntity>;

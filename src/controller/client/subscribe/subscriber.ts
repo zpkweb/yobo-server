@@ -1,6 +1,6 @@
 import { ALL, Body, Query, Controller, Get, Inject, Post, Provide, Del } from "@midwayjs/decorator";
 import { Context } from 'egg';
-import { SubscriberServer } from "src/service/subscribe/subscriber";
+import { SubscriberService } from "src/service/subscribe/subscriber";
 
 @Provide()
 @Controller('/api/subscriber', { tagName: '订阅' })
@@ -8,14 +8,14 @@ import { SubscriberServer } from "src/service/subscribe/subscriber";
 export class SubscriberController {
 
   @Inject()
-  subscriberServer: SubscriberServer;
+  subscriberService: SubscriberService;
 
   @Inject()
   ctx: Context;
 
   @Post()
   async create(@Body(ALL) createBody) {
-    const result = await this.subscriberServer.create({
+    const result = await this.subscriberService.create({
       email: createBody.email,
       userId: createBody.userId
     })
@@ -24,7 +24,7 @@ export class SubscriberController {
 
   @Get()
   async find(@Query(ALL) findQuery) {
-    const result = await this.subscriberServer.retrieve({
+    const result = await this.subscriberService.retrieve({
       email: findQuery.email,
       userId: findQuery.userId
     })
@@ -33,7 +33,7 @@ export class SubscriberController {
 
   @Del()
   async delete(@Body(ALL) deleteBody) {
-    const result = await this.subscriberServer.delete({
+    const result = await this.subscriberService.delete({
       email: deleteBody.email,
       userId: deleteBody.userId
     })

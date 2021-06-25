@@ -4,7 +4,7 @@ import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDate
 import { InformationDetailEntity } from "./detail";
 import { InformationVideoEntity } from "./video";
 
-@EntityModel()
+@EntityModel('information')
 export class InformationEntity {
 
   @PrimaryGeneratedColumn()
@@ -15,7 +15,6 @@ export class InformationEntity {
   })
   @Generated('uuid')
   informationId: string;
-
 
   @Column({
     type: 'text'
@@ -37,13 +36,27 @@ export class InformationEntity {
   })
   'es-es': string;
 
+  // 是否置顶
+  @Column({
+    select: false
+  })
+  isTop: boolean;
+
+
+
   // 关联资讯详情
   @OneToOne(type => InformationDetailEntity, InformationDetailEntity => InformationDetailEntity.information)
   detail: InformationDetailEntity;
 
   // 关联资讯视频
   @OneToMany(type => InformationVideoEntity, InformationVideoEntity => InformationVideoEntity.information)
-  video: InformationVideoEntity[];
+  videos: InformationVideoEntity[];
+
+  // 是否删除
+  @Column({
+    select: false
+  })
+  isDelete: boolean;
 
   //  创建日期
   @CreateDateColumn({

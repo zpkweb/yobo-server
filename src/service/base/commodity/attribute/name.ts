@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 
 @Provide()
-export class BaseCommodityNameServer {
+export class BaseCommodityNameService {
 
   @InjectEntityModel(CommodityNameEntity)
   commodityNameEntity: Repository<CommodityNameEntity>;

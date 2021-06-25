@@ -5,7 +5,7 @@ import { CommoditySpecificationEntity } from 'src/entity/commodity/commodity-opt
 
 
 @Provide()
-export class BaseCommoditySpecificationServer {
+export class BaseCommoditySpecificationService {
 
   @InjectEntityModel(CommoditySpecificationEntity)
   CommoditySpecificationEntity: Repository<CommoditySpecificationEntity>;

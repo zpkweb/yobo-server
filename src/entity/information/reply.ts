@@ -1,8 +1,8 @@
 // 资讯 评论 回复
 import { EntityModel } from "@midwayjs/orm";
-import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
-
-@EntityModel()
+import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { InformationCommentEntity } from "./comment"
+@EntityModel('information_reply')
 export class InformationReplyEntity {
 
   @PrimaryGeneratedColumn()
@@ -12,7 +12,7 @@ export class InformationReplyEntity {
     unique: true
   })
   @Generated('uuid')
-  informationReplyId: string;
+  replyId: string;
 
   // 回复内容
   @Column({
@@ -22,7 +22,19 @@ export class InformationReplyEntity {
 
   // 回复人
   @Column()
+  replyUser: string;
+
+  // 回复者
+  @Column()
   userId: string;
+
+  // 评论id
+  @Column()
+  commentId: string;
+
+  // 关联评论
+  @ManyToOne(type => InformationCommentEntity, InformationCommentEntity => InformationCommentEntity.replys)
+  comment: InformationCommentEntity;
 
   // 是否展示
   @Column({
@@ -30,9 +42,11 @@ export class InformationReplyEntity {
   })
   isShow: boolean;
 
-  // 评论id
-
-  // 关联评论
+  // 是否删除
+  @Column({
+    select: false
+  })
+  isDelete: boolean;
 
   //  创建日期
   @CreateDateColumn({

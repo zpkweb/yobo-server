@@ -5,7 +5,7 @@ import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 
 
 @Provide()
-export class BaseIdentityServer {
+export class BaseIdentityService {
 
 
   @InjectEntityModel(UserIdentityEntity)

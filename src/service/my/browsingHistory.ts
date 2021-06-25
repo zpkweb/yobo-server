@@ -1,19 +1,19 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseBrowsingHistoryServer } from '../base/my/browsingHistory';
-import { BaseCommodityBrowsingCountServer } from '../base/commodity/commodityBrowsingCount';
-import { BaseCommodityServer } from 'src/service/base/commodity/commodity';
+import { BaseBrowsingHistoryService } from '../base/my/browsingHistory';
+import { BaseCommodityBrowsingCountService } from '../base/commodity/commodityBrowsingCount';
+import { BaseCommodityService } from 'src/service/base/commodity/commodity';
 
 @Provide()
 export class MyBrowsingHistoryService {
 
   @Inject()
-  baseBrowsingHistoryServer: BaseBrowsingHistoryServer;
+  baseBrowsingHistoryService: BaseBrowsingHistoryService;
 
   @Inject()
-  baseCommodityBrowsingCountServer: BaseCommodityBrowsingCountServer;
+  baseCommodityBrowsingCountService: BaseCommodityBrowsingCountService;
 
   @Inject()
-  baseCommodityServer: BaseCommodityServer;
+  baseCommodityService: BaseCommodityService;
 
   // 添加浏览记录
   async addBrowsingHistory(payload) {
@@ -122,7 +122,7 @@ export class MyBrowsingHistoryService {
    * @param payload
    */
   async createBrowsingHistory(payload) {
-    const data = await this.baseBrowsingHistoryServer.BaseCreate(payload);
+    const data = await this.baseBrowsingHistoryService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -144,7 +144,7 @@ export class MyBrowsingHistoryService {
    * @memberof MyBrowsingHistoryService
    */
   async hasBrowsingHistory(payload) {
-    const data = await this.baseBrowsingHistoryServer.BaseHas(payload);
+    const data = await this.baseBrowsingHistoryService.BaseHas(payload);
     if (data) {
       return {
         data: data,
@@ -164,7 +164,7 @@ export class MyBrowsingHistoryService {
    * @param commodityId
    */
   async updateBrowsingHistoryCount(payload) {
-    const data = await this.baseBrowsingHistoryServer.BaseUpdate(payload)
+    const data = await this.baseBrowsingHistoryService.BaseUpdate(payload)
     if(data){
       return {
         data: data,
@@ -184,7 +184,7 @@ export class MyBrowsingHistoryService {
    * @param payload
    */
   async retrieveBrowsingHistory(payload) {
-    let result = await this.baseBrowsingHistoryServer.BaseRetrieve({
+    let result = await this.baseBrowsingHistoryService.BaseRetrieve({
       userId: payload.userId,
       currentPage: payload.currentPage,
       pageSize: payload.pageSize,
@@ -201,7 +201,7 @@ export class MyBrowsingHistoryService {
         // 查找商品
         for(let item of data) {
           // console.log("查找商品", item)
-          let commodity:any = await this.baseCommodityServer.BaseRetrieveCommodityPhoto(item.commodityId);
+          let commodity:any = await this.baseCommodityService.BaseRetrieveCommodityPhoto(item.commodityId);
           // console.log("commodity", commodity)
           if(commodity) {
             if(payload.isLocale) {
@@ -265,7 +265,7 @@ export class MyBrowsingHistoryService {
    * 关联 用户
    */
   async relationUser(payload) {
-    await this.baseBrowsingHistoryServer.BaseRelation({
+    await this.baseBrowsingHistoryService.BaseRelation({
       name: 'user',
       of: payload.of,
       set: { userId: payload.set }
@@ -275,7 +275,7 @@ export class MyBrowsingHistoryService {
    * 关联 商品
    */
   async relationCommodity(payload) {
-    await this.baseBrowsingHistoryServer.BaseRelation({
+    await this.baseBrowsingHistoryService.BaseRelation({
       name: 'commodity',
       of: payload.of,
       set: { commodityId: payload.set }
@@ -288,7 +288,7 @@ export class MyBrowsingHistoryService {
    * @param commodityId
    */
   async createBrowsingCount(commodityId) {
-    const data = await this.baseCommodityBrowsingCountServer.BaseCreate(commodityId)
+    const data = await this.baseCommodityBrowsingCountService.BaseCreate(commodityId)
     if(data){
       return {
         data: data,
@@ -308,7 +308,7 @@ export class MyBrowsingHistoryService {
    * @param commodityId
    */
   async retrieveBrowsingCount(commodityId) {
-    const data = await this.baseCommodityBrowsingCountServer.BaseRetrieve(commodityId)
+    const data = await this.baseCommodityBrowsingCountService.BaseRetrieve(commodityId)
     if(data){
       return {
         data: data,
@@ -328,7 +328,7 @@ export class MyBrowsingHistoryService {
    * @param commodityId
    */
   async updateBrowsingCount(payload) {
-    const data = await this.baseCommodityBrowsingCountServer.BaseUpdate(payload)
+    const data = await this.baseCommodityBrowsingCountService.BaseUpdate(payload)
     if(data){
       return {
         data: data,
@@ -347,7 +347,7 @@ export class MyBrowsingHistoryService {
    * 关联 商品
    */
   async relationBrowsingCountCommodity(payload) {
-    await this.baseCommodityBrowsingCountServer.BaseRelation({
+    await this.baseCommodityBrowsingCountService.BaseRelation({
       name: 'commodity',
       of: payload.of,
       set: { commodityId: payload.set }

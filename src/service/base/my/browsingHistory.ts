@@ -10,7 +10,7 @@ import { CommodityEntity } from 'src/entity/commodity/commodity';
 // import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @Provide()
-export class BaseBrowsingHistoryServer {
+export class BaseBrowsingHistoryService {
 
   @InjectEntityModel(MyBrowsingHistoryEntity)
   myBrowsingHistoryEntity: Repository<MyBrowsingHistoryEntity>;

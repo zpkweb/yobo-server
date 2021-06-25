@@ -1,17 +1,17 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityCategoryServer } from 'src/service/base/commodity/commodity-options/category';
+import { BaseCommodityCategoryService } from 'src/service/base/commodity/commodity-options/category';
 import { CommodityOptionsCategoryService } from '../options/category';
 @Provide()
 export class CommodityCategoryService {
 
   @Inject()
-  baseCommodityCategoryServer: BaseCommodityCategoryServer;
+  baseCommodityCategoryService: BaseCommodityCategoryService;
 
   @Inject()
   commodityOptionsCategoryService: CommodityOptionsCategoryService;
 
   async create(payload) {
-    const data = await this.baseCommodityCategoryServer.BaseCreate(payload);
+    const data = await this.baseCommodityCategoryService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -27,7 +27,7 @@ export class CommodityCategoryService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseCommodityCategoryServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityCategoryService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -43,7 +43,7 @@ export class CommodityCategoryService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityCategoryServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityCategoryService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -59,7 +59,7 @@ export class CommodityCategoryService {
   }
 
   async retrieveID(payload) {
-    const data = await this.baseCommodityCategoryServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityCategoryService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -75,7 +75,7 @@ export class CommodityCategoryService {
   }
 
   async relation(payload) {
-    return await this.baseCommodityCategoryServer.BaseRelationSet(payload)
+    return await this.baseCommodityCategoryService.BaseRelationSet(payload)
   }
 
   async relationCreate(payload) {
@@ -140,7 +140,7 @@ export class CommodityCategoryService {
   }
 
   async search(payload) {
-    const data = await this.baseCommodityCategoryServer.BaseSearch(payload);
+    const data = await this.baseCommodityCategoryService.BaseSearch(payload);
     if (data) {
       return {
         data: data,

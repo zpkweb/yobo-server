@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommodityOptionsThemeEntity } from 'src/entity/commodity/options/theme';
 
 @Provide()
-export class BaseCommodityOptionsThemeServer {
+export class BaseCommodityOptionsThemeService {
 
   @InjectEntityModel(CommodityOptionsThemeEntity)
   commodityOptionsThemeEntity: Repository<CommodityOptionsThemeEntity>;

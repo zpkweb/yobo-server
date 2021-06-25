@@ -1,5 +1,5 @@
 import { Config, Inject, Provide } from "@midwayjs/decorator";
-import PageServer from '../page';
+import PageService from '../page';
 
 @Provide()
 export class BannerService {
@@ -8,9 +8,9 @@ export class BannerService {
   host;
 
   @Inject()
-  pageServer: PageServer;
+  pageService: PageService;
 
   async get() {
-    return await this.pageServer.getBannerAll();
+    return await this.pageService.getBannerAll();
   }
 }

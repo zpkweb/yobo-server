@@ -9,10 +9,10 @@ import { UserSellerResumeEntity } from 'src/entity/user/seller/resume';
 import { UserIdentityEntity } from 'src/entity/user/identity/identity';
 import { UserAdminEntity } from 'src/entity/user/admin/admin';
 import { UserCustomerServiceEntity } from 'src/entity/user/customerService/customerService';
-import { BaseUserServer } from "src/service/base/user/user";
-import { BaseSellerServer } from 'src/service/base/seller/seller';
-import { BaseSellerMetadataServer } from "src/service/base/seller/metadata";
-import { BaseIdentityListServer } from 'src/service/base/user/identityList';
+import { BaseUserService } from "src/service/base/user/user";
+import { BaseSellerService } from 'src/service/base/seller/seller';
+import { BaseSellerMetadataService } from "src/service/base/seller/metadata";
+import { BaseIdentityListService } from 'src/service/base/user/identityList';
 import * as nodemailer from 'nodemailer';
 
 @Provide()
@@ -44,16 +44,16 @@ export class UserRegisterService {
   userCustomerServiceEntity: Repository<UserCustomerServiceEntity>;
 
   @Inject()
-  baseUserServer: BaseUserServer;
+  baseUserService: BaseUserService;
 
   @Inject()
-  baseSellerServer: BaseSellerServer;
+  baseSellerService: BaseSellerService;
 
   @Inject()
-  baseSellerMetadataServer: BaseSellerMetadataServer;
+  baseSellerMetadataService: BaseSellerMetadataService;
 
   @Inject()
-  baseIdentityListServer: BaseIdentityListServer;
+  baseIdentityListService: BaseIdentityListService;
 
   @Config('email')
   email;
@@ -125,12 +125,12 @@ export class UserRegisterService {
     }
 
     if(userId) {
-      // const changeUser = await this.baseUserServer.baseUpdateUser({
+      // const changeUser = await this.baseUserService.baseUpdateUser({
       //   userId: payload.userId,
       // })
 
       // 用户是否关联艺术家信息
-      const applySeller = await this.baseSellerServer.baseApplySeller(userId);
+      const applySeller = await this.baseSellerService.baseApplySeller(userId);
       if(applySeller){
         return {
           success: false,
@@ -368,7 +368,7 @@ export class UserRegisterService {
     // 返回用户关联身份
     if(newUser.success){
       // 获取用户
-      user = await this.baseUserServer.baseRetrieveUserId(newUser.userId)
+      user = await this.baseUserService.baseRetrieveUserId(newUser.userId)
 
       return {
         data: user,
@@ -388,7 +388,7 @@ export class UserRegisterService {
    * @param payload
    */
     async hasUser(payload) {
-      const user:any = await this.baseUserServer.baseRetrieveUser(payload);
+      const user:any = await this.baseUserService.baseRetrieveUser(payload);
       if(user){
         return {
           data: user,
@@ -407,7 +407,7 @@ export class UserRegisterService {
    * @param payload
    */
    async hasUserName(name) {
-    const user:any = await this.baseUserServer.baseRetrieveUserName(name);
+    const user:any = await this.baseUserService.baseRetrieveUserName(name);
     if(user){
       return {
         data: user,
@@ -426,7 +426,7 @@ export class UserRegisterService {
    * @param payload
    */
    async hasUserEmail(email) {
-    const user:any = await this.baseUserServer.baseRetrieveUserEmail(email);
+    const user:any = await this.baseUserService.baseRetrieveUserEmail(email);
     if(user){
       return {
         data: user,
@@ -461,7 +461,7 @@ export class UserRegisterService {
 
       }else{
         // 创建用户
-        let newUser: any = await this.baseUserServer.baseCreateUser(payload);
+        let newUser: any = await this.baseUserService.baseCreateUser(payload);
         if(newUser.generatedMaps[0].userId){
           return {
             userId: newUser.generatedMaps[0].userId,
@@ -507,7 +507,7 @@ export class UserRegisterService {
    */
     async addUserIdentity(payload) {
       // 通过用户身份列表获取 用户身份
-      let identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
+      let identityList = await this.baseIdentityListService.baseRetrieveIdentityList({
         index: payload.identityIndex
       });
       if(!identityList){
@@ -518,12 +518,12 @@ export class UserRegisterService {
       }
       let identity: any;
       // 查询用户身份
-      identity = await this.baseUserServer.baseRetrieveUserIdentity(payload.userId);
+      identity = await this.baseUserService.baseRetrieveUserIdentity(payload.userId);
       if(identity){
 
       }else{
         // 创建用户的身份
-        identity = await this.baseUserServer.baseCreateUserIdentity({
+        identity = await this.baseUserService.baseCreateUserIdentity({
           ...identityList,
           userName: payload.userName,
           userEmail: payload.userEmail,
@@ -567,7 +567,7 @@ export class UserRegisterService {
    */
     async addSeller(payload){
       // 添加商家信息
-      const seller = await this.baseSellerServer.baseCreateSeller({
+      const seller = await this.baseSellerService.baseCreateSeller({
         state: payload.state,
         type: payload.type || 0,
         banner: payload.banner || '',
@@ -586,7 +586,7 @@ export class UserRegisterService {
         };
       }
       // 添加商家基本信息
-      const sellerMetadata = await this.baseSellerMetadataServer.baseCreate({
+      const sellerMetadata = await this.baseSellerMetadataService.baseCreate({
         language: payload.language || '',
         findUs: payload.findUs || '',
         isFullTime: payload.isFullTime || '',

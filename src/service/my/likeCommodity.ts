@@ -1,5 +1,5 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseMyLikeCommodityServer } from "../base/my/likeCommodity";
+import { BaseMyLikeCommodityService } from "../base/my/likeCommodity";
 import { UserService } from "../user/user";
 
 import { CommodityCommodityService } from 'src/service/commodity/commodity';
@@ -10,7 +10,7 @@ import { CommodityAttributePhoto } from 'src/service/commodity/attribute/photo';
 export class MyLikeCommodityService {
 
   @Inject()
-  baseMyLikeCommodityServer: BaseMyLikeCommodityServer;
+  baseMyLikeCommodityService: BaseMyLikeCommodityService;
 
   @Inject()
   userService: UserService;
@@ -90,7 +90,7 @@ export class MyLikeCommodityService {
    * 喜欢的艺术家列表
    */
   async myLikeCommodity(payload) {
-    let commoditys:any = await this.baseMyLikeCommodityServer.BaseRetrieve(payload.userId);
+    let commoditys:any = await this.baseMyLikeCommodityService.BaseRetrieve(payload.userId);
     // console.log("commoditys", commoditys)
     if(commoditys && commoditys.length){
 
@@ -169,7 +169,7 @@ export class MyLikeCommodityService {
    * @param payload
    */
   async hasMyLikeCommodity(payload) {
-    const likeCommodity =  await this.baseMyLikeCommodityServer.BaseHas({
+    const likeCommodity =  await this.baseMyLikeCommodityService.BaseHas({
       userId: payload.userId,
       commodityId: payload.commodityId
     })
@@ -192,7 +192,7 @@ export class MyLikeCommodityService {
    * @param payload
    */
   async createLikeCommodity(payload) {
-    const data = await this.baseMyLikeCommodityServer.BaseCreate(payload);
+    const data = await this.baseMyLikeCommodityService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -213,7 +213,7 @@ export class MyLikeCommodityService {
    * 关联 用户
    */
     async relationUser(payload) {
-      await this.baseMyLikeCommodityServer.BaseRelation({
+      await this.baseMyLikeCommodityService.BaseRelation({
         name: 'user',
         of: payload.of,
         set: { userId: payload.set }
@@ -223,7 +223,7 @@ export class MyLikeCommodityService {
    * 关联 艺术家
    */
   async relationCommodity(payload) {
-    await this.baseMyLikeCommodityServer.BaseRelation({
+    await this.baseMyLikeCommodityService.BaseRelation({
       name: 'commodity',
       of: payload.of,
       set: { commodityId: payload.set }
@@ -253,7 +253,7 @@ export class MyLikeCommodityService {
    * 删除艺术家
    */
   async delLikeCommodity(payload) {
-    const data = await this.baseMyLikeCommodityServer.BaseDelete(payload);
+    const data = await this.baseMyLikeCommodityService.BaseDelete(payload);
     if (data.affected) {
       return {
         success: true,
@@ -270,7 +270,7 @@ export class MyLikeCommodityService {
    * 删除我喜欢的所有艺术家
    */
     async delLikeCommodityAll(userId) {
-      const data = await this.baseMyLikeCommodityServer.BaseDeleteAll(userId);
+      const data = await this.baseMyLikeCommodityService.BaseDeleteAll(userId);
     if (data.affected) {
       return {
         success: true,

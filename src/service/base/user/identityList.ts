@@ -3,7 +3,7 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { UserIdentityListEntity } from 'src/entity/user/identity/list';
 import { Repository } from "typeorm";
 @Provide()
-export class BaseIdentityListServer {
+export class BaseIdentityListService {
 
   @InjectEntityModel(UserIdentityListEntity)
   userIdentityListEntity: Repository<UserIdentityListEntity>;

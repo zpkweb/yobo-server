@@ -1,26 +1,26 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { PageBannerServer } from './banner';
+import { PageBannerService } from './banner';
 
 @Provide()
-export default class PageServer {
+export default class PageService {
 
   @Inject()
-  pageBannerServer: PageBannerServer;
+  pageBannerService: PageBannerService;
 
   async createBanner(payload) {
-    return await this.pageBannerServer.create(payload);
+    return await this.pageBannerService.create(payload);
   }
 
   async updateBanner(payload) {
-    return await this.pageBannerServer.update(payload);
+    return await this.pageBannerService.update(payload);
   }
 
   async getBannerAll() {
-    return await this.pageBannerServer.getAll();
+    return await this.pageBannerService.getAll();
   }
 
 
   async deleteBanner(bannerId) {
-    return await this.pageBannerServer.delete(bannerId);
+    return await this.pageBannerService.delete(bannerId);
   }
 }

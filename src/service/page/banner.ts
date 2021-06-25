@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BasePageBannerServer } from '../base/page/banner';
+import { BasePageBannerService } from '../base/page/banner';
 
 @Provide()
-export class PageBannerServer {
+export class PageBannerService {
 
   @Inject()
-  basePageBannerServer: BasePageBannerServer;
+  basePageBannerService: BasePageBannerService;
 
   // 创建图片
   async create(payload) {
-    const data = await this.basePageBannerServer.BaseCreate({
+    const data = await this.basePageBannerService.BaseCreate({
       src: payload.src || '',
       title: payload.title || '',
       subTitle: payload.subTitle || '',
@@ -35,7 +35,7 @@ export class PageBannerServer {
    *
    */
   async hasId(bannerId) {
-    const data = await this.basePageBannerServer.BaseHas(bannerId);
+    const data = await this.basePageBannerService.BaseHas(bannerId);
     if (data) {
       return {
         data: data,
@@ -54,7 +54,7 @@ export class PageBannerServer {
    * @param payload
    */
     async get(bannerId) {
-      const data = await this.basePageBannerServer.BaseRetrievebannerId(bannerId);
+      const data = await this.basePageBannerService.BaseRetrievebannerId(bannerId);
       if (data) {
         return {
           data: data,
@@ -70,7 +70,7 @@ export class PageBannerServer {
     }
 
     async getAll() {
-      const data = await this.basePageBannerServer.BaseRetrieveAll();
+      const data = await this.basePageBannerService.BaseRetrieveAll();
       if (data) {
         return {
           data: data,
@@ -88,7 +88,7 @@ export class PageBannerServer {
 
   // 更新商品图片
   async update(payload) {
-    const data = await this.basePageBannerServer.BaseUpdate({
+    const data = await this.basePageBannerService.BaseUpdate({
       bannerId: payload.bannerId,
       src: payload.src || '',
       title: payload.title || '',
@@ -110,7 +110,7 @@ export class PageBannerServer {
   }
 
   async delete(bannerId) {
-    const data = await this.basePageBannerServer.BaseDelete(bannerId);
+    const data = await this.basePageBannerService.BaseDelete(bannerId);
     if (data.affected) {
       return {
         data: data,

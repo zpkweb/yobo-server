@@ -1,10 +1,10 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseIdentityListServer } from "src/service/base/user/identityList";
+import { BaseIdentityListService } from "src/service/base/user/identityList";
 @Provide()
 export class IdentityListService {
 
   @Inject()
-  baseIdentityListServer: BaseIdentityListServer;
+  baseIdentityListService: BaseIdentityListService;
 
   /**
    * 创建身份列表
@@ -12,9 +12,9 @@ export class IdentityListService {
    */
   async createIdentityList(payload) {
     for (let item of payload) {
-      let identity:any = await this.baseIdentityListServer.baseRetrieveIdentityList(item);
+      let identity:any = await this.baseIdentityListService.baseRetrieveIdentityList(item);
       if (!identity) {
-        let newIdentity = await this.baseIdentityListServer.baseCreateIdentityList({
+        let newIdentity = await this.baseIdentityListService.baseCreateIdentityList({
           "zh-cn": item['zh-cn'] || '',
           "en-us": item['en-us'] || '',
           "ja-jp": item['ja-jp'] || '',
@@ -32,7 +32,7 @@ export class IdentityListService {
       }
     }
 
-    const userIdentity = await this.baseIdentityListServer.baseRetrieveIdentityListAll();
+    const userIdentity = await this.baseIdentityListService.baseRetrieveIdentityListAll();
     if (userIdentity) {
       return {
         data: userIdentity,
@@ -58,7 +58,7 @@ export class IdentityListService {
    */
   async retrieveIdentityList(payload?:any) {
     if(payload && Object.keys(payload).length){
-      const retrieveIdentityList =  await this.baseIdentityListServer.baseRetrieveIdentityList(payload);
+      const retrieveIdentityList =  await this.baseIdentityListService.baseRetrieveIdentityList(payload);
       if(retrieveIdentityList) {
         return {
           data: retrieveIdentityList,
@@ -72,7 +72,7 @@ export class IdentityListService {
         }
       }
     }else{
-      const retrieveIdentityListAll =   await this.baseIdentityListServer.baseRetrieveIdentityListAll();
+      const retrieveIdentityListAll =   await this.baseIdentityListService.baseRetrieveIdentityListAll();
       if(retrieveIdentityListAll) {
         return {
           data: retrieveIdentityListAll,
@@ -95,7 +95,7 @@ export class IdentityListService {
    * @param payload
    */
   async updateIdentityList(payload) {
-    const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
+    const identityList = await this.baseIdentityListService.baseRetrieveIdentityList({
       "zh-cn": payload['zh-cn'] || '',
       "en-us": payload['en-us'] || '',
       "ja-jp": payload['ja-jp'] || '',
@@ -111,7 +111,7 @@ export class IdentityListService {
       }
     }
 
-    const newIdentityList = await this.baseIdentityListServer.baseUpdateIdentityList(Object.assign({
+    const newIdentityList = await this.baseIdentityListService.baseUpdateIdentityList(Object.assign({
       "zh-cn": identityList['zh-cn'] || '',
       "en-us": identityList['en-us'] || '',
       "ja-jp": identityList['ja-jp'] || '',
@@ -122,7 +122,7 @@ export class IdentityListService {
       id: identityList.id
     }, payload))
     if(newIdentityList.affected){
-      const identityList = await this.baseIdentityListServer.baseRetrieveIdentityList({
+      const identityList = await this.baseIdentityListService.baseRetrieveIdentityList({
         "zh-cn": payload['zh-cn'] || '',
         "en-us": payload['en-us'] || '',
         "ja-jp": payload['ja-jp'] || '',
@@ -156,7 +156,7 @@ export class IdentityListService {
    */
   async deleteIdentityList(payload) {
     if(payload && Object.keys(payload).length){
-      const identityList = await this.baseIdentityListServer.baseDeleteIdentityList(payload);
+      const identityList = await this.baseIdentityListService.baseDeleteIdentityList(payload);
       if(identityList.affected){
         return {
           data: identityList,
@@ -170,7 +170,7 @@ export class IdentityListService {
         }
       }
     }else{
-      const identityListAll = await this.baseIdentityListServer.baseDeleteIdentityListAll();
+      const identityListAll = await this.baseIdentityListService.baseDeleteIdentityListAll();
       if(identityListAll.affected){
         return {
           data: identityListAll,

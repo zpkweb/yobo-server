@@ -5,12 +5,12 @@ import { UserEntity } from 'src/entity/user/user';
 
 
 
-import { BaseUserServer } from '../base/user/user';
+import { BaseUserService } from '../base/user/user';
 
-import { BaseSellerServer } from "src/service/base/seller/seller";
-import { BaseSellerMetadataServer } from "src/service/base/seller/metadata";
-import { BaseSellerResumeServer } from "src/service/base/seller/resume";
-import { BaseSellerStudioServer } from "src/service/base/seller/studio";
+import { BaseSellerService } from "src/service/base/seller/seller";
+import { BaseSellerMetadataService } from "src/service/base/seller/metadata";
+import { BaseSellerResumeService } from "src/service/base/seller/resume";
+import { BaseSellerStudioService } from "src/service/base/seller/studio";
 
 import { CommodityCommodityService } from 'src/service/commodity/commodity';
 import { CommodityAttributeName } from 'src/service/commodity/attribute/name';
@@ -30,19 +30,19 @@ export class SellerService {
   userEntity: Repository<UserEntity>;
 
   @Inject()
-  baseUserServer: BaseUserServer;
+  baseUserService: BaseUserService;
 
   @Inject()
-  baseSellerServer: BaseSellerServer;
+  baseSellerService: BaseSellerService;
 
   @Inject()
-  baseSellerMetadataServer: BaseSellerMetadataServer;
+  baseSellerMetadataService: BaseSellerMetadataService;
 
   @Inject()
-  baseSellerResumeServer: BaseSellerResumeServer;
+  baseSellerResumeService: BaseSellerResumeService;
 
   @Inject()
-  baseSellerStudioServer: BaseSellerStudioServer;
+  baseSellerStudioService: BaseSellerStudioService;
 
   @Inject()
   commodityCommodityService: CommodityCommodityService;
@@ -66,7 +66,7 @@ export class SellerService {
 
     // 判断用户是否关联艺术家
     if(payload.user && payload.user.userId) {
-      const userSeller = await this.baseSellerServer.baseApplySeller(payload.user.userId);
+      const userSeller = await this.baseSellerService.baseApplySeller(payload.user.userId);
       if(userSeller) {
         return {
           success: false,
@@ -78,7 +78,7 @@ export class SellerService {
     // 艺术家
       // 判断艺术家姓名是否重复
       if(payload.seller.firstname || payload.seller.lastname) {
-        const sellerName = await this.baseSellerServer.BaseHasName({
+        const sellerName = await this.baseSellerService.BaseHasName({
           firstname: payload.seller.firstname,
           lastname: payload.seller.lastname,
         })
@@ -104,7 +104,7 @@ export class SellerService {
       || payload.seller.country
       ){
         // 创建艺术家
-        seller = await this.baseSellerServer.baseCreateSeller({
+        seller = await this.baseSellerService.baseCreateSeller({
           banner: payload.seller.banner,
           choice: payload.seller.choice,
           state: payload.seller.state,
@@ -154,7 +154,7 @@ export class SellerService {
     || payload.metadata.profileEses
     ){
       // 创建艺术家基本信息
-      const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
+      const sellerMetadata:any = await this.baseSellerMetadataService.baseCreate({
         language: payload.metadata.language,
         findUs: payload.metadata.findUs,
         isFullTime: payload.metadata.isFullTime,
@@ -176,7 +176,7 @@ export class SellerService {
 
       if(sellerMetadata) {
         // 关联基本信息
-        await this.baseSellerMetadataServer.relation({
+        await this.baseSellerMetadataService.relation({
           name: "seller",
           of: sellerMetadata.identifiers[0].id,
           set: { sellerId: seller.generatedMaps[0].sellerId }
@@ -200,7 +200,7 @@ export class SellerService {
     || payload.studio.introduce
     ){
       // 创建艺术家工作室
-      const sellerStudio:any = await this.baseSellerStudioServer.baseCreate({
+      const sellerStudio:any = await this.baseSellerStudioService.baseCreate({
         sellerId: seller.generatedMaps[0].sellerId,
         name: payload.studio.name,
         photo: payload.studio.photo,
@@ -214,7 +214,7 @@ export class SellerService {
       // console.log("创建艺术家工作室", sellerStudio)
       if(sellerStudio) {
         // 关联工作室
-        await this.baseSellerServer.relation({
+        await this.baseSellerService.relation({
           name: "studio",
           of: seller.identifiers[0].id,
           set: sellerStudio.identifiers[0].id,
@@ -235,13 +235,13 @@ export class SellerService {
     || payload.resume.publish.length
     ){
       // 创建艺术家履历
-      const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
+      const sellerResume:any = await this.baseSellerResumeService.baseCreate({
         resume: JSON.stringify(payload.resume)
       })
       // console.log("创建艺术家履历", sellerResume)
       if(sellerResume) {
         // 关联艺术家履历
-        await this.baseSellerResumeServer.relation({
+        await this.baseSellerResumeService.relation({
           name: "seller",
           of: sellerResume.identifiers[0].id,
           set: { sellerId: seller.generatedMaps[0].sellerId }
@@ -257,11 +257,11 @@ export class SellerService {
 
     // 关联用户
     if(payload.user && payload.user.userId) {
-      const user = await this.baseUserServer.baseRetrieveUserIdentity(payload.user.userId);
+      const user = await this.baseUserService.baseRetrieveUserIdentity(payload.user.userId);
       // console.log("关联用户", user)
       if(user) {
         // 关联用户
-        await this.baseSellerServer.relation({
+        await this.baseSellerService.relation({
           name: "user",
           of: seller.identifiers[0].id,
           set: { userId: payload.user.userId }
@@ -287,7 +287,7 @@ export class SellerService {
     if(payload.sellerId) {
       let edit:any = {};
       // 获取艺术家
-      const sellerData = await this.baseSellerServer.baseRetrieveUser(payload.sellerId);
+      const sellerData = await this.baseSellerService.baseRetrieveUser(payload.sellerId);
       if(sellerData) {
         const { user, ...seller} = sellerData;
         edit.seller = seller;
@@ -296,17 +296,17 @@ export class SellerService {
           edit.user = user;
         }
         // 艺术家基本信息
-        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.sellerId);
+        const sellerMetadata = await this.baseSellerMetadataService.baseRetrieve(payload.sellerId);
         if(sellerMetadata) {
           edit.metadata = sellerMetadata;
         }
         // 艺术家工作室
-        const sellerStudio = await this.baseSellerStudioServer.baseRetrieve(payload.sellerId);
+        const sellerStudio = await this.baseSellerStudioService.baseRetrieve(payload.sellerId);
         if(sellerStudio) {
           edit.studio = sellerStudio;
         }
         // 艺术家履历
-        const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.sellerId);
+        const sellerResume = await this.baseSellerResumeService.baseRetrieve(payload.sellerId);
         if(sellerResume && sellerResume.resume) {
           edit.resume = JSON.parse(sellerResume.resume);
         }
@@ -341,7 +341,7 @@ export class SellerService {
 
       if(payload.sellerId){
         let find:any = {};
-        const sellerData:any = await this.baseSellerServer.baseRetrieveSeller(payload.sellerId);
+        const sellerData:any = await this.baseSellerService.baseRetrieveSeller(payload.sellerId);
         if(sellerData) {
           const { user, ...seller} = sellerData;
           find.seller = seller;
@@ -351,20 +351,20 @@ export class SellerService {
           }
 
           // metadata
-          const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.sellerId);
+          const sellerMetadata = await this.baseSellerMetadataService.baseRetrieve(payload.sellerId);
           if(sellerMetadata){
             find.metadata = sellerMetadata;
           }
 
           // studio
-          const sellerStudio = await this.baseSellerStudioServer.baseRetrieve(payload.sellerId);
+          const sellerStudio = await this.baseSellerStudioService.baseRetrieve(payload.sellerId);
           if(sellerStudio){
             find.studio = sellerStudio;
           }
 
 
           // resume
-          const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.sellerId);
+          const sellerResume = await this.baseSellerResumeService.baseRetrieve(payload.sellerId);
           if(sellerResume && sellerResume.resume){
             find.resume = JSON.parse(sellerResume.resume);
           }
@@ -423,7 +423,7 @@ export class SellerService {
   async update(payload) {
     if(payload.seller.sellerId) {
       // 获取艺术家
-      const sellerData = await this.baseSellerServer.baseRetrieveUser(payload.seller.sellerId);
+      const sellerData = await this.baseSellerService.baseRetrieveUser(payload.seller.sellerId);
       // console.log("获取艺术家", sellerData)
       if(sellerData) {
         const { user } = sellerData;
@@ -431,13 +431,13 @@ export class SellerService {
           if(payload.user) {
             if(payload.user.userId !== user.userId){
               // 解绑用户 user.userId
-              await this.baseSellerServer.relation({
+              await this.baseSellerService.relation({
                 name: "user",
                 of: sellerData.id,
                 set: null
               })
               // 关联用户 payload.user.userId
-              await this.baseSellerServer.relation({
+              await this.baseSellerService.relation({
                 name: "user",
                 of: sellerData.id,
                 set: { userId: payload.user.userId }
@@ -445,7 +445,7 @@ export class SellerService {
             }
           }else{
             // 解绑用户 user.userId
-            await this.baseSellerServer.relation({
+            await this.baseSellerService.relation({
               name: "user",
               of: sellerData.id,
               set: null
@@ -455,7 +455,7 @@ export class SellerService {
         }else{
           if(payload.user && payload.user.userId) {
             // 关联用户 payload.user.userId
-            await this.baseSellerServer.relation({
+            await this.baseSellerService.relation({
               name: "user",
               of: sellerData.id,
               set: { userId: payload.user.userId }
@@ -464,7 +464,7 @@ export class SellerService {
         }
 
         // 更新艺术家
-        const seller:any = await this.baseSellerServer.baseUpdateSeller({
+        const seller:any = await this.baseSellerService.baseUpdateSeller({
           sellerId: payload.seller.sellerId,
 
           banner: payload.seller.banner,
@@ -500,10 +500,10 @@ export class SellerService {
       // 艺术家基本信息
       if(payload.metadata) {
         // 艺术家基本信息
-        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(payload.seller.sellerId);
+        const sellerMetadata = await this.baseSellerMetadataService.baseRetrieve(payload.seller.sellerId);
         if(sellerMetadata) {
           // 更新艺术家基本信息
-          const sellerMetadata:any = await this.baseSellerMetadataServer.baseUpdate({
+          const sellerMetadata:any = await this.baseSellerMetadataService.baseUpdate({
             sellerId: payload.seller.sellerId,
 
             language: payload.metadata.language,
@@ -551,7 +551,7 @@ export class SellerService {
             || payload.metadata.profileEses
             ){
           // 创建艺术家基本信息
-          const sellerMetadata:any = await this.baseSellerMetadataServer.baseCreate({
+          const sellerMetadata:any = await this.baseSellerMetadataService.baseCreate({
             language: payload.metadata.language,
             findUs: payload.metadata.findUs,
             isFullTime: payload.metadata.isFullTime,
@@ -573,7 +573,7 @@ export class SellerService {
 
           if(sellerMetadata) {
             // 关联基本信息
-            await this.baseSellerMetadataServer.relation({
+            await this.baseSellerMetadataService.relation({
               name: "seller",
               of: sellerMetadata.identifiers[0].id,
               set: { sellerId: payload.seller.sellerId }
@@ -592,10 +592,10 @@ export class SellerService {
       // 艺术家工作室
       if(payload.studio) {
         // 查找艺术家是否有工作室
-        const sellerStudio = await this.baseSellerStudioServer.baseRetrieve(payload.seller.sellerId);
+        const sellerStudio = await this.baseSellerStudioService.baseRetrieve(payload.seller.sellerId);
         if(sellerStudio) {
           // 更新艺术家工作室
-          const sellerStudioUpdate:any = await this.baseSellerStudioServer.baseUpdate({
+          const sellerStudioUpdate:any = await this.baseSellerStudioService.baseUpdate({
             sellerId: payload.seller.sellerId,
 
             name: payload.studio.name,
@@ -627,7 +627,7 @@ export class SellerService {
             || payload.studio.introduce
             ){
           // 创建艺术家工作室
-          const sellerStudio:any = await this.baseSellerStudioServer.baseCreate({
+          const sellerStudio:any = await this.baseSellerStudioService.baseCreate({
             sellerId: payload.seller.sellerId,
             name: payload.studio.name,
             photo: payload.studio.photo,
@@ -641,12 +641,12 @@ export class SellerService {
           // console.log("创建艺术家工作室", sellerStudio)
           if(sellerStudio) {
             // 关联工作室
-            // await this.baseSellerStudioServer.relation({
+            // await this.baseSellerStudioService.relation({
             //   name: "seller",
             //   of: sellerStudio.identifiers[0].id,
             //   set: { sellerId: payload.seller.sellerId }
             // })
-            await this.baseSellerServer.relation({
+            await this.baseSellerService.relation({
               name: "studio",
               of: { sellerId: payload.seller.sellerId },
               set: sellerStudio.identifiers[0].id,
@@ -666,10 +666,10 @@ export class SellerService {
       // 艺术家履历
       if(payload.resume) {
         // 查找艺术家是否有履历
-        const sellerResume = await this.baseSellerResumeServer.baseRetrieve(payload.seller.sellerId);
+        const sellerResume = await this.baseSellerResumeService.baseRetrieve(payload.seller.sellerId);
         if(sellerResume){
           // 更新艺术家履历
-          const sellerResume:any = await this.baseSellerResumeServer.baseUpdate({
+          const sellerResume:any = await this.baseSellerResumeService.baseUpdate({
             sellerId: payload.seller.sellerId,
 
             resume: JSON.stringify(payload.resume),
@@ -690,13 +690,13 @@ export class SellerService {
             || payload.resume.publish.length
             ){
           // 创建艺术家履历
-          const sellerResume:any = await this.baseSellerResumeServer.baseCreate({
+          const sellerResume:any = await this.baseSellerResumeService.baseCreate({
             resume: JSON.stringify(payload.resume)
           })
           // console.log("创建艺术家履历", sellerResume)
           if(sellerResume) {
             // 关联艺术家履历
-            await this.baseSellerResumeServer.relation({
+            await this.baseSellerResumeService.relation({
               name: "seller",
               of: sellerResume.identifiers[0].id,
               set: { sellerId: payload.seller.sellerId }
@@ -736,7 +736,7 @@ export class SellerService {
    */
   async updateSellerState(payload) {
     // 查找用户，通过sellerId关联查找user
-    const seller = await this.baseSellerServer.baseRetrieveSeller(payload)
+    const seller = await this.baseSellerService.baseRetrieveSeller(payload)
     if(!seller){
       return {
         success: false,
@@ -745,7 +745,7 @@ export class SellerService {
     }
     if(payload.state == '1'){ // 同意申请
       // 更新状态
-      let sellerState = await this.baseSellerServer.baseSetSellerState(payload)
+      let sellerState = await this.baseSellerService.baseSetSellerState(payload)
       if(!sellerState.affected){
         return {
           success: false,
@@ -754,7 +754,7 @@ export class SellerService {
       }
       // 设置密码
       // const passwordCrypto = crypto.createHash('md5').update('123456').digest('hex');
-      // const password = await this.baseUserServer.baseUpdateUser({
+      // const password = await this.baseUserService.baseUpdateUser({
       //   userId: seller.user.userId,
       //   avatar: seller.user.avatar,
       //   name: seller.user.name,
@@ -791,7 +791,7 @@ export class SellerService {
 
     }else if(payload.state == '2'){ // 拒绝申请
       // 更新状态
-      let sellerState = await this.baseSellerServer.baseSetSellerState(payload)
+      let sellerState = await this.baseSellerService.baseSetSellerState(payload)
 
 
       if(!sellerState.affected){
@@ -868,7 +868,7 @@ export class SellerService {
 
   async updateSeller(payload){
     // 查找艺术家
-    const seller = await this.baseSellerServer.baseRetrieveSeller(payload.sellerId);
+    const seller = await this.baseSellerService.baseRetrieveSeller(payload.sellerId);
     if(!seller){
       return {
         success: false,
@@ -876,7 +876,7 @@ export class SellerService {
       }
     }
     // 更新用户
-    const user = await this.baseUserServer.baseUpdateUser({
+    const user = await this.baseUserService.baseUpdateUser({
       userId: seller.user.userId,
       name: payload.firstname + payload.lastname || '',
       email: payload.email || '',
@@ -891,7 +891,7 @@ export class SellerService {
       };
     }
     // 更新商家
-    const updateSeller = await this.baseSellerServer.baseUpdateSeller({
+    const updateSeller = await this.baseSellerService.baseUpdateSeller({
       sellerId: seller.sellerId,
       state: payload.state || 0,
       banner: payload.banner || '',
@@ -910,7 +910,7 @@ export class SellerService {
       };
     }
     // 更新商家基本信息
-    const updateSellerMetadata = await this.baseSellerMetadataServer.baseUpdate({
+    const updateSellerMetadata = await this.baseSellerMetadataService.baseUpdate({
       sellerId: seller.sellerId,
       language: payload.language || '',
       findUs: payload.findUs || '',
@@ -945,7 +945,7 @@ export class SellerService {
 
   // 查找艺术家申请列表
   async applyList () {
-    const applyList =  await this.baseSellerServer.baseSearchSeller({
+    const applyList =  await this.baseSellerService.baseSearchSeller({
       state: 0
     })
 
@@ -981,7 +981,7 @@ export class SellerService {
    }
 
   async searchSeller(payload) {
-    let result = await this.baseSellerServer.baseSearchSeller(payload);
+    let result = await this.baseSellerService.baseSearchSeller(payload);
       let data = result[0];
       let total = result[1];
       if (data) {
@@ -1004,7 +1004,7 @@ export class SellerService {
   }
 
   async retrieveSellerAll(payload) {
-    let result = await this.baseSellerServer.baseRetrieveSellerAll(payload);
+    let result = await this.baseSellerService.baseRetrieveSellerAll(payload);
     if(result){
 
 
@@ -1032,7 +1032,7 @@ export class SellerService {
   }
 
   async retrieveSellerHome(payload) {
-    let result = await this.baseSellerServer.baseRetrieveSellerHome(payload);
+    let result = await this.baseSellerService.baseRetrieveSellerHome(payload);
     // 获取加精的艺术品
 
     if(result){
@@ -1088,7 +1088,7 @@ export class SellerService {
    */
   async hasSeller(sellerId) {
     // console.log("hasSeller sellerId", sellerId)
-    const seller =  await this.baseSellerServer.BaseHas(sellerId)
+    const seller =  await this.baseSellerService.BaseHas(sellerId)
     // console.log("hasSeller", seller)
       if(seller){
         return {
@@ -1107,7 +1107,7 @@ export class SellerService {
 
 
   async choiceSeller(payload) {
-    const hotSaleSeller = await this.baseSellerServer.baseChoiceSeller({
+    const hotSaleSeller = await this.baseSellerService.baseChoiceSeller({
       pageSize: payload.pageSize,
       currentPage: payload.currentPage,
       news: payload.news
@@ -1128,7 +1128,7 @@ export class SellerService {
 
   async sellerIdFind(payload) {
 
-    const seller = await this.baseSellerServer.baseSellerIdRetrieveSeller(payload);
+    const seller = await this.baseSellerService.baseSellerIdRetrieveSeller(payload);
 
       if(seller){
         return {
@@ -1168,7 +1168,7 @@ export class SellerService {
    * @param payload
    */
   async deleteSeller(sellerId) {
-    const seller = await this.baseSellerServer.baseDeleteSeller(sellerId);
+    const seller = await this.baseSellerService.baseDeleteSeller(sellerId);
     if(seller.affected){
 
       return {
@@ -1184,7 +1184,7 @@ export class SellerService {
   }
 
   async updateMetadata(payload) {
-    const seller = await this.baseSellerMetadataServer.baseUpdateMetadata(payload);
+    const seller = await this.baseSellerMetadataService.baseUpdateMetadata(payload);
     if(seller.affected){
 
       return {
@@ -1200,7 +1200,7 @@ export class SellerService {
   }
 
   async updateResume(payload) {
-    const seller = await this.baseSellerResumeServer.baseUpdateResume(payload);
+    const seller = await this.baseSellerResumeService.baseUpdateResume(payload);
     if(seller.affected){
 
       return {
@@ -1217,7 +1217,7 @@ export class SellerService {
 
 
   async retrieveSeller(sellerId) {
-    const sellerData:any = await this.baseSellerServer.baseRetrieveSeller(sellerId);
+    const sellerData:any = await this.baseSellerService.baseRetrieveSeller(sellerId);
     if(sellerData){
       return {
         data: sellerData,

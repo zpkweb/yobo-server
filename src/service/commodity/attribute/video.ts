@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityVideoServer } from '../../base/commodity/attribute/video';
+import { BaseCommodityVideoService } from '../../base/commodity/attribute/video';
 
 @Provide()
 export class CommodityAttributeVideo {
 
   @Inject()
-  baseCommodityVideoServer: BaseCommodityVideoServer;
+  baseCommodityVideoService: BaseCommodityVideoService;
 
   // 创建
   async create(payload) {
-    const data = await this.baseCommodityVideoServer.BaseCreate(payload);
+    const data = await this.baseCommodityVideoService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -31,7 +31,7 @@ export class CommodityAttributeVideo {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityVideoServer.BaseHas(commodityId);
+    const data = await this.baseCommodityVideoService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -50,7 +50,7 @@ export class CommodityAttributeVideo {
    * @param payload
    */
     async getCommodity(commodityId) {
-      const data = await this.baseCommodityVideoServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityVideoService.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -66,7 +66,7 @@ export class CommodityAttributeVideo {
     }
 
     async retrieveCommodityId(commodityId) {
-      const data = await this.baseCommodityVideoServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityVideoService.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -84,7 +84,7 @@ export class CommodityAttributeVideo {
 
   // 更新商品
   async update(payload) {
-    const data = await this.baseCommodityVideoServer.BaseUpdate(payload);
+    const data = await this.baseCommodityVideoService.BaseUpdate(payload);
     if (data.affected) {
       return {
         data: data,
@@ -100,7 +100,7 @@ export class CommodityAttributeVideo {
   }
 
   async delete(id) {
-    const data = await this.baseCommodityVideoServer.BaseDelete(id);
+    const data = await this.baseCommodityVideoService.BaseDelete(id);
     if (data.affected) {
       return {
         success: true,

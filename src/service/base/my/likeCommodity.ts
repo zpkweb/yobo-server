@@ -9,7 +9,7 @@ import { MyLikeCommodityEntity } from 'src/entity/my/likeCommodity';
 // import { UserSellerEntity } from 'src/entity/user/seller/seller';
 
 @Provide()
-export class BaseMyLikeCommodityServer {
+export class BaseMyLikeCommodityService {
 
   @InjectEntityModel(MyLikeCommodityEntity)
   myLikeCommodityEntity: Repository<MyLikeCommodityEntity>;

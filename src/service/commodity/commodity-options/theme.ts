@@ -1,18 +1,18 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityThemeServer } from 'src/service/base/commodity/commodity-options/theme';
+import { BaseCommodityThemeService } from 'src/service/base/commodity/commodity-options/theme';
 import { CommodityOptionsThemeService } from '../options/theme';
 
 @Provide()
 export class CommodityThemeService {
 
   @Inject()
-  baseCommodityThemeServer: BaseCommodityThemeServer;
+  baseCommodityThemeService: BaseCommodityThemeService;
 
   @Inject()
   commodityOptionsThemeService: CommodityOptionsThemeService;
 
   async search(payload) {
-    const data = await this.baseCommodityThemeServer.BaseSearch(payload);
+    const data = await this.baseCommodityThemeService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -28,7 +28,7 @@ export class CommodityThemeService {
   }
 
   async create(payload) {
-    const data = await this.baseCommodityThemeServer.BaseCreate(payload);
+    const data = await this.baseCommodityThemeService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -44,7 +44,7 @@ export class CommodityThemeService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseCommodityThemeServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityThemeService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -60,7 +60,7 @@ export class CommodityThemeService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityThemeServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityThemeService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -76,7 +76,7 @@ export class CommodityThemeService {
   }
 
   async retrieveID(payload) {
-    const data = await this.baseCommodityThemeServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityThemeService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -92,7 +92,7 @@ export class CommodityThemeService {
   }
 
   async relation(payload) {
-    return await this.baseCommodityThemeServer.BaseRelationSet(payload)
+    return await this.baseCommodityThemeService.BaseRelationSet(payload)
   }
 
   async relationCreate(payload) {

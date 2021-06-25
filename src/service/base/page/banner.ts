@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { PageBannerEntity } from 'src/entity/page/banner';
 
 @Provide()
-export class BasePageBannerServer {
+export class BasePageBannerService {
 
   @InjectEntityModel(PageBannerEntity)
   pageBannerEntity: Repository<PageBannerEntity>;

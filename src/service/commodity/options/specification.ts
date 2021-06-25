@@ -2,19 +2,19 @@
  *
  */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsSpecificationServer } from 'src/service/base/commodity/options/specification';
+import { BaseCommodityOptionsSpecificationService } from 'src/service/base/commodity/options/specification';
 
 @Provide()
 export class CommodityOptionsSpecificationService {
 
   @Inject()
-  baseCommodityOptionsSpecificationServer: BaseCommodityOptionsSpecificationServer;
+  baseCommodityOptionsSpecificationService: BaseCommodityOptionsSpecificationService;
 
   /**
    * 创建
    */
   async create(payload) {
-    const data = await this.baseCommodityOptionsSpecificationServer.BaseCreate(payload);
+    const data = await this.baseCommodityOptionsSpecificationService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -33,7 +33,7 @@ export class CommodityOptionsSpecificationService {
    * 查询
    */
   async retrieve(id) {
-    const data = await this.baseCommodityOptionsSpecificationServer.BaseRetrieve(id);
+    const data = await this.baseCommodityOptionsSpecificationService.BaseRetrieve(id);
     if (data) {
       return {
         data: data,
@@ -52,7 +52,7 @@ export class CommodityOptionsSpecificationService {
    * 查询
    */
   async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsSpecificationServer.BaseRetrieveId(payload);
+    const data = await this.baseCommodityOptionsSpecificationService.BaseRetrieveId(payload);
     if (data) {
       return {
         data: data,
@@ -74,7 +74,7 @@ export class CommodityOptionsSpecificationService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    let data = await this.baseCommodityOptionsSpecificationServer.BaseRetrieveAll();
+    let data = await this.baseCommodityOptionsSpecificationService.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)
     }
@@ -97,7 +97,7 @@ export class CommodityOptionsSpecificationService {
    * 修改
    */
   async update(payload) {
-    const data = await this.baseCommodityOptionsSpecificationServer.BaseUpdate(payload);
+    const data = await this.baseCommodityOptionsSpecificationService.BaseUpdate(payload);
     if (data.affected) {
       return {
         // data: data,
@@ -117,7 +117,7 @@ export class CommodityOptionsSpecificationService {
    * 删除
    */
   async delete(id) {
-    const data = await this.baseCommodityOptionsSpecificationServer.BaseDelete(id);
+    const data = await this.baseCommodityOptionsSpecificationService.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

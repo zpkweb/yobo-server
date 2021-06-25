@@ -2,7 +2,7 @@ import { Provide, Inject } from "@midwayjs/decorator";
 import { InjectEntityModel } from '@midwayjs/orm';
 import { Repository } from 'typeorm';
 import { UserAddressEntity } from 'src/entity/user/address';
-import { BaseUserServer } from '../base/user/user';
+import { BaseUserService } from '../base/user/user';
 
 @Provide()
 export default class UserAddressService {
@@ -11,14 +11,14 @@ export default class UserAddressService {
   userAddressEntity: Repository<UserAddressEntity>;
 
   @Inject()
-  baseUserServer: BaseUserServer;
+  baseUserService: BaseUserService;
 
   /**
    * 创建用户地址
    * @param payload
    */
   async create(payload) {
-    let address = await this.baseUserServer.baseCreateUserAddress(payload);
+    let address = await this.baseUserService.baseCreateUserAddress(payload);
     if(address.identifiers[0].id){
 
       await this.userAddressEntity
@@ -27,7 +27,7 @@ export default class UserAddressService {
         .of(address.identifiers[0].id)
         .set({userId: payload.userId})
 
-      let userAddress = await this.baseUserServer.baseRetrieveUserAddress(payload.userId);
+      let userAddress = await this.baseUserService.baseRetrieveUserAddress(payload.userId);
       if(userAddress){
         return {
           data: userAddress,
@@ -56,7 +56,7 @@ export default class UserAddressService {
    * @param payload
    */
   async retrieve(userId) {
-    const address =  await this.baseUserServer.baseRetrieveUserAddress(userId);
+    const address =  await this.baseUserService.baseRetrieveUserAddress(userId);
     if(address){
       return{
         data: address,
@@ -72,7 +72,7 @@ export default class UserAddressService {
   }
 
   async update(payload) {
-    const address = await this.baseUserServer.baseUpdateUserAddress({
+    const address = await this.baseUserService.baseUpdateUserAddress({
       name: payload.name || '',
       phone: payload.phone || '',
       country: payload.country || '',
@@ -81,7 +81,7 @@ export default class UserAddressService {
       userId: payload.userId || ''
     })
       if(address.affected){
-        let user = await this.baseUserServer.baseRetrieveUserAddress(payload.userId)
+        let user = await this.baseUserService.baseRetrieveUserAddress(payload.userId)
         if(user){
           return {
             data: user,
@@ -110,7 +110,7 @@ export default class UserAddressService {
    * @param payload
    */
   async remove(userId) {
-    const address = await this.baseUserServer.baseDeleteUserAddress(userId);
+    const address = await this.baseUserService.baseDeleteUserAddress(userId);
       if(address.affected){
         return {
           success: true,

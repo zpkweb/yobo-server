@@ -237,8 +237,8 @@ export class CommodityService {
 
   }
 
-  async serverSearch(payload) {
-    return await this.commodityCommodityService.serverSearch({
+  async ServiceSearch(payload) {
+    return await this.commodityCommodityService.ServiceSearch({
       ...payload,
       locale: payload.locale || 'zh-cn'
     });

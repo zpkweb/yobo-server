@@ -2,19 +2,19 @@
  *
  */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsShapeServer } from 'src/service/base/commodity/options/shape';
+import { BaseCommodityOptionsShapeService } from 'src/service/base/commodity/options/shape';
 
 @Provide()
 export class CommodityOptionsShapeService {
 
   @Inject()
-  baseCommodityOptionsShapeServer: BaseCommodityOptionsShapeServer;
+  baseCommodityOptionsShapeService: BaseCommodityOptionsShapeService;
 
   /**
    * 创建
    */
   async create(payload) {
-    const data = await this.baseCommodityOptionsShapeServer.BaseCreate(payload);
+    const data = await this.baseCommodityOptionsShapeService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -33,7 +33,7 @@ export class CommodityOptionsShapeService {
    * 查询
    */
   async retrieve(id) {
-    const data = await this.baseCommodityOptionsShapeServer.BaseRetrieve(id);
+    const data = await this.baseCommodityOptionsShapeService.BaseRetrieve(id);
     if (data) {
       return {
         data: data,
@@ -52,7 +52,7 @@ export class CommodityOptionsShapeService {
    * 查询
    */
   async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsShapeServer.BaseRetrieveId(payload);
+    const data = await this.baseCommodityOptionsShapeService.BaseRetrieveId(payload);
     if (data) {
       return {
         data: data,
@@ -74,7 +74,7 @@ export class CommodityOptionsShapeService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    let data = await this.baseCommodityOptionsShapeServer.BaseRetrieveAll();
+    let data = await this.baseCommodityOptionsShapeService.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)
     }
@@ -97,7 +97,7 @@ export class CommodityOptionsShapeService {
    * 修改
    */
   async update(payload) {
-    const data = await this.baseCommodityOptionsShapeServer.BaseUpdate(payload);
+    const data = await this.baseCommodityOptionsShapeService.BaseUpdate(payload);
     if (data.affected) {
       return {
         // data: data,
@@ -117,7 +117,7 @@ export class CommodityOptionsShapeService {
    * 删除
    */
   async delete(id) {
-    const data = await this.baseCommodityOptionsShapeServer.BaseDelete(id);
+    const data = await this.baseCommodityOptionsShapeService.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

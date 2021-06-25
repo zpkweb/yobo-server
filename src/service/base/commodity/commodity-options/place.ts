@@ -5,7 +5,7 @@ import { CommodityPlaceEntity } from 'src/entity/commodity/commodity-options/pla
 
 
 @Provide()
-export class BaseCommodityPlaceServer {
+export class BaseCommodityPlaceService {
 
   @InjectEntityModel(CommodityPlaceEntity)
   CommodityPlaceEntity: Repository<CommodityPlaceEntity>;

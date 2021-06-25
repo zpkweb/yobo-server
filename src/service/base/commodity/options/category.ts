@@ -6,7 +6,7 @@ import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
 import { CommodityOptionsCategoryEntity } from 'src/entity/commodity/options/category';
 @Provide()
-export class BaseCommodityOptionsCategoryServer {
+export class BaseCommodityOptionsCategoryService {
 
   @InjectEntityModel(CommodityOptionsCategoryEntity)
   commodityOptionsCategoryEntity: Repository<CommodityOptionsCategoryEntity>;

@@ -7,7 +7,7 @@ import { CommodityNameEntity } from 'src/entity/commodity/attribute/name';
 
 
 @Provide()
-export class BaseSellerServer {
+export class BaseSellerService {
 
   @InjectEntityModel(UserSellerEntity)
   userSellerEntity: Repository<UserSellerEntity>
@@ -74,7 +74,7 @@ export class BaseSellerServer {
   /**
    * 判断用户是否申请艺术家
    *
-   * @memberof BaseSellerServer
+   * @memberof BaseSellerService
    */
   async baseApplySeller(userId) {
     return await this.userSellerEntity

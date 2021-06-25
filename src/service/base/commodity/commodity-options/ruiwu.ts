@@ -5,7 +5,7 @@ import { CommodityRuiwuEntity } from 'src/entity/commodity/commodity-options/rui
 
 
 @Provide()
-export class BaseCommodityRuiwuServer {
+export class BaseCommodityRuiwuService {
 
   @InjectEntityModel(CommodityRuiwuEntity)
   CommodityRuiwuEntity: Repository<CommodityRuiwuEntity>;

@@ -1,14 +1,14 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseMessageServer } from "src/service/base/message/message"
+import { BaseMessageService } from "src/service/base/message/message"
 
 @Provide()
-export class MessageServer {
+export class MessageService {
 
   @Inject()
-  baseMessageServer: BaseMessageServer;
+  baseMessageService: BaseMessageService;
 
   async create(payload) {
-    const data = await this.baseMessageServer.BaseCreate({
+    const data = await this.baseMessageService.BaseCreate({
       href: payload.href,
       type: payload.type,
       owner: payload.owner,
@@ -30,7 +30,7 @@ export class MessageServer {
   }
 
   async retrieveMessageId(messageId) {
-    const data = await this.baseMessageServer.BaseRetrieveMessageId(messageId);
+    const data = await this.baseMessageService.BaseRetrieveMessageId(messageId);
     if(data) {
       return {
         success: true,
@@ -45,7 +45,7 @@ export class MessageServer {
   }
 
   async retrieveAll(payload){
-    const result = await this.baseMessageServer.BaseRetrieveAll({
+    const result = await this.baseMessageService.BaseRetrieveAll({
       currentPage: payload.currentPage,
       pageSize: payload.pageSize
     });
@@ -68,7 +68,7 @@ export class MessageServer {
   }
 
   async search(payload) {
-    const result = await this.baseMessageServer.BaseSearch(payload);
+    const result = await this.baseMessageService.BaseSearch(payload);
     if(result) {
       return {
         data: {
@@ -87,7 +87,7 @@ export class MessageServer {
   }
 
   async delete(messageId) {
-    const data = await this.baseMessageServer.BaseDelete(messageId);
+    const data = await this.baseMessageService.BaseDelete(messageId);
     if(data) {
       return {
         success: true,

@@ -1,18 +1,18 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommoditySpecificationServer } from 'src/service/base/commodity/commodity-options/specification';
+import { BaseCommoditySpecificationService } from 'src/service/base/commodity/commodity-options/specification';
 import { CommodityOptionsSpecificationService } from '../options/specification';
 
 @Provide()
 export class CommoditySpecificationService {
 
   @Inject()
-  baseCommoditySpecificationServer: BaseCommoditySpecificationServer;
+  baseCommoditySpecificationService: BaseCommoditySpecificationService;
 
   @Inject()
   commodityOptionsSpecificationService: CommodityOptionsSpecificationService;
 
   async search(payload) {
-    const data = await this.baseCommoditySpecificationServer.BaseSearch(payload);
+    const data = await this.baseCommoditySpecificationService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -28,7 +28,7 @@ export class CommoditySpecificationService {
   }
 
   async create(payload) {
-    const data = await this.baseCommoditySpecificationServer.BaseCreate(payload);
+    const data = await this.baseCommoditySpecificationService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -44,7 +44,7 @@ export class CommoditySpecificationService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseCommoditySpecificationServer.BaseRetrieveID(payload);
+    const data = await this.baseCommoditySpecificationService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -60,7 +60,7 @@ export class CommoditySpecificationService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommoditySpecificationServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommoditySpecificationService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -76,7 +76,7 @@ export class CommoditySpecificationService {
   }
 
   async retrieveID(payload) {
-    const data = await this.baseCommoditySpecificationServer.BaseRetrieveID(payload);
+    const data = await this.baseCommoditySpecificationService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -92,7 +92,7 @@ export class CommoditySpecificationService {
   }
 
   async relation(payload) {
-    return await this.baseCommoditySpecificationServer.BaseRelationSet(payload)
+    return await this.baseCommoditySpecificationService.BaseRelationSet(payload)
   }
 
   async relationCreate(payload) {

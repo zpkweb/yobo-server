@@ -5,7 +5,7 @@ import { SellerService } from 'src/service/user/seller';
 
 @Provide()
 @Controller('/api/seller',{tagName:'艺术家'})
-export class ServerSellerController {
+export class ServiceSellerController {
 
   @Inject()
   userRegisterService: UserRegisterService;
@@ -30,7 +30,7 @@ export class ServerSellerController {
    *
    * @param {*} findQuery
    * @return {*}
-   * @memberof ServerSellerController
+   * @memberof ServiceSellerController
    * userId
    * sellerId
    */

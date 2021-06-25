@@ -1,5 +1,5 @@
 import { Provide, Inject } from "@midwayjs/decorator";
-import { BaseCommodityServer } from '../base/commodity/commodity';
+import { BaseCommodityService } from '../base/commodity/commodity';
 import { CommodityAttributeName } from 'src/service/commodity/attribute/name';
 import { CommodityAttributeDesc } from 'src/service/commodity/attribute/desc';
 import { CommodityAttributeColor } from 'src/service/commodity/attribute/color';
@@ -22,7 +22,7 @@ import { CommodityUseService } from './commodity-options/use';
 export class CommoditySearchService {
 
   @Inject()
-  baseCommodityServer: BaseCommodityServer;
+  baseCommodityService: BaseCommodityService;
 
   @Inject()
   commodityAttributeName: CommodityAttributeName;
@@ -276,9 +276,9 @@ export class CommoditySearchService {
     // console.log("searchAll", searchAll)
     if(commodityIds.length){
 
-      // result = await this.baseCommodityServer.BaseRetrieveAll(payload);
+      // result = await this.baseCommodityService.BaseRetrieveAll(payload);
     }else{
-      // result = await this.baseCommodityServer.BaseSearchs(payload);
+      // result = await this.baseCommodityService.BaseSearchs(payload);
     }
 
     // console.log("searchs result", result)
@@ -405,7 +405,7 @@ export class CommoditySearchService {
 
   async searchCommodity(payload) {
     // console.log("searchCommodity", payload)
-    const result = await this.baseCommodityServer.BaseSearchCommodity(payload);
+    const result = await this.baseCommodityService.BaseSearchCommodity(payload);
     let data = result[0];
     let total = result[1];
 

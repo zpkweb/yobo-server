@@ -26,7 +26,7 @@ import { CommodityUseEntity } from 'src/entity/commodity/commodity-options/use';
 
 
 @Provide()
-export class BaseCommodityServer {
+export class BaseCommodityService {
 
   @InjectEntityModel(CommodityEntity)
   commodityEntity: Repository<CommodityEntity>;

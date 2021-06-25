@@ -1,12 +1,12 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseSubscriberServer } from "src/service/base/subscribe/subscriber";
+import { BaseSubscriberService } from "src/service/base/subscribe/subscriber";
 import { UserService } from "src/service/user/user"
 
 @Provide()
-export class SubscriberServer {
+export class SubscriberService {
 
   @Inject()
-  baseSubscriberServer: BaseSubscriberServer;
+  baseSubscriberService: BaseSubscriberService;
 
   @Inject()
   userService: UserService;
@@ -35,7 +35,7 @@ export class SubscriberServer {
     }
     // 找到用户,
     // 创建订阅
-    const subscriber = await this.baseSubscriberServer.BaseCreate({
+    const subscriber = await this.baseSubscriberService.BaseCreate({
       email: payload.email,
       userName: user.data.name,
       userEmail: user.data.email,
@@ -44,7 +44,7 @@ export class SubscriberServer {
     if(subscriber.identifiers[0].id){
       // return await this.retrieveEmail(payload.email)
       // 关联用户
-      await this.baseSubscriberServer.BaseRelationSet({
+      await this.baseSubscriberService.BaseRelationSet({
         name: 'user',
         of: subscriber.identifiers[0].id,
         set: { userId: payload.userId }
@@ -77,7 +77,7 @@ export class SubscriberServer {
 
   }
   async retrieveEmail(email) {
-    const retrieve = await this.baseSubscriberServer.BaseRetrieveEmail(email);
+    const retrieve = await this.baseSubscriberService.BaseRetrieveEmail(email);
     if (retrieve) {
       return {
         data: retrieve,
@@ -92,7 +92,7 @@ export class SubscriberServer {
     }
   }
   async retrieveUserId(userId) {
-    const retrieve = await this.baseSubscriberServer.BaseRetrieveUserId(userId);
+    const retrieve = await this.baseSubscriberService.BaseRetrieveUserId(userId);
     if (retrieve) {
       return {
         data: retrieve,
@@ -107,7 +107,7 @@ export class SubscriberServer {
     }
   }
   async retrieveEmailUserId(payload) {
-    const retrieve = await this.baseSubscriberServer.BaseRetrieveEmailUserId(payload);
+    const retrieve = await this.baseSubscriberService.BaseRetrieveEmailUserId(payload);
     if (retrieve) {
       return {
         data: retrieve,
@@ -122,7 +122,7 @@ export class SubscriberServer {
     }
   }
   async retrieveAll() {
-    const retrieve = await this.baseSubscriberServer.BaseRetrieve();
+    const retrieve = await this.baseSubscriberService.BaseRetrieve();
     if (retrieve) {
       return {
         data: retrieve,
@@ -151,7 +151,7 @@ export class SubscriberServer {
     }
   }
   async deleteEmail(email) {
-    const data = await this.baseSubscriberServer.BaseDeleteEmail(email);
+    const data = await this.baseSubscriberService.BaseDeleteEmail(email);
     if (data.affected) {
       return {
         data: data,
@@ -166,7 +166,7 @@ export class SubscriberServer {
     }
   }
   async deleteUserId(userId) {
-    const data = await this.baseSubscriberServer.BaseDeleteUserId(userId);
+    const data = await this.baseSubscriberService.BaseDeleteUserId(userId);
     if (data.affected) {
       return {
         data: data,
@@ -182,7 +182,7 @@ export class SubscriberServer {
   }
 
   async deleteAll() {
-    const data = await this.baseSubscriberServer.BaseDelete();
+    const data = await this.baseSubscriberService.BaseDelete();
     if (data.affected) {
       return {
         data: data,

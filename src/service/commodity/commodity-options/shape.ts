@@ -1,18 +1,18 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityShapeServer } from 'src/service/base/commodity/commodity-options/shape';
+import { BaseCommodityShapeService } from 'src/service/base/commodity/commodity-options/shape';
 import { CommodityOptionsShapeService } from '../options/shape';
 
 @Provide()
 export class CommodityShapeService {
 
   @Inject()
-  baseCommodityShapeServer: BaseCommodityShapeServer;
+  baseCommodityShapeService: BaseCommodityShapeService;
 
   @Inject()
   commodityOptionsShapeService: CommodityOptionsShapeService;
 
   async search(payload) {
-    const data = await this.baseCommodityShapeServer.BaseSearch(payload);
+    const data = await this.baseCommodityShapeService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -28,7 +28,7 @@ export class CommodityShapeService {
   }
 
   async create(payload) {
-    const data = await this.baseCommodityShapeServer.BaseCreate(payload);
+    const data = await this.baseCommodityShapeService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -44,7 +44,7 @@ export class CommodityShapeService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseCommodityShapeServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityShapeService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -60,7 +60,7 @@ export class CommodityShapeService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityShapeServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityShapeService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -76,7 +76,7 @@ export class CommodityShapeService {
   }
 
   async retrieveID(payload) {
-    const data = await this.baseCommodityShapeServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityShapeService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -92,7 +92,7 @@ export class CommodityShapeService {
   }
 
   async relation(payload) {
-    return await this.baseCommodityShapeServer.BaseRelationSet(payload)
+    return await this.baseCommodityShapeService.BaseRelationSet(payload)
   }
 
   async relationCreate(payload) {

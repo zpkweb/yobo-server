@@ -5,7 +5,7 @@ import { CommodityStyleEntity } from 'src/entity/commodity/commodity-options/sty
 
 
 @Provide()
-export class BaseCommodityStyleServer {
+export class BaseCommodityStyleService {
 
   @InjectEntityModel(CommodityStyleEntity)
   CommodityStyleEntity: Repository<CommodityStyleEntity>;

@@ -5,7 +5,7 @@ import { UserSellerMetadataEntity } from 'src/entity/user/seller/metadata';
 
 
 @Provide()
-export class BaseSellerMetadataServer {
+export class BaseSellerMetadataService {
 
   @InjectEntityModel(UserSellerMetadataEntity)
   userSellerMetadataEntity: Repository<UserSellerMetadataEntity>

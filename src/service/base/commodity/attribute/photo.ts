@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommodityPhotoEntity } from 'src/entity/commodity/attribute/photo';
 
 @Provide()
-export class BaseCommodityPhotoServer {
+export class BaseCommodityPhotoService {
 
   @InjectEntityModel(CommodityPhotoEntity)
   commodityPhotoEntity: Repository<CommodityPhotoEntity>;

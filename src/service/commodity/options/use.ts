@@ -2,19 +2,19 @@
  *
  */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsUseServer } from 'src/service/base/commodity/options/use';
+import { BaseCommodityOptionsUseService } from 'src/service/base/commodity/options/use';
 
 @Provide()
 export class CommodityOptionsUseService {
 
   @Inject()
-  baseCommodityOptionsUseServer: BaseCommodityOptionsUseServer;
+  baseCommodityOptionsUseService: BaseCommodityOptionsUseService;
 
   /**
    * 创建
    */
   async create(payload) {
-    const data = await this.baseCommodityOptionsUseServer.BaseCreate(payload);
+    const data = await this.baseCommodityOptionsUseService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -33,7 +33,7 @@ export class CommodityOptionsUseService {
    * 查询
    */
   async retrieve(id) {
-    const data = await this.baseCommodityOptionsUseServer.BaseRetrieve(id);
+    const data = await this.baseCommodityOptionsUseService.BaseRetrieve(id);
     if (data) {
       return {
         data: data,
@@ -52,7 +52,7 @@ export class CommodityOptionsUseService {
    * 查询
    */
   async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsUseServer.BaseRetrieveId(payload);
+    const data = await this.baseCommodityOptionsUseService.BaseRetrieveId(payload);
     if (data) {
       return {
         data: data,
@@ -74,7 +74,7 @@ export class CommodityOptionsUseService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    let data = await this.baseCommodityOptionsUseServer.BaseRetrieveAll();
+    let data = await this.baseCommodityOptionsUseService.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)
     }
@@ -97,7 +97,7 @@ export class CommodityOptionsUseService {
    * 修改
    */
   async update(payload) {
-    const data = await this.baseCommodityOptionsUseServer.BaseUpdate(payload);
+    const data = await this.baseCommodityOptionsUseService.BaseUpdate(payload);
     if (data.affected) {
       return {
         // data: data,
@@ -117,7 +117,7 @@ export class CommodityOptionsUseService {
    * 删除
    */
   async delete(id) {
-    const data = await this.baseCommodityOptionsUseServer.BaseDelete(id);
+    const data = await this.baseCommodityOptionsUseService.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

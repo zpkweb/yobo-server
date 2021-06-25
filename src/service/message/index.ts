@@ -1,24 +1,24 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { MessageServer } from './message';
+import { MessageService } from './message';
 
 @Provide()
 export default class Message {
   @Inject()
-  messageServer: MessageServer;
+  messageService: MessageService;
 
   async create(payload) {
-    return await this.messageServer.create(payload)
+    return await this.messageService.create(payload)
   }
 
   async findAll(payload) {
-    return await this.messageServer.retrieveAll(payload)
+    return await this.messageService.retrieveAll(payload)
   }
 
   async search(payload) {
-    return await this.messageServer.search(payload)
+    return await this.messageService.search(payload)
   }
 
   async delete(messageId) {
-    return await this.messageServer.delete(messageId)
+    return await this.messageService.delete(messageId)
   }
 }

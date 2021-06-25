@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityNameServer } from '../../base/commodity/attribute/name';
+import { BaseCommodityNameService } from '../../base/commodity/attribute/name';
 
 @Provide()
 export class CommodityAttributeName {
 
   @Inject()
-  baseCommodityNameServer: BaseCommodityNameServer;
+  baseCommodityNameService: BaseCommodityNameService;
 
   // 创建名称
   async create(payload) {
-    const data = await this.baseCommodityNameServer.BaseCreate(payload);
+    const data = await this.baseCommodityNameService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -31,7 +31,7 @@ export class CommodityAttributeName {
    *
    */
   async hasName(payload) {
-    const data = await this.baseCommodityNameServer.BaseRetrieve({
+    const data = await this.baseCommodityNameService.BaseRetrieve({
       'zh-cn': payload['zh-cn'] || '',
       'en-us': payload['en-us'] || '',
       'ja-jp': payload['ja-jp'] || '',
@@ -60,7 +60,7 @@ export class CommodityAttributeName {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityNameServer.BaseHas(commodityId);
+    const data = await this.baseCommodityNameService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -76,7 +76,7 @@ export class CommodityAttributeName {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityNameServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityNameService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -92,7 +92,7 @@ export class CommodityAttributeName {
   }
 
   async search(payload) {
-    const data = await this.baseCommodityNameServer.BaseSearch(payload);
+    const data = await this.baseCommodityNameService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -109,7 +109,7 @@ export class CommodityAttributeName {
 
   // 更新商品名称
   async update(payload) {
-    const data = await this.baseCommodityNameServer.BaseUpdate(payload);
+    const data = await this.baseCommodityNameService.BaseUpdate(payload);
     if (data.affected) {
       return {
         success: true,

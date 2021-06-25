@@ -5,7 +5,7 @@ import { CommodityShapeEntity } from 'src/entity/commodity/commodity-options/sha
 
 
 @Provide()
-export class BaseCommodityShapeServer {
+export class BaseCommodityShapeService {
 
   @InjectEntityModel(CommodityShapeEntity)
   CommodityShapeEntity: Repository<CommodityShapeEntity>;

@@ -8,7 +8,7 @@ import { Repository } from "typeorm";
 import { SubscriberEntity } from "src/entity/subscribe/subscriber"
 
 @Provide()
-export class BaseSubscriberServer {
+export class BaseSubscriberService {
 
   @InjectEntityModel(SubscriberEntity)
   subscriberEntity: Repository<SubscriberEntity>;
@@ -17,7 +17,7 @@ export class BaseSubscriberServer {
    * 创建
    *
    * @param {*} payload
-   * @memberof BaseSubscriberServer
+   * @memberof BaseSubscriberService
    */
   async BaseCreate({
     email = '',

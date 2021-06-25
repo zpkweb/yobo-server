@@ -7,7 +7,7 @@
  import { CommodityOptionsRuiwuEntity } from 'src/entity/commodity/options/ruiwu';
 
  @Provide()
- export class BaseCommodityOptionsRuiwuServer {
+ export class BaseCommodityOptionsRuiwuService {
 
    @InjectEntityModel(CommodityOptionsRuiwuEntity)
    commodityOptionsRuiwuEntity: Repository<CommodityOptionsRuiwuEntity>;

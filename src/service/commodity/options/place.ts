@@ -2,19 +2,19 @@
  *
  */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsPlaceServer } from 'src/service/base/commodity/options/place';
+import { BaseCommodityOptionsPlaceService } from 'src/service/base/commodity/options/place';
 
 @Provide()
 export class CommodityOptionsPlaceService {
 
   @Inject()
-  baseCommodityOptionsPlaceServer: BaseCommodityOptionsPlaceServer;
+  baseCommodityOptionsPlaceService: BaseCommodityOptionsPlaceService;
 
   /**
    * 创建
    */
   async create(payload) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseCreate(payload);
+    const data = await this.baseCommodityOptionsPlaceService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -33,7 +33,7 @@ export class CommodityOptionsPlaceService {
    * 查询
    */
   async retrieve(id) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseRetrieve(id);
+    const data = await this.baseCommodityOptionsPlaceService.BaseRetrieve(id);
     if (data) {
       return {
         data: data,
@@ -52,7 +52,7 @@ export class CommodityOptionsPlaceService {
    * 查询
    */
   async retrieveId(payload) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseRetrieveId(payload);
+    const data = await this.baseCommodityOptionsPlaceService.BaseRetrieveId(payload);
     if (data) {
       return {
         data: data,
@@ -74,7 +74,7 @@ export class CommodityOptionsPlaceService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    let data = await this.baseCommodityOptionsPlaceServer.BaseRetrieveAll();
+    let data = await this.baseCommodityOptionsPlaceService.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)
     }
@@ -97,7 +97,7 @@ export class CommodityOptionsPlaceService {
    * 修改
    */
   async update(payload) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseUpdate(payload);
+    const data = await this.baseCommodityOptionsPlaceService.BaseUpdate(payload);
     if (data.affected) {
       return {
         // data: data,
@@ -117,7 +117,7 @@ export class CommodityOptionsPlaceService {
    * 删除
    */
   async delete(id) {
-    const data = await this.baseCommodityOptionsPlaceServer.BaseDelete(id);
+    const data = await this.baseCommodityOptionsPlaceService.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

@@ -1,18 +1,18 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityRuiwuServer } from 'src/service/base/commodity/commodity-options/ruiwu';
+import { BaseCommodityRuiwuService } from 'src/service/base/commodity/commodity-options/ruiwu';
 import { CommodityOptionsRuiwuService } from '../options/ruiwu';
 
 @Provide()
 export class CommodityRuiwuService {
 
   @Inject()
-  baseCommodityRuiwuServer: BaseCommodityRuiwuServer;
+  baseCommodityRuiwuService: BaseCommodityRuiwuService;
 
   @Inject()
   commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
 
   async search(payload) {
-    const data = await this.baseCommodityRuiwuServer.BaseSearch(payload);
+    const data = await this.baseCommodityRuiwuService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -28,7 +28,7 @@ export class CommodityRuiwuService {
   }
 
   async create(payload) {
-    const data = await this.baseCommodityRuiwuServer.BaseCreate(payload);
+    const data = await this.baseCommodityRuiwuService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -44,7 +44,7 @@ export class CommodityRuiwuService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseCommodityRuiwuServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityRuiwuService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -60,7 +60,7 @@ export class CommodityRuiwuService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityRuiwuServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityRuiwuService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -76,7 +76,7 @@ export class CommodityRuiwuService {
   }
 
   async retrieveID(payload) {
-    const data = await this.baseCommodityRuiwuServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityRuiwuService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -92,7 +92,7 @@ export class CommodityRuiwuService {
   }
 
   async relation(payload) {
-    return await this.baseCommodityRuiwuServer.BaseRelationSet(payload)
+    return await this.baseCommodityRuiwuService.BaseRelationSet(payload)
   }
 
   async relationCreate(payload) {

@@ -4,7 +4,7 @@ import { MessageEntity } from "src/entity/message/message";
 import { Like, Repository } from "typeorm";
 
 @Provide()
-export class BaseMessageServer {
+export class BaseMessageService {
 
   @InjectEntityModel(MessageEntity)
   messageEntity: Repository<MessageEntity>;

@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { CommodityPostageEntity } from 'src/entity/commodity/attribute/postage';
 
 @Provide()
-export class BaseCommodityPostageServer {
+export class BaseCommodityPostageService {
 
   @InjectEntityModel(CommodityPostageEntity)
   commodityPostageEntity: Repository<CommodityPostageEntity>;

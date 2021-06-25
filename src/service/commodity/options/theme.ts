@@ -2,19 +2,19 @@
  *
  */
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityOptionsThemeServer } from 'src/service/base/commodity/options/theme';
+import { BaseCommodityOptionsThemeService } from 'src/service/base/commodity/options/theme';
 
 @Provide()
 export class CommodityOptionsThemeService {
 
   @Inject()
-  baseCommodityOptionsThemeServer: BaseCommodityOptionsThemeServer;
+  baseCommodityOptionsThemeService: BaseCommodityOptionsThemeService;
 
   /**
    * 创建
    */
   async create(payload) {
-    const data = await this.baseCommodityOptionsThemeServer.BaseCreate(payload);
+    const data = await this.baseCommodityOptionsThemeService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -33,7 +33,7 @@ export class CommodityOptionsThemeService {
    * 查询
    */
   async retrieve(payload) {
-    const data = await this.baseCommodityOptionsThemeServer.BaseRetrieve(payload);
+    const data = await this.baseCommodityOptionsThemeService.BaseRetrieve(payload);
     if (data) {
       return {
         data: data,
@@ -52,7 +52,7 @@ export class CommodityOptionsThemeService {
    * 查询
    */
   async retrieveId(id) {
-    const data = await this.baseCommodityOptionsThemeServer.BaseRetrieveId(id);
+    const data = await this.baseCommodityOptionsThemeService.BaseRetrieveId(id);
     if (data) {
       return {
         data: data,
@@ -74,7 +74,7 @@ export class CommodityOptionsThemeService {
     isLocale = false,
     locale = 'zh-cn'
   } = {}) {
-    let data = await this.baseCommodityOptionsThemeServer.BaseRetrieveAll();
+    let data = await this.baseCommodityOptionsThemeService.BaseRetrieveAll();
     if(isLocale){
       data = this.filter(locale, data)
     }
@@ -98,7 +98,7 @@ export class CommodityOptionsThemeService {
     currentPage = 10,
     pageSize = 1
   } = {}) {
-    let data = await this.baseCommodityOptionsThemeServer.BaseRetrieveSize({
+    let data = await this.baseCommodityOptionsThemeService.BaseRetrieveSize({
       currentPage,
       pageSize
     });
@@ -123,7 +123,7 @@ export class CommodityOptionsThemeService {
    * 修改
    */
   async update(payload) {
-    const data = await this.baseCommodityOptionsThemeServer.BaseUpdate(payload);
+    const data = await this.baseCommodityOptionsThemeService.BaseUpdate(payload);
     if (data.affected) {
       return {
         // data: data,
@@ -143,7 +143,7 @@ export class CommodityOptionsThemeService {
    * 删除
    */
   async delete(id) {
-    const data = await this.baseCommodityOptionsThemeServer.BaseDelete(id);
+    const data = await this.baseCommodityOptionsThemeService.BaseDelete(id);
     if (data.affected) {
       return {
         // data: data,

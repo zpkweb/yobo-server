@@ -5,7 +5,7 @@ import { MyLikeSellerEntity } from 'src/entity/my/likeSeller';
 // import { UserEntity } from 'src/entity/user/user';
 
 @Provide()
-export class BaseMyLikeSellerServer {
+export class BaseMyLikeSellerService {
 
   @InjectEntityModel(MyLikeSellerEntity)
   myLikeSellerEntity: Repository<MyLikeSellerEntity>;

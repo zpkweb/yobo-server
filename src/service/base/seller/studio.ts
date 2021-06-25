@@ -5,7 +5,7 @@ import { UserSellerStudioEntity } from 'src/entity/user/seller/studio';
 
 
 @Provide()
-export class BaseSellerStudioServer {
+export class BaseSellerStudioService {
 
   @InjectEntityModel(UserSellerStudioEntity)
   userSellerStudioEntity: Repository<UserSellerStudioEntity>

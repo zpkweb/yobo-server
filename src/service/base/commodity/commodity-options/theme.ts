@@ -5,7 +5,7 @@ import { CommodityThemeEntity } from 'src/entity/commodity/commodity-options/the
 
 
 @Provide()
-export class BaseCommodityThemeServer {
+export class BaseCommodityThemeService {
 
   @InjectEntityModel(CommodityThemeEntity)
   CommodityThemeEntity: Repository<CommodityThemeEntity>;

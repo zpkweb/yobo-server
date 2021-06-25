@@ -1,18 +1,18 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityModelServer } from 'src/service/base/commodity/commodity-options/model';
+import { BaseCommodityModelService } from 'src/service/base/commodity/commodity-options/model';
 import { CommodityOptionsModelService } from '../options/model';
 
 @Provide()
 export class CommodityModelService {
 
   @Inject()
-  baseCommodityModelServer: BaseCommodityModelServer;
+  baseCommodityModelService: BaseCommodityModelService;
 
   @Inject()
   commodityOptionsModelService: CommodityOptionsModelService;
 
   async search(payload) {
-    const data = await this.baseCommodityModelServer.BaseSearch(payload);
+    const data = await this.baseCommodityModelService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
@@ -28,7 +28,7 @@ export class CommodityModelService {
   }
 
   async create(payload) {
-    const data = await this.baseCommodityModelServer.BaseCreate(payload);
+    const data = await this.baseCommodityModelService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -44,7 +44,7 @@ export class CommodityModelService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseCommodityModelServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityModelService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -60,7 +60,7 @@ export class CommodityModelService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityModelServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityModelService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -76,7 +76,7 @@ export class CommodityModelService {
   }
 
   async retrieveID(payload) {
-    const data = await this.baseCommodityModelServer.BaseRetrieveID(payload);
+    const data = await this.baseCommodityModelService.BaseRetrieveID(payload);
     if (data) {
       return {
         data: data,
@@ -92,7 +92,7 @@ export class CommodityModelService {
   }
 
   async relation(payload) {
-    return await this.baseCommodityModelServer.BaseRelationSet(payload)
+    return await this.baseCommodityModelService.BaseRelationSet(payload)
   }
 
   async relationCreate(payload) {

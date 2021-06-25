@@ -5,7 +5,7 @@ import { CommodityBrowsingCountEntity } from 'src/entity/commodity/commodityBrow
 
 
 @Provide()
-export class BaseCommodityBrowsingCountServer {
+export class BaseCommodityBrowsingCountService {
 
   @InjectEntityModel(CommodityBrowsingCountEntity)
   commodityBrowsingCountEntity: Repository<CommodityBrowsingCountEntity>;

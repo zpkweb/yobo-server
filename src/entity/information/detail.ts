@@ -1,9 +1,9 @@
 // 资讯 详情
 import { EntityModel } from "@midwayjs/orm";
-import { Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne } from "typeorm";
+import { Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn } from "typeorm";
 import { InformationEntity } from "./information";
 
-@EntityModel()
+@EntityModel('information_detail')
 export class InformationDetailEntity {
 
   @PrimaryGeneratedColumn()
@@ -29,13 +29,18 @@ export class InformationDetailEntity {
   })
   'es-es': string;
 
-  // 资讯id
-  @Column()
-  informationId: string;
-
   // 关联资讯
   @OneToOne(type => InformationEntity, InformationEntity => InformationEntity.detail)
+  @JoinColumn({
+    name: 'informationId'
+  })
   information: InformationEntity;
+
+  // 是否删除
+  @Column({
+    select: false
+  })
+  isDelete: boolean;
 
   //  创建日期
   @CreateDateColumn({

@@ -1,25 +1,25 @@
 import { Inject, Provide } from "@midwayjs/decorator";
 
-import { BaseIdentityServer } from 'src/service/base/user/identity';
+import { BaseIdentityService } from 'src/service/base/user/identity';
 
 @Provide()
 export class IdentityService {
 
   @Inject()
-  baseIdentityServer: BaseIdentityServer;
+  baseIdentityService: BaseIdentityService;
 
   async create(payload) {
-    const data = await this.baseIdentityServer.baseCreateUserIdentity(payload.identityIndex);
+    const data = await this.baseIdentityService.baseCreateUserIdentity(payload.identityIndex);
     if(data) {
       // 关联身份列表
-      await this.baseIdentityServer.BaseRelationSet({
+      await this.baseIdentityService.BaseRelationSet({
         name: 'identityList',
         of: data.identifiers[0].id,
         set: payload.identityIndex
       })
       // 关联用户
       if(payload.userId) {
-        await this.baseIdentityServer.BaseRelationSet({
+        await this.baseIdentityService.BaseRelationSet({
           name: 'user',
           of: data.identifiers[0].id,
           set: { userId: payload.userId }
@@ -40,7 +40,7 @@ export class IdentityService {
   }
 
   async retrieveUserIdentityList(payload) {
-    const data = await this.baseIdentityServer.baseRetrieveUserIdentityList(payload);
+    const data = await this.baseIdentityService.baseRetrieveUserIdentityList(payload);
     if(data) {
       return {
         data: data,
@@ -55,7 +55,7 @@ export class IdentityService {
     }
   }
   async deleteUserIdIdentityId(payload) {
-    const data = await this.baseIdentityServer.baseDeleteIdentityId(payload);
+    const data = await this.baseIdentityService.baseDeleteIdentityId(payload);
     if(data.affected) {
       return {
         data: data,

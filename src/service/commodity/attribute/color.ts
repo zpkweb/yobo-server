@@ -1,11 +1,11 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityColorServer } from '../../base/commodity/attribute/color';
+import { BaseCommodityColorService } from '../../base/commodity/attribute/color';
 
 @Provide()
 export class CommodityAttributeColor {
 
   @Inject()
-  baseCommodityColorServer: BaseCommodityColorServer;
+  baseCommodityColorService: BaseCommodityColorService;
 
   // 创建颜色
   async create(payload) {
@@ -15,7 +15,7 @@ export class CommodityAttributeColor {
   // }
     // const hex = await payload.name.toLowerCase().split('').reduce( (result, ch) => result * 16 + '0123456789abcdefgh'.indexOf(ch), 0);
 
-    const data = await this.baseCommodityColorServer.BaseCreate(payload);
+    const data = await this.baseCommodityColorService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -37,7 +37,7 @@ export class CommodityAttributeColor {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityColorServer.BaseHas(commodityId);
+    const data = await this.baseCommodityColorService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -56,7 +56,7 @@ export class CommodityAttributeColor {
    * @param payload
    */
     async getCommodityId(commodityId) {
-      const data = await this.baseCommodityColorServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityColorService.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -72,7 +72,7 @@ export class CommodityAttributeColor {
     }
 
     async retrieveCommodityId(commodityId) {
-      const data = await this.baseCommodityColorServer.BaseRetrieveCommodityId(commodityId);
+      const data = await this.baseCommodityColorService.BaseRetrieveCommodityId(commodityId);
       if (data) {
         return {
           data: data,
@@ -90,7 +90,7 @@ export class CommodityAttributeColor {
 
   // 更新商品颜色
   async update(payload) {
-    const data = await this.baseCommodityColorServer.BaseUpdate(payload);
+    const data = await this.baseCommodityColorService.BaseUpdate(payload);
     if (data.affected) {
       return {
         data: data,
@@ -106,7 +106,7 @@ export class CommodityAttributeColor {
   }
 
   async search(payload) {
-    const data = await this.baseCommodityColorServer.BaseSearch(payload);
+    const data = await this.baseCommodityColorService.BaseSearch(payload);
     if (data) {
       return {
         data: data,

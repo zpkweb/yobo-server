@@ -1,5 +1,5 @@
 import { Inject, Provide } from '@midwayjs/decorator';
-import { BaseCommodityServer } from '../base/commodity/commodity';
+import { BaseCommodityService } from '../base/commodity/commodity';
 import { CommodityAttributeName } from './attribute/name';
 import { CommodityAttributeDesc } from './attribute/desc';
 import { CommodityAttributeDetails } from './attribute/details';
@@ -21,11 +21,11 @@ import { CommodityTechniqueService } from './commodity-options/technique';
 import { CommodityThemeService } from './commodity-options/theme';
 import { CommodityTypeService } from './commodity-options/type';
 import { CommodityUseService } from './commodity-options/use';
-import { BaseSellerMetadataServer } from "src/service/base/seller/metadata";
+import { BaseSellerMetadataService } from "src/service/base/seller/metadata";
 
 import { CommodityOptionService } from './commodityOption';
 import { SellerService } from 'src/service/user/seller';
-import { BaseSellerServer } from "src/service/base/seller/seller";
+import { BaseSellerService } from "src/service/base/seller/seller";
 
 
 import { CommoditySearchService } from './commodity-search'
@@ -34,10 +34,10 @@ import { CommoditySearchService } from './commodity-search'
 export class CommodityCommodityService {
 
   @Inject()
-  baseCommodityServer: BaseCommodityServer;
+  baseCommodityService: BaseCommodityService;
 
   @Inject()
-  baseSellerMetadataServer: BaseSellerMetadataServer;
+  baseSellerMetadataService: BaseSellerMetadataService;
 
   @Inject()
   commodityAttributeName: CommodityAttributeName;
@@ -109,7 +109,7 @@ export class CommodityCommodityService {
   sellerService: SellerService;
 
   @Inject()
-  baseSellerServer: BaseSellerServer;
+  baseSellerService: BaseSellerService;
 
   @Inject()
   commoditySearchService: CommoditySearchService;
@@ -117,15 +117,15 @@ export class CommodityCommodityService {
   // 编辑商品
   async edit(commodityId) {
     let commodity:any = {};
-    const baseCommodityServer = await this.baseCommodityServer.BaseRetrieveCommodityId(commodityId);
-    if(baseCommodityServer) {
-      commodity = baseCommodityServer
-      if(baseCommodityServer.seller) {
-        commodity.seller = baseCommodityServer.seller;
+    const baseCommodityService = await this.baseCommodityService.BaseRetrieveCommodityId(commodityId);
+    if(baseCommodityService) {
+      commodity = baseCommodityService
+      if(baseCommodityService.seller) {
+        commodity.seller = baseCommodityService.seller;
       }
     }
 
-    // const commoditySellerService =  await this.baseCommodityServer.retrieveCommodityId(commodityId);
+    // const commoditySellerService =  await this.baseCommodityService.retrieveCommodityId(commodityId);
     // // console.log("edit commodityUseService", commodityUseService)
     // if(commodityUseService) {
     //   commodity.uses = commodityUseService.data;
@@ -279,22 +279,22 @@ export class CommodityCommodityService {
 
   async clientCommodity(payload) {
     let commodity:any = {};
-    const baseCommodityServer = await this.baseCommodityServer.BaseRetrieveCommodityId(payload.commodityId);
-    // console.log("edit baseCommodityServer", baseCommodityServer)
-    if(baseCommodityServer) {
-      const { seller, ...commodityData } = baseCommodityServer;
+    const baseCommodityService = await this.baseCommodityService.BaseRetrieveCommodityId(payload.commodityId);
+    // console.log("edit baseCommodityService", baseCommodityService)
+    if(baseCommodityService) {
+      const { seller, ...commodityData } = baseCommodityService;
       commodity = commodityData;
 
       // 商品关联的商家
       if(seller && seller.sellerId) {
         // user
-        const sellerData:any = await this.baseSellerServer.baseRetrieveSeller(seller.sellerId);
+        const sellerData:any = await this.baseSellerService.baseRetrieveSeller(seller.sellerId);
         // console.log("sellerData", sellerData)
         if(sellerData && sellerData.user) {
           seller.user = sellerData.user;
         }
         // metadata
-        const sellerMetadata = await this.baseSellerMetadataServer.baseRetrieve(seller.sellerId);
+        const sellerMetadata = await this.baseSellerMetadataService.baseRetrieve(seller.sellerId);
         if(sellerMetadata){
           seller.metadata = sellerMetadata;
         }
@@ -573,7 +573,7 @@ export class CommodityCommodityService {
   }
 
 
-  async serverSearch(payload) {
+  async ServiceSearch(payload) {
     // const result = await this.searchs(payload);
     // let data = result[0];
     // let total = result[1];
@@ -872,7 +872,7 @@ export class CommodityCommodityService {
 
   // 创建
   async createMetadata(payload) {
-    const data = await this.baseCommodityServer.BaseCreate(payload);
+    const data = await this.baseCommodityService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -893,19 +893,19 @@ export class CommodityCommodityService {
   // 关联
   async relation(payload) {
     if(payload.set) {
-      return await this.baseCommodityServer.BaseRelationSet({
+      return await this.baseCommodityService.BaseRelationSet({
         name: payload.name,
         of: payload.of,
         set: payload.set
       })
     }else if(payload.add) {
-      return await this.baseCommodityServer.BaseRelationAdd({
+      return await this.baseCommodityService.BaseRelationAdd({
         name: payload.name,
         of: payload.of,
         add: payload.add
       })
     }else if(payload.remove) {
-      return await this.baseCommodityServer.BaseRelationRemove({
+      return await this.baseCommodityService.BaseRelationRemove({
         name: payload.name,
         of: payload.of,
         remove: payload.remove
@@ -1102,7 +1102,7 @@ export class CommodityCommodityService {
    *
    */
   async hasCommodityPhoto(payload) {
-    const data = await this.baseCommodityServer.BaseHasRelation({
+    const data = await this.baseCommodityService.BaseHasRelation({
       type: 'photos',
       commodityId: payload.commodityId,
       id: payload.id
@@ -1127,7 +1127,7 @@ export class CommodityCommodityService {
    *
    */
   async hasCommodityColor(payload) {
-    const data = await this.baseCommodityServer.BaseHasRelation({
+    const data = await this.baseCommodityService.BaseHasRelation({
       type: 'colors',
       commodityId: payload.commodityId,
       id: payload.id
@@ -1153,7 +1153,7 @@ export class CommodityCommodityService {
    *
    */
   async hasCommodityCategory(payload) {
-    const data = await this.baseCommodityServer.BaseHasRelation({
+    const data = await this.baseCommodityService.BaseHasRelation({
       type: 'categorys',
       commodityId: payload.commodityId,
       id: payload.id
@@ -1178,7 +1178,7 @@ export class CommodityCommodityService {
    *
    */
   async hasCommodityShape(payload) {
-    const data = await this.baseCommodityServer.BaseHasRelation({
+    const data = await this.baseCommodityService.BaseHasRelation({
       type: 'shapes',
       commodityId: payload.commodityId,
       id: payload.id
@@ -1203,7 +1203,7 @@ export class CommodityCommodityService {
    *
    */
   async hasCommodityTechnique(payload) {
-    const data = await this.baseCommodityServer.BaseHasRelation({
+    const data = await this.baseCommodityService.BaseHasRelation({
       type: 'techniques',
       commodityId: payload.commodityId,
       id: payload.id
@@ -1228,7 +1228,7 @@ export class CommodityCommodityService {
    *
    */
   async hasCommodityTheme(payload) {
-    const data = await this.baseCommodityServer.BaseHasRelation({
+    const data = await this.baseCommodityService.BaseHasRelation({
       type: 'themes',
       commodityId: payload.commodityId,
       id: payload.id
@@ -1255,7 +1255,7 @@ export class CommodityCommodityService {
    * 通过商品id
    */
   async retrieve(payload) {
-    let data = await this.baseCommodityServer.BaseRetrieve(payload.commodityId);
+    let data = await this.baseCommodityService.BaseRetrieve(payload.commodityId);
 
     if (data) {
       if(payload.isLocale) {
@@ -1284,7 +1284,7 @@ export class CommodityCommodityService {
    */
     async retrieveAll(payload) {
       // 商品Id查找商品
-      let result = await this.baseCommodityServer.BaseRetrieveAll(payload);
+      let result = await this.baseCommodityService.BaseRetrieveAll(payload);
       let data = result[0];
       let total = result[1];
 
@@ -1309,7 +1309,7 @@ export class CommodityCommodityService {
     }
 
     async retrievePhoto(payload) {
-      let result = await this.baseCommodityServer.BaseRetrievePhoto(payload);
+      let result = await this.baseCommodityService.BaseRetrievePhoto(payload);
       let data = result[0];
       let total = result[1];
 
@@ -1334,7 +1334,7 @@ export class CommodityCommodityService {
     }
 
     async retrieveSeller(commodityId) {
-      let data = await this.baseCommodityServer.BaseRetrieveSeller(commodityId);
+      let data = await this.baseCommodityService.BaseRetrieveSeller(commodityId);
       if (data) {
         return {
           data: data,
@@ -1350,7 +1350,7 @@ export class CommodityCommodityService {
     }
 
     async retrieveCategory(id) {
-      let data = await this.baseCommodityServer.BaseRetrieveCategory(id);
+      let data = await this.baseCommodityService.BaseRetrieveCategory(id);
 
       if (data) {
         return {
@@ -1408,7 +1408,7 @@ export class CommodityCommodityService {
 
   // 搜索商品
   async search(payload) {
-    let result = await this.baseCommodityServer.BaseSearch(payload);
+    let result = await this.baseCommodityService.BaseSearch(payload);
     let data = result[0];
     let total = result[1];
 
@@ -1604,9 +1604,9 @@ export class CommodityCommodityService {
     let result;
     // console.log("searchAll", searchAll)
     if(searchAll){
-      result = await this.baseCommodityServer.BaseRetrieveAll(payload);
+      result = await this.baseCommodityService.BaseRetrieveAll(payload);
     }else{
-      result = await this.baseCommodityServer.BaseSearchs(payload);
+      result = await this.baseCommodityService.BaseSearchs(payload);
 
     }
 
@@ -1674,7 +1674,7 @@ export class CommodityCommodityService {
   // 删除商品
 
   async deleteCommodityId(commodityId) {
-    const data = await this.baseCommodityServer.BaseDeleteCommodityId(commodityId);
+    const data = await this.baseCommodityService.BaseDeleteCommodityId(commodityId);
     if (data.affected) {
       return {
         success: true,
@@ -1689,7 +1689,7 @@ export class CommodityCommodityService {
   }
   // 删除全部商品
   async deleteAll() {
-    const data = await this.baseCommodityServer.BaseDeleteAll();
+    const data = await this.baseCommodityService.BaseDeleteAll();
     if (data.affected) {
       return {
         success: true,
@@ -1704,7 +1704,7 @@ export class CommodityCommodityService {
   }
 
   async hasCommodity(commodityId) {
-    const data = await this.baseCommodityServer.BaseHas(commodityId);
+    const data = await this.baseCommodityService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -1722,7 +1722,7 @@ export class CommodityCommodityService {
 
 
   async update(payload) {
-    const data = await this.baseCommodityServer.BaseUpdate(payload);
+    const data = await this.baseCommodityService.BaseUpdate(payload);
     if (data.affected) {
       return {
         data: data,
@@ -1739,7 +1739,7 @@ export class CommodityCommodityService {
 
 
   async retrieveCommmoditySellerId(sellerId) {
-    const data = await this.baseCommodityServer.baseRetrieveCommmodity(sellerId);
+    const data = await this.baseCommodityService.baseRetrieveCommmodity(sellerId);
     if (data) {
       return {
         data: data,
@@ -1755,7 +1755,7 @@ export class CommodityCommodityService {
   }
 
   async retrieveCommmoditySellerPagination(payload) {
-    const result = await this.baseCommodityServer.baseRetrieveCommmodityPagination({
+    const result = await this.baseCommodityService.baseRetrieveCommmodityPagination({
       sellerId: payload.sellerId,
       pageSize: payload.pageSize,
       currentPage: payload.currentPage,
@@ -1777,7 +1777,7 @@ export class CommodityCommodityService {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -1793,7 +1793,7 @@ export class CommodityCommodityService {
   }
 
   async choiceCommodity(payload) {
-    const data:any = await this.baseCommodityServer.baseChoiceCommodity(payload);
+    const data:any = await this.baseCommodityService.baseChoiceCommodity(payload);
 
     if (data) {
       for(let item of data) {
@@ -1825,7 +1825,7 @@ export class CommodityCommodityService {
   }
 
   async retrieveSellerCount(sellerId) {
-    const data = await this.baseCommodityServer.baseRetrieveSellerCount(sellerId);
+    const data = await this.baseCommodityService.baseRetrieveSellerCount(sellerId);
     if (data) {
       return {
         data: data,

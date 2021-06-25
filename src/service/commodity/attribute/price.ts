@@ -1,15 +1,15 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseCommodityPriceServer } from '../../base/commodity/attribute/price';
+import { BaseCommodityPriceService } from '../../base/commodity/attribute/price';
 
 @Provide()
 export class CommodityAttributePrice {
 
   @Inject()
-  baseCommodityPriceServer: BaseCommodityPriceServer;
+  baseCommodityPriceService: BaseCommodityPriceService;
 
   // 创建价格
   async create(payload) {
-    const data = await this.baseCommodityPriceServer.BaseCreate(payload);
+    const data = await this.baseCommodityPriceService.BaseCreate(payload);
     if (data.identifiers[0].id) {
       return {
         data: data,
@@ -31,7 +31,7 @@ export class CommodityAttributePrice {
    *
    */
   async hasId(commodityId) {
-    const data = await this.baseCommodityPriceServer.BaseHas(commodityId);
+    const data = await this.baseCommodityPriceService.BaseHas(commodityId);
     if (data) {
       return {
         data: data,
@@ -47,7 +47,7 @@ export class CommodityAttributePrice {
   }
 
   async retrieveCommodityId(commodityId) {
-    const data = await this.baseCommodityPriceServer.BaseRetrieveCommodityId(commodityId);
+    const data = await this.baseCommodityPriceService.BaseRetrieveCommodityId(commodityId);
     if (data) {
       return {
         data: data,
@@ -65,7 +65,7 @@ export class CommodityAttributePrice {
 
   // 更新商品价格
   async update(payload) {
-    const data = await this.baseCommodityPriceServer.BaseUpdate(payload);
+    const data = await this.baseCommodityPriceService.BaseUpdate(payload);
     if (data.affected) {
       return {
         data: data,
@@ -90,7 +90,7 @@ export class CommodityAttributePrice {
   }
 
   async search(payload) {
-    const data = await this.baseCommodityPriceServer.BaseSearch(payload);
+    const data = await this.baseCommodityPriceService.BaseSearch(payload);
     if (data) {
       return {
         data: data,
