@@ -1,10 +1,10 @@
-import { BaseBrowsingHistoryServer } from "../base/my/browsingHistory";
-import { BaseCommodityBrowsingCountServer } from "../base/commodity/commodityBrowsingCount";
-import { BaseCommodityServer } from "../base/commodity/commodity";
+import { BaseBrowsingHistoryService } from "../base/my/browsingHistory";
+import { BaseCommodityBrowsingCountService } from "../base/commodity/commodityBrowsingCount";
+import { BaseCommodityService } from "../base/commodity/commodity";
 export declare class MyBrowsingHistoryService {
-    baseBrowsingHistoryServer: BaseBrowsingHistoryServer;
-    baseCommodityBrowsingCountServer: BaseCommodityBrowsingCountServer;
-    baseCommodityServer: BaseCommodityServer;
+    baseBrowsingHistoryService: BaseBrowsingHistoryService;
+    baseCommodityBrowsingCountService: BaseCommodityBrowsingCountService;
+    baseCommodityService: BaseCommodityService;
     addBrowsingHistory(payload: any): Promise<any>;
     addMyBrowsingHistory(payload: any): Promise<any>;
     addCommodityBrowsingHistory(payload: any): Promise<{

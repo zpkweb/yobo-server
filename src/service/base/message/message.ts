@@ -62,7 +62,7 @@ export class BaseMessageService {
       .createQueryBuilder('message')
       .where(where)
       .addSelect('message.createdDate')
-      .orderBy("message.id", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .orderBy("message.id", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();

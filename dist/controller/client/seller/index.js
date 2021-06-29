@@ -12,11 +12,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ServerSellerController = void 0;
+exports.ServiceSellerController = void 0;
 const decorator_1 = require("@midwayjs/decorator");
 const register_1 = require("../../../service/user/register");
 const seller_1 = require("../../../service/user/seller");
-let ServerSellerController = class ServerSellerController {
+let ServiceSellerController = class ServiceSellerController {
     async find(queryAll) {
         return await this.sellerService.find({
             sellerId: queryAll.sellerId,
@@ -55,65 +55,65 @@ let ServerSellerController = class ServerSellerController {
 __decorate([
     decorator_1.Inject(),
     __metadata("design:type", register_1.UserRegisterService)
-], ServerSellerController.prototype, "userRegisterService", void 0);
+], ServiceSellerController.prototype, "userRegisterService", void 0);
 __decorate([
     decorator_1.Inject(),
     __metadata("design:type", seller_1.SellerService)
-], ServerSellerController.prototype, "sellerService", void 0);
+], ServiceSellerController.prototype, "sellerService", void 0);
 __decorate([
     decorator_1.Inject(),
     __metadata("design:type", Object)
-], ServerSellerController.prototype, "ctx", void 0);
+], ServiceSellerController.prototype, "ctx", void 0);
 __decorate([
     decorator_1.Plugin(),
     __metadata("design:type", Object)
-], ServerSellerController.prototype, "jwt", void 0);
+], ServiceSellerController.prototype, "jwt", void 0);
 __decorate([
     decorator_1.Config('jwt'),
     __metadata("design:type", Object)
-], ServerSellerController.prototype, "jwtConfig", void 0);
+], ServiceSellerController.prototype, "jwtConfig", void 0);
 __decorate([
     decorator_1.Config('pagination'),
     __metadata("design:type", Object)
-], ServerSellerController.prototype, "pagination", void 0);
+], ServiceSellerController.prototype, "pagination", void 0);
 __decorate([
     decorator_1.Get('/', { summary: '获取艺术家详细信息' }),
     __param(0, decorator_1.Query(decorator_1.ALL)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ServerSellerController.prototype, "find", null);
+], ServiceSellerController.prototype, "find", null);
 __decorate([
     decorator_1.Get('/choice', { summary: '精选艺术家' }),
     __param(0, decorator_1.Query(decorator_1.ALL)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ServerSellerController.prototype, "choice", null);
+], ServiceSellerController.prototype, "choice", null);
 __decorate([
     decorator_1.Post('/update', { summary: '更新艺术家信息' }),
     __param(0, decorator_1.Body(decorator_1.ALL)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ServerSellerController.prototype, "update", null);
+], ServiceSellerController.prototype, "update", null);
 __decorate([
     decorator_1.Post('/setState', { summary: '设置艺术家状态' }),
     __param(0, decorator_1.Body(decorator_1.ALL)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ServerSellerController.prototype, "setState", null);
+], ServiceSellerController.prototype, "setState", null);
 __decorate([
     decorator_1.Get('/search', { summary: '艺术家搜索' }),
     __param(0, decorator_1.Query(decorator_1.ALL)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], ServerSellerController.prototype, "search", null);
-ServerSellerController = __decorate([
+], ServiceSellerController.prototype, "search", null);
+ServiceSellerController = __decorate([
     decorator_1.Provide(),
     decorator_1.Controller('/api/seller', { tagName: '艺术家' })
-], ServerSellerController);
-exports.ServerSellerController = ServerSellerController;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL3lhbnNodW8vRG9jdW1lbnRzL3pway9naXRodWIveW9iby1zZXJ2ZXIvc3JjLyIsInNvdXJjZXMiOlsiY29udHJvbGxlci9jbGllbnQvc2VsbGVyL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG1EQUErRztBQUUvRyw2REFBZ0U7QUFDaEUseURBQXdEO0FBSXhELElBQWEsc0JBQXNCLEdBQW5DLE1BQWEsc0JBQXNCO0lBOEJqQyxLQUFLLENBQUMsSUFBSSxDQUFhLFFBQVE7UUFDN0IsT0FBTyxNQUFNLElBQUksQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDO1lBQ25DLFFBQVEsRUFBRSxRQUFRLENBQUMsUUFBUTtZQUMzQixNQUFNLEVBQUUsUUFBUSxDQUFDLE1BQU0sSUFBSSxPQUFPO1lBQ2xDLFFBQVEsRUFBRSxJQUFJO1NBQ2YsQ0FBQyxDQUFBO0lBQ0osQ0FBQztJQUdELEtBQUssQ0FBQyxNQUFNLENBQWEsUUFBUTtRQUMvQixPQUFPLE1BQU0sSUFBSSxDQUFDLGFBQWEsQ0FBQyxZQUFZLENBQUM7WUFDM0MsUUFBUSxFQUFFLFFBQVEsQ0FBQyxRQUFRLElBQUksQ0FBQztZQUNoQyxXQUFXLEVBQUUsUUFBUSxDQUFDLFdBQVcsSUFBSSxDQUFDO1lBQ3RDLElBQUksRUFBRSxRQUFRLENBQUMsSUFBSSxJQUFJLE1BQU07U0FDOUIsQ0FBQyxDQUFBO0lBQ0osQ0FBQztJQUlELEtBQUssQ0FBQyxNQUFNLENBQVksWUFBWTtRQUNsQyxPQUFPLE1BQU0sSUFBSSxDQUFDLGFBQWEsQ0FBQyxZQUFZLENBQUMsWUFBWSxDQUFDLENBQUM7SUFDN0QsQ0FBQztJQWFELEtBQUssQ0FBQyxRQUFRLENBQVksU0FBUztRQUNqQyxPQUFPLE1BQU0sSUFBSSxDQUFDLGFBQWEsQ0FBQyxpQkFBaUIsQ0FBQyxTQUFTLENBQUMsQ0FBQztJQUMvRCxDQUFDO0lBSUQsS0FBSyxDQUFDLE1BQU0sQ0FBYSxZQUFZO1FBRW5DLE1BQU0sUUFBUSxHQUFHLE1BQU0sQ0FBQyxZQUFZLENBQUMsUUFBUSxDQUFDLElBQUksSUFBSSxDQUFDLFVBQVUsQ0FBQyxRQUFRLENBQUM7UUFDM0UsTUFBTSxXQUFXLEdBQUcsTUFBTSxDQUFDLFlBQVksQ0FBQyxXQUFXLENBQUMsSUFBSSxJQUFJLENBQUMsVUFBVSxDQUFDLFdBQVcsQ0FBQztRQUNwRixNQUFNLElBQUksR0FBTyxNQUFNLElBQUksQ0FBQyxhQUFhLENBQUMsTUFBTSxDQUFDO1lBQy9DLEdBQUcsWUFBWTtZQUNmLFFBQVEsRUFBRSxRQUFRO1lBQ2xCLFdBQVcsRUFBRSxXQUFXO1NBQ3pCLENBQUMsQ0FBQztRQUNILElBQUcsSUFBSSxDQUFDLE9BQU8sRUFBQztZQUNkLElBQUksQ0FBQyxJQUFJLENBQUMsUUFBUSxHQUFHLFFBQVEsQ0FBQztZQUM5QixJQUFJLENBQUMsSUFBSSxDQUFDLFdBQVcsR0FBRyxXQUFXLENBQUM7U0FDckM7UUFDRCxPQUFPLElBQUksQ0FBQztJQUNkLENBQUM7Q0FHRixDQUFBO0FBcEZDO0lBREMsa0JBQU0sRUFBRTs4QkFDWSw4QkFBbUI7bUVBQUM7QUFHekM7SUFEQyxrQkFBTSxFQUFFOzhCQUNNLHNCQUFhOzZEQUFDO0FBRzdCO0lBREMsa0JBQU0sRUFBRTs7bURBQ0k7QUFHYjtJQURDLGtCQUFNLEVBQUU7O21EQUNMO0FBR0o7SUFEQyxrQkFBTSxDQUFDLEtBQUssQ0FBQzs7eURBQ0o7QUFHVjtJQURDLGtCQUFNLENBQUMsWUFBWSxDQUFDOzswREFDVjtBQVlYO0lBREMsZUFBRyxDQUFDLEdBQUcsRUFBQyxFQUFDLE9BQU8sRUFBQyxXQUFXLEVBQUMsQ0FBQztJQUNuQixXQUFBLGlCQUFLLENBQUMsZUFBRyxDQUFDLENBQUE7Ozs7a0RBTXJCO0FBR0Q7SUFEQyxlQUFHLENBQUMsU0FBUyxFQUFDLEVBQUMsT0FBTyxFQUFDLE9BQU8sRUFBQyxDQUFDO0lBQ25CLFdBQUEsaUJBQUssQ0FBQyxlQUFHLENBQUMsQ0FBQTs7OztvREFNdkI7QUFJRDtJQURDLGdCQUFJLENBQUMsU0FBUyxFQUFDLEVBQUMsT0FBTyxFQUFDLFNBQVMsRUFBQyxDQUFDO0lBQ3RCLFdBQUEsZ0JBQUksQ0FBQyxlQUFHLENBQUMsQ0FBQTs7OztvREFFdEI7QUFhRDtJQURDLGdCQUFJLENBQUMsV0FBVyxFQUFDLEVBQUMsT0FBTyxFQUFDLFNBQVMsRUFBQyxDQUFDO0lBQ3RCLFdBQUEsZ0JBQUksQ0FBQyxlQUFHLENBQUMsQ0FBQTs7OztzREFFeEI7QUFJRDtJQURDLGVBQUcsQ0FBQyxTQUFTLEVBQUMsRUFBQyxPQUFPLEVBQUMsT0FBTyxFQUFDLENBQUM7SUFDbkIsV0FBQSxpQkFBSyxDQUFDLGVBQUcsQ0FBQyxDQUFBOzs7O29EQWN2QjtBQXBGVSxzQkFBc0I7SUFGbEMsbUJBQU8sRUFBRTtJQUNULHNCQUFVLENBQUMsYUFBYSxFQUFDLEVBQUMsT0FBTyxFQUFDLEtBQUssRUFBQyxDQUFDO0dBQzdCLHNCQUFzQixDQXVGbEM7QUF2Rlksd0RBQXNCIn0=
+], ServiceSellerController);
+exports.ServiceSellerController = ServiceSellerController;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL3lhbnNodW8vRG9jdW1lbnRzL3pway9naXRodWIveW9iby1zZXJ2ZXIvc3JjLyIsInNvdXJjZXMiOlsiY29udHJvbGxlci9jbGllbnQvc2VsbGVyL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQUFBLG1EQUErRztBQUUvRyw2REFBZ0U7QUFDaEUseURBQXdEO0FBSXhELElBQWEsdUJBQXVCLEdBQXBDLE1BQWEsdUJBQXVCO0lBOEJsQyxLQUFLLENBQUMsSUFBSSxDQUFhLFFBQVE7UUFDN0IsT0FBTyxNQUFNLElBQUksQ0FBQyxhQUFhLENBQUMsSUFBSSxDQUFDO1lBQ25DLFFBQVEsRUFBRSxRQUFRLENBQUMsUUFBUTtZQUMzQixNQUFNLEVBQUUsUUFBUSxDQUFDLE1BQU0sSUFBSSxPQUFPO1lBQ2xDLFFBQVEsRUFBRSxJQUFJO1NBQ2YsQ0FBQyxDQUFBO0lBQ0osQ0FBQztJQUdELEtBQUssQ0FBQyxNQUFNLENBQWEsUUFBUTtRQUMvQixPQUFPLE1BQU0sSUFBSSxDQUFDLGFBQWEsQ0FBQyxZQUFZLENBQUM7WUFDM0MsUUFBUSxFQUFFLFFBQVEsQ0FBQyxRQUFRLElBQUksQ0FBQztZQUNoQyxXQUFXLEVBQUUsUUFBUSxDQUFDLFdBQVcsSUFBSSxDQUFDO1lBQ3RDLElBQUksRUFBRSxRQUFRLENBQUMsSUFBSSxJQUFJLE1BQU07U0FDOUIsQ0FBQyxDQUFBO0lBQ0osQ0FBQztJQUlELEtBQUssQ0FBQyxNQUFNLENBQVksWUFBWTtRQUNsQyxPQUFPLE1BQU0sSUFBSSxDQUFDLGFBQWEsQ0FBQyxZQUFZLENBQUMsWUFBWSxDQUFDLENBQUM7SUFDN0QsQ0FBQztJQWFELEtBQUssQ0FBQyxRQUFRLENBQVksU0FBUztRQUNqQyxPQUFPLE1BQU0sSUFBSSxDQUFDLGFBQWEsQ0FBQyxpQkFBaUIsQ0FBQyxTQUFTLENBQUMsQ0FBQztJQUMvRCxDQUFDO0lBSUQsS0FBSyxDQUFDLE1BQU0sQ0FBYSxZQUFZO1FBRW5DLE1BQU0sUUFBUSxHQUFHLE1BQU0sQ0FBQyxZQUFZLENBQUMsUUFBUSxDQUFDLElBQUksSUFBSSxDQUFDLFVBQVUsQ0FBQyxRQUFRLENBQUM7UUFDM0UsTUFBTSxXQUFXLEdBQUcsTUFBTSxDQUFDLFlBQVksQ0FBQyxXQUFXLENBQUMsSUFBSSxJQUFJLENBQUMsVUFBVSxDQUFDLFdBQVcsQ0FBQztRQUNwRixNQUFNLElBQUksR0FBTyxNQUFNLElBQUksQ0FBQyxhQUFhLENBQUMsTUFBTSxDQUFDO1lBQy9DLEdBQUcsWUFBWTtZQUNmLFFBQVEsRUFBRSxRQUFRO1lBQ2xCLFdBQVcsRUFBRSxXQUFXO1NBQ3pCLENBQUMsQ0FBQztRQUNILElBQUcsSUFBSSxDQUFDLE9BQU8sRUFBQztZQUNkLElBQUksQ0FBQyxJQUFJLENBQUMsUUFBUSxHQUFHLFFBQVEsQ0FBQztZQUM5QixJQUFJLENBQUMsSUFBSSxDQUFDLFdBQVcsR0FBRyxXQUFXLENBQUM7U0FDckM7UUFDRCxPQUFPLElBQUksQ0FBQztJQUNkLENBQUM7Q0FHRixDQUFBO0FBcEZDO0lBREMsa0JBQU0sRUFBRTs4QkFDWSw4QkFBbUI7b0VBQUM7QUFHekM7SUFEQyxrQkFBTSxFQUFFOzhCQUNNLHNCQUFhOzhEQUFDO0FBRzdCO0lBREMsa0JBQU0sRUFBRTs7b0RBQ0k7QUFHYjtJQURDLGtCQUFNLEVBQUU7O29EQUNMO0FBR0o7SUFEQyxrQkFBTSxDQUFDLEtBQUssQ0FBQzs7MERBQ0o7QUFHVjtJQURDLGtCQUFNLENBQUMsWUFBWSxDQUFDOzsyREFDVjtBQVlYO0lBREMsZUFBRyxDQUFDLEdBQUcsRUFBQyxFQUFDLE9BQU8sRUFBQyxXQUFXLEVBQUMsQ0FBQztJQUNuQixXQUFBLGlCQUFLLENBQUMsZUFBRyxDQUFDLENBQUE7Ozs7bURBTXJCO0FBR0Q7SUFEQyxlQUFHLENBQUMsU0FBUyxFQUFDLEVBQUMsT0FBTyxFQUFDLE9BQU8sRUFBQyxDQUFDO0lBQ25CLFdBQUEsaUJBQUssQ0FBQyxlQUFHLENBQUMsQ0FBQTs7OztxREFNdkI7QUFJRDtJQURDLGdCQUFJLENBQUMsU0FBUyxFQUFDLEVBQUMsT0FBTyxFQUFDLFNBQVMsRUFBQyxDQUFDO0lBQ3RCLFdBQUEsZ0JBQUksQ0FBQyxlQUFHLENBQUMsQ0FBQTs7OztxREFFdEI7QUFhRDtJQURDLGdCQUFJLENBQUMsV0FBVyxFQUFDLEVBQUMsT0FBTyxFQUFDLFNBQVMsRUFBQyxDQUFDO0lBQ3RCLFdBQUEsZ0JBQUksQ0FBQyxlQUFHLENBQUMsQ0FBQTs7Ozt1REFFeEI7QUFJRDtJQURDLGVBQUcsQ0FBQyxTQUFTLEVBQUMsRUFBQyxPQUFPLEVBQUMsT0FBTyxFQUFDLENBQUM7SUFDbkIsV0FBQSxpQkFBSyxDQUFDLGVBQUcsQ0FBQyxDQUFBOzs7O3FEQWN2QjtBQXBGVSx1QkFBdUI7SUFGbkMsbUJBQU8sRUFBRTtJQUNULHNCQUFVLENBQUMsYUFBYSxFQUFDLEVBQUMsT0FBTyxFQUFDLEtBQUssRUFBQyxDQUFDO0dBQzdCLHVCQUF1QixDQXVGbkM7QUF2RlksMERBQXVCIn0=

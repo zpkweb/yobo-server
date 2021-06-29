@@ -44,6 +44,7 @@ export class BaseInformationService {
       .leftJoinAndSelect("information.videos", "videos")
       .where("information.isDelete = :isDelete", { isDelete : false })
       .addSelect("information.isTop")
+      .addSelect("information.createdDate")
       .orderBy({
         "information.id": news ? "DESC"  :  "ASC",
         "information.isTop": isTop ? "DESC"  :  "ASC"

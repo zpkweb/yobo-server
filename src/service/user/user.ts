@@ -505,12 +505,13 @@ export class UserService{
     // 身份
     if(payload.identityList && payload.identityList.length) {
       for(let item of payload.identityList) {
-          // console.log(item);
+
           // 查找
           const userIdentity = await this.identityService.retrieveUserIdentityList({
             userId: payload.userId,
             identityIndex: item.value
           });
+          console.log("userIdentity", userIdentity);
           if(userIdentity.success) {
             if(!item.check){
               // delete
@@ -518,6 +519,7 @@ export class UserService{
                 userId: payload.userId,
                 identityIndex: item.value
               })
+              console.log("deleteIdentity", deleteIdentity)
               if(deleteIdentity.success) {
 
               }
@@ -529,6 +531,7 @@ export class UserService{
                 userId: payload.userId,
                 identityIndex: item.value
               })
+              console.log("identity", identity)
               if(identity.success) {
 
               }

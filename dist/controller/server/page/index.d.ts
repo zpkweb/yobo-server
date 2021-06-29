@@ -1,6 +1,6 @@
-import PageServer from "../../../service/page/index";
+import PageService from "../../../service/page/index";
 export declare class AdminPageController {
-    pageServer: PageServer;
+    pageService: PageService;
     getBanner(): Promise<{
         data: import("../../../entity/page/banner").PageBannerEntity[];
         success: boolean;

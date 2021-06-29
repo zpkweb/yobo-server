@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { MyBrowsingHistoryEntity } from "../../../entity/my/browsingHistory";
 import { CommodityEntity } from "../../../entity/commodity/commodity";
-export declare class BaseBrowsingHistoryServer {
+export declare class BaseBrowsingHistoryService {
     myBrowsingHistoryEntity: Repository<MyBrowsingHistoryEntity>;
     commodityEntity: Repository<CommodityEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;

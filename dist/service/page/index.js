@@ -11,26 +11,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorator_1 = require("@midwayjs/decorator");
 const banner_1 = require("./banner");
-let PageServer = class PageServer {
+let PageService = class PageService {
     async createBanner(payload) {
-        return await this.pageBannerServer.create(payload);
+        return await this.pageBannerService.create(payload);
     }
     async updateBanner(payload) {
-        return await this.pageBannerServer.update(payload);
+        return await this.pageBannerService.update(payload);
     }
     async getBannerAll() {
-        return await this.pageBannerServer.getAll();
+        return await this.pageBannerService.getAll();
     }
     async deleteBanner(bannerId) {
-        return await this.pageBannerServer.delete(bannerId);
+        return await this.pageBannerService.delete(bannerId);
     }
 };
 __decorate([
     decorator_1.Inject(),
-    __metadata("design:type", banner_1.PageBannerServer)
-], PageServer.prototype, "pageBannerServer", void 0);
-PageServer = __decorate([
+    __metadata("design:type", banner_1.PageBannerService)
+], PageService.prototype, "pageBannerService", void 0);
+PageService = __decorate([
     decorator_1.Provide()
-], PageServer);
-exports.default = PageServer;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL3lhbnNodW8vRG9jdW1lbnRzL3pway9naXRodWIveW9iby1zZXJ2ZXIvc3JjLyIsInNvdXJjZXMiOlsic2VydmljZS9wYWdlL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7O0FBQUEsbURBQXNEO0FBQ3RELHFDQUE0QztBQUc1QyxJQUFxQixVQUFVLEdBQS9CLE1BQXFCLFVBQVU7SUFLN0IsS0FBSyxDQUFDLFlBQVksQ0FBQyxPQUFPO1FBQ3hCLE9BQU8sTUFBTSxJQUFJLENBQUMsZ0JBQWdCLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFDO0lBQ3JELENBQUM7SUFFRCxLQUFLLENBQUMsWUFBWSxDQUFDLE9BQU87UUFDeEIsT0FBTyxNQUFNLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxNQUFNLENBQUMsT0FBTyxDQUFDLENBQUM7SUFDckQsQ0FBQztJQUVELEtBQUssQ0FBQyxZQUFZO1FBQ2hCLE9BQU8sTUFBTSxJQUFJLENBQUMsZ0JBQWdCLENBQUMsTUFBTSxFQUFFLENBQUM7SUFDOUMsQ0FBQztJQUdELEtBQUssQ0FBQyxZQUFZLENBQUMsUUFBUTtRQUN6QixPQUFPLE1BQU0sSUFBSSxDQUFDLGdCQUFnQixDQUFDLE1BQU0sQ0FBQyxRQUFRLENBQUMsQ0FBQztJQUN0RCxDQUFDO0NBQ0YsQ0FBQTtBQWxCQztJQURDLGtCQUFNLEVBQUU7OEJBQ1MseUJBQWdCO29EQUFDO0FBSGhCLFVBQVU7SUFEOUIsbUJBQU8sRUFBRTtHQUNXLFVBQVUsQ0FxQjlCO2tCQXJCb0IsVUFBVSJ9
+], PageService);
+exports.default = PageService;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL1VzZXJzL3lhbnNodW8vRG9jdW1lbnRzL3pway9naXRodWIveW9iby1zZXJ2ZXIvc3JjLyIsInNvdXJjZXMiOlsic2VydmljZS9wYWdlL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7O0FBQUEsbURBQXNEO0FBQ3RELHFDQUE2QztBQUc3QyxJQUFxQixXQUFXLEdBQWhDLE1BQXFCLFdBQVc7SUFLOUIsS0FBSyxDQUFDLFlBQVksQ0FBQyxPQUFPO1FBQ3hCLE9BQU8sTUFBTSxJQUFJLENBQUMsaUJBQWlCLENBQUMsTUFBTSxDQUFDLE9BQU8sQ0FBQyxDQUFDO0lBQ3RELENBQUM7SUFFRCxLQUFLLENBQUMsWUFBWSxDQUFDLE9BQU87UUFDeEIsT0FBTyxNQUFNLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxNQUFNLENBQUMsT0FBTyxDQUFDLENBQUM7SUFDdEQsQ0FBQztJQUVELEtBQUssQ0FBQyxZQUFZO1FBQ2hCLE9BQU8sTUFBTSxJQUFJLENBQUMsaUJBQWlCLENBQUMsTUFBTSxFQUFFLENBQUM7SUFDL0MsQ0FBQztJQUdELEtBQUssQ0FBQyxZQUFZLENBQUMsUUFBUTtRQUN6QixPQUFPLE1BQU0sSUFBSSxDQUFDLGlCQUFpQixDQUFDLE1BQU0sQ0FBQyxRQUFRLENBQUMsQ0FBQztJQUN2RCxDQUFDO0NBQ0YsQ0FBQTtBQWxCQztJQURDLGtCQUFNLEVBQUU7OEJBQ1UsMEJBQWlCO3NEQUFDO0FBSGxCLFdBQVc7SUFEL0IsbUJBQU8sRUFBRTtHQUNXLFdBQVcsQ0FxQi9CO2tCQXJCb0IsV0FBVyJ9

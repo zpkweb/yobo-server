@@ -46,11 +46,13 @@ export class InformationService {
               name: item[payload.locale]
             }
           })
+          const createdDate = item.createdDate;
           return {
             informationId,
             name,
             detail,
-            videos
+            videos,
+            createdDate
           }
         })
       }

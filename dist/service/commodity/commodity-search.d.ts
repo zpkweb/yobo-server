@@ -1,4 +1,4 @@
-import { BaseCommodityServer } from "../base/commodity/commodity";
+import { BaseCommodityService } from "../base/commodity/commodity";
 import { CommodityAttributeName } from "./attribute/name";
 import { CommodityAttributeDesc } from "./attribute/desc";
 import { CommodityAttributeColor } from "./attribute/color";
@@ -16,7 +16,7 @@ import { CommodityThemeService } from "./commodity-options/theme";
 import { CommodityTypeService } from "./commodity-options/type";
 import { CommodityUseService } from "./commodity-options/use";
 export declare class CommoditySearchService {
-    baseCommodityServer: BaseCommodityServer;
+    baseCommodityService: BaseCommodityService;
     commodityAttributeName: CommodityAttributeName;
     commodityAttributeDesc: CommodityAttributeDesc;
     commodityAttributeColor: CommodityAttributeColor;

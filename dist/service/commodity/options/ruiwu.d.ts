@@ -1,6 +1,6 @@
-import { BaseCommodityOptionsRuiwuServer } from "../../base/commodity/options/ruiwu";
+import { BaseCommodityOptionsRuiwuService } from "../../base/commodity/options/ruiwu";
 export declare class CommodityOptionsRuiwuService {
-    baseCommodityOptionsRuiwuServer: BaseCommodityOptionsRuiwuServer;
+    baseCommodityOptionsRuiwuService: BaseCommodityOptionsRuiwuService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

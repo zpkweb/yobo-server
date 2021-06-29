@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { UserEntity } from "../../../entity/user/user";
 import { UserIdentityEntity } from "../../../entity/user/identity/identity";
 import { UserAddressEntity } from "../../../entity/user/address";
-export declare class BaseUserServer {
+export declare class BaseUserService {
     userEntity: Repository<UserEntity>;
     userIdentityEntity: Repository<UserIdentityEntity>;
     userAddressEntity: Repository<UserAddressEntity>;

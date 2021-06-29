@@ -1,6 +1,6 @@
-import { MessageServer } from "./message";
+import { MessageService } from "./message";
 export default class Message {
-    messageServer: MessageServer;
+    messageService: MessageService;
     create(payload: any): Promise<{
         success: boolean;
         code: number;

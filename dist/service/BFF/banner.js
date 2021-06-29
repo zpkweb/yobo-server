@@ -14,7 +14,7 @@ const decorator_1 = require("@midwayjs/decorator");
 const index_1 = require("../page/index");
 let BannerService = class BannerService {
     async get() {
-        return await this.pageServer.getBannerAll();
+        return await this.pageService.getBannerAll();
     }
 };
 __decorate([
@@ -24,9 +24,9 @@ __decorate([
 __decorate([
     decorator_1.Inject(),
     __metadata("design:type", index_1.default)
-], BannerService.prototype, "pageServer", void 0);
+], BannerService.prototype, "pageService", void 0);
 BannerService = __decorate([
     decorator_1.Provide()
 ], BannerService);
 exports.BannerService = BannerService;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYmFubmVyLmpzIiwic291cmNlUm9vdCI6Ii9Vc2Vycy95YW5zaHVvL0RvY3VtZW50cy96cGsvZ2l0aHViL3lvYm8tc2VydmVyL3NyYy8iLCJzb3VyY2VzIjpbInNlcnZpY2UvQkZGL2Jhbm5lci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFBQSxtREFBOEQ7QUFDOUQseUNBQWlDO0FBR2pDLElBQWEsYUFBYSxHQUExQixNQUFhLGFBQWE7SUFReEIsS0FBSyxDQUFDLEdBQUc7UUFDUCxPQUFPLE1BQU0sSUFBSSxDQUFDLFVBQVUsQ0FBQyxZQUFZLEVBQUUsQ0FBQztJQUM5QyxDQUFDO0NBQ0YsQ0FBQTtBQVJDO0lBREMsa0JBQU0sQ0FBQyxNQUFNLENBQUM7OzJDQUNWO0FBR0w7SUFEQyxrQkFBTSxFQUFFOzhCQUNHLGVBQVU7aURBQUM7QUFOWixhQUFhO0lBRHpCLG1CQUFPLEVBQUU7R0FDRyxhQUFhLENBV3pCO0FBWFksc0NBQWEifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYmFubmVyLmpzIiwic291cmNlUm9vdCI6Ii9Vc2Vycy95YW5zaHVvL0RvY3VtZW50cy96cGsvZ2l0aHViL3lvYm8tc2VydmVyL3NyYy8iLCJzb3VyY2VzIjpbInNlcnZpY2UvQkZGL2Jhbm5lci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFBQSxtREFBOEQ7QUFDOUQseUNBQWtDO0FBR2xDLElBQWEsYUFBYSxHQUExQixNQUFhLGFBQWE7SUFReEIsS0FBSyxDQUFDLEdBQUc7UUFDUCxPQUFPLE1BQU0sSUFBSSxDQUFDLFdBQVcsQ0FBQyxZQUFZLEVBQUUsQ0FBQztJQUMvQyxDQUFDO0NBQ0YsQ0FBQTtBQVJDO0lBREMsa0JBQU0sQ0FBQyxNQUFNLENBQUM7OzJDQUNWO0FBR0w7SUFEQyxrQkFBTSxFQUFFOzhCQUNJLGVBQVc7a0RBQUM7QUFOZCxhQUFhO0lBRHpCLG1CQUFPLEVBQUU7R0FDRyxhQUFhLENBV3pCO0FBWFksc0NBQWEifQ==

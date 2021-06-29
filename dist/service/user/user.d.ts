@@ -1,13 +1,13 @@
 import { Repository } from 'typeorm';
 import { UserEntity } from "../../entity/user/user";
-import { BaseUserServer } from "../base/user/user";
-import { BaseIdentityServer } from "../base/user/identity";
+import { BaseUserService } from "../base/user/user";
+import { BaseIdentityService } from "../base/user/identity";
 import { IdentityService } from "./identity";
 export declare class UserService {
     email: any;
     userEntity: Repository<UserEntity>;
-    baseUserServer: BaseUserServer;
-    baseIdentityServer: BaseIdentityServer;
+    baseUserService: BaseUserService;
+    baseIdentityService: BaseIdentityService;
     identityService: IdentityService;
     create(payload: any): Promise<{
         success: boolean;

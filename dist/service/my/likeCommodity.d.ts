@@ -1,10 +1,10 @@
-import { BaseMyLikeCommodityServer } from "../base/my/likeCommodity";
+import { BaseMyLikeCommodityService } from "../base/my/likeCommodity";
 import { UserService } from "../user/user";
 import { CommodityCommodityService } from "../commodity/commodity";
 import { CommodityAttributeName } from "../commodity/attribute/name";
 import { CommodityAttributePhoto } from "../commodity/attribute/photo";
 export declare class MyLikeCommodityService {
-    baseMyLikeCommodityServer: BaseMyLikeCommodityServer;
+    baseMyLikeCommodityService: BaseMyLikeCommodityService;
     userService: UserService;
     commodityCommodityService: CommodityCommodityService;
     commodityAttributeName: CommodityAttributeName;

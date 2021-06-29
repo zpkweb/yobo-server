@@ -1,7 +1,7 @@
-import { BaseCommodityStyleServer } from "../../base/commodity/commodity-options/style";
+import { BaseCommodityStyleService } from "../../base/commodity/commodity-options/style";
 import { CommodityOptionsStyleService } from "../options/style";
 export declare class CommodityStyleService {
-    baseCommodityStyleServer: BaseCommodityStyleServer;
+    baseCommodityStyleService: BaseCommodityStyleService;
     commodityOptionsStyleService: CommodityOptionsStyleService;
     search(payload: any): Promise<{
         data: import("../../../entity/commodity/commodity-options/style").CommodityStyleEntity[];

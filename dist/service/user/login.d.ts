@@ -1,10 +1,10 @@
 import { Repository } from "typeorm";
 import { UserEntity } from "../../entity/user/user";
-import { BaseUserServer } from "../base/user/user";
+import { BaseUserService } from "../base/user/user";
 import { IdentityListService } from "./identityList";
 export declare class LoginService {
     userEntity: Repository<UserEntity>;
-    baseUserServer: BaseUserServer;
+    baseUserService: BaseUserService;
     identityListService: IdentityListService;
     root: any;
     validatePassword(payload: any): Promise<{

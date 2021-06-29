@@ -1,6 +1,6 @@
-import { PageBannerServer } from "./banner";
-export default class PageServer {
-    pageBannerServer: PageBannerServer;
+import { PageBannerService } from "./banner";
+export default class PageService {
+    pageBannerService: PageBannerService;
     createBanner(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

@@ -1,7 +1,7 @@
-import { BaseCommodityCategoryServer } from "../../base/commodity/commodity-options/category";
+import { BaseCommodityCategoryService } from "../../base/commodity/commodity-options/category";
 import { CommodityOptionsCategoryService } from "../options/category";
 export declare class CommodityCategoryService {
-    baseCommodityCategoryServer: BaseCommodityCategoryServer;
+    baseCommodityCategoryService: BaseCommodityCategoryService;
     commodityOptionsCategoryService: CommodityOptionsCategoryService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;

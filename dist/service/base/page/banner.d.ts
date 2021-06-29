@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { PageBannerEntity } from "../../../entity/page/banner";
-export declare class BasePageBannerServer {
+export declare class BasePageBannerService {
     pageBannerEntity: Repository<PageBannerEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseHas(bannerId: any): Promise<PageBannerEntity>;

@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { CommodityDetailsEntity } from "../../../../entity/commodity/attribute/details";
-export declare class BaseCommodityDetailsServer {
+export declare class BaseCommodityDetailsService {
     commodityDetailsEntity: Repository<CommodityDetailsEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseHas(commodityId: any): Promise<CommodityDetailsEntity>;

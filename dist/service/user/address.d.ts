@@ -1,9 +1,9 @@
 import { Repository } from 'typeorm';
 import { UserAddressEntity } from "../../entity/user/address";
-import { BaseUserServer } from "../base/user/user";
+import { BaseUserService } from "../base/user/user";
 export default class UserAddressService {
     userAddressEntity: Repository<UserAddressEntity>;
-    baseUserServer: BaseUserServer;
+    baseUserService: BaseUserService;
     create(payload: any): Promise<{
         data: UserAddressEntity;
         success: boolean;

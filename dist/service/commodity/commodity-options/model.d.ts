@@ -1,7 +1,7 @@
-import { BaseCommodityModelServer } from "../../base/commodity/commodity-options/model";
+import { BaseCommodityModelService } from "../../base/commodity/commodity-options/model";
 import { CommodityOptionsModelService } from "../options/model";
 export declare class CommodityModelService {
-    baseCommodityModelServer: BaseCommodityModelServer;
+    baseCommodityModelService: BaseCommodityModelService;
     commodityOptionsModelService: CommodityOptionsModelService;
     search(payload: any): Promise<{
         data: import("../../../entity/commodity/commodity-options/model").CommodityModelEntity[];

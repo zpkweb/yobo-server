@@ -256,6 +256,8 @@ export class BaseUserService {
       where.phone = Like(`%${payload.phone}%`);
     }
 
+
+
     return await this.userEntity
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.seller', 'seller')
@@ -263,6 +265,7 @@ export class BaseUserService {
       // .andWhere("user.email like :email", { email: `%${payload.email}%` })
       // .andWhere("user.phone like :phone", { phone: `%${payload.phone}%` })
       .where(where)
+      .orderBy("user.createdDate", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();

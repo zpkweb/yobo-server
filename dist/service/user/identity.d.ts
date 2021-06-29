@@ -1,6 +1,6 @@
-import { BaseIdentityServer } from "../base/user/identity";
+import { BaseIdentityService } from "../base/user/identity";
 export declare class IdentityService {
-    baseIdentityServer: BaseIdentityServer;
+    baseIdentityService: BaseIdentityService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { SubscriberEntity } from "../../../entity/subscribe/subscriber";
-export declare class BaseSubscriberServer {
+export declare class BaseSubscriberService {
     subscriberEntity: Repository<SubscriberEntity>;
     BaseCreate({ email, userName, userEmail, userPhone }?: {
         email?: string;

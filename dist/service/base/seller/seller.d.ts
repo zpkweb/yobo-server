@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { UserSellerEntity } from "../../../entity/user/seller/seller";
-export declare class BaseSellerServer {
+export declare class BaseSellerService {
     userSellerEntity: Repository<UserSellerEntity>;
     relation(payload: any): Promise<void>;
     baseCreateSeller(payload: any): Promise<import("typeorm").InsertResult>;

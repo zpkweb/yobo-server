@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { UserIdentityEntity } from "../../../entity/user/identity/identity";
-export declare class BaseIdentityServer {
+export declare class BaseIdentityService {
     userIdentityEntity: Repository<UserIdentityEntity>;
     baseCreateUserIdentity(index: any): Promise<import("typeorm").InsertResult>;
     baseRetrieveUserIdentity(userId: any): Promise<UserIdentityEntity[]>;

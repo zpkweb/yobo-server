@@ -73,6 +73,7 @@ export class BaseIdentityService {
     }
 
     async baseDeleteIdentityId(payload) {
+      console.log("baseDeleteIdentityId", payload)
       return await this.userIdentityEntity
       .createQueryBuilder()
       .delete()

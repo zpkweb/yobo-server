@@ -19,7 +19,7 @@ import { CommodityTechniqueEntity } from "../../../entity/commodity/commodity-op
 import { CommodityThemeEntity } from "../../../entity/commodity/commodity-options/theme";
 import { CommodityTypeEntity } from "../../../entity/commodity/commodity-options/type";
 import { CommodityUseEntity } from "../../../entity/commodity/commodity-options/use";
-export declare class BaseCommodityServer {
+export declare class BaseCommodityService {
     commodityEntity: Repository<CommodityEntity>;
     userSellerEntity: Repository<UserSellerEntity>;
     commodityNameEntity: Repository<CommodityNameEntity>;

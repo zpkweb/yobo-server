@@ -1,7 +1,7 @@
 import { Context } from 'egg';
-import { SubscriberServer } from "../../../service/subscribe/subscriber";
+import { SubscriberService } from "../../../service/subscribe/subscriber";
 export declare class SubscriberController {
-    subscriberServer: SubscriberServer;
+    subscriberService: SubscriberService;
     ctx: Context;
     create(createBody: any): Promise<{
         success: boolean;

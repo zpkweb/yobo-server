@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { CommodityStyleEntity } from "../../../../entity/commodity/commodity-options/style";
-export declare class BaseCommodityStyleServer {
+export declare class BaseCommodityStyleService {
     CommodityStyleEntity: Repository<CommodityStyleEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseRetrieveCommodityId(commodityId: any): Promise<CommodityStyleEntity[]>;

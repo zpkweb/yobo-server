@@ -35,7 +35,8 @@ export default class EmailService {
       from: this.email.user,
       to: payload.email,
       // to: this.email.user,
-      subject: 'yobo-直接联系',
+      // subject: '永宝佳作（YOBOART)',
+      subject: payload.title,
       // html: `<p>`+payload.sendMail.title+`：<span style="font-size: 18px; color: red">` + payload.sendMail.code + `</span></p><p style="font-size: 14px;color:#666;">`+ payload.sendMail.codeTimeText +`</p>`
       // html: `
       //   <p>邮箱：${payload.email}</p>

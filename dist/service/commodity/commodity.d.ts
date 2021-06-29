@@ -1,4 +1,4 @@
-import { BaseCommodityServer } from "../base/commodity/commodity";
+import { BaseCommodityService } from "../base/commodity/commodity";
 import { CommodityAttributeName } from "./attribute/name";
 import { CommodityAttributeDesc } from "./attribute/desc";
 import { CommodityAttributeDetails } from "./attribute/details";
@@ -20,14 +20,14 @@ import { CommodityTechniqueService } from "./commodity-options/technique";
 import { CommodityThemeService } from "./commodity-options/theme";
 import { CommodityTypeService } from "./commodity-options/type";
 import { CommodityUseService } from "./commodity-options/use";
-import { BaseSellerMetadataServer } from "../base/seller/metadata";
+import { BaseSellerMetadataService } from "../base/seller/metadata";
 import { CommodityOptionService } from "./commodityOption";
 import { SellerService } from "../user/seller";
-import { BaseSellerServer } from "../base/seller/seller";
+import { BaseSellerService } from "../base/seller/seller";
 import { CommoditySearchService } from "./commodity-search";
 export declare class CommodityCommodityService {
-    baseCommodityServer: BaseCommodityServer;
-    baseSellerMetadataServer: BaseSellerMetadataServer;
+    baseCommodityService: BaseCommodityService;
+    baseSellerMetadataService: BaseSellerMetadataService;
     commodityAttributeName: CommodityAttributeName;
     commodityAttributeDesc: CommodityAttributeDesc;
     commodityAttributeDetails: CommodityAttributeDetails;
@@ -51,7 +51,7 @@ export declare class CommodityCommodityService {
     commodityUseService: CommodityUseService;
     commodityOptionService: CommodityOptionService;
     sellerService: SellerService;
-    baseSellerServer: BaseSellerServer;
+    baseSellerService: BaseSellerService;
     commoditySearchService: CommoditySearchService;
     edit(commodityId: any): Promise<{
         data: any;
@@ -73,7 +73,7 @@ export declare class CommodityCommodityService {
     }>;
     searchTest(payload: any): Promise<any>;
     clientSearch(payload: any): Promise<any>;
-    serverSearch(payload: any): Promise<any>;
+    ServiceSearch(payload: any): Promise<any>;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         id: any;

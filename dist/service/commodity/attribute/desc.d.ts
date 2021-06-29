@@ -1,6 +1,6 @@
-import { BaseCommodityDescServer } from "../../base/commodity/attribute/desc";
+import { BaseCommodityDescService } from "../../base/commodity/attribute/desc";
 export declare class CommodityAttributeDesc {
-    baseCommodityDescServer: BaseCommodityDescServer;
+    baseCommodityDescService: BaseCommodityDescService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         id: any;

@@ -1,7 +1,7 @@
-import PageServer from "../page/index";
+import PageService from "../page/index";
 export declare class BannerService {
     host: any;
-    pageServer: PageServer;
+    pageService: PageService;
     get(): Promise<{
         data: import("../../entity/page/banner").PageBannerEntity[];
         success: boolean;

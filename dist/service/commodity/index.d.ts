@@ -104,7 +104,7 @@ export declare class CommodityService {
     searchs(payload: any): Promise<any>;
     searchTest(payload: any): Promise<any>;
     clientSearch(payload: any): Promise<any>;
-    serverSearch(payload: any): Promise<any>;
+    ServiceSearch(payload: any): Promise<any>;
     delete(commodityId: any): Promise<{
         success: boolean;
         code: number;

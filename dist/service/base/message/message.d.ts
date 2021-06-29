@@ -1,6 +1,6 @@
 import { MessageEntity } from "../../../entity/message/message";
 import { Repository } from "typeorm";
-export declare class BaseMessageServer {
+export declare class BaseMessageService {
     messageEntity: Repository<MessageEntity>;
     BaseCreate(payload: any): Promise<import("typeorm").InsertResult>;
     BaseRetrieveMessageId(messageId: any): Promise<MessageEntity>;

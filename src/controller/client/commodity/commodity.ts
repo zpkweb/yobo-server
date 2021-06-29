@@ -47,8 +47,10 @@ export class CommodityController {
   async search(@Query(ALL) searchQuery) {
     const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
+    const news = (Boolean(searchQuery.news) && searchQuery.news == 'true') ? true : false;
     const data:any = await this.commodityService.search({
       ...searchQuery,
+      news,
       pageSize: pageSize,
       currentPage: currentPage,
       isLocale: true
@@ -64,8 +66,10 @@ export class CommodityController {
   async searchTest(@Query(ALL) searchQuery) {
     const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
+    const news = (Boolean(searchQuery.news) && searchQuery.news == 'true') ? true : false;
     const data:any = await this.commodityService.searchTest({
       ...searchQuery,
+      news,
       pageSize: pageSize,
       currentPage: currentPage,
       isLocale: true
@@ -82,8 +86,10 @@ export class CommodityController {
   async searchs(@Query(ALL) searchQuery) {
     const pageSize = Number(searchQuery.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchQuery.currentPage) || this.pagination.currentPage;
+    const news = (Boolean(searchQuery.news) && searchQuery.news == 'true') ? true : false;
     const data:any = await this.commodityService.clientSearch({
       ...searchQuery,
+      news,
       pageSize: pageSize,
       currentPage: currentPage,
       isLocale: true

@@ -1,7 +1,7 @@
-import { BaseSubscriberServer } from "../base/subscribe/subscriber";
+import { BaseSubscriberService } from "../base/subscribe/subscriber";
 import { UserService } from "../user/user";
-export declare class SubscriberServer {
-    baseSubscriberServer: BaseSubscriberServer;
+export declare class SubscriberService {
+    baseSubscriberService: BaseSubscriberService;
     userService: UserService;
     create(payload: any): Promise<{
         success: boolean;

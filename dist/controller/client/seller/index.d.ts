@@ -1,7 +1,7 @@
 import { Context } from 'egg';
 import { UserRegisterService } from "../../../service/user/register";
 import { SellerService } from "../../../service/user/seller";
-export declare class ServerSellerController {
+export declare class ServiceSellerController {
     userRegisterService: UserRegisterService;
     sellerService: SellerService;
     ctx: Context;

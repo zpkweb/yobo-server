@@ -1,7 +1,7 @@
-import { BaseCommodityRuiwuServer } from "../../base/commodity/commodity-options/ruiwu";
+import { BaseCommodityRuiwuService } from "../../base/commodity/commodity-options/ruiwu";
 import { CommodityOptionsRuiwuService } from "../options/ruiwu";
 export declare class CommodityRuiwuService {
-    baseCommodityRuiwuServer: BaseCommodityRuiwuServer;
+    baseCommodityRuiwuService: BaseCommodityRuiwuService;
     commodityOptionsRuiwuService: CommodityOptionsRuiwuService;
     search(payload: any): Promise<{
         data: import("../../../entity/commodity/commodity-options/ruiwu").CommodityRuiwuEntity[];

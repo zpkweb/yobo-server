@@ -1,6 +1,6 @@
-import { BaseCommodityColorServer } from "../../base/commodity/attribute/color";
+import { BaseCommodityColorService } from "../../base/commodity/attribute/color";
 export declare class CommodityAttributeColor {
-    baseCommodityColorServer: BaseCommodityColorServer;
+    baseCommodityColorService: BaseCommodityColorService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         id: any;

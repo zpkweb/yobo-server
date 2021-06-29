@@ -1,6 +1,6 @@
-import { BaseMessageServer } from "../base/message/message";
-export declare class MessageServer {
-    baseMessageServer: BaseMessageServer;
+import { BaseMessageService } from "../base/message/message";
+export declare class MessageService {
+    baseMessageService: BaseMessageService;
     create(payload: any): Promise<{
         success: boolean;
         code: number;

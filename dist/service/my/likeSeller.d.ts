@@ -1,9 +1,9 @@
-import { BaseMyLikeSellerServer } from "../base/my/likeSeller";
+import { BaseMyLikeSellerService } from "../base/my/likeSeller";
 import { UserService } from "../user/user";
 import { SellerService } from "../user/seller";
 import { CommodityCommodityService } from "../commodity/commodity";
 export declare class MyLikeSellerService {
-    baseMyLikeSellerServer: BaseMyLikeSellerServer;
+    baseMyLikeSellerService: BaseMyLikeSellerService;
     userService: UserService;
     sellerService: SellerService;
     commodityCommodityService: CommodityCommodityService;

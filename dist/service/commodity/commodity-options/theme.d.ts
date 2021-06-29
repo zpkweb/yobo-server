@@ -1,7 +1,7 @@
-import { BaseCommodityThemeServer } from "../../base/commodity/commodity-options/theme";
+import { BaseCommodityThemeService } from "../../base/commodity/commodity-options/theme";
 import { CommodityOptionsThemeService } from "../options/theme";
 export declare class CommodityThemeService {
-    baseCommodityThemeServer: BaseCommodityThemeServer;
+    baseCommodityThemeService: BaseCommodityThemeService;
     commodityOptionsThemeService: CommodityOptionsThemeService;
     search(payload: any): Promise<{
         data: import("../../../entity/commodity/commodity-options/theme").CommodityThemeEntity[];

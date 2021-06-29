@@ -12,11 +12,11 @@ export class IdentityService {
     const data = await this.baseIdentityService.baseCreateUserIdentity(payload.identityIndex);
     if(data) {
       // 关联身份列表
-      await this.baseIdentityService.BaseRelationSet({
-        name: 'identityList',
-        of: data.identifiers[0].id,
-        set: payload.identityIndex
-      })
+      // await this.baseIdentityService.BaseRelationSet({
+      //   name: 'identityList',
+      //   of: data.identifiers[0].id,
+      //   set: payload.identityIndex
+      // })
       // 关联用户
       if(payload.userId) {
         await this.baseIdentityService.BaseRelationSet({
@@ -56,6 +56,7 @@ export class IdentityService {
   }
   async deleteUserIdIdentityId(payload) {
     const data = await this.baseIdentityService.baseDeleteIdentityId(payload);
+    console.log("deleteUserIdIdentityId", data)
     if(data.affected) {
       return {
         data: data,

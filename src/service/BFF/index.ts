@@ -136,6 +136,7 @@ export class BFFService {
       pageSize: payload.pageSize || 5,
       currentPage: payload.currentPage || 1,
     });
+
     if(!commodity.success) {
       return commodity;
     }
@@ -199,17 +200,26 @@ export class BFFService {
         pageSize: payload.pageSize || 4,
         currentPage: payload.currentPage || 1,
       });
+      console.log("findBrowsingHistory", findBrowsingHistory)
       // console.log("findBrowsingHistory", findBrowsingHistory)
-      if(!findBrowsingHistory.success) {
-        return findBrowsingHistory;
+      if(findBrowsingHistory.success) {
+        browsingHistory = findBrowsingHistory.data.list;
+      }else{
+        browsingHistory = [];
       }
-      browsingHistory = findBrowsingHistory.data.list;
 
       // 添加浏览记录
       await this.myService.addBrowsingHistory(payload);
 
     }
     const { seller, ...commodityData } = commodity.data;
+    console.log("commodity", {
+      commodity: commodityData,
+      // commoditySimilar: commoditySimilar.data.list,
+      seller: seller,
+      browsingHistory: browsingHistory,
+      commoditySimilar: commoditySimilar.data.list,
+    })
     return {
       success: true,
       code: 10009,

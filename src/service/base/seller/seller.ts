@@ -122,7 +122,7 @@ export class BaseSellerService {
       // .leftJoinAndMapMany('seller.commodityPhotos', '')
       .addSelect('seller.createdDate')
       .where("seller.choice = :choice", { choice: true })
-      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .orderBy("seller.createdDate", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getMany();
@@ -158,7 +158,7 @@ export class BaseSellerService {
       // .leftJoinAndMapOne('seller.commodityName', CommodityNameEntity, "commodityName", "commodityName.commodityId = commoditys.commodityId")
       // .leftJoinAndMapMany('seller.commodityPhotos', '')
       .addSelect('seller.createdDate')
-      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .orderBy("seller.createdDate", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();
@@ -243,7 +243,7 @@ export class BaseSellerService {
       .innerJoin('seller.studio', 'studio')
       .addSelect('seller.createdDate')
       .where(where)
-      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .orderBy("seller.createdDate", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();
@@ -255,7 +255,7 @@ export class BaseSellerService {
       // .leftJoin('seller.studio', 'studio')
       .addSelect('seller.createdDate')
       .where(where)
-      .orderBy("seller.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .orderBy("seller.createdDate", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getManyAndCount();

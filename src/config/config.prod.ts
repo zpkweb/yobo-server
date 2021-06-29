@@ -9,11 +9,20 @@ export default (appInfo: EggAppInfo) => {
 
 
   config.email = {
-    service: 'qq',
-    user: '41728127@qq.com',
-    pass: 'cblmwxiolsxycada',
+    service: 'smtp.exmail.qq.com',
+    user: 'lishuo@yoboart.com',
+    pass: 'Yoboart306',
     port: 465
   }
+
+  // config.email = {
+  //   service: 'qq',
+  //   user: '41728127@qq.com',
+  //   pass: 'cblmwxiolsxycada',
+  //   port: 465
+  // }
+
+
 
   // config.email = {
   //   service: 'smtp.126.com',

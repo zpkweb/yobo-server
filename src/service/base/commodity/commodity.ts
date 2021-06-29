@@ -286,7 +286,7 @@ export class BaseCommodityService {
       // .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
       .orderBy({
-        "commodity.id": payload.news && payload.news =='true'  ? "DESC"  :  "ASC",
+        "commodity.id": payload.news  ? "DESC"  :  "ASC",
         // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
       })
       // .printSql()
@@ -310,7 +310,7 @@ export class BaseCommodityService {
       // .leftJoinAndMapOne('commodity.category', CommodityCategoryEntity, "commodityCategorys", "commodityCategorys.id = categorys.optionId")
       .addSelect('commodity.createdDate')
       .orderBy({
-        "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
+        "commodity.id": payload.news ? "DESC"  :  "ASC",
         // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
       })
       // .printSql()
@@ -1041,8 +1041,8 @@ export class BaseCommodityService {
       .setParameter("themes", payload.themes)
       .setParameter("types", payload.types)
       .setParameter("uses", payload.uses)
-      .orderBy("browsingCount.count", payload.hots && payload.hots =='true' ? "DESC"  :  "ASC")
-      .orderBy("commodity.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      // .orderBy("browsingCount.count", payload.hots ? "DESC"  :  "ASC")
+      .orderBy("commodity.createdDate", payload.news ? "DESC"  :  "ASC")
 
 
       .skip((payload.currentPage-1)*payload.pageSize)
@@ -1283,7 +1283,7 @@ export class BaseCommodityService {
       .setParameter("types", payload.types)
       .setParameter("uses", payload.uses)
       .orderBy({
-        "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
+        "commodity.id": payload.news ? "DESC"  :  "ASC",
         // "browsingCount.count": payload.hots && payload.hots =='true' ? "DESC"  :  "ASC"
       })
       .skip((payload.currentPage-1)*payload.pageSize)
@@ -1351,7 +1351,7 @@ export class BaseCommodityService {
       .createQueryBuilder('commodity')
       .where(where)
       .orderBy({
-        "commodity.id": payload.news && payload.news =='true' ? "DESC"  :  "ASC",
+        "commodity.id": payload.news ? "DESC"  :  "ASC",
         // "browsingCount.count": payload.hots && payload.hots =='true' ? "DESC"  :  "ASC"
       })
       .skip((payload.currentPage-1)*payload.pageSize)
@@ -1426,7 +1426,7 @@ export class BaseCommodityService {
       .leftJoinAndSelect('commodity.seller', 'seller')
       .addSelect('commodity.createdDate')
       .where("commodity.choice = :choice", { choice: true })
-      .orderBy("commodity.createdDate", payload.news && payload.news =='true' ? "DESC"  :  "ASC")
+      .orderBy("commodity.id", payload.news ? "DESC"  :  "ASC")
       .skip((payload.currentPage-1)*payload.pageSize)
       .take(payload.pageSize)
       .getMany();

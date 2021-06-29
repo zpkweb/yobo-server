@@ -1,7 +1,7 @@
-import { BaseCommodityShapeServer } from "../../base/commodity/commodity-options/shape";
+import { BaseCommodityShapeService } from "../../base/commodity/commodity-options/shape";
 import { CommodityOptionsShapeService } from "../options/shape";
 export declare class CommodityShapeService {
-    baseCommodityShapeServer: BaseCommodityShapeServer;
+    baseCommodityShapeService: BaseCommodityShapeService;
     commodityOptionsShapeService: CommodityOptionsShapeService;
     search(payload: any): Promise<{
         data: import("../../../entity/commodity/commodity-options/shape").CommodityShapeEntity[];

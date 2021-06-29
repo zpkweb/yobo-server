@@ -99,10 +99,14 @@ export class CommodityEntity {
   @Column()
   choice: boolean;
 
-  @Column()
+  @Column({
+    type: 'float'
+  })
   width: number;
 
-  @Column()
+  @Column({
+    type: 'float'
+  })
   height: number;
 
   // 封面图

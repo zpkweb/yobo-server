@@ -79,8 +79,10 @@ export class ServiceSellerController {
     // return await this.sellerService.searchSeller(searchQuery);
     const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const news = (Boolean(searchParams.news) && searchParams.news == 'true') ? true : false;
     const data:any = await this.sellerService.search({
       ...searchParams,
+      news,
       pageSize: pageSize,
       currentPage: currentPage,
     });

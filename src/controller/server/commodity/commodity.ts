@@ -71,8 +71,10 @@ export class AdminCommodityController {
   async search(@Query(ALL) searchParams) {
     const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const news = (Boolean(searchParams.news) && searchParams.news == 'true') ? true : false;
     const data:any = await this.commodityService.search({
       ...searchParams,
+      news,
       pageSize: pageSize,
       currentPage: currentPage,
     });
@@ -87,9 +89,11 @@ export class AdminCommodityController {
   async searchs(@Query(ALL) searchParams) {
     const pageSize = Number(searchParams.pageSize) || this.pagination.pageSize;
     const currentPage = Number(searchParams.currentPage) || this.pagination.currentPage;
+    const news = (Boolean(searchParams.news) && searchParams.news == 'true') ? true : false;
     const data:any = await this.commodityService.ServiceSearch({
       ...searchParams,
       isLocale: true,
+      news,
       locale: searchParams.locale || 'zh-cn',
       pageSize: pageSize,
       currentPage: currentPage,

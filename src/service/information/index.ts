@@ -147,7 +147,7 @@ export class ServiceInformation {
   }
 
   // 资讯列表
-  async informatinList({
+  async informationList({
     currentPage = 1,
     pageSize = 10,
     news = false,
