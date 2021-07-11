@@ -1,6 +1,6 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { InformationEntity } from 'src/entity/information/information';
 
 @Provide()
@@ -79,6 +79,46 @@ export class BaseInformationService {
       .createQueryBuilder()
       .where(where)
       .getOne();
+  }
+
+  async BaseRetrieveInformationId(informationId) {
+    return this.informationEntity
+      .createQueryBuilder('information')
+      .leftJoinAndSelect("information.detail", "detail")
+      .leftJoinAndSelect("information.videos", "videos")
+      .where("information.informationId = :informationId", { informationId : informationId })
+      .addSelect("information.isTop")
+      .addSelect("information.createdDate")
+      .getOne();
+  }
+
+  async BaseSearchInformation({
+    name = '',
+    currentPage = 1,
+    pageSize = 10,
+    news = false,
+    isTop = false
+  } = {}) {
+    const where:any = {
+      isDelete: false
+    };
+    if(name) {
+      where['zh-cn'] = Like(`%${name}%`);
+    }
+    return this.informationEntity
+      .createQueryBuilder('information')
+      .leftJoinAndSelect("information.detail", "detail")
+      .leftJoinAndSelect("information.videos", "videos")
+      .where(where)
+      .addSelect("information.isTop")
+      .addSelect("information.createdDate")
+      .orderBy({
+        "information.id": news ? "DESC"  :  "ASC",
+        "information.isTop": isTop ? "DESC"  :  "ASC"
+      })
+      .skip((currentPage-1)*pageSize)
+      .take(pageSize)
+      .getManyAndCount();
   }
 
   async BaseUpdate({

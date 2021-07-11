@@ -18,7 +18,7 @@ export class InformationService {
     }else{
       return {
         success: false,
-        code: 10003
+        code: 10004
       }
     }
   }
@@ -77,6 +77,111 @@ export class InformationService {
     if(data) {
       return {
         data,
+        success: true,
+        code: 10009
+      }
+    }else{
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async retrieveInformationId(informationId) {
+    const data = await this.baseInformationService.BaseRetrieveInformationId(informationId);
+    if(data) {
+      return {
+        data,
+        success: true,
+        code: 10009
+      }
+    }else{
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async retrieveInformationDetail(payload) {
+    console.log(payload)
+    let data:any = await this.baseInformationService.BaseRetrieveInformationId(payload.informationId);
+    console.log(data)
+    if(data) {
+      if(payload.isLocale) {
+        const informationId = data.informationId;
+        const title = data[payload.locale];
+        const detail = data.detail ? data.detail[payload.locale] : '';
+        const videos = data.videos.map(item => {
+          return {
+            videoId: item.videoId,
+            videoSrc: item.videoSrc,
+            ccId: item.ccId,
+            siteId: item.siteId,
+            videoPhoto: item.videoPhoto,
+            watchs: item.watchs,
+            title: item[payload.locale]
+          }
+        })
+        data = {
+          informationId,
+          title,
+          detail,
+          videos
+        }
+      }
+      return {
+        data,
+        success: true,
+        code: 10009
+      }
+    }else{
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+
+  async searchInformation(payload) {
+    const data = await this.baseInformationService.BaseSearchInformation(payload);
+    let list:any = data[0];
+    let total = data[1];
+    if(list) {
+      if(payload.isLocale) {
+        // console.log("payload.locale", payload.locale)
+        list = list.map(item => {
+          const informationId = item.informationId;
+          const name = item[payload.locale];
+          const detail = item.detail ? item.detail[payload.locale] : '';
+          const videos = item.videos.map(item => {
+            // console.log("payload.locale", payload.locale)
+            return {
+              videoId: item.videoId,
+              videoSrc: item.videoSrc,
+              ccId: item.ccId,
+              siteId: item.siteId,
+              videoPhoto: item.videoPhoto,
+              watchs: item.watchs,
+              name: item[payload.locale]
+            }
+          })
+          const createdDate = item.createdDate;
+          return {
+            informationId,
+            name,
+            detail,
+            videos,
+            createdDate
+          }
+        })
+      }
+      return {
+        data: {
+          list,
+          total
+        },
         success: true,
         code: 10009
       }

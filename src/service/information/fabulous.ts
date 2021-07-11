@@ -18,7 +18,7 @@ export class InformationFabulousService {
     }else{
       return {
         success: false,
-        code: 10003
+        code: 10004
       }
     }
   }

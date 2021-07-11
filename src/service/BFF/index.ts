@@ -5,7 +5,7 @@ import { CommodityService } from '../commodity';
 import { MyService } from 'src/service/my';
 import { ArtworkOptionsService } from './artworkOptions';
 import { CommodityOptionsThemeService } from 'src/service/commodity/options/theme'
-
+import { ServiceInformation } from "src/service/information"
 
 @Provide()
 export class BFFService {
@@ -27,6 +27,9 @@ export class BFFService {
 
   @Inject()
   commodityOptionsThemeService: CommodityOptionsThemeService;
+
+  @Inject()
+  serviceInformation: ServiceInformation;
 
   @Config('host')
   host;
@@ -84,14 +87,31 @@ export class BFFService {
     }
 
     // 商品评论
-    const commodityComment = await this.commodityService.commodityComment({
-      pageSize: payload.pageSize || 4,
-      currentPage: payload.currentPage || 1,
+    // const commodityComment = await this.commodityService.commodityComment({
+    //   pageSize: payload.pageSize || 4,
+    //   currentPage: payload.currentPage || 1,
+    //   isLocale: true,
+    //   locale: payload.locale || 'zh-cn'
+    // });
+    // if(!commodityComment.success) {
+    //   return commodityComment;
+    // }
+
+    // 资讯
+    const information:any = await this.serviceInformation.informationList({
+      news: true,
+      isTop: false,
+      pageSize: 5,
+      currentPage: 1,
       isLocale: true,
       locale: payload.locale || 'zh-cn'
     });
-    if(!commodityComment.success) {
-      return commodityComment;
+    // if(data.success){
+    //   information.data.pageSize = payload.pageSize;
+    //   information.data.currentPage = payload.currentPage;
+    // }
+    if(!information.success) {
+      return information;
     }
 
     // 我们热卖的艺术家
@@ -115,7 +135,11 @@ export class BFFService {
         gallerySeller: gallerySeller.data,
         latestCommodity: latestCommodity.data.list,
         lookWorld: commodityOption.data,
-        commentCommodity: commodityComment.data,
+        // commentCommodity: commodityComment.data,
+        information: {
+          show: '',
+          list: information.data.list,
+        },
         hotSaleSeller: hotSaleSeller.data.list
       }
     }
@@ -240,5 +264,38 @@ export class BFFService {
    */
   async artworkOptions(payload) {
     return await this.artworkOptionsService.get(payload);
+  }
+
+
+  // 资讯详情：
+  // 视频：视频播放列表，正在观看人数， 视频累计观看人数
+  // 资讯详情， 资讯评论数，评论列表，
+  async informationDetail({
+    informationId = '',
+    isLocale = false,
+    locale = 'zh-cn'
+  } = {}) {
+    // 资讯
+    const information:any = await this.serviceInformation.informationDetail({
+      informationId,
+      isLocale,
+      locale
+    });
+
+    // 资讯评论
+      // news: true,
+      // isTop: false,
+      // pageSize: 5,
+      // currentPage: 1,
+      // isLocale: true,
+      // locale: payload.locale || 'zh-cn'
+
+    return {
+      data: {
+        information: information.data
+      },
+      success: true,
+      code: 10009
+    };
   }
 }

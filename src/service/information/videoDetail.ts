@@ -1,14 +1,14 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseInformationReplyService } from "src/service/base/information/reply";
+import { BaseInformationVideoDetailService } from "src/service/base/information/videoDetail";
 
 @Provide()
-export class InformationReplyService {
+export class InformationVideoDetailService {
 
   @Inject()
-  baseInformationReplyService: BaseInformationReplyService;
+  baseInformationVideoDetailService: BaseInformationVideoDetailService;
 
-  async create(payload) {
-    const data = await this.baseInformationReplyService.BaseCreate(payload);
+  async baseCreate(payload) {
+    const data = await this.baseInformationVideoDetailService.BaseCreate(payload);
     if(data) {
       return {
         data,
@@ -24,7 +24,7 @@ export class InformationReplyService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseInformationReplyService.BaseRetrieve(payload);
+    const data = await this.baseInformationVideoDetailService.BaseRetrieve(payload);
     if(data) {
       return {
         data,
@@ -39,8 +39,10 @@ export class InformationReplyService {
     }
   }
 
-  async update(payload) {
-    const data = await this.baseInformationReplyService.BaseUpdate(payload);
+
+
+  async baseUpdate(payload) {
+    const data = await this.baseInformationVideoDetailService.BaseUpdate(payload);
     if(data.affected) {
       return {
         success: true,
@@ -55,7 +57,7 @@ export class InformationReplyService {
   }
 
   async delete(id) {
-    const data = await this.baseInformationReplyService.BaseDelete(id);
+    const data = await this.baseInformationVideoDetailService.BaseDelete(id);
     if(data.affected) {
       return {
         success: true,
@@ -68,5 +70,7 @@ export class InformationReplyService {
       }
     }
   }
+
+
 
 }

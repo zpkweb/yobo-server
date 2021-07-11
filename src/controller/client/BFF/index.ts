@@ -27,7 +27,7 @@ export class BFFController {
   async commodity(@Query(ALL) query) {
     return await this.bffService.clientCommodity({
       ...query,
-      locale: 'zh-cn'
+      locale: query.locale || 'zh-cn'
     })
   }
 
@@ -39,4 +39,16 @@ export class BFFController {
       isLocale: true
     });
   }
+
+  // 资讯详情
+  @Get('/informationDetail', { summary: "资讯详情" })
+  async informationDetail(@Query(ALL) query) {
+    // const isLocale = (Boolean(query.isLocale) && query.isLocale == 'true') ? true : false;
+    return await this.bffService.informationDetail({
+      informationId: query.informationId,
+      isLocale: true,
+      locale: query.locale || 'zh-cn'
+    })
+  }
+
 }

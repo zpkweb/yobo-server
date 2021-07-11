@@ -1,8 +1,9 @@
 // 资讯 视频
 import { EntityModel } from "@midwayjs/orm";
-import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from "typeorm";
+import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { InformationEntity } from "./information";
 import { InformationCommentEntity } from './comment';
+import { InformationVideoDetailEntity } from './videoDetail';
 
 @EntityModel('information_video')
 export class InformationVideoEntity {
@@ -60,6 +61,10 @@ export class InformationVideoEntity {
   // 关联视频评论
   @OneToMany(type => InformationCommentEntity, InformationCommentEntity => InformationCommentEntity.video)
   comments: InformationCommentEntity[];
+
+  // 关联视频详情
+  @OneToOne(type => InformationVideoDetailEntity, InformationVideoDetailEntity => InformationVideoDetailEntity.video)
+  detail: InformationVideoDetailEntity;
 
   // 是否删除
   @Column({

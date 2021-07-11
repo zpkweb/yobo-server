@@ -2,6 +2,8 @@
 import { EntityModel } from "@midwayjs/orm";
 import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
 import { InformationCommentEntity } from "./comment"
+// import { InformationVideoEntity } from "./video"
+
 @EntityModel('information_reply')
 export class InformationReplyEntity {
 
@@ -32,9 +34,17 @@ export class InformationReplyEntity {
   @Column()
   commentId: string;
 
+  // 评论id
+  @Column()
+  videoId: string;
+
   // 关联评论
   @ManyToOne(type => InformationCommentEntity, InformationCommentEntity => InformationCommentEntity.replys)
   comment: InformationCommentEntity;
+
+  // 关联视频
+  // @ManyToOne(type => InformationVideoEntity, InformationVideoEntity => InformationVideoEntity.replys)
+  // video: InformationVideoEntity;
 
   // 是否展示
   @Column({
