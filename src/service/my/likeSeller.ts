@@ -19,6 +19,7 @@ export class MyLikeSellerService {
   @Inject()
   commodityCommodityService: CommodityCommodityService;
 
+  // 添加喜欢的艺术家
   async addMyLikeSeller(payload) {
     // console.log("addMyLikeSeller", payload)
     // 查找用户
@@ -48,6 +49,10 @@ export class MyLikeSellerService {
       }
     }
 
+
+
+
+
     // 创建喜欢的艺术家
     const creatLikeSeller = await this.createLikeSeller({
       banner: payload.banner || '',
@@ -59,6 +64,15 @@ export class MyLikeSellerService {
     });
     if(!creatLikeSeller.success) {
       return creatLikeSeller;
+    }
+
+    // 增加艺术家喜欢数
+    const sellerLikes = await this.sellerService.likes({
+      likes: seller.data.likes + 1,
+      sellerId: payload.sellerId
+    })
+    if(!sellerLikes.success) {
+      return sellerLikes
     }
 
     // 关联用户
@@ -77,6 +91,64 @@ export class MyLikeSellerService {
     return await this.myLikeSeller(payload.userId);
   }
 
+  /**
+   * 取消我喜欢的艺术家
+   */
+   async delMyLikeSeller(payload) {
+
+    // 查找用户
+    const user = await this.userService.hasUser(payload.userId);
+    if (!user.success) {
+      return user;
+    }
+
+    // 查找艺术家
+    const seller = await this.sellerService.hasSeller(payload.sellerId);
+    // console.log("查找艺术家", seller)
+    if (!seller.success) {
+      return seller;
+    }
+
+    // 查找喜欢的艺术家是否存在
+    const likeSeller = await this.hasMyLikeSeller({
+      userId: payload.userId,
+      sellerId: payload.sellerId
+    })
+    if (!likeSeller.success) {
+      return {
+        success: true,
+        code : 10602
+      }
+    }
+
+
+
+    // 删除艺术家
+    const delLikeSeller = await this.delLikeSeller({
+      userId: payload.userId,
+      sellerId: payload.sellerId
+    })
+    if(!delLikeSeller.success) {
+      return delLikeSeller;
+    }
+
+    // 减少艺术家喜欢数
+    const likes = seller.data.likes - 1;
+
+    const sellerLikes = await this.sellerService.likes({
+      likes: (likes > 0) ? likes : 0,
+      sellerId: payload.sellerId
+    })
+    if(!sellerLikes.success) {
+      return sellerLikes
+    }
+
+    return {
+      success: true,
+      code: 10001
+    }
+
+  }
 
 
   /**
@@ -193,28 +265,7 @@ export class MyLikeSellerService {
     })
   }
 
-  /**
-   * 删除我喜欢的艺术家
-   */
-  async delMyLikeSeller(payload) {
-    // 查找喜欢的艺术家是否存在
-    const likeSeller = await this.hasMyLikeSeller({
-      userId: payload.userId,
-      sellerId: payload.sellerId
-    })
-    if (!likeSeller.success) {
-      return {
-        success: true,
-        code : 10602
-      }
-    }
-    // 删除艺术家
-    return await this.delLikeSeller({
-      userId: payload.userId,
-      sellerId: payload.sellerId
-    })
 
-  }
   /**
    * 删除艺术家
    */

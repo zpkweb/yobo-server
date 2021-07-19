@@ -73,13 +73,12 @@ export class BaseIdentityService {
     }
 
     async baseDeleteIdentityId(payload) {
-      console.log("baseDeleteIdentityId", payload)
       return await this.userIdentityEntity
-      .createQueryBuilder()
-      .delete()
-      .where('userId = :userId', { userId: payload.userId })
-      .andWhere("identityIndex = :identityIndex", { identityIndex: payload.identityIndex })
-      .execute();
+        .createQueryBuilder()
+        .delete()
+        .where('userId = :userId', { userId: payload.userId })
+        .andWhere("identityIndex = :identityIndex", { identityIndex: payload.identityIndex })
+        .execute();
     }
 
     // 关联用户

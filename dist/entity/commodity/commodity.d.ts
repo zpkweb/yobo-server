@@ -33,6 +33,7 @@ export declare class CommodityEntity {
     choice: boolean;
     width: number;
     height: number;
+    likes: number;
     images: string;
     name: CommodityNameEntity;
     desc: CommodityDescEntity;

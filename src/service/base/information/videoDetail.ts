@@ -70,7 +70,7 @@ export class BaseInformationVideoDetailService {
       .createQueryBuilder()
       .update(InformationVideoDetailEntity)
       .set({
-        isDelete: false
+        isDelete: true
       })
       .where("id = :id", { id : id })
       .execute();

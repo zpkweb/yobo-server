@@ -8,11 +8,23 @@ export declare class MyLikeSellerService {
     sellerService: SellerService;
     commodityCommodityService: CommodityCommodityService;
     addMyLikeSeller(payload: any): Promise<{
+        data: import("../../entity/user/user").UserEntity;
+        success: boolean;
+        code: number;
+    } | {
         success: boolean;
         code: number;
         data?: undefined;
     } | {
-        data: any;
+        data: import("../../entity/user/seller/seller").UserSellerEntity;
+        success: boolean;
+        code: number;
+    } | {
+        data: import("typeorm").InsertResult;
+        success: boolean;
+        code: number;
+    }>;
+    delMyLikeSeller(payload: any): Promise<{
         success: boolean;
         code: number;
     }>;
@@ -54,10 +66,6 @@ export declare class MyLikeSellerService {
     }>;
     relationUser(payload: any): Promise<void>;
     relationSeller(payload: any): Promise<void>;
-    delMyLikeSeller(payload: any): Promise<{
-        success: boolean;
-        code: number;
-    }>;
     delLikeSeller(payload: any): Promise<{
         success: boolean;
         code: number;

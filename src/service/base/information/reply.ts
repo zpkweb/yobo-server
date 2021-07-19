@@ -11,9 +11,13 @@ export class BaseInformationReplyService {
 
   async BaseCreate({
     content = '',
-    replyUser = '',
+    replyUserId = '',
+    replyUserName = '',
     userId = '',
+    userName = '',
     commentId = '',
+    likes = 0,
+    replyNums = 0,
     isShow = true,
     isDelete = false
   } = {}) {
@@ -23,13 +27,31 @@ export class BaseInformationReplyService {
       .into(InformationReplyEntity)
       .values({
         content,
-        replyUser,
+        replyUserId,
+        replyUserName,
         userId,
+        userName,
         commentId,
+        likes,
+        replyNums,
         isShow,
         isDelete
       })
       .execute();
+  }
+
+
+  async BaseRetrieveReplyId(replyId) {
+    const where:any = {
+      isDelete: false,
+      isShow: true,
+      replyId
+    };
+    return this.informationReplyEntity
+      .createQueryBuilder("reply")
+      .where(where)
+      .addSelect("reply.createdDate")
+      .getOne();
   }
 
   async BaseRetrieve({
@@ -45,25 +67,84 @@ export class BaseInformationReplyService {
       .getMany();
   }
 
+  async BaseRetrieveCommentId({
+    commentId = '',
+    currentPage = 1,
+    pageSize = 10
+  } = {}) {
+    return this.informationReplyEntity
+      .createQueryBuilder('reply')
+      .where("commentId = :commentId", { commentId: commentId })
+      .andWhere("isDelete = :isDelete", { isDelete : false })
+      .andWhere("isShow = :isShow", { isShow : true })
+      .addSelect('reply.createdDate')
+      .skip((currentPage-1)*pageSize)
+      .take(pageSize)
+      .getMany();
+  }
+
+
+
   async BaseUpdate({
     id = '',
     content = '',
-    replyUser = '',
+    replyUserId = '',
+    replyUserName = '',
     userId = '',
+    userName = '',
     commentId = '',
+    likes = 0,
+    replyNums = 0,
     isShow = true
   } = {}) {
+
+    const set:any = {}
+    if(content) {
+      set.content = content;
+    }
+    if(likes) {
+      set.likes = likes;
+    }
+    if(replyNums) {
+      set.replyNums = replyNums;
+    }
     return this.informationReplyEntity
       .createQueryBuilder()
       .update(InformationReplyEntity)
-      .set({
-        content,
-        replyUser,
-        userId,
-        commentId,
-        isShow,
-      })
+      .set(set)
       .where("id = :id", { id : id })
+      .execute();
+  }
+
+  async BaseUpdatereplyId({
+    replyId = '',
+    content = '',
+    replyUserId = '',
+    replyUserName = '',
+    userId = '',
+    userName = '',
+    commentId = '',
+    likes = 0,
+    replyNums = 0,
+    isShow = true
+  } = {}) {
+
+    const set:any = {}
+    if(content) {
+      set.content = content;
+    }
+    if(likes) {
+      set.likes = likes;
+    }
+    if(replyNums) {
+      set.replyNums = replyNums;
+    }
+
+    return this.informationReplyEntity
+      .createQueryBuilder()
+      .update(InformationReplyEntity)
+      .set(set)
+      .where("replyId = :replyId", { replyId : replyId })
       .execute();
   }
 

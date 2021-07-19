@@ -1,14 +1,14 @@
 import { Inject, Provide } from "@midwayjs/decorator";
-import { BaseInformationFabulousService } from "src/service/base/information/fabulous";
+import { BaseInformationLikesService } from "src/service/base/information/likes";
 
 @Provide()
-export class InformationFabulousService {
+export class InformationLikesService {
 
   @Inject()
-  baseInformationFabulousService: BaseInformationFabulousService;
+  baseInformationLikesService: BaseInformationLikesService;
 
   async create(payload) {
-    const data = await this.baseInformationFabulousService.BaseCreate(payload);
+    const data = await this.baseInformationLikesService.BaseCreate(payload);
     if(data) {
       return {
         data,
@@ -24,7 +24,7 @@ export class InformationFabulousService {
   }
 
   async retrieve(payload) {
-    const data = await this.baseInformationFabulousService.BaseRetrieve(payload);
+    const data = await this.baseInformationLikesService.BaseRetrieve(payload);
     if(data) {
       return {
         data,
@@ -40,7 +40,7 @@ export class InformationFabulousService {
   }
 
   async update(payload) {
-    const data = await this.baseInformationFabulousService.BaseUpdate(payload);
+    const data = await this.baseInformationLikesService.BaseUpdate(payload);
     if(data.affected) {
       return {
         success: true,
@@ -55,7 +55,7 @@ export class InformationFabulousService {
   }
 
   async delete(id) {
-    const data = await this.baseInformationFabulousService.BaseDelete(id);
+    const data = await this.baseInformationLikesService.BaseDelete(id);
     if(data.affected) {
       return {
         success: true,

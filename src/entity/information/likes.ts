@@ -2,8 +2,8 @@
 import { EntityModel } from "@midwayjs/orm";
 import { Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
-@EntityModel('information_fabulous')
-export class InformationFabulousEntity {
+@EntityModel('information_likes')
+export class InformationLikesEntity {
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,7 +20,8 @@ export class InformationFabulousEntity {
   @Column()
   userId: string;
 
-
+  @Column()
+  userName: string;
 
   // 是否取消
   @Column({

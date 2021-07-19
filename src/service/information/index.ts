@@ -1,7 +1,7 @@
 import { Provide, Inject } from "@midwayjs/decorator";
 import { InformationCommentService } from "./comment";
 import { InformationDetailService } from "./detail";
-import { InformationFabulousService } from "./fabulous";
+import { InformationLikesService } from "./likes";
 import { InformationService } from "./information";
 import { InformationReplyService } from "./reply";
 import { InformationVideoService } from "./video";
@@ -16,7 +16,7 @@ export class ServiceInformation {
   informationDetailService: InformationDetailService;
 
   @Inject()
-  informationFabulousService: InformationFabulousService;
+  informationLikesService: InformationLikesService;
 
   @Inject()
   informationService: InformationService;
@@ -33,8 +33,8 @@ export class ServiceInformation {
   //  创建资讯
   async  createInformation({
     name = {},
-    detail = {},
-    videos = []
+    desc = {},
+    videos = [],
   } = {}) {
 
     // 查询资讯
@@ -64,14 +64,14 @@ export class ServiceInformation {
         return information;
       }
     }
-    console.log("information", information)
+    // console.log("information", information)
 
     // 创建详情
     let detailData:any = await this.informationDetailService.create({
-      zhcn: detail['zh-cn'],
-      enus: detail['en-us'],
-      jajp: detail['ja-jp'],
-      eses: detail['es-es'],
+      zhcn: desc['zh-cn'],
+      enus: desc['en-us'],
+      jajp: desc['ja-jp'],
+      eses: desc['es-es'],
     })
     // 创建失败
     if(!detailData.success){
@@ -86,7 +86,7 @@ export class ServiceInformation {
       set: detailData.data.identifiers[0].id
     })
 
-    // 创建视频
+
 
     if(videos && videos.length) {
       for(let item of videos) {
@@ -103,9 +103,15 @@ export class ServiceInformation {
 
 
     // 获取资讯
-    // const informationData = await this.informationService.retrieveInformationId(information.data.generatedMaps[0].informationId);
+    const data = await this.informationService.retrieveName({
+      zhcn: name['zh-cn'],
+      enus: name['en-us'],
+      jajp: name['ja-jp'],
+      eses: name['es-es']
+    });
+
     return {
-      informationId: information.data.generatedMaps[0].informationId,
+      data: data.data,
       success: true,
       code: 10003
     };
@@ -134,6 +140,7 @@ export class ServiceInformation {
   // 资讯详情
   async informationDetail(payload) {
     return await this.informationService.retrieveInformationDetail(payload)
+
   }
 
   // 搜索资讯
@@ -145,8 +152,9 @@ export class ServiceInformation {
   async updateInformation({
     informationId = '',
     name = {},
-    detail = {},
-    videos = []
+    desc = {},
+    videos = [],
+    removeVideos = []
   } = {}) {
     // 查询参数
     // if(!zhcn && !enus && !jajp && !eses) {
@@ -157,6 +165,7 @@ export class ServiceInformation {
     // }
     // 查询资讯
     const information:any = await this.informationService.retrieveInformationId(informationId);
+    // console.log("information", information)
     if(!information.success) {
       return {
         success: false,
@@ -172,6 +181,7 @@ export class ServiceInformation {
       jajp: name['ja-jp'],
       eses: name['es-es']
     })
+    // console.log("informationUpdate", informationUpdate)
     // 更新资讯失败
     if(!informationUpdate.success) {
       return informationUpdate;
@@ -179,64 +189,37 @@ export class ServiceInformation {
 
     // 更新详情
     const detailData:any = await this.informationDetailService.update({
-      id: detail['id'],
-      zhcn: detail['zh-cn'],
-      enus: detail['en-us'],
-      jajp: detail['ja-jp'],
-      eses: detail['es-es'],
+      id: desc['id'],
+      zhcn: desc['zh-cn'],
+      enus: desc['en-us'],
+      jajp: desc['ja-jp'],
+      eses: desc['es-es'],
     })
+    // console.log("detailData", detailData)
     // 更新详情失败
     if(!detailData.success) {
       return detailData;
     }
 
+    // 删除关联视频
+    if(removeVideos && removeVideos.length) {
+      for(let item of removeVideos) {
+        await this.informationService.relationRemove({
+          name: 'videos',
+          of: information.data.id,
+          remove: item.id
+        })
+      }
+    }
 
     if(videos && videos.length) {
       for(let item of videos) {
-        if(item.id) {
-          // 更新视频
-          const video:any = await this.informationVideoService.update({
-            id: item.id,
-            videoSrc: item.videoSrc,
-            ccId: item.ccId,
-            siteId: item.siteId,
-            videoPhoto: item.videoPhoto,
-            zhcn: item['zh-cn'],
-            enus: item['en-us'],
-            jajp: item['ja-jp'],
-            eses: item['es-es']
-          })
-
-          // 更新视频失败
-          if(!video.success){
-            return video;
-          }
-        }else{
-          // 创建视频
-          const video:any = await this.informationVideoService.create({
-            videoSrc: item.videoSrc,
-            ccId: item.ccId,
-            siteId: item.siteId,
-            videoPhoto: item.videoPhoto,
-            zhcn: item['zh-cn'],
-            enus: item['en-us'],
-            jajp: item['ja-jp'],
-            eses: item['es-es']
-          })
-
-          // 创建视频失败
-          if(!video.success){
-            return video;
-          }
-          // 关联资讯
-          // console.log("video", video)
-          await this.informationService.relationAdd({
-            name: 'videos',
-            of: information.data.id,
-            add: video.data.identifiers[0].id
-          })
-        }
-
+        // 关联资讯
+        await this.informationService.relationAdd({
+          name: 'videos',
+          of: information.data.id,
+          add: item.id
+        })
 
       }
 
@@ -247,6 +230,11 @@ export class ServiceInformation {
       code: 10007
     }
 
+  }
+
+  // 删除资讯
+  async deleteInformation(informationId) {
+    return await this.informationService.baseDelete(informationId)
   }
 
 
@@ -276,7 +264,7 @@ export class ServiceInformation {
   }
 
   // 资讯视频详情
-  async informationVideoId(payload) {
+  async informationVideoDetail(payload) {
     return await this.informationVideoService.retrieveVideoId(payload)
   }
 
@@ -290,18 +278,73 @@ export class ServiceInformation {
     return await this.informationVideoService.update(payload)
   }
 
+  // 删除资讯
+  async deleteInformationVideo(videoId) {
+    return await this.informationVideoService.baseDelete(videoId)
+  }
+
 
   // 视频评论
+  async videoComment(payload) {
+    return await this.informationCommentService.create(payload)
+  }
+
+  // 视频评论列表
+  async commentList(payload) {
+    // video list
+    return await this.informationCommentService.retrieveList(payload)
+  }
+
 
   // 视频评论回复， 回复视频评论回复
+  async commentReply(payload) {
+    return await this.informationReplyService.create(payload)
+  }
+
+  async replyReply(payload) {
+    return await this.informationReplyService.reply(payload)
+  }
 
   // 点赞评论， 点赞回复
+  async likes({
+    type = '',
+    typeId = '',
+    userName = '',
+    userId = ''
+  } = {}) {
+
+    switch(type) {
+      case "comment":
+        return await this.informationCommentService.likes({
+          type,
+          userId,
+          userName,
+          commentId: typeId
+        })
+        break;
+      case "reply":
+      default:
+        return await this.informationReplyService.likes({
+          type,
+          userId,
+          userName,
+          replyId: typeId
+        })
+        break;
+
+    }
+
+  }
 
 
   // 官网资讯详情
   async bffInformationDetail(payload) {
-    console.log(payload)
     return await this.informationService.retrieveInformationDetail(payload)
+  }
+
+  //  视频观看
+  async watchs(payload) {
+    return await this.informationVideoService.watchs(payload)
   }
 
 }

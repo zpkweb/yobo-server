@@ -1,29 +1,31 @@
 import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Repository } from "typeorm";
-import { InformationFabulousEntity } from 'src/entity/information/fabulous';
+import { InformationLikesEntity } from 'src/entity/information/likes';
 
 @Provide()
-export class BaseInformationFabulousService {
+export class BaseInformationLikesService {
 
-  @InjectEntityModel(InformationFabulousEntity)
-  informationFabulousEntity: Repository<InformationFabulousEntity>;
+  @InjectEntityModel(InformationLikesEntity)
+  informationLikesEntity: Repository<InformationLikesEntity>;
 
   async BaseCreate({
     type = '',
     typeId = '',
     userId = '',
+    userName = '',
     isCancel = true,
     isDelete = false
   } = {}) {
-    return this.informationFabulousEntity
+    return this.informationLikesEntity
       .createQueryBuilder()
       .insert()
-      .into(InformationFabulousEntity)
+      .into(InformationLikesEntity)
       .values({
         type,
         typeId,
         userId,
+        userName,
         isCancel,
         isDelete
       })
@@ -34,7 +36,7 @@ export class BaseInformationFabulousService {
     currentPage = 1,
     pageSize = 10
   } = {}) {
-    return this.informationFabulousEntity
+    return this.informationLikesEntity
       .createQueryBuilder()
       .where("isDelete = :isDelete", { isDelete : false })
       .andWhere("isCancel = :isCancel", { isCancel : false })
@@ -48,15 +50,17 @@ export class BaseInformationFabulousService {
     type = '',
     typeId = '',
     userId = '',
+    userName = '',
     isCancel = true,
   } = {}) {
-    return this.informationFabulousEntity
+    return this.informationLikesEntity
       .createQueryBuilder()
-      .update(InformationFabulousEntity)
+      .update(InformationLikesEntity)
       .set({
         type,
         typeId,
         userId,
+        userName,
         isCancel,
       })
       .where("id = :id", { id : id })
@@ -64,11 +68,11 @@ export class BaseInformationFabulousService {
   }
 
   async BaseDelete(id) {
-    return this.informationFabulousEntity
+    return this.informationLikesEntity
       .createQueryBuilder()
-      .update(InformationFabulousEntity)
+      .update(InformationLikesEntity)
       .set({
-        isDelete: false
+        isDelete: true
       })
       .where("id = :id", { id : id })
       .execute();

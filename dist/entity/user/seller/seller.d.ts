@@ -16,6 +16,7 @@ export declare class UserSellerEntity {
     lastname: string;
     searchName: string;
     tags: string[];
+    likes: number;
     gender: string;
     country: string;
     createdDate: Date;

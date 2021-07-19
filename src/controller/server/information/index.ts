@@ -41,9 +41,11 @@ export class adminInformatinController {
 
   }
 
-  @Get('/detail', { summary: "编辑资讯" })
+  @Get('/detail', { summary: "资讯详情" })
   async informationEdit(@Query(ALL) editQuery) {
-    const data:any = await this.serviceInformation.informationDetail(editQuery.informationId)
+    const data:any = await this.serviceInformation.informationDetail({
+      informationId: editQuery.informationId
+    })
     return data;
   }
 
@@ -75,6 +77,11 @@ export class adminInformatinController {
       data.data.currentPage = currentPage;
     }
     return data;
+  }
+
+  @Post('/delete', { summary: "删除资讯" })
+  async deleteInformation(@Query(ALL) query) {
+    return await this.serviceInformation.deleteInformation(query.informationId);
   }
 
 

@@ -104,7 +104,8 @@ export class BaseCommodityService {
         state: payload.state,
         width: payload.width,
         height: payload.height,
-        images: payload.images
+        images: payload.images,
+        likes: payload.likes
       })
       .execute();
   }
@@ -330,6 +331,7 @@ export class BaseCommodityService {
       .innerJoinAndSelect('commodity.photos', 'photos')
       .where('commodity.commodityId = :commodityId', { commodityId: commodityId })
       .addSelect('commodity.createdDate')
+
       .getOne();
 
     return data;
@@ -1391,10 +1393,30 @@ export class BaseCommodityService {
    */
   async BaseUpdate(payload) {
     const { commodityId, ...setData } = payload;
+    const set:any = {}
+    if(setData.choice) {
+      set.choice = setData.choice;
+    }
+    if(setData.state) {
+      set.state = setData.state;
+    }
+    if(setData.width) {
+      set.width = setData.width;
+    }
+    if(setData.height) {
+      set.height = setData.height;
+    }
+    if(setData.images) {
+      set.images = setData.images;
+    }
+    if(setData.likes >= 0) {
+      set.likes = setData.likes;
+    }
+
     return await this.commodityEntity
       .createQueryBuilder()
       .update(CommodityEntity)
-      .set(setData)
+      .set(set)
       .where("commodityId = :commodityId", { commodityId: commodityId })
       .execute();
   }
@@ -1440,6 +1462,8 @@ export class BaseCommodityService {
       // .getManyAndCount();
       .getCount()
   }
+
+
 
 
 }

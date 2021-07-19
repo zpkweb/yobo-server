@@ -298,4 +298,13 @@ export declare class CommodityCommodityService {
         code: number;
         data?: undefined;
     }>;
+    likes(payload: any): Promise<{
+        data: import("typeorm").UpdateResult;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
 }

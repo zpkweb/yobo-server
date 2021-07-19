@@ -105,15 +105,15 @@ export class InformationService {
   }
 
   async retrieveInformationDetail(payload) {
-    console.log(payload)
     let data:any = await this.baseInformationService.BaseRetrieveInformationId(payload.informationId);
-    console.log(data)
+    // console.log("retrieveInformationDetail data", data)
     if(data) {
       if(payload.isLocale) {
         const informationId = data.informationId;
         const title = data[payload.locale];
         const detail = data.detail ? data.detail[payload.locale] : '';
         const videos = data.videos.map(item => {
+
           return {
             videoId: item.videoId,
             videoSrc: item.videoSrc,
@@ -121,7 +121,8 @@ export class InformationService {
             siteId: item.siteId,
             videoPhoto: item.videoPhoto,
             watchs: item.watchs,
-            title: item[payload.locale]
+            title: item[payload.locale],
+            detail: item.detail ? item.detail[payload.locale] : ''
           }
         })
         data = {
@@ -208,7 +209,7 @@ export class InformationService {
     }
   }
 
-  async delete(id) {
+  async baseDelete(id) {
     const data = await this.baseInformationService.BaseDelete(id);
     if(data.affected) {
       return {
@@ -229,6 +230,10 @@ export class InformationService {
 
   async relationAdd(payload) {
     return this.baseInformationService.BaseRelationAdd(payload);
+  }
+
+  async relationRemove(payload) {
+    return this.baseInformationService.BaseRelationRemove(payload);
   }
 
 }

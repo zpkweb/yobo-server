@@ -25,6 +25,10 @@ export declare class MyLikeCommodityService {
         data: import("typeorm").InsertResult;
         success: boolean;
         code: number;
+    } | {
+        data: import("typeorm").UpdateResult;
+        success: boolean;
+        code: number;
     }>;
     myLikeCommodity(payload: any): Promise<{
         data: any;
@@ -35,6 +39,7 @@ export declare class MyLikeCommodityService {
         code: number;
         data?: undefined;
     }>;
+    commodityLikes(commodityId: any): Promise<void>;
     filter(type: any, payload: any): any;
     hasMyLikeCommodity(payload: any): Promise<{
         data: import("../../entity/my/likeCommodity").MyLikeCommodityEntity;

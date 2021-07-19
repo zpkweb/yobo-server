@@ -1,6 +1,6 @@
 // 资讯 评论 回复
 import { EntityModel } from "@midwayjs/orm";
-import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm";
+import { Column, Generated, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { InformationCommentEntity } from "./comment"
 // import { InformationVideoEntity } from "./video"
 
@@ -24,22 +24,35 @@ export class InformationReplyEntity {
 
   // 回复人
   @Column()
-  replyUser: string;
+  replyUserId: string;
+
+  @Column()
+  replyUserName: string;
 
   // 回复者
   @Column()
   userId: string;
 
+  @Column()
+  userName: string;
+
   // 评论id
   @Column()
   commentId: string;
 
-  // 评论id
+  // // 点赞数
   @Column()
-  videoId: string;
+  likes: number;
+
+  // 回复数
+  @Column()
+  replyNums: number;
 
   // 关联评论
   @ManyToOne(type => InformationCommentEntity, InformationCommentEntity => InformationCommentEntity.replys)
+  @JoinColumn({
+    name: 'informationCommentId'
+  })
   comment: InformationCommentEntity;
 
   // 关联视频

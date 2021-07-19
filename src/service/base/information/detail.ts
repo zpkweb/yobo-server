@@ -70,7 +70,7 @@ export class BaseInformationDetailService {
       .createQueryBuilder()
       .update(InformationDetailEntity)
       .set({
-        isDelete: false
+        isDelete: true
       })
       .where("id = :id", { id : id })
       .execute();

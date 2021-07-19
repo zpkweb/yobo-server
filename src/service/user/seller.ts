@@ -102,6 +102,7 @@ export class SellerService {
       || payload.seller.tags
       || payload.seller.gender
       || payload.seller.country
+      || payload.seller.likes
       ){
         // 创建艺术家
         seller = await this.baseSellerService.baseCreateSeller({
@@ -115,6 +116,7 @@ export class SellerService {
           tags: payload.seller.tags,
           gender: payload.seller.gender,
           country: payload.seller.country,
+          likes: payload.seller.likes || 0
         })
         // console.log("创建艺术家", seller)
         if(!seller) {
@@ -477,6 +479,7 @@ export class SellerService {
           tags: payload.seller.tags,
           gender: payload.seller.gender,
           country: payload.seller.country,
+          likes: payload.seller.likes
         })
         // console.log("更新艺术家", seller)
         if(!seller.affected) {
@@ -901,7 +904,8 @@ export class SellerService {
       searchName: payload.searchName || '',
       tags: payload.tags || '',
       gender: payload.gender || '',
-      country: payload.country || ''
+      country: payload.country || '',
+      likes: payload.likes || 0
     })
     if(!updateSeller.affected){
       return {
@@ -1217,10 +1221,10 @@ export class SellerService {
 
 
   async retrieveSeller(sellerId) {
-    const sellerData:any = await this.baseSellerService.baseRetrieveSeller(sellerId);
-    if(sellerData){
+    const data:any = await this.baseSellerService.baseRetrieveSeller(sellerId);
+    if(data){
       return {
-        data: sellerData,
+        data: data,
         success: true,
         code : 10009
       }
@@ -1231,4 +1235,41 @@ export class SellerService {
       }
     }
   }
+
+  // 查找艺术家关联的艺术品的图片
+  async baseRetrieveSellerCommoditysPhotos(sellerId) {
+    const data:any = await this.baseSellerService.BaseRetrieveSellerCommoditysPhotos(sellerId);
+    if(data){
+      return {
+        data: data,
+        success: true,
+        code : 10009
+      }
+    }else{
+      return {
+        success: false,
+        code : 10010
+      }
+    }
+  }
+
+  // 更新艺术家喜欢数
+  async likes(payload) {
+    const data = await this.baseSellerService.baseUpdateSeller({
+      likes: payload.likes,
+      sellerId: payload.sellerId
+    })
+    if(data.affected){
+      return {
+        success: true,
+        code : 10007
+      }
+    }else{
+      return {
+        success: false,
+        code : 10008
+      }
+    }
+  }
+
 }

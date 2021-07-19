@@ -8,6 +8,7 @@ export declare class BaseSellerService {
     BaseHasName(payload: any): Promise<UserSellerEntity>;
     baseApplySeller(userId: any): Promise<UserSellerEntity>;
     baseRetrieveSeller(sellerId: any): Promise<UserSellerEntity>;
+    BaseRetrieveSellerCommoditysPhotos(sellerId: any): Promise<UserSellerEntity>;
     baseRetrieveUser(sellerId: any): Promise<UserSellerEntity>;
     baseChoiceSeller(payload: any): Promise<UserSellerEntity[]>;
     baseSellerIdRetrieveSeller(sellerId: any): Promise<UserSellerEntity>;

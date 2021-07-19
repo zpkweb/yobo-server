@@ -3,11 +3,19 @@ export declare class MyController {
     myService: MyService;
     pagination: any;
     setSeller(sellerBody: any): Promise<{
+        data: import("../../../entity/user/user").UserEntity;
+        success: boolean;
+        code: number;
+    } | {
         success: boolean;
         code: number;
         data?: undefined;
     } | {
-        data: any;
+        data: import("../../../entity/user/seller/seller").UserSellerEntity;
+        success: boolean;
+        code: number;
+    } | {
+        data: import("typeorm").InsertResult;
         success: boolean;
         code: number;
     }>;
@@ -47,6 +55,10 @@ export declare class MyController {
         data?: undefined;
     } | {
         data: import("../../../entity/commodity/commodity").CommodityEntity;
+        success: boolean;
+        code: number;
+    } | {
+        data: import("typeorm").UpdateResult;
         success: boolean;
         code: number;
     } | {

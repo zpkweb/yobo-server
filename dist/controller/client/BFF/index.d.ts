@@ -5,15 +5,7 @@ export declare class BFFController {
     commodityService: CommodityService;
     bffService: BFFService;
     ctx: Context;
-    home(query: any): Promise<{
-        success: boolean;
-        code: number;
-        data?: undefined;
-    } | {
-        data: any;
-        success: boolean;
-        code: number;
-    }>;
+    home(query: any): Promise<any>;
     commodity(query: any): Promise<{
         data: any;
         success: boolean;
@@ -53,5 +45,12 @@ export declare class BFFController {
             type: import("../../../entity/commodity/options/type").CommodityOptionsTypeEntity[];
             use: import("../../../entity/commodity/options/use").CommodityOptionsUseEntity[];
         };
+    }>;
+    informationDetail(query: any): Promise<{
+        data: {
+            information: any;
+        };
+        success: boolean;
+        code: number;
     }>;
 }

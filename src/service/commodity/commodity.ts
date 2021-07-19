@@ -525,6 +525,7 @@ export class CommodityCommodityService {
           //   item.colors = commodityAttributeColor.data;
           // }
 
+          // 当前商品图片
           const commodityAttributePhoto =  await this.commodityAttributePhoto.retrieveCommodityId(item.commodityId);
           if(commodityAttributePhoto.success) {
             item.photos = commodityAttributePhoto.data;
@@ -539,6 +540,16 @@ export class CommodityCommodityService {
           const commoditySeller:any =  await this.retrieveSeller(item.commodityId);
           if(commoditySeller) {
             if(commoditySeller.data.seller) {
+
+              // 查找艺术家关联的艺术品
+              const sellerCommoditysPhotos = await this.sellerService.baseRetrieveSellerCommoditysPhotos(commoditySeller.data.seller.sellerId);
+              // console.log("sellerCommoditysPhotos", sellerCommoditysPhotos)
+              if(!sellerCommoditysPhotos.success) {
+                return sellerCommoditysPhotos;
+              }
+              const commodityPhotos = sellerCommoditysPhotos.data.commodityPhotos.splice(0, 3)
+              item.commoditysPhotos = commodityPhotos.map(item => item.src);
+
               const commodityAttributeSeller =  await this.sellerService.sellerIdFind(commoditySeller.data.seller.sellerId);
               if(commodityAttributeSeller) {
                 item.seller = commodityAttributeSeller.data;
@@ -673,7 +684,8 @@ export class CommodityCommodityService {
       state: payload.state || '0',
       width: payload.width || 0,
       height: payload.height || 0,
-      images: payload.images || ''
+      images: payload.images || '',
+      likes: payload.likes || 0
     })
 
     if (!commodity.success) {
@@ -1826,6 +1838,24 @@ export class CommodityCommodityService {
 
   async retrieveSellerCount(sellerId) {
     const data = await this.baseCommodityService.baseRetrieveSellerCount(sellerId);
+    if (data) {
+      return {
+        data: data,
+        success: true,
+        code: 10009
+      }
+    } else {
+      return {
+        success: false,
+        code: 10010
+      }
+    }
+  }
+  async likes(payload) {
+    const data = await this.baseCommodityService.BaseUpdate({
+      likes: payload.likes,
+      commodityId: payload.commodityId
+    });
     if (data) {
       return {
         data: data,

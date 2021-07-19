@@ -2,7 +2,7 @@ import { Provide } from "@midwayjs/decorator";
 import { InjectEntityModel } from "@midwayjs/orm";
 import { Like, Repository } from "typeorm";
 import { InformationEntity } from 'src/entity/information/information';
-
+import { InformationVideoDetailEntity } from 'src/entity/information/videoDetail';
 @Provide()
 export class BaseInformationService {
 
@@ -86,7 +86,9 @@ export class BaseInformationService {
       .createQueryBuilder('information')
       .leftJoinAndSelect("information.detail", "detail")
       .leftJoinAndSelect("information.videos", "videos")
+      .leftJoinAndMapOne('videos.detail', InformationVideoDetailEntity, "InformationVideoDetail", "InformationVideoDetail.informationVideoId = videos.id")
       .where("information.informationId = :informationId", { informationId : informationId })
+      .andWhere("information.isDelete = :isDelete", { isDelete : false })
       .addSelect("information.isTop")
       .addSelect("information.createdDate")
       .getOne();
@@ -100,7 +102,7 @@ export class BaseInformationService {
     isTop = false
   } = {}) {
     const where:any = {
-      isDelete: false
+      isDelete: false,
     };
     if(name) {
       where['zh-cn'] = Like(`%${name}%`);
@@ -140,6 +142,7 @@ export class BaseInformationService {
         isTop
       })
       .where("id = :id", { id : id })
+      .andWhere("isDelete = :isDelete", { isDelete : false })
       .execute();
   }
 
@@ -148,7 +151,7 @@ export class BaseInformationService {
       .createQueryBuilder()
       .update(InformationEntity)
       .set({
-        isDelete: false
+        isDelete: true
       })
       .where("id = :id", { id : id })
       .execute();
@@ -168,6 +171,14 @@ export class BaseInformationService {
       .relation(InformationEntity, payload.name)
       .of(payload.of)
       .add(payload.add);
+  }
+
+  async BaseRelationRemove(payload) {
+    return await this.informationEntity
+      .createQueryBuilder()
+      .relation(InformationEntity, payload.name)
+      .of(payload.of)
+      .remove(payload.remove);
   }
 
 }

@@ -511,7 +511,7 @@ export class UserService{
             userId: payload.userId,
             identityIndex: item.value
           });
-          console.log("userIdentity", userIdentity);
+          // console.log("userIdentity", userIdentity);
           if(userIdentity.success) {
             if(!item.check){
               // delete
@@ -519,7 +519,7 @@ export class UserService{
                 userId: payload.userId,
                 identityIndex: item.value
               })
-              console.log("deleteIdentity", deleteIdentity)
+              // console.log("deleteIdentity", deleteIdentity)
               if(deleteIdentity.success) {
 
               }
@@ -531,7 +531,7 @@ export class UserService{
                 userId: payload.userId,
                 identityIndex: item.value
               })
-              console.log("identity", identity)
+              // console.log("identity", identity)
               if(identity.success) {
 
               }

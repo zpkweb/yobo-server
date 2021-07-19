@@ -56,7 +56,7 @@ export class IdentityService {
   }
   async deleteUserIdIdentityId(payload) {
     const data = await this.baseIdentityService.baseDeleteIdentityId(payload);
-    console.log("deleteUserIdIdentityId", data)
+    // console.log("deleteUserIdIdentityId", data)
     if(data.affected) {
       return {
         data: data,

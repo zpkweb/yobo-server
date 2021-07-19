@@ -4,4 +4,11 @@ export declare class adminInformatinController {
     pagination: any;
     createInformation(createBody: any): Promise<any>;
     informationList(findParams: any): Promise<any>;
+    informationEdit(editQuery: any): Promise<any>;
+    updateInformation(updateBody: any): Promise<any>;
+    searchInformation(searchQuery: any): Promise<any>;
+    deleteInformation(query: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
 }

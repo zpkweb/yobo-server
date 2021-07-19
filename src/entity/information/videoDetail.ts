@@ -50,7 +50,7 @@ export class InformationVideoDetailEntity {
   // 关联资讯视频
   @OneToOne(type => InformationVideoEntity, InformationVideoEntity => InformationVideoEntity.detail)
   @JoinColumn({
-    name: 'informationId'
+    name: 'informationVideoId'
   })
   video: InformationVideoEntity;
 

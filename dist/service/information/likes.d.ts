@@ -1,6 +1,6 @@
-import { BaseInformationFabulousService } from "../base/information/fabulous";
-export declare class InformationFabulousService {
-    baseInformationFabulousService: BaseInformationFabulousService;
+import { BaseInformationLikesService } from "../base/information/likes";
+export declare class InformationLikesService {
+    baseInformationLikesService: BaseInformationLikesService;
     create(payload: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;
@@ -11,7 +11,7 @@ export declare class InformationFabulousService {
         data?: undefined;
     }>;
     retrieve(payload: any): Promise<{
-        data: import("../../entity/information/fabulous").InformationFabulousEntity[];
+        data: import("../../entity/information/likes").InformationLikesEntity[];
         success: boolean;
         code: number;
     } | {

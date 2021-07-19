@@ -24,30 +24,40 @@ export class MyLikeCommodityService {
   @Inject()
   commodityAttributePhoto: CommodityAttributePhoto;
 
+  // 添加喜欢的艺术品
   async addMyLikeCommodity(payload) {
     // 查找用户
     const user = await this.userService.hasUser(payload.userId);
+    // console.log("user", user)
     if (!user.success) {
       return user;
     }
 
-    // 查找艺术家
+    // 查找艺术品
     const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
+    // console.log("commodity", commodity)
     if (!commodity.success) {
       return commodity;
     }
 
-    // 查找我喜欢的艺术家
+
+    // 查找我喜欢的艺术品
     const likeCommodity = await this.hasMyLikeCommodity({
       userId: payload.userId,
       commodityId: payload.commodityId
     })
+    // console.log("likeCommodity", likeCommodity)
     if (likeCommodity.success) {
       return {
         success: false,
-        code: 10010
+        code: 10013
       }
     }
+
+
+
+
+
 
     // 创建喜欢的艺术家
     const creatLikeCommodity = await this.createLikeCommodity({
@@ -60,8 +70,19 @@ export class MyLikeCommodityService {
       'es-es': payload['es-es'] || commodity.data.name['es-es'],
       commodityId: payload.commodityId
     });
+    // console.log("creatLikeCommodity", creatLikeCommodity)
     if(!creatLikeCommodity.success) {
       return creatLikeCommodity;
+    }
+
+    // 增加艺术品喜欢数
+
+    const commodityLikes = await this.commodityCommodityService.likes({
+      likes: commodity.data.likes + 1,
+      commodityId: payload.commodityId
+    })
+    if(!commodityLikes.success) {
+      return commodityLikes;
     }
 
     // 关联用户
@@ -135,6 +156,11 @@ export class MyLikeCommodityService {
     }
   }
 
+  // 艺术品喜欢数
+  async commodityLikes(commodityId) {
+
+  }
+
   /**
    * 筛选商品
    * @param  payload
@@ -169,6 +195,7 @@ export class MyLikeCommodityService {
    * @param payload
    */
   async hasMyLikeCommodity(payload) {
+
     const likeCommodity =  await this.baseMyLikeCommodityService.BaseHas({
       userId: payload.userId,
       commodityId: payload.commodityId
@@ -177,18 +204,18 @@ export class MyLikeCommodityService {
         return {
           data: likeCommodity,
           success: true,
-          code : 10601
+          code : 10013
         }
       }else{
         return {
           success: false,
-          code : 10602
+          code : 10014
         }
       }
   }
 
   /**
-   * 创建喜欢的艺术家
+   * 创建喜欢的艺术品
    * @param payload
    */
   async createLikeCommodity(payload) {
@@ -231,10 +258,25 @@ export class MyLikeCommodityService {
   }
 
   /**
-   * 删除我喜欢的艺术家
+   * 删除我喜欢的艺术品
    */
   async delMyLikeCommodity(payload) {
-    // 查找喜欢的艺术家是否存在
+
+    // 查找用户
+    const user = await this.userService.hasUser(payload.userId);
+    // console.log("user", user)
+    if (!user.success) {
+      return user;
+    }
+
+    // 查找艺术品
+    const commodity = await this.commodityCommodityService.hasCommodity(payload.commodityId);
+    // console.log("commodity", commodity)
+    if (!commodity.success) {
+      return commodity;
+    }
+
+    // 查找喜欢的艺术品是否存在
     const likeCommodity = await this.hasMyLikeCommodity({
       userId: payload.userId,
       commodityId: payload.commodityId
@@ -242,11 +284,32 @@ export class MyLikeCommodityService {
     if (!likeCommodity.success) {
       return likeCommodity;
     }
+
+
+
     // 删除艺术家
-    return await this.delLikeCommodity({
+    const delLikeCommodity = await this.delLikeCommodity({
       userId: payload.userId,
       commodityId: payload.commodityId
     })
+    if(!delLikeCommodity.success) {
+      return delLikeCommodity;
+    }
+
+    // 减少艺术品喜欢数
+    const likes = commodity.data.likes - 1;
+    const commodityLikes = await this.commodityCommodityService.likes({
+      likes: likes > 0 ? likes : 0,
+      commodityId: payload.commodityId
+    })
+    if(!commodityLikes.success) {
+      return commodityLikes;
+    }
+
+    return {
+      success: true,
+      code: 10001
+    }
 
   }
   /**

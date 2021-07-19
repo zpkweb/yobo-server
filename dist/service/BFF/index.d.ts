@@ -4,6 +4,7 @@ import { CommodityService } from "../commodity/index";
 import { MyService } from "../my/index";
 import { ArtworkOptionsService } from "./artworkOptions";
 import { CommodityOptionsThemeService } from "../commodity/options/theme";
+import { ServiceInformation } from "../information/index";
 export declare class BFFService {
     bannerService: BannerService;
     artworkOptionsService: ArtworkOptionsService;
@@ -11,16 +12,9 @@ export declare class BFFService {
     commodityService: CommodityService;
     myService: MyService;
     commodityOptionsThemeService: CommodityOptionsThemeService;
+    serviceInformation: ServiceInformation;
     host: any;
-    home(payload: any): Promise<{
-        success: boolean;
-        code: number;
-        data?: undefined;
-    } | {
-        data: any;
-        success: boolean;
-        code: number;
-    }>;
+    home(payload: any): Promise<any>;
     clientCommodity(payload: any): Promise<{
         data: any;
         success: boolean;
@@ -60,5 +54,16 @@ export declare class BFFService {
             type: import("../../entity/commodity/options/type").CommodityOptionsTypeEntity[];
             use: import("../../entity/commodity/options/use").CommodityOptionsUseEntity[];
         };
+    }>;
+    informationDetail({ informationId, isLocale, locale }?: {
+        informationId?: string;
+        isLocale?: boolean;
+        locale?: string;
+    }): Promise<{
+        data: {
+            information: any;
+        };
+        success: boolean;
+        code: number;
     }>;
 }

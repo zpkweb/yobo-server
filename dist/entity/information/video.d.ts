@@ -1,5 +1,6 @@
 import { InformationEntity } from "./information";
 import { InformationCommentEntity } from "./comment";
+import { InformationVideoDetailEntity } from "./videoDetail";
 export declare class InformationVideoEntity {
     id: number;
     videoId: string;
@@ -14,6 +15,7 @@ export declare class InformationVideoEntity {
     'es-es': string;
     information: InformationEntity;
     comments: InformationCommentEntity[];
+    detail: InformationVideoDetailEntity;
     isDelete: boolean;
     createdDate: Date;
     updatedDate: Date;

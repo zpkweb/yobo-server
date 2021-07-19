@@ -64,7 +64,9 @@ export class UserSellerEntity {
   @Column('simple-array')
   tags: string[];
 
-
+  // 喜欢数
+  @Column()
+  likes: number;
 
   // 性别
   @Column()

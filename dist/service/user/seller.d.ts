@@ -201,4 +201,17 @@ export declare class SellerService {
         code: number;
         data?: undefined;
     }>;
+    baseRetrieveSellerCommoditysPhotos(sellerId: any): Promise<{
+        data: any;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    likes(payload: any): Promise<{
+        success: boolean;
+        code: number;
+    }>;
 }

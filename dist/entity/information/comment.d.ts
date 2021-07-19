@@ -5,7 +5,9 @@ export declare class InformationCommentEntity {
     commentId: string;
     content: string;
     userId: string;
+    userName: string;
     videoId: string;
+    likes: number;
     video: InformationVideoEntity;
     replys: InformationReplyEntity[];
     isShow: boolean;

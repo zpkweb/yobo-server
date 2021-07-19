@@ -224,7 +224,6 @@ export class BFFService {
         pageSize: payload.pageSize || 4,
         currentPage: payload.currentPage || 1,
       });
-      console.log("findBrowsingHistory", findBrowsingHistory)
       // console.log("findBrowsingHistory", findBrowsingHistory)
       if(findBrowsingHistory.success) {
         browsingHistory = findBrowsingHistory.data.list;
@@ -237,13 +236,7 @@ export class BFFService {
 
     }
     const { seller, ...commodityData } = commodity.data;
-    console.log("commodity", {
-      commodity: commodityData,
-      // commoditySimilar: commoditySimilar.data.list,
-      seller: seller,
-      browsingHistory: browsingHistory,
-      commoditySimilar: commoditySimilar.data.list,
-    })
+
     return {
       success: true,
       code: 10009,

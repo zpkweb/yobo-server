@@ -39,11 +39,11 @@ export class adminInformatinVideoController {
 
   }
 
-  @Get('/find', { summary: "编辑资讯视频" })
+  @Get('/detail', { summary: "资讯视频detail" })
   async informationFind(@Query(ALL) query) {
     const locale = query.locale ? query.locale : 'zh-cn';
     const isLocale = (Boolean(query.isLocale) && query.isLocale == 'true') ? true : false;
-    const data:any = await this.serviceInformation.informationVideoId({
+    const data:any = await this.serviceInformation.informationVideoDetail({
       videoId: query.videoId,
       locale,
       isLocale,
@@ -84,9 +84,14 @@ export class adminInformatinVideoController {
     return data;
   }
 
+  @Post('/delete', { summary: "删除资讯视频" })
+  async deleteInformation(@Body(ALL) query) {
+    return await this.serviceInformation.deleteInformationVideo(query.videoId);
+  }
+
   @Get('/:videoId', { summary: "编辑资讯视频" })
   async informationFindVideoId(@Param() videoId) {
-    const data:any = await this.serviceInformation.informationVideoId({
+    const data:any = await this.serviceInformation.informationVideoDetail({
       videoId
     })
     return data;

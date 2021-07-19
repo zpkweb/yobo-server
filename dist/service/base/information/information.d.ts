@@ -22,6 +22,14 @@ export declare class BaseInformationService {
         jajp?: string;
         eses?: string;
     }): Promise<InformationEntity>;
+    BaseRetrieveInformationId(informationId: any): Promise<InformationEntity>;
+    BaseSearchInformation({ name, currentPage, pageSize, news, isTop }?: {
+        name?: string;
+        currentPage?: number;
+        pageSize?: number;
+        news?: boolean;
+        isTop?: boolean;
+    }): Promise<[InformationEntity[], number]>;
     BaseUpdate({ id, zhcn, enus, jajp, eses, isTop }?: {
         id?: string;
         zhcn?: string;
@@ -33,4 +41,5 @@ export declare class BaseInformationService {
     BaseDelete(id: any): Promise<import("typeorm").UpdateResult>;
     BaseRelationSet(payload: any): Promise<void>;
     BaseRelationAdd(payload: any): Promise<void>;
+    BaseRelationRemove(payload: any): Promise<void>;
 }

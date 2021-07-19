@@ -109,6 +109,9 @@ export class CommodityEntity {
   })
   height: number;
 
+  @Column()
+  likes: number;
+
   // 封面图
   @Column()
   images: string;

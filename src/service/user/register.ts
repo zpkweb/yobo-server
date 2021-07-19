@@ -538,11 +538,11 @@ export class UserRegisterService {
 
         // 用户身份 关联 用户身份列表
 
-        await this.userIdentityEntity
-          .createQueryBuilder()
-          .relation(UserIdentityEntity, "identityList")
-          .of(identity.identifiers[0].id)
-          .set(identityList.id);
+        // await this.userIdentityEntity
+        //   .createQueryBuilder()
+        //   .relation(UserIdentityEntity, "identityList")
+        //   .of(identity.identifiers[0].id)
+        //   .set(identityList.id);
 
 
         // 用户身份 关联 用户

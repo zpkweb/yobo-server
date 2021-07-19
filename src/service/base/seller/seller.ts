@@ -46,6 +46,7 @@ export class BaseSellerService {
         tags: payload.tags,
         gender: payload.gender,
         country: payload.country,
+        likes: payload.likes
       })
       .execute();
   }
@@ -98,6 +99,22 @@ export class BaseSellerService {
       // .leftJoinAndMapMany('commoditys.photos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
       .addSelect('seller.createdDate')
       .where("seller.sellerId = :sellerId", { sellerId: sellerId })
+      .getOne();
+  }
+
+  async BaseRetrieveSellerCommoditysPhotos(sellerId) {
+    return await this.userSellerEntity
+      .createQueryBuilder('seller')
+      // .leftJoin('seller.user', 'user')
+      // .leftJoinAndSelect('seller.metadata', 'metadata')
+      .leftJoin('seller.commoditys', 'commoditys')
+      .leftJoinAndMapMany('seller.commodityPhotos', CommodityPhotoEntity, "commodityPhoto", "commodityPhoto.commodityId = commoditys.commodityId")
+      .addSelect('seller.createdDate')
+      .where("seller.sellerId = :sellerId", { sellerId: sellerId })
+      .orderBy({
+        "commoditys.likes": "DESC"
+        // "browsingCount.count": payload.hots ? "DESC"  :  "ASC"
+      })
       .getOne();
   }
 
@@ -273,6 +290,41 @@ export class BaseSellerService {
    */
   async baseUpdateSeller(payload) {
     const { sellerId, ...setData } = payload;
+    const set:any = {}
+    if(setData.banner) {
+      set.banner = setData.banner;
+    }
+    if(setData.choice) {
+      set.choice = setData.choice;
+    }
+    if(setData.state) {
+      set.state = setData.state;
+    }
+    if(setData.type) {
+      set.type = setData.type;
+    }
+    if(setData.firstname) {
+      set.firstname = setData.firstname;
+    }
+    if(setData.lastname) {
+      set.lastname = setData.lastname;
+    }
+    if(setData.searchName) {
+      set.searchName = setData.searchName;
+    }
+    if(setData.tags) {
+      set.tags = setData.tags;
+    }
+    if(setData.gender) {
+      set.gender = setData.gender;
+    }
+    if(setData.country) {
+      set.country = setData.country;
+    }
+    if(setData.likes >= 0) {
+      set.likes = setData.likes;
+    }
+
     return await this.userSellerEntity
       .createQueryBuilder()
       .update(UserSellerEntity)
@@ -283,7 +335,7 @@ export class BaseSellerService {
       //   gender: payload.gender,
       //   country: payload.country,
       // })
-      .set(setData)
+      .set(set)
       .where("sellerId = :sellerId", { sellerId: sellerId })
       .execute();
   }

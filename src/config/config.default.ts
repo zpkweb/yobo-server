@@ -52,12 +52,12 @@ export default (appInfo: EggAppInfo) => {
 
 
 
-  // config.email = {
-  //   service: 'qq',
-  //   user: '547790132@qq.com',
-  //   pass: 'vgmowhcgqcpobcaf',
-  //   port: 465
-  // };
+  config.email = {
+    service: 'qq',
+    user: '547790132@qq.com',
+    pass: 'vgmowhcgqcpobcaf',
+    port: 465
+  };
 
 
   config.jwt = {

@@ -279,7 +279,8 @@ export class CommodityService {
       state: payload.state,
       width: payload.width,
       height: payload.height,
-      images: payload.images
+      images: payload.images,
+      likes: payload.likes
     })
 
 

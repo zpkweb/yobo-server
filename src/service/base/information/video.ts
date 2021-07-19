@@ -82,8 +82,9 @@ export class BaseInformationVideoService {
     }
 
     return this.informationVideoEntity
-      .createQueryBuilder()
+      .createQueryBuilder('informationVideo')
       .where(where)
+      .andWhere("informationVideo.isDelete = :isDelete", { isDelete : false })
       .getOne();
   }
 
@@ -92,6 +93,7 @@ export class BaseInformationVideoService {
       .createQueryBuilder('informationVideo')
       .leftJoinAndSelect("informationVideo.detail", "detail")
       .where("informationVideo.videoId = :videoId", { videoId : videoId })
+      .andWhere("informationVideo.isDelete = :isDelete", { isDelete : false })
       .addSelect("informationVideo.createdDate")
       .getOne();
   }
@@ -109,12 +111,13 @@ export class BaseInformationVideoService {
       where['zh-cn'] = Like(`%${title}%`);
     }
     return this.informationVideoEntity
-      .createQueryBuilder('information')
-      .leftJoinAndSelect("information.detail", "detail")
+      .createQueryBuilder('informationVideo')
+      .leftJoinAndSelect("informationVideo.detail", "detail")
       .where(where)
-      .addSelect("information.createdDate")
+      .andWhere("informationVideo.isDelete = :isDelete", { isDelete : false })
+      .addSelect("informationVideo.createdDate")
       .orderBy({
-        "information.id": news ? "DESC"  :  "ASC",
+        "informationVideo.id": news ? "DESC"  :  "ASC",
       })
       .skip((currentPage-1)*pageSize)
       .take(pageSize)
@@ -122,42 +125,55 @@ export class BaseInformationVideoService {
   }
 
 
-  async BaseUpdate({
-    videoId = '',
-    videoSrc = '',
-    ccId = '',
-    siteId = '',
-    videoPhoto = '',
-    zhcn = '',
-    enus = '',
-    jajp = '',
-    eses = '',
-  } = {}) {
+  async BaseUpdate(payload) {
+    const { videoId, ...setData } = payload;
+    const set:any = {}
+    if(setData.videoSrc) {
+      set.videoSrc = setData.videoSrc;
+    }
+    if(setData.ccId) {
+      set.ccId = setData.ccId;
+    }
+    if(setData.siteId) {
+      set.siteId = setData.siteId;
+    }
+    if(setData.videoPhoto) {
+      set.videoPhoto = setData.videoPhoto;
+    }
+    if(setData.zhcn) {
+      set['zh-cn'] = setData.zhcn;
+    }
+    if(setData.enus) {
+      set['en-us'] = setData.enus;
+    }
+    if(setData.jajp) {
+      set['ja-jp'] = setData.jajp;
+    }
+    if(setData.eses) {
+      set['es-es'] = setData.eses;
+    }
+    if(setData.watchs) {
+      set.watchs = setData.watchs;
+    }
+
+
     return this.informationVideoEntity
       .createQueryBuilder()
       .update(InformationVideoEntity)
-      .set({
-        videoSrc,
-        ccId,
-        siteId,
-        videoPhoto,
-        'zh-cn': zhcn,
-        'en-us': enus,
-        'ja-jp': jajp,
-        'es-es': eses,
-      })
+      .set(set)
       .where("videoId = :videoId", { videoId : videoId })
+      .andWhere("isDelete = :isDelete", { isDelete : false })
       .execute();
   }
 
-  async BaseDelete(id) {
+  async BaseDelete(videoId) {
     return this.informationVideoEntity
       .createQueryBuilder()
       .update(InformationVideoEntity)
       .set({
-        isDelete: false
+        isDelete: true
       })
-      .where("id = :id", { id : id })
+      .where("videoId = :videoId", { videoId : videoId })
       .execute();
   }
 

@@ -19,6 +19,7 @@ export class InformationVideoService {
     }
 
     // 创建视频详情
+    // console.log("payload.detail", payload.detail)
     const detailJSON = JSON.parse(payload.detail);
     const videoDetailData = await this.informationVideoDetailService.baseCreate({
       zhcn: detailJSON['zh-cn'],
@@ -34,8 +35,16 @@ export class InformationVideoService {
         set: videoDetailData.data.identifiers[0].id
       })
     }
+    // 查询视频
+    const data = await this.baseInformationVideoService.BaseRetrieveName({
+      zhcn: payload['zh-cn'],
+      enus: payload['en-us'],
+      jajp: payload['ja-jp'],
+      eses: payload['es-es'],
+    });
 
     return {
+      data,
       success: true,
       code: 10003
     }
@@ -302,8 +311,37 @@ export class InformationVideoService {
     }
   }
 
-  async delete(id) {
-    const data = await this.baseInformationVideoService.BaseDelete(id);
+  async watchs(payload) {
+    // 获取视频
+    const video = await this.baseInformationVideoService.BaseRetrieveVideoId(payload.videoId);
+    if(video) {
+      const watchs = video.watchs + 1;
+      const data = await this.baseInformationVideoService.BaseUpdate({
+        videoId: payload.videoId,
+        watchs
+      })
+      if(data.affected) {
+        return {
+          success: true,
+          code: 10007
+        }
+      }else{
+        return {
+          success: false,
+          code: 10008
+        }
+      }
+    }else{
+      return {
+        success: false,
+        code: 10014
+      }
+    }
+
+  }
+
+  async baseDelete(videoId) {
+    const data = await this.baseInformationVideoService.BaseDelete(videoId);
     if(data.affected) {
       return {
         success: true,
