@@ -30,6 +30,9 @@ export class InformationVideoEntity {
   @Column()
   videoPhoto: string;
 
+  @Column()
+  isTop: boolean;
+
   // 视频观看人数
   @Column()
   watchs: number;

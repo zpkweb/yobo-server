@@ -15,6 +15,7 @@ export class BaseInformationVideoService {
     siteId = '',
     videoPhoto = '',
     watchs = 0,
+    isTop = false,
     zhcn = '',
     enus = '',
     jajp = '',
@@ -31,6 +32,7 @@ export class BaseInformationVideoService {
         siteId,
         videoPhoto,
         watchs,
+        isTop,
         'zh-cn': zhcn,
         'en-us': enus,
         'ja-jp': jajp,
@@ -124,6 +126,28 @@ export class BaseInformationVideoService {
       .getManyAndCount();
   }
 
+  async BaseTopVideo() {
+    return this.informationVideoEntity
+      .createQueryBuilder("video")
+      .where("video.isTop = :isTop", { isTop : true })
+      .andWhere("video.isDelete = :isDelete", { isDelete : false })
+      // .addSelect("video.updatedDate")
+      // .orderBy({
+      //   "video.id": "DESC"
+      // })
+      .getOne();
+  }
+
+  async BaseNewVideo() {
+    return this.informationVideoEntity
+      .createQueryBuilder("video")
+      .where("video.isDelete = :isDelete", { isDelete : false })
+      // .orderBy({
+      //   "video.id": "DESC"
+      // })
+      .getOne();
+  }
+
 
   async BaseUpdate(payload) {
     const { videoId, ...setData } = payload;
@@ -155,6 +179,8 @@ export class BaseInformationVideoService {
     if(setData.watchs) {
       set.watchs = setData.watchs;
     }
+    set.isTop = setData.isTop ? true : false;
+
 
 
     return this.informationVideoEntity

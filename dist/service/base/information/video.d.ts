@@ -2,12 +2,13 @@ import { Repository } from "typeorm";
 import { InformationVideoEntity } from "../../../entity/information/video";
 export declare class BaseInformationVideoService {
     informationVideoEntity: Repository<InformationVideoEntity>;
-    BaseCreate({ videoSrc, ccId, siteId, videoPhoto, watchs, zhcn, enus, jajp, eses, isDelete }?: {
+    BaseCreate({ videoSrc, ccId, siteId, videoPhoto, watchs, isTop, zhcn, enus, jajp, eses, isDelete }?: {
         videoSrc?: string;
         ccId?: string;
         siteId?: string;
         videoPhoto?: string;
         watchs?: number;
+        isTop?: boolean;
         zhcn?: string;
         enus?: string;
         jajp?: string;
@@ -32,6 +33,8 @@ export declare class BaseInformationVideoService {
         pageSize?: number;
         news?: boolean;
     }): Promise<[InformationVideoEntity[], number]>;
+    BaseTopVideo(): Promise<InformationVideoEntity>;
+    BaseNewVideo(): Promise<InformationVideoEntity>;
     BaseUpdate(payload: any): Promise<import("typeorm").UpdateResult>;
     BaseDelete(videoId: any): Promise<import("typeorm").UpdateResult>;
     BaseRelationSet(payload: any): Promise<void>;

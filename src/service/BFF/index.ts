@@ -110,9 +110,28 @@ export class BFFService {
     //   information.data.pageSize = payload.pageSize;
     //   information.data.currentPage = payload.currentPage;
     // }
+
     if(!information.success) {
       return information;
     }
+    // 资讯置顶视频
+    let informationShowVideo:any = {};
+    const informationTopVideo = await this.serviceInformation.informationTopVideo();
+    console.log("informationTopVideo", informationTopVideo)
+    if(informationTopVideo.success) {
+      informationShowVideo = informationTopVideo.data;
+
+    }else{
+      const informationNewVideo = await this.serviceInformation.informationNewVideo();
+      console.log("informationNewVideo", informationNewVideo)
+      if(informationNewVideo.success) {
+        informationShowVideo = informationNewVideo.data;
+      }
+    }
+
+
+
+
 
     // 我们热卖的艺术家
     const hotSaleSeller = await this.sellerService.retrieveSellerAll({
@@ -137,9 +156,12 @@ export class BFFService {
         lookWorld: commodityOption.data,
         // commentCommodity: commodityComment.data,
         information: {
-          show: '',
           list: information.data.list,
+          currentPage: 1,
+          pageSize: 5,
+          total: information.data.total
         },
+        informationTopVideo: informationShowVideo,
         hotSaleSeller: hotSaleSeller.data.list
       }
     }

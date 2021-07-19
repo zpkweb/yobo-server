@@ -66,8 +66,9 @@ export class InformationVideoService {
         code: 10013
       }
     }
-
+    // 创建视频
     const data = await this.baseInformationVideoService.BaseCreate({
+      isTop: payload.isTop,
       zhcn: payload['zh-cn'],
       enus: payload['en-us'],
       jajp: payload['ja-jp'],
@@ -75,7 +76,7 @@ export class InformationVideoService {
       videoSrc: payload.videoSrc,
       ccId: payload.ccId,
       siteId: payload.siteId,
-      videoPhoto: payload.videophoto,
+      videoPhoto: payload.videoPhoto,
       watchs: 0,
       isDelete: false
     });
@@ -226,6 +227,40 @@ export class InformationVideoService {
     }
   }
 
+  async topVideo() {
+    // 查询资讯视频是否存在
+    const data = await this.baseInformationVideoService.BaseTopVideo();
+    if(data) {
+      return {
+        data,
+        success: true,
+        code: 10014
+      }
+    }else{
+      return {
+        success: false,
+        code: 10014
+      }
+    }
+  }
+
+  async newVideo() {
+    // 查询资讯视频是否存在
+    const data = await this.baseInformationVideoService.BaseNewVideo();
+    if(data) {
+      return {
+        data,
+        success: true,
+        code: 10014
+      }
+    }else{
+      return {
+        success: false,
+        code: 10014
+      }
+    }
+  }
+
   async update(payload) {
     // 更新资讯视频
     const videoUpdateData = await this.baseUpdate(payload);
@@ -235,7 +270,8 @@ export class InformationVideoService {
     }
     // 更新资讯视频详情
     if(payload.detail) {
-      const detailJSON = typeof payload.detail == 'string' ? JSON.parse(payload.detail) : payload.detail;
+      const detailJSON = (typeof payload.detail == 'string') ? JSON.parse(payload.detail) : payload.detail;
+      console.log("detailJSON", detailJSON)
       if(detailJSON.id) {
         // 更新资讯视频详情
         const videoDetailData = await this.informationVideoDetailService.baseUpdate({
@@ -256,6 +292,7 @@ export class InformationVideoService {
           jajp: detailJSON['ja-jp'],
           eses: detailJSON['es-es'],
         })
+        console.log("videoDetailData", videoDetailData)
         if(videoDetailData.success) {
           //  视频 关联 视频详情
           this.relationSet({
@@ -286,6 +323,7 @@ export class InformationVideoService {
     }
     // 更新资讯视频
     const data = await this.baseInformationVideoService.BaseUpdate({
+      isTop: payload.isTop,
       videoId: payload.videoId,
       videoSrc: payload.videoSrc,
       ccId: payload.ccId,

@@ -2,6 +2,7 @@ import { ServiceInformation } from "../../../service/information/index";
 export declare class informatinController {
     serviceInformation: ServiceInformation;
     pagination: any;
+    informationList(findParams: any): Promise<any>;
     videoComment(createBody: any): Promise<{
         data: import("typeorm").InsertResult;
         success: boolean;

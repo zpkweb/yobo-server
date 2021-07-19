@@ -8,6 +8,7 @@ export declare class InformationVideoEntity {
     ccId: string;
     siteId: string;
     videoPhoto: string;
+    isTop: boolean;
     watchs: number;
     'zh-cn': string;
     'en-us': string;

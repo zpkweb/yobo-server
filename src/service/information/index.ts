@@ -137,6 +137,8 @@ export class ServiceInformation {
     })
   }
 
+
+
   // 资讯详情
   async informationDetail(payload) {
     return await this.informationService.retrieveInformationDetail(payload)
@@ -271,6 +273,16 @@ export class ServiceInformation {
   // 搜索资讯视频
   async searchInformationVideo(payload) {
     return await this.informationVideoService.baseSearch(payload)
+  }
+
+  // 置顶视频
+  async informationTopVideo() {
+    return await this.informationVideoService.topVideo()
+  }
+
+  // 最新视频
+  async informationNewVideo() {
+    return await this.informationVideoService.newVideo()
   }
 
   // 更新资讯视频

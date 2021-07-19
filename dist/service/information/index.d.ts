@@ -121,6 +121,24 @@ export declare class ServiceInformation {
         code: number;
         data?: undefined;
     }>;
+    informationTopVideo(): Promise<{
+        data: import("../../entity/information/video").InformationVideoEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
+    informationNewVideo(): Promise<{
+        data: import("../../entity/information/video").InformationVideoEntity;
+        success: boolean;
+        code: number;
+    } | {
+        success: boolean;
+        code: number;
+        data?: undefined;
+    }>;
     updateInformationVideo(payload: any): Promise<{
         success: boolean;
         code: number;
